@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
-import RootStack from '../Navigation/RootStack';
 import { connect } from 'react-redux';
+
+import RootStack from '../Navigation/RootStack';
+
+// Styles
+import styles from './Styles/RootContainerStyles';
 
 class RootContainer extends Component {
   render() {
     return (
-      <View>
+      <View style={styles.applicationView}>
         <RootStack />
       </View>
     );

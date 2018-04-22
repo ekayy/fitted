@@ -1,0 +1,77 @@
+{
+  "brands": {
+    "1": {
+      "name": "John Elliot",
+      "url":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/59ba2dcc37c581d3733c1a18/1505373649624/JE+logo+new.png",
+      "garmentIds": [1, 2]
+    },
+    "2": {
+      "name": "3sixteen",
+      "url":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5a1ceeab24a694106de87998/1511845608566/3sixteen_logo_SMRpeug.jpg",
+      "garmentIds": [1, 2]
+    },
+    "3": {
+      "name": "Rogue Territory",
+      "url":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5a39d769ec212dfab2e7a55b/1513741407136/rogue_territory_copy_copy_large.png",
+      "garmentIds": [1, 2]
+    }
+  },
+  "garments": {
+    "1": {
+      "color": "black",
+      "model": "Anti-Expo Tee",
+      "sku": "",
+      "brand": 1,
+      "image":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf936ebbd1aff44d35473/1502411560789/ANTI_EXPO_TEE_FLAT_PURPLE.jpg?format=750w",
+      "fitIds": [5, 26]
+    },
+    "2": {
+      "color": "black",
+      "model": "Kake Mock Pullover",
+      "sku": "",
+      "brand": 1,
+      "image":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf936db29d68b1782332b/1502412444163/KAKE_MOCK_PULLOVER_DARK_GREY_FLAT_29b8a8e7-a09c-479b-810f-a6d93268c8b7.jpg?format=750w",
+      "fitIds": [5, 26]
+    }
+  },
+  "fits": {
+    "5": {
+      "username": "Mackp12",
+      "model": "Kake Mock Pullover",
+      "size": "small",
+      "color": "dark grey",
+      "height": "5'6",
+      "weight": "145 lbs",
+      "image":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
+      "garmentIds": [1]
+    },
+    "26": {
+      "username": "srizvi722",
+      "model": "Kake Mock Pullover",
+      "size": "small",
+      "color": "dark grey",
+      "height": "5'6",
+      "weight": "145 lbs",
+      "image":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
+      "garmentIds": [1]
+    },
+    "3": {
+      "username": "CH03",
+      "model": "Kake Mock Pullover",
+      "size": "large",
+      "color": "dark grey",
+      "height": "6`'",
+      "weight": "175 lbs",
+      "image":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
+      "garmentIds": [1]
+    }
+  }
+}

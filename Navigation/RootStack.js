@@ -1,11 +1,24 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import BrandScreen from '../Containers/BrandScreen';
+import Brands from '../Containers/Brands';
+import Garments from '../Containers/Garments';
+import Fits from '../Containers/Fits';
 
-const RootStack = StackNavigator({
-  Home: {
-    screen: BrandScreen
+const RootStack = StackNavigator(
+  {
+    Home: {
+      screen: Brands
+    },
+    Garments: {
+      screen: Garments
+    },
+    Fits: {
+      screen: Fits
+    }
+  },
+  {
+    initialRouteName: 'Home'
   }
-});
+);
 
 export default RootStack;
