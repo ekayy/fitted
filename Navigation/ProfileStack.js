@@ -2,6 +2,7 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import Profile from '../Containers/Profile';
 import GarmentDetail from '../Containers/GarmentDetail';
+import FitDetail from '../Containers/FitDetail';
 
 const ProfileStack = StackNavigator(
   {
@@ -10,7 +11,16 @@ const ProfileStack = StackNavigator(
       navigationOptions: { title: 'Profile' }
     },
     GarmentDetail: {
-      screen: GarmentDetail
+      screen: GarmentDetail,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.model
+      })
+    },
+    FitDetail: {
+      screen: FitDetail,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.username
+      })
     }
   },
   {

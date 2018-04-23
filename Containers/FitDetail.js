@@ -10,29 +10,32 @@ import {
 } from 'react-native';
 import { Metrics } from '../Themes';
 
-import FitList from '../Components/FitList';
+import GarmentList from '../Components/GarmentList';
 
-import { fits } from '../data.json';
+import { garments } from '../data.json';
 
-class GarmentDetail extends Component {
+class FitDetail extends Component {
   render() {
     const {
-      sku,
+      id,
+      username,
       color,
-      brand,
       model,
+      size,
       image,
-      fitIds
+      garmentIds
     } = this.props.navigation.state.params;
-
-    const filteredFits = fitIds.map(id => fits[id]);
+    const filteredGarments = garmentIds.map(id => garments[id]);
 
     return (
       <View style={styles.container}>
         <ScrollView>
           <Text>{model}</Text>
           <Image style={styles.image} source={{ uri: image }} />
-          <FitList data={filteredFits} navigation={this.props.navigation} />
+          <GarmentList
+            data={filteredGarments}
+            navigation={this.props.navigation}
+          />
         </ScrollView>
       </View>
     );
@@ -61,4 +64,4 @@ const styles = {
   }
 };
 
-export default GarmentDetail;
+export default FitDetail;

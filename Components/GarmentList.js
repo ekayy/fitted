@@ -13,7 +13,7 @@ import {
 
 import { profiles } from '../data.json';
 
-class GarmentsList extends Component {
+class GarmentList extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { color, model, sku, brand, image } = item;
@@ -61,4 +61,4 @@ const styles = {
   }
 };
 
-export default GarmentsList;
+export default GarmentList;

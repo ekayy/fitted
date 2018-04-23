@@ -13,12 +13,12 @@ import {
 
 import { profiles } from '../data.json';
 
-class FitsList extends Component {
+class FitList extends Component {
   renderFit(item) {
     const { navigate } = this.props.navigation;
     const { id, username, color, model, size, height, weight, image } = item;
     return (
-      <TouchableOpacity key={id} onPress={() => navigate('', item)}>
+      <TouchableOpacity key={id} onPress={() => navigate('FitDetail', item)}>
         <View style={styles.gridItem}>
           <Image style={styles.image} source={{ uri: image }} />
         </View>
@@ -58,4 +58,4 @@ const styles = {
   }
 };
 
-export default FitsList;
+export default FitList;
