@@ -9,6 +9,7 @@
     "react": "16.2.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-elements": "^0.19.1",
+    "react-native-gesture-handler": "^1.0.0-alpha.43",
     "react-native-tab-view": "^0.0.77",
     "react-navigation": "^1.5.11",
     "react-redux": "^5.0.7",

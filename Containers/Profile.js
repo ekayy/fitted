@@ -10,23 +10,74 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
+import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
-import Favorites from '../Components/Favorites';
+const initialLayout = {
+  height: 0,
+  width: Dimensions.get('window').width
+};
 
-import { profiles, garments } from '../data.json';
+import FitsList from '../Components/FitsList';
+import GarmentsList from '../Components/GarmentsList';
+
+import { profiles, fits, garments } from '../data.json';
 
 class Profile extends Component {
+  state = {
+    index: 0,
+    routes: [
+      { key: 'garments', title: 'Favorites' },
+      { key: 'fits', title: 'Fits' }
+    ]
+  };
+
+  _handleIndexChange = index => this.setState({ index });
+
+  _renderHeader = props => <TabBar {...props} />;
+
+  _renderScene = ({ route }) => {
+    const {
+      id,
+      user,
+      favorites,
+      favoriteFits,
+      height,
+      weight,
+      followed_by
+    } = profiles[1];
+    const favoriteGarmentsList = favorites.map(id => garments[id]);
+    const favoriteFitsList = favoriteFits.map(id => fits[id]);
+
+    switch (route.key) {
+      case 'garments':
+        return (
+          <GarmentsList
+            data={favoriteGarmentsList}
+            navigation={this.props.navigation}
+          />
+        );
+      case 'fits':
+        return (
+          <FitsList
+            data={favoriteFitsList}
+            navigation={this.props.navigation}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   render() {
-    const { id, user, favorites, height, weight, followed_by } = profiles[1];
-    const favoriteList = favorites.map(id => garments[id]);
     return (
       <ScrollView style={styles.container}>
-        <Text>
-          {user.first_name} {user.last_name}
-        </Text>
-        <Text>{user.username}</Text>
-        <Favorites data={favoriteList} />
-        <Favorites data={favoriteList} />
+        <TabViewAnimated
+          navigationState={this.state}
+          renderScene={this._renderScene}
+          renderHeader={this._renderHeader}
+          onIndexChange={this._handleIndexChange}
+          initialLayout={initialLayout}
+        />
       </ScrollView>
     );
   }

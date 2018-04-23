@@ -98,6 +98,7 @@
         "email": "wesleylulee@gmail.com"
       },
       "favorites": [1, 2, 3],
+      "favoriteFits": [5, 26, 3],
       "height": 67,
       "weight": 165,
       "followed_by": []

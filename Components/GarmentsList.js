@@ -13,11 +13,15 @@ import {
 
 import { profiles } from '../data.json';
 
-class Favorites extends Component {
-  renderFit(fit) {
-    const { color, model, sku, brand, image } = fit;
+class GarmentsList extends Component {
+  renderGarment(item) {
+    const { navigate } = this.props.navigation;
+    const { color, model, sku, brand, image } = item;
     return (
-      <TouchableOpacity key={sku}>
+      <TouchableOpacity
+        key={sku}
+        onPress={() => navigate('GarmentDetail', item)}
+      >
         <View style={styles.gridItem}>
           <Image style={styles.image} source={{ uri: image }} />
         </View>
@@ -32,7 +36,7 @@ class Favorites extends Component {
         data={data}
         keyExtractor={item => item.key}
         numColumns={3}
-        renderItem={({ item }) => this.renderFit(item)}
+        renderItem={({ item }) => this.renderGarment(item)}
         scrollEnabled={false}
       />
     );
@@ -57,4 +61,4 @@ const styles = {
   }
 };
 
-export default Favorites;
+export default GarmentsList;
