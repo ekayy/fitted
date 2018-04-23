@@ -15,6 +15,7 @@ class Fits extends Component {
     const filteredFits = fitIds.map(id => fits[id]);
     return filteredFits.map(fit => {
       const {
+        id,
         username,
         model,
         size,
@@ -28,7 +29,7 @@ class Fits extends Component {
         <TouchableOpacity
           style={styles.imageContainer}
           onPress={() => {}}
-          key={model}
+          key={id}
         >
           <Image style={styles.image} source={{ uri: image }} />
           <Text style={styles.text}>{username}</Text>

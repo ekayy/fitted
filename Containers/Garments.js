@@ -19,14 +19,14 @@ class Garments extends Component {
     const { garmentIds } = this.props.navigation.state.params;
     const filteredGarments = garmentIds.map(id => garments[id]);
     return filteredGarments.map(garment => {
-      const { color, model, sku, brand, image } = garment;
+      const { id, color, model, sku, brand, image } = garment;
       return (
         <TouchableOpacity
           style={styles.imageContainer}
           onPress={() => {
             this.handlePress(garment);
           }}
-          key={model}
+          key={id}
         >
           <Image style={styles.image} source={{ uri: image }} />
           <Text style={styles.text}>{model}</Text>

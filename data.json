@@ -23,7 +23,7 @@
     "1": {
       "color": "black",
       "model": "Anti-Expo Tee",
-      "sku": "",
+      "sku": "131",
       "brand": 1,
       "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf936ebbd1aff44d35473/1502411560789/ANTI_EXPO_TEE_FLAT_PURPLE.jpg?format=750w",
@@ -32,15 +32,25 @@
     "2": {
       "color": "black",
       "model": "Kake Mock Pullover",
-      "sku": "",
+      "sku": "136",
       "brand": 1,
       "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf936db29d68b1782332b/1502412444163/KAKE_MOCK_PULLOVER_DARK_GREY_FLAT_29b8a8e7-a09c-479b-810f-a6d93268c8b7.jpg?format=750w",
+      "fitIds": [5, 26]
+    },
+    "3": {
+      "color": "black",
+      "model": "Escobar Sweatpants",
+      "sku": "124",
+      "brand": 1,
+      "image":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf937f43b556be2aa08c7/1502412460815/ESCOBAR_SWEATPANTS_FLAT_BLACK.jpg?format=750w",
       "fitIds": [5, 26]
     }
   },
   "fits": {
     "5": {
+      "id": 5,
       "username": "Mackp12",
       "model": "Kake Mock Pullover",
       "size": "small",
@@ -52,6 +62,7 @@
       "garmentIds": [1]
     },
     "26": {
+      "id": 26,
       "username": "srizvi722",
       "model": "Kake Mock Pullover",
       "size": "small",
@@ -63,6 +74,7 @@
       "garmentIds": [1]
     },
     "3": {
+      "id": 3,
       "username": "CH03",
       "model": "Kake Mock Pullover",
       "size": "large",
@@ -72,6 +84,23 @@
       "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
       "garmentIds": [1]
+    }
+  },
+  "profiles": {
+    "1": {
+      "id": 1,
+      "user": {
+        "username": "wesley3",
+        "password":
+          "pbkdf2_sha256$36000$2msduZfZqU8J$AhUHQwHStYsUSyBuDX9b9/TdAyAL9pwboEw99mO78pQ=",
+        "first_name": "wesley",
+        "last_name": "lee",
+        "email": "wesleylulee@gmail.com"
+      },
+      "favorites": [1, 2, 3],
+      "height": 67,
+      "weight": 165,
+      "followed_by": []
     }
   }
 }

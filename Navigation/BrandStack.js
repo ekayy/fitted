@@ -4,9 +4,9 @@ import Brands from '../Containers/Brands';
 import Garments from '../Containers/Garments';
 import Fits from '../Containers/Fits';
 
-const RootStack = StackNavigator(
+const BrandStack = StackNavigator(
   {
-    Home: {
+    Brands: {
       screen: Brands
     },
     Garments: {
@@ -17,8 +17,8 @@ const RootStack = StackNavigator(
     }
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Brands'
   }
 );
 
-export default RootStack;
+export default BrandStack;

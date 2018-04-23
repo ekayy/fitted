@@ -8,7 +8,9 @@
     "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
-    "react-navigation": "^1.5.8",
+    "react-native-elements": "^0.19.1",
+    "react-native-tab-view": "^0.0.77",
+    "react-navigation": "^1.5.11",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"

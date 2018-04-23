@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 
-import RootStack from '../Navigation/RootStack';
+import RootNav from '../Navigation/RootNav';
 
 // Styles
 import styles from './Styles/RootContainerStyles';
@@ -11,7 +11,7 @@ class RootContainer extends Component {
   render() {
     return (
       <View style={styles.applicationView}>
-        <RootStack />
+        <RootNav />
       </View>
     );
   }
