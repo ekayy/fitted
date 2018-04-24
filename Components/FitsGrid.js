@@ -13,15 +13,12 @@ import {
 
 import { profiles } from '../data.json';
 
-class GarmentList extends Component {
-  renderGarment(item) {
+class FitsGrid extends Component {
+  renderFit(item) {
     const { navigate } = this.props.navigation;
-    const { color, model, sku, brand, image } = item;
+    const { id, username, color, model, size, height, weight, image } = item;
     return (
-      <TouchableOpacity
-        key={sku}
-        onPress={() => navigate('GarmentDetail', item)}
-      >
+      <TouchableOpacity key={id} onPress={() => navigate('FitDetail', item)}>
         <View style={styles.gridItem}>
           <Image style={styles.image} source={{ uri: image }} />
         </View>
@@ -36,7 +33,7 @@ class GarmentList extends Component {
         data={data}
         keyExtractor={item => item.key}
         numColumns={3}
-        renderItem={({ item }) => this.renderGarment(item)}
+        renderItem={({ item }) => this.renderFit(item)}
         scrollEnabled={false}
       />
     );
@@ -46,7 +43,6 @@ class GarmentList extends Component {
 const styles = {
   container: {
     flex: 1,
-    flexDirection: 'row',
     paddingHorizontal: 5
   },
   gridItem: {
@@ -61,4 +57,4 @@ const styles = {
   }
 };
 
-export default GarmentList;
+export default FitsGrid;

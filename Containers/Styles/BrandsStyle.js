@@ -9,7 +9,7 @@ export default StyleSheet.create({
   },
   container: {
     flex: 1,
-    margin: 20
+    padding: 20
   },
   row: {
     flex: 1,

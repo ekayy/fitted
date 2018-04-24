@@ -2,21 +2,32 @@
   "brands": {
     "1": {
       "name": "John Elliot",
-      "url":
+      "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/59ba2dcc37c581d3733c1a18/1505373649624/JE+logo+new.png",
-      "garmentIds": [1, 2]
+      "garmentIds": [1, 2],
+      "fitIds": [5, 26]
     },
     "2": {
       "name": "3sixteen",
-      "url":
+      "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5a1ceeab24a694106de87998/1511845608566/3sixteen_logo_SMRpeug.jpg",
-      "garmentIds": [1, 2]
+      "garmentIds": [1, 2],
+      "fitIds": [5, 26]
     },
     "3": {
       "name": "Rogue Territory",
-      "url":
+      "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5a39d769ec212dfab2e7a55b/1513741407136/rogue_territory_copy_copy_large.png",
-      "garmentIds": [1, 2]
+      "garmentIds": [1, 2],
+      "fitIds": [5, 26]
+    },
+
+    "4": {
+      "name": "Fear of God",
+      "image":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5983c9c0cd39c369f60f96a5/1505374841466/?format=1000w",
+      "garmentIds": [1, 2],
+      "fitIds": [5, 26]
     }
   },
   "garments": {
@@ -27,7 +38,7 @@
       "brand": 1,
       "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf936ebbd1aff44d35473/1502411560789/ANTI_EXPO_TEE_FLAT_PURPLE.jpg?format=750w",
-      "fitIds": [5, 26]
+      "fitIds": [5, 26, 3]
     },
     "2": {
       "color": "black",
@@ -59,7 +70,7 @@
       "weight": "145 lbs",
       "image":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
-      "garmentIds": [1]
+      "garmentIds": [1, 2, 3]
     },
     "26": {
       "id": 26,

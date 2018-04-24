@@ -1,19 +1,33 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import Brands from '../Containers/Brands';
-import Garments from '../Containers/Garments';
-import Fits from '../Containers/Fits';
+import BrandOverview from '../Containers/BrandOverview';
+import GarmentDetail from '../Containers/GarmentDetail';
+import FitDetail from '../Containers/FitDetail';
 
 const BrandStack = StackNavigator(
   {
     Brands: {
-      screen: Brands
+      screen: Brands,
+      navigationOptions: { title: 'Brands' }
     },
-    Garments: {
-      screen: Garments
+    BrandOverview: {
+      screen: BrandOverview,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.name
+      })
     },
-    Fits: {
-      screen: Fits
+    GarmentDetail: {
+      screen: GarmentDetail,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.model
+      })
+    },
+    FitDetail: {
+      screen: FitDetail,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.username
+      })
     }
   },
   {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { Metrics } from '../Themes';
 
 import { fits } from '../data.json';
 
@@ -39,7 +40,13 @@ class Fits extends Component {
   }
 
   render() {
-    return <View style={styles.container}>{this._renderItem()}</View>;
+    const { image } = this.props.navigation.state.params;
+    return (
+      <ScrollView>
+        <Image style={styles.mainImage} source={{ uri: image }} />
+        <View style={styles.container}>{this._renderItem()}</View>
+      </ScrollView>
+    );
   }
 }
 
@@ -49,15 +56,19 @@ const styles = {
     flexDirection: 'row',
     paddingHorizontal: 5
   },
+  mainImage: {
+    width: Metrics.screenWidth,
+    minHeight: 500
+  },
   imageContainer: {
     flex: 0.5,
     alignItems: 'center',
-    width: Dimensions.get('window').width / 2 - 20
+    width: Metrics.screenWidth / 2 - 20
   },
   image: {
     height: 200,
     marginVertical: 10,
-    width: Dimensions.get('window').width / 2 - 20
+    width: Metrics.screenWidth / 2 - 20
   }
 };
 

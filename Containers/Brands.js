@@ -1,36 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 // Styles
-import styles from './Styles/BrandScreenStyle';
+import styles from './Styles/BrandsStyle';
 
 import { brands } from '../data.json';
 
 class Brands extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: null
-    };
-  }
-
-  handlePress(data) {
-    const { navigate } = this.props.navigation;
-    navigate('Garments', data);
-  }
-
   renderBrands() {
     return Object.values(brands).map(brand => {
+      const { navigate } = this.props.navigation;
+      const { name, image } = brand;
       return (
         <TouchableOpacity
-          key={brand.name}
-          onPress={() => this.handlePress(brand)}
+          key={name}
+          onPress={() => navigate('BrandOverview', brand)}
         >
           <Image
             resizeMode={'contain'}
             style={styles.image}
-            source={{ uri: brand.url }}
+            source={{ uri: image }}
           />
         </TouchableOpacity>
       );
@@ -38,7 +28,9 @@ class Brands extends Component {
   }
 
   render() {
-    return <View style={styles.container}>{this.renderBrands()}</View>;
+    return (
+      <ScrollView style={styles.container}>{this.renderBrands()}</ScrollView>
+    );
   }
 }
 

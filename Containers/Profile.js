@@ -17,8 +17,8 @@ const initialLayout = {
   width: Dimensions.get('window').width
 };
 
-import FitList from '../Components/FitList';
-import GarmentList from '../Components/GarmentList';
+import FitsGrid from '../Components/FitsGrid';
+import GarmentsGrid from '../Components/GarmentsGrid';
 
 import { profiles, fits, garments } from '../data.json';
 
@@ -51,14 +51,17 @@ class Profile extends Component {
     switch (route.key) {
       case 'garments':
         return (
-          <GarmentList
+          <GarmentsGrid
             data={favoriteGarmentsList}
             navigation={this.props.navigation}
           />
         );
       case 'fits':
         return (
-          <FitList data={favoriteFitsList} navigation={this.props.navigation} />
+          <FitsGrid
+            data={favoriteFitsList}
+            navigation={this.props.navigation}
+          />
         );
       default:
         return null;

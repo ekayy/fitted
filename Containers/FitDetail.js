@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Metrics } from '../Themes';
 
-import GarmentList from '../Components/GarmentList';
+import GarmentsList from '../Components/GarmentsList';
 
 import { garments } from '../data.json';
 
@@ -30,9 +30,8 @@ class FitDetail extends Component {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Text>{model}</Text>
           <Image style={styles.image} source={{ uri: image }} />
-          <GarmentList
+          <GarmentsList
             data={filteredGarments}
             navigation={this.props.navigation}
           />
@@ -50,7 +49,7 @@ const styles = {
   },
   image: {
     width: Metrics.screenWidth,
-    minHeight: 500
+    minHeight: 400
   },
   gridItem: {
     flex: 1,

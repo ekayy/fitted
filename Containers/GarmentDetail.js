@@ -10,9 +10,10 @@ import {
 } from 'react-native';
 import { Metrics } from '../Themes';
 
-import FitList from '../Components/FitList';
+import FavoriteButton from '../Components/FavoriteButton';
+import FitsGrid from '../Components/FitsGrid';
 
-import { fits } from '../data.json';
+import { brands, fits } from '../data.json';
 
 class GarmentDetail extends Component {
   render() {
@@ -26,13 +27,25 @@ class GarmentDetail extends Component {
     } = this.props.navigation.state.params;
 
     const filteredFits = fitIds.map(id => fits[id]);
+    const brandName = brands[brand].name;
 
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Text>{model}</Text>
-          <Image style={styles.image} source={{ uri: image }} />
-          <FitList data={filteredFits} navigation={this.props.navigation} />
+          <View>
+            <Image style={styles.image} source={{ uri: image }} />
+            <View style={styles.favorite}>
+              <FavoriteButton />
+            </View>
+          </View>
+          <View style={styles.description}>
+            <View>
+              <Text>
+                {brandName} - {model} in {color}
+              </Text>
+            </View>
+          </View>
+          <FitsGrid data={filteredFits} navigation={this.props.navigation} />
         </ScrollView>
       </View>
     );
@@ -47,7 +60,12 @@ const styles = {
   },
   image: {
     width: Metrics.screenWidth,
-    minHeight: 500
+    minHeight: 400
+  },
+  favorite: {
+    position: 'absolute',
+    bottom: Metrics.doubleBaseMargin,
+    right: Metrics.doubleBaseMargin
   },
   gridItem: {
     flex: 1,
@@ -58,6 +76,13 @@ const styles = {
   image2: {
     width: undefined,
     height: 200
+  },
+  description: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    paddingVertical: Metrics.baseMargin,
+    paddingHorizontal: Metrics.baseMargin
   }
 };
 
