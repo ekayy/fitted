@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 // Styles
 import styles from './Styles/BrandsStyle';
 
-import { brands } from '../data.json';
+import { fetchBrands } from '../Redux/BrandsRedux';
+// import { brands } from '../data.json';
 
 class Brands extends Component {
+  componentDidMount() {
+    this.props.fetchBrands();
+  }
+
   renderBrands() {
-    return Object.values(brands).map(brand => {
+    return Object.values(this.props.brands).map(brand => {
       const { navigate } = this.props.navigation;
       const { name, image } = brand;
       return (
@@ -34,4 +39,10 @@ class Brands extends Component {
   }
 }
 
-export default Brands;
+const mapStateToProps = state => {
+  return {
+    brands: state.brands.items
+  };
+};
+
+export default connect(mapStateToProps, { fetchBrands })(Brands);

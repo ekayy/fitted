@@ -1,35 +1,67 @@
+import axios from 'axios';
+
 // Actions
-const FETCH = 'brands/FETCH';
-const SUCCESS = 'brands/SUCCESS';
-const FAIL = 'brands/FAIL';
+const FETCH_BRANDS_BEGIN = 'FETCH_BRANDS_BEGIN';
+const FETCH_BRANDS_SUCCESS = 'FETCH_BRANDS_SUCCESS';
+const FETCH_BRANDS_FAILURE = 'FETCH_BRANDS_FAILURE';
 
 export const INITIAL_STATE = {
-  results: null,
-  error: null,
-  fetching: false
+  items: [],
+  loading: false,
+  error: null
 };
 
 // Reducer
-export default function reducer(state = INITIAL_STATE, action = {}) {
+export default function brands(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
-    // do reducer stuff
+    case FETCH_BRANDS_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case FETCH_BRANDS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        items: action.payload.brands
+      };
+
+    case FETCH_BRANDS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        items
+      };
     default:
       return state;
   }
 }
 
 // Action Creators
-export function loadWidgets() {
-  return { type: LOAD };
-}
+export const fetchBrandsBegin = () => ({
+  type: FETCH_BRANDS_BEGIN
+});
 
-export function createWidget(widget) {
-  return { type: CREATE, widget };
-}
+export const fetchBrandsSuccess = brands => ({
+  type: FETCH_BRANDS_SUCCESS,
+  payload: { brands }
+});
+
+export const fetchBrandsFailure = error => ({
+  type: FETCH_BRANDS_FAILURE,
+  payload: { error }
+});
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function getBrands() {
-  return dispatch =>
-    get('/garments').then(garment => dispatch(updateWidget(garment)));
+export function fetchBrands() {
+  return dispatch => {
+    dispatch(fetchBrandsBegin());
+    return axios
+      .get('http://localhost:19001/data.json')
+      .then(response => dispatch(fetchBrandsSuccess(response.data.brands)))
+      .catch(error => dispatch(fetchBrandsFailure(error)));
+  };
 }

@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import configureStore from './CreateStore';
-import BrandsRedux from './BrandsRedux';
+import brands from './BrandsRedux';
 
 export default () => {
   /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
-    brands: BrandsRedux
+    brands
   });
 
   return configureStore(rootReducer);
