@@ -13,6 +13,8 @@
     "react-native-tab-view": "^0.0.77",
     "react-navigation": "^1.5.11",
     "react-redux": "^5.0.7",
+    "reactotron-react-native": "^1.14.0",
+    "reactotron-redux": "^1.13.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
   }
