@@ -1,44 +1,22 @@
 import React from 'react';
-import { TabNavigator } from 'react-navigation';
-import BrandStack from './BrandStack';
-import ProfileStack from './ProfileStack';
+import { StackNavigator, addNavigationHelpers } from 'react-navigation';
+import { connect } from 'react-redux';
+import MainNav from './MainNav';
+import LoggedOutNav from './LoggedOutNav';
+import LoadingScreen from '../Containers/LoadingScreen';
 
 import styles from './Styles/NavigationStyles';
-import { Ionicons } from '@expo/vector-icons';
 
-const RootNav = TabNavigator(
+export const RootNav = StackNavigator(
   {
-    BrandStack: {
-      screen: BrandStack,
-      navigationOptions: {
-        title: 'Brands',
-        tabBarLabel: 'Brands',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-home" size={26} color={tintColor} />
-        ),
-        header: null
-      }
-    },
-    ProfileStack: {
-      screen: ProfileStack,
-      navigationOptions: {
-        title: 'Profile',
-        tabBarLabel: 'Profile',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-person" size={26} color={tintColor} />
-        ),
-        header: null
-      }
-    }
+    LoadingScreen: { screen: LoadingScreen },
+    LoggedOutNav: { screen: LoggedOutNav },
+    MainNav: { screen: MainNav }
   },
   {
-    initialRouteName: 'BrandStack',
-    tabBarOptions: {
-      activeTintColor: '#e91e63',
-      showLabel: false,
-      showIcon: true
-    }
+    initialRouteName: 'MainNav'
   }
 );
 
+// export default PrimaryNav
 export default RootNav;

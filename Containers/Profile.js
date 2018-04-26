@@ -11,6 +11,8 @@ import {
   FlatList
 } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
+import { connect } from 'react-redux';
+import { fetchProfiles } from '../Redux/ProfilesRedux';
 
 const initialLayout = {
   height: 0,
@@ -20,7 +22,8 @@ const initialLayout = {
 import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
 
-import { profiles, fits, garments } from '../data.json';
+import axios from 'axios';
+import { fits } from '../data.json';
 
 class Profile extends Component {
   state = {
@@ -28,25 +31,30 @@ class Profile extends Component {
     routes: [
       { key: 'garments', title: 'Favorites' },
       { key: 'fits', title: 'Fits' }
-    ]
+    ],
+    currentId: 2,
+    favorites: []
   };
+
+  componentDidMount() {
+    const { currentId } = this.props;
+    axios
+      .get(`http://localhost:8000/profiles/${this.state.currentId}`)
+      .then(response => {
+        this.setState({ favorites: response.data.favorites });
+      })
+      .catch(error => console.log(error));
+  }
 
   _handleIndexChange = index => this.setState({ index });
 
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
-    const {
-      id,
-      user,
-      favorites,
-      favoriteFits,
-      height,
-      weight,
-      followed_by
-    } = profiles[1];
-    const favoriteGarmentsList = favorites.map(id => garments[id]);
-    const favoriteFitsList = favoriteFits.map(id => fits[id]);
+    const { garments } = this.props;
+    console.log(garments);
+    const favoriteGarmentsList = this.state.favorites.map(id => garments[id]);
+    // const favoriteFitsList = favoriteFits.map(id => fits[id]);
 
     switch (route.key) {
       case 'garments':
@@ -57,15 +65,14 @@ class Profile extends Component {
           />
         );
       case 'fits':
-        return (
-          <FitsGrid
-            data={favoriteFitsList}
-            navigation={this.props.navigation}
-          />
-        );
+        return <FitsGrid data={fits} navigation={this.props.navigation} />;
       default:
         return null;
     }
+  };
+
+  handlePress = () => {
+    this.props.fetchProfiles(2);
   };
 
   render() {
@@ -78,6 +85,9 @@ class Profile extends Component {
           onIndexChange={this._handleIndexChange}
           initialLayout={initialLayout}
         />
+        <TouchableOpacity onPress={this.handlePress}>
+          <Text>Load More</Text>
+        </TouchableOpacity>
       </ScrollView>
     );
   }
@@ -90,4 +100,12 @@ const styles = {
   }
 };
 
-export default Profile;
+const mapStateToProps = state => {
+  return {
+    currentId: state.login.id,
+    garments: state.garments.items,
+    fits: state.fits.items
+  };
+};
+
+export default connect(mapStateToProps, { fetchProfiles })(Profile);

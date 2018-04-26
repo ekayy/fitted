@@ -7,7 +7,10 @@ import { Metrics } from '../Themes';
 import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
 
-import { garments, fits } from '../data.json';
+import { connect } from 'react-redux';
+import { fetchGarments } from '../Redux/GarmentsRedux';
+import { fetchFits } from '../Redux/FitsRedux';
+// import { garments } from '../data.json';
 
 const initialLayout = {
   height: 0,
@@ -20,8 +23,14 @@ class BrandOverview extends Component {
     routes: [
       { key: 'garments', title: 'Garments' },
       { key: 'fits', title: 'Fits' }
-    ]
+    ],
+    page: 1
   };
+
+  componentDidMount() {
+    this.props.fetchFits(this.state.page);
+    this.props.fetchGarments(this.state.page);
+  }
 
   _handleIndexChange = index => this.setState({ index });
 
@@ -29,22 +38,21 @@ class BrandOverview extends Component {
 
   _renderScene = ({ route }) => {
     const { garmentIds, fitIds } = this.props.navigation.state.params;
-    const filteredGarments = garmentIds.map(id => garments[id]);
-    const filteredFits = fitIds.map(id => fits[id]);
+    const { fits, garments } = this.props;
+    // const filteredGarments = garmentIds.map(id => garments[id]);
+    // const filteredFits = fitIds.map(id => fits[id]);
 
     switch (route.key) {
       case 'garments':
         return (
           <GarmentsGrid
-            data={filteredGarments}
+            data={garments}
             navigation={this.props.navigation}
             numCol={2}
           />
         );
       case 'fits':
-        return (
-          <FitsGrid data={filteredFits} navigation={this.props.navigation} />
-        );
+        return <FitsGrid data={fits} navigation={this.props.navigation} />;
       default:
         return null;
     }
@@ -103,4 +111,13 @@ const styles = {
   }
 };
 
-export default BrandOverview;
+const mapStateToProps = state => {
+  return {
+    fits: state.fits.items,
+    garments: state.garments.items
+  };
+};
+
+export default connect(mapStateToProps, { fetchGarments, fetchFits })(
+  BrandOverview
+);

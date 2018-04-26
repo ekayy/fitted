@@ -16,11 +16,21 @@ import { profiles } from '../data.json';
 class FitsGrid extends Component {
   renderFit(item) {
     const { navigate } = this.props.navigation;
-    const { id, username, color, model, size, height, weight, image } = item;
+    const {
+      id,
+      username,
+      color,
+      model,
+      size,
+      height,
+      weight,
+      image,
+      photo
+    } = item;
     return (
       <TouchableOpacity key={id} onPress={() => navigate('FitDetail', item)}>
         <View style={styles.gridItem}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: photo.url }} />
         </View>
       </TouchableOpacity>
     );

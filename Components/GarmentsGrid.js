@@ -9,28 +9,28 @@ class GarmentsGrid extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { numCol, grid } = this.props;
-    const { color, model, sku, brand, image } = item;
+    const { id, color, model, sku, brand, photo_set } = item;
     return numCol == 2 ? (
       <TouchableOpacity
         style={styles.gridItem}
-        key={sku}
+        key={id}
         onPress={() => navigate('GarmentDetail', item)}
       >
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: photo_set[0].url }} />
         </View>
         <Text>{model}</Text>
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
         style={styles.gridItem}
-        key={sku}
+        key={id}
         onPress={() => navigate('GarmentDetail', item)}
       >
         <View
           style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}
         >
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: photo_set[0].url }} />
         </View>
       </TouchableOpacity>
     );
