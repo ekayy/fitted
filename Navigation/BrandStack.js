@@ -1,11 +1,11 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import Brands from '../Containers/Brands';
 import BrandOverview from '../Containers/BrandOverview';
 import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 
-const BrandStack = StackNavigator(
+const BrandStack = createStackNavigator(
   {
     Brands: {
       screen: Brands,

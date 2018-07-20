@@ -1,7 +1,8 @@
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import RootNav from '../Navigation/RootNav';
 
-const { navigate, reset } = NavigationActions;
+const { navigate } = NavigationActions;
+const { reset } = StackActions;
 const { getStateForAction } = RootNav.router;
 
 const INITIAL_STATE = getStateForAction(
@@ -10,13 +11,13 @@ const INITIAL_STATE = getStateForAction(
 const NOT_LOGGED_IN_STATE = getStateForAction(
   reset({
     index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'LoggedOutNav' })]
+    actions: [navigate({ routeName: 'LoggedOutNav' })]
   })
 );
 const LOGGED_IN_STATE = getStateForAction(
   reset({
     index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'RootNav' })]
+    actions: [navigate({ routeName: 'MainNav' })]
   })
 );
 /**

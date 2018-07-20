@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import Reactotron from 'reactotron-react-native';
 import thunk from 'redux-thunk';
 

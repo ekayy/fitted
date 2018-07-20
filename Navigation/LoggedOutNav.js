@@ -1,11 +1,11 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import Login from '../Containers/Login';
 
 import styles from './Styles/NavigationStyles';
 import { Ionicons } from '@expo/vector-icons';
 
-const LoggedOutNav = StackNavigator(
+const LoggedOutNav = createStackNavigator(
   {
     Login: {
       screen: Login,

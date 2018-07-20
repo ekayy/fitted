@@ -1,12 +1,12 @@
 import React from 'react';
-import { TabNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation';
 import BrandStack from './BrandStack';
 import ProfileStack from './ProfileStack';
 
 import styles from './Styles/NavigationStyles';
 import { Ionicons } from '@expo/vector-icons';
 
-const MainNav = TabNavigator(
+const MainNav = createBottomTabNavigator(
   {
     BrandStack: {
       screen: BrandStack,

@@ -1,10 +1,10 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import Profile from '../Containers/Profile';
 import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 
-const ProfileStack = StackNavigator(
+const ProfileStack = createStackNavigator(
   {
     Profile: {
       screen: Profile,

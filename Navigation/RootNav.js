@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator, addNavigationHelpers } from 'react-navigation';
+import { createStackNavigator, addNavigationHelpers } from 'react-navigation';
 import { connect } from 'react-redux';
 import MainNav from './MainNav';
 import LoggedOutNav from './LoggedOutNav';
@@ -7,7 +7,7 @@ import LoadingScreen from '../Containers/LoadingScreen';
 
 import styles from './Styles/NavigationStyles';
 
-export const RootNav = StackNavigator(
+export const RootNav = createStackNavigator(
   {
     LoadingScreen: { screen: LoadingScreen },
     LoggedOutNav: { screen: LoggedOutNav },
