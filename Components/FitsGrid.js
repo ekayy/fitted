@@ -16,21 +16,12 @@ import { profiles } from '../data.json';
 class FitsGrid extends Component {
   renderFit(item) {
     const { navigate } = this.props.navigation;
-    const {
-      id,
-      username,
-      color,
-      model,
-      size,
-      height,
-      weight,
-      image,
-      photo
-    } = item;
+    const { profile, description, style, photo, likes, garments } = item;
+
     return (
-      <TouchableOpacity key={id} onPress={() => navigate('FitDetail', item)}>
+      <TouchableOpacity onPress={() => navigate('FitDetail', item)}>
         <View style={styles.gridItem}>
-          <Image style={styles.image} source={{ uri: photo.url }} />
+          <Image style={styles.image} source={{ uri: photo }} />
         </View>
       </TouchableOpacity>
     );
@@ -38,10 +29,11 @@ class FitsGrid extends Component {
 
   render() {
     const { data } = this.props;
+
     return (
       <FlatList
         data={data}
-        keyExtractor={item => item.key}
+        keyExtractor={(item, index) => index.toString()}
         numColumns={3}
         renderItem={({ item }) => this.renderFit(item)}
         scrollEnabled={false}

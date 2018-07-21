@@ -28,8 +28,10 @@ class BrandOverview extends Component {
   };
 
   componentDidMount() {
+    const { id } = this.props.navigation.state.params;
+
     this.props.fetchFits(this.state.page);
-    this.props.fetchGarments(this.state.page);
+    this.props.fetchGarments(id);
   }
 
   _handleIndexChange = index => this.setState({ index });
@@ -37,10 +39,7 @@ class BrandOverview extends Component {
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
-    const { garmentIds, fitIds } = this.props.navigation.state.params;
     const { fits, garments } = this.props;
-    // const filteredGarments = garmentIds.map(id => garments[id]);
-    // const filteredFits = fitIds.map(id => fits[id]);
 
     switch (route.key) {
       case 'garments':
@@ -97,7 +96,8 @@ class BrandOverview extends Component {
 const styles = {
   container: {
     flex: 1,
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
+    backgroundColor: '#f3f3f3'
   },
   imageContainer: {
     flex: 0.5,
@@ -118,6 +118,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { fetchGarments, fetchFits })(
-  BrandOverview
-);
+export default connect(
+  mapStateToProps,
+  { fetchGarments, fetchFits }
+)(BrandOverview);

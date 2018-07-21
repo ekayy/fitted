@@ -9,7 +9,7 @@ class GarmentsGrid extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { numCol, grid } = this.props;
-    const { id, color, model, sku, brand, photo_set } = item;
+    const { id, color, model, sku, brand, photo } = item;
     return numCol == 2 ? (
       <TouchableOpacity
         style={styles.gridItem}
@@ -17,7 +17,7 @@ class GarmentsGrid extends Component {
         onPress={() => navigate('GarmentDetail', item)}
       >
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: photo_set[0].url }} />
+          <Image style={styles.image} source={{ uri: `https://${photo}` }} />
         </View>
         <Text>{model}</Text>
       </TouchableOpacity>
@@ -30,7 +30,7 @@ class GarmentsGrid extends Component {
         <View
           style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}
         >
-          <Image style={styles.image} source={{ uri: photo_set[0].url }} />
+          <Image style={styles.image} source={{ uri: `https://${photo}` }} />
         </View>
       </TouchableOpacity>
     );
@@ -41,7 +41,7 @@ class GarmentsGrid extends Component {
     return (
       <FlatList
         data={data}
-        keyExtractor={item => item.key}
+        keyExtractor={item => item.id}
         numColumns={3}
         renderItem={({ item }) => this.renderGarment(item)}
         scrollEnabled={false}

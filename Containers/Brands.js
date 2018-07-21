@@ -6,7 +6,7 @@ import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import styles from './Styles/BrandsStyle';
 
 import { fetchBrands } from '../Redux/BrandsRedux';
-// import { brands } from '../data.json';
+import { brands } from '../data.json';
 
 class Brands extends Component {
   componentDidMount() {
@@ -16,7 +16,7 @@ class Brands extends Component {
   renderBrands() {
     return Object.values(this.props.brands).map(brand => {
       const { navigate } = this.props.navigation;
-      const { name, image } = brand;
+      const { id, name, photo } = brand;
       return (
         <TouchableOpacity
           key={name}
@@ -25,7 +25,7 @@ class Brands extends Component {
           <Image
             resizeMode={'contain'}
             style={styles.image}
-            source={{ uri: image }}
+            source={{ uri: photo }}
           />
         </TouchableOpacity>
       );
@@ -45,4 +45,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { fetchBrands })(Brands);
+export default connect(
+  mapStateToProps,
+  { fetchBrands }
+)(Brands);

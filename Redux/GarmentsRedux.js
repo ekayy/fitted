@@ -56,11 +56,11 @@ export const fetchGarmentsFailure = error => ({
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function fetchGarments(page) {
+export function fetchGarments(brandId) {
   return dispatch => {
     dispatch(fetchGarmentsBegin());
     return axios
-      .get(`http://localhost:8000/garments/?page=${page}`)
+      .get(`http://localhost:8000/garments/?brand=${brandId}`)
       .then(response => dispatch(fetchGarmentsSuccess(response.data.results)))
       .catch(error => dispatch(fetchGarmentsFailure(error)));
   };

@@ -13,29 +13,59 @@ import { Metrics } from '../Themes';
 import FavoriteButton from '../Components/FavoriteButton';
 import FitsGrid from '../Components/FitsGrid';
 
-import { brands, fits } from '../data.json';
+import axios from 'axios';
+
+import { brands } from '../data.json';
 
 class GarmentDetail extends Component {
+  state = {
+    error: null,
+    loading: true,
+    fits: []
+  };
+
+  componentDidMount() {
+    this.fetchFits();
+  }
+
+  fetchFits = async () => {
+    const { id } = this.props.navigation.state.params;
+
+    const response = await axios.get(
+      `http://localhost:8000/fits/?garment=${id}`
+    );
+
+    try {
+      this.setState({
+        fits: response.data.results,
+        error: null,
+        loading: false
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
     const {
-      sku,
+      id,
       color,
+      sku,
       brand,
       model,
-      image,
-      fitIds
+      photo
     } = this.props.navigation.state.params;
 
-    const filteredFits = fitIds.map(id => fits[id]);
     const brandName = brands[brand].name;
 
     return (
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <Image style={styles.image} source={{ uri: image }} />
+            <Image style={styles.image} source={{ uri: `https://${photo}` }} />
             <View style={styles.favorite}>
               <FavoriteButton />
+              <Text>{this.state.fits.photo}</Text>
             </View>
           </View>
           <View style={styles.description}>
@@ -45,7 +75,8 @@ class GarmentDetail extends Component {
               </Text>
             </View>
           </View>
-          <FitsGrid data={filteredFits} navigation={this.props.navigation} />
+
+          <FitsGrid data={this.state.fits} navigation={this.props.navigation} />
         </ScrollView>
       </View>
     );

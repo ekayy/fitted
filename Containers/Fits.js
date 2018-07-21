@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Metrics } from '../Themes';
 
-import { fits } from '../data.json';
+// import { fits } from '../data.json';
 
 class Fits extends Component {
   constructor(props) {
@@ -26,6 +26,7 @@ class Fits extends Component {
         image,
         garmentIds
       } = fit;
+
       return (
         <TouchableOpacity
           style={styles.imageContainer}

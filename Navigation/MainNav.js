@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
 import BrandStack from './BrandStack';
+import GarmentsGrid from '../Components/GarmentsGrid';
 import ProfileStack from './ProfileStack';
 
 import styles from './Styles/NavigationStyles';
@@ -15,6 +16,17 @@ const MainNav = createBottomTabNavigator(
         tabBarLabel: 'Brands',
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-home" size={26} color={tintColor} />
+        ),
+        header: null
+      }
+    },
+    GarmentStack: {
+      screen: GarmentsGrid,
+      navigationOptions: {
+        title: 'Garments',
+        tabBarLabel: 'Garments',
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="ios-person" size={26} color={tintColor} />
         ),
         header: null
       }

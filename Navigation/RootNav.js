@@ -14,7 +14,8 @@ export const RootNav = createStackNavigator(
     MainNav: { screen: MainNav }
   },
   {
-    initialRouteName: 'MainNav'
+    initialRouteName: 'MainNav',
+    headerMode: 'none'
   }
 );
 

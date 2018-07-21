@@ -11,28 +11,53 @@ import {
 import { Metrics } from '../Themes';
 
 import GarmentsList from '../Components/GarmentsList';
+import axios from 'axios';
 
-import { garments } from '../data.json';
+// import { garments } from '../data.json';
 
 class FitDetail extends Component {
+  state = {
+    error: null,
+    loading: true,
+    garments: []
+  };
+
+  componentDidMount() {
+    this.fetchGarments();
+  }
+
+  fetchGarments = async () => {
+    const { garments } = this.props.navigation.state.params;
+
+    const filteredGarments = garments.map(async garmentId => {
+      const response = await axios.get(
+        `http://localhost:8000/garments/${garmentId}`
+      );
+
+      try {
+        this.setState({
+          garments: [...this.state.garments, response.data],
+          error: null,
+          loading: false
+        });
+      } catch (error) {
+        this.setState({
+          error,
+          loading: false
+        });
+      }
+    });
+  };
+
   render() {
-    const {
-      id,
-      username,
-      color,
-      model,
-      size,
-      image,
-      garmentIds
-    } = this.props.navigation.state.params;
-    const filteredGarments = garmentIds.map(id => garments[id]);
+    const { photo } = this.props.navigation.state.params;
 
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: photo }} />
           <GarmentsList
-            data={filteredGarments}
+            data={this.state.garments}
             navigation={this.props.navigation}
           />
         </ScrollView>

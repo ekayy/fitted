@@ -59,7 +59,7 @@ export const fetchProfilesFailure = error => ({
 export function fetchProfiles(page) {
   return dispatch => {
     dispatch(fetchProfilesBegin());
-    console.log(page);
+    // console.log(page);
     return axios
       .get(`http://localhost:8000/profiles/?page=${page}`)
       .then(response => dispatch(fetchProfilesSuccess(response.data.results)))

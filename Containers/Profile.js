@@ -32,40 +32,65 @@ class Profile extends Component {
       { key: 'garments', title: 'Favorites' },
       { key: 'fits', title: 'Fits' }
     ],
-    currentId: 2,
-    favorites: []
+    currentId: 52,
+    favorites: [],
+    favoriteFits: ''
   };
 
   componentDidMount() {
     const { currentId } = this.props;
+
     axios
       .get(`http://localhost:8000/profiles/${this.state.currentId}`)
       .then(response => {
         this.setState({ favorites: response.data.favorites });
+
+        this.fetchFavorites();
       })
       .catch(error => console.log(error));
   }
+
+  fetchFavorites = async () => {
+    this.state.favorites.map(async fitId => {
+      const response = await axios.get(`http://localhost:8000/fits/${fitId}`);
+
+      try {
+        this.setState({
+          favoriteFits: [...this.state.favoriteFits, response.data],
+          error: null,
+          loading: false
+        });
+
+        console.log(this.state.favoriteFits);
+      } catch (error) {
+        this.setState({
+          error,
+          loading: false
+        });
+      }
+    });
+  };
 
   _handleIndexChange = index => this.setState({ index });
 
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
-    const { garments } = this.props;
-    console.log(garments);
-    const favoriteGarmentsList = this.state.favorites.map(id => garments[id]);
-    // const favoriteFitsList = favoriteFits.map(id => fits[id]);
-
     switch (route.key) {
       case 'garments':
         return (
-          <GarmentsGrid
-            data={favoriteGarmentsList}
+          <FitsGrid
+            data={this.state.favoriteFits}
             navigation={this.props.navigation}
           />
         );
       case 'fits':
-        return <FitsGrid data={fits} navigation={this.props.navigation} />;
+        return (
+          <FitsGrid
+            data={this.state.favoriteFits}
+            navigation={this.props.navigation}
+          />
+        );
       default:
         return null;
     }
@@ -108,4 +133,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { fetchProfiles })(Profile);
+export default connect(
+  mapStateToProps,
+  { fetchProfiles }
+)(Profile);

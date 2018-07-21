@@ -1,102 +1,219 @@
 {
   "brands": {
     "1": {
-      "name": "John Elliot",
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/59ba2dcc37c581d3733c1a18/1505373649624/JE+logo+new.png",
-      "garmentIds": [1, 2],
-      "fitIds": [5, 26]
-    },
-    "2": {
       "name": "3sixteen",
-      "image":
+      "photo":
         "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5a1ceeab24a694106de87998/1511845608566/3sixteen_logo_SMRpeug.jpg",
-      "garmentIds": [1, 2],
-      "fitIds": [5, 26]
-    },
-    "3": {
-      "name": "Rogue Territory",
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5a39d769ec212dfab2e7a55b/1513741407136/rogue_territory_copy_copy_large.png",
-      "garmentIds": [1, 2],
-      "fitIds": [5, 26]
-    },
-
-    "4": {
-      "name": "Fear of God",
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5983c9c0cd39c369f60f96a5/1505374841466/?format=1000w",
-      "garmentIds": [1, 2],
-      "fitIds": [5, 26]
-    }
-  },
-  "garments": {
-    "1": {
-      "color": "black",
-      "model": "Anti-Expo Tee",
-      "sku": "131",
-      "brand": 1,
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf936ebbd1aff44d35473/1502411560789/ANTI_EXPO_TEE_FLAT_PURPLE.jpg?format=750w",
-      "fitIds": [5, 26, 3]
+      "id": 1
     },
     "2": {
-      "color": "black",
-      "model": "Kake Mock Pullover",
-      "sku": "136",
-      "brand": 1,
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf936db29d68b1782332b/1502412444163/KAKE_MOCK_PULLOVER_DARK_GREY_FLAT_29b8a8e7-a09c-479b-810f-a6d93268c8b7.jpg?format=750w",
-      "fitIds": [5, 26]
+      "name": "Carhatt WIP",
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/59cf1ccb914e6b6e0eaad8b6/1506745551870/?format=1000w",
+      "id": 2
     },
     "3": {
-      "color": "black",
-      "model": "Escobar Sweatpants",
-      "sku": "124",
-      "brand": 1,
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/598cf910be42d6a025431862/598cf937f43b556be2aa08c7/1502412460815/ESCOBAR_SWEATPANTS_FLAT_BLACK.jpg?format=750w",
-      "fitIds": [5, 26]
-    }
-  },
-  "fits": {
+      "name": "Fear of God",
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/5983c9c0cd39c369f60f96a5/1505374841466/?format=1000w",
+      "id": 3
+    },
+    "4": {
+      "name": "John Elliot",
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/t/59ba2dcc37c581d3733c1a18/1505373649624/JE+logo+new.png",
+      "id": 4
+    },
     "5": {
-      "id": 5,
-      "username": "Mackp12",
-      "model": "Kake Mock Pullover",
-      "size": "small",
-      "color": "dark grey",
-      "height": "5'6",
-      "weight": "145 lbs",
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
-      "garmentIds": [1, 2, 3]
-    },
-    "26": {
-      "id": 26,
-      "username": "srizvi722",
-      "model": "Kake Mock Pullover",
-      "size": "small",
-      "color": "dark grey",
-      "height": "5'6",
-      "weight": "145 lbs",
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
-      "garmentIds": [1]
-    },
-    "3": {
-      "id": 3,
-      "username": "CH03",
-      "model": "Kake Mock Pullover",
-      "size": "large",
-      "color": "dark grey",
-      "height": "6`'",
-      "weight": "175 lbs",
-      "image":
-        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1506656553356/AEd.jpg",
-      "garmentIds": [1]
+      "name": "Reigning Champ",
+      "photo":
+        "http://whatdropsnow.s3.amazonaws.com/brands/logos/458/768aef705d72a269b8799a083c25b985de9016b0.png",
+      "id": 5
     }
   },
+  "garments": [
+    {
+      "id": 1,
+      "color": "Grey Chambray",
+      "sku": "",
+      "brand": 1,
+      "model": "Band Collar Shirt",
+      "photo": "x"
+    },
+    {
+      "id": 2,
+      "color": "Black ",
+      "sku": "",
+      "brand": 1,
+      "model": "BDU Shirt",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/3sixteen_BDU-1-1.jpg"
+    },
+    {
+      "id": 3,
+      "color": "Olive",
+      "sku": "",
+      "brand": 1,
+      "model": "BDU Shirt",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/3sixteen_BDU-2-1.jpg"
+    },
+    {
+      "id": 4,
+      "color": "Indigo",
+      "sku": "",
+      "brand": 1,
+      "model": "BDU Shirt",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/LSS-BlueDenim-Front.jpg"
+    },
+    {
+      "id": 5,
+      "color": "Stone",
+      "sku": "",
+      "brand": 1,
+      "model": "BDU Shirt",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/LSS-TanJacket-Front.jpg"
+    },
+    {
+      "id": 6,
+      "color": "Black",
+      "sku": "",
+      "brand": 1,
+      "model": "CH-22x",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/Black-Chinos-Front.jpg"
+    },
+    {
+      "id": 7,
+      "color": "Khaki",
+      "sku": "",
+      "brand": 1,
+      "model": "CH-44x",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/Khaki-Chinos-Front.jpg"
+    },
+    {
+      "id": 8,
+      "color": "Olive",
+      "sku": "",
+      "brand": 1,
+      "model": "CH-55x",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/Olive-Chinos-Front.jpg"
+    },
+    {
+      "id": 9,
+      "color": "Indigo",
+      "sku": "",
+      "brand": 1,
+      "model": "Chino",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/3sixteen_chinos-1-1.jpg"
+    },
+    {
+      "id": 10,
+      "color": "Red/Blue",
+      "sku": "",
+      "brand": 1,
+      "model": "Crosscut Flannel",
+      "photo":
+        "cdn.shopify.com/s/files/1/0028/6132/products/LSS-RedFlannel-Front.jpg"
+    }
+  ],
+  "fits": [
+    {
+      "profile": 9,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0f4c0dbf2d3c7a393a/1505353039422/AEd.jpg",
+      "likes": [],
+      "garments": [1216]
+    },
+    {
+      "profile": 27,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0d579fb3656e258dea/1505353021414/AEa.jpg",
+      "likes": [],
+      "garments": [1213]
+    },
+    {
+      "profile": 27,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e10c534a5837f7cc6ef/1505353094233/AEg.png",
+      "likes": [],
+      "garments": [1218]
+    },
+    {
+      "profile": 2,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/59b9de42e3df28b377785577/1505353327119/SF-jstrath406-AEtee.JPG",
+      "likes": [],
+      "garments": [1218]
+    },
+    {
+      "profile": 26,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0eebbd1ad6944a0634/1505353304946/SF-ae+tee-itzkoolkidkam.jpg",
+      "likes": [],
+      "garments": [1215]
+    },
+    {
+      "profile": 5,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e10be6594cef6ad3a73/1505353075101/AEf.JPG",
+      "likes": [],
+      "garments": [1217]
+    },
+    {
+      "profile": 5,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/597e5e0dd482e9f4cc7d5ef1/1505353080471/AEb.JPG",
+      "likes": [],
+      "garments": [1214]
+    },
+    {
+      "profile": 19,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/597e5971b8a79b2cf8567685/59bb13c8a8b2b033717cbe97/1505432549631/IG-jon_corleone-AE-cast2.jpg",
+      "likes": [],
+      "garments": [1217]
+    },
+    {
+      "profile": 9,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/59850e05d2b857274d07bab1/59ba2510f57e1e8b4870679d/1505371440314/SF-Mackp12-kake.jpeg",
+      "likes": [],
+      "garments": [1278]
+    },
+    {
+      "profile": 1,
+      "description": null,
+      "style": null,
+      "photo":
+        "https://static1.squarespace.com/static/597e5956bebafb171304e388/59850e05d2b857274d07bab1/59ba263d03596ea9189ec13c/1505371807849/SF-srizvi-kake.jpeg",
+      "likes": [],
+      "garments": [1277]
+    }
+  ],
   "profiles": {
     "1": {
       "id": 1,
@@ -114,5 +231,21 @@
       "weight": 165,
       "followed_by": []
     }
+  },
+  "currentProfile": {
+    "id": 1,
+    "user": {
+      "username": "wesley3",
+      "password":
+        "pbkdf2_sha256$36000$2msduZfZqU8J$AhUHQwHStYsUSyBuDX9b9/TdAyAL9pwboEw99mO78pQ=",
+      "first_name": "wesley",
+      "last_name": "lee",
+      "email": "wesleylulee@gmail.com"
+    },
+    "favorites": [1, 2, 3],
+    "favoriteFits": [5, 26, 3],
+    "height": 67,
+    "weight": 165,
+    "followed_by": []
   }
 }

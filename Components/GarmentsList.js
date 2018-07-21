@@ -9,13 +9,14 @@ class GarmentsList extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { numCol } = this.props;
-    const { color, model, sku, brand, image } = item;
+    const { id, color, model, sku, brand, photo } = item;
     const brandName = brands[brand].name;
+
     return (
-      <View style={styles.listItem} key={sku}>
+      <View style={styles.listItem}>
         <TouchableOpacity onPress={() => navigate('GarmentDetail', item)}>
           <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: image }} />
+            <Image style={styles.image} source={{ uri: `http://${photo}` }} />
           </View>
         </TouchableOpacity>
         <View style={styles.description}>
@@ -31,7 +32,7 @@ class GarmentsList extends Component {
     return (
       <FlatList
         data={data}
-        keyExtractor={item => item.key}
+        keyExtractor={(item, index) => index.toString()}
         numColumns={1}
         renderItem={({ item }) => this.renderGarment(item)}
         scrollEnabled={false}

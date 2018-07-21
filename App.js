@@ -10,6 +10,8 @@ const store = createStore();
 
 class App extends Component {
   render() {
+    Reactotron.log('hello rendering world');
+
     return (
       <Provider store={store}>
         <RootContainer />
