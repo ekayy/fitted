@@ -44,7 +44,17 @@ export default StyleSheet.create({
   },
   loginText: {
     textAlign: 'center',
-    color: Colors.silver
+    color: Colors.snow
+  },
+  facebookButton: {
+    backgroundColor: '#3b5998',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5
+  },
+  switchText: {
+    textAlign: 'center',
+    color: Colors.green
   },
   headerText: {
     color: Colors.snow,

@@ -14,11 +14,12 @@ import {
 } from 'react-native';
 import { Metrics } from '../Themes';
 import axios from 'axios';
-import { baseURL, fbAppId } from '../Config';
+import { baseURL } from '../Config';
+import Reactotron from 'reactotron-react-native';
 
 import styles from './Styles/LoginStyles';
 
-class Login extends Component {
+class Register extends Component {
   isAttempting = false;
   keyboardDidShowListener = {};
   keyboardDidHideListener = {};
@@ -26,8 +27,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'fittedsf',
-      password: 'original',
+      username: '',
+      password: '',
       loading: false
     };
     this.isAttempting = false;
@@ -49,29 +50,13 @@ class Login extends Component {
     }
   };
 
-  loginFb = async () => {
-    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
-      fbAppId,
-      {
-        permissions: ['public_profile']
-      }
-    );
-    if (type === 'success') {
-      const response = await fetch(
-        `https://graph.facebook.com/me?access_token=${token}`
-      );
-    }
-
-    this.props.navigation.navigate('App');
-  };
-
   render() {
     const { username, password, loading } = this.state;
     const editable = !loading;
     const textInputStyle = editable
       ? styles.textInput
       : styles.textInputReadonly;
-    const { navigate } = this.props.navigation;
+    const { navigate, goBack } = this.props.navigation;
 
     return (
       <ScrollView
@@ -122,29 +107,18 @@ class Login extends Component {
               onPress={this.signInAsync}
             >
               <View style={styles.loginButton}>
-                <Text style={styles.loginText}>Sign In</Text>
+                <Text style={styles.loginText}>Sign Up</Text>
               </View>
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={[styles.row, { alignItems: 'center' }]}>
-          <TouchableOpacity
-            style={styles.loginButtonWrapper}
-            onPress={this.loginFb}
-          >
-            <View style={styles.facebookButton}>
-              <Text style={styles.loginText}>Sign In With Facebook</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.row}>
-          <TouchableOpacity onPress={() => navigate('Register')}>
+          <TouchableOpacity onPress={() => goBack(null)}>
             <View>
               <Text style={styles.switchText}>
-                Don't have an account?
-                <Text style={styles.switchText}> Sign Up</Text>
+                Already have an account?
+                <Text style={styles.switchText}> Sign In</Text>
               </Text>
             </View>
           </TouchableOpacity>
@@ -162,4 +136,4 @@ class Login extends Component {
   };
 }
 
-export default Login;
+export default Register;
