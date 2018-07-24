@@ -36,7 +36,8 @@ class Profile extends Component {
     currentId: 52,
     user: [],
     favorites: [],
-    favoriteFits: []
+    favoriteFits: [],
+    favoriteGarments: []
   };
 
   componentDidMount() {
@@ -56,19 +57,20 @@ class Profile extends Component {
         user: profile.data.user
       });
 
-      this.fetchFavorites();
+      this.fetchFavoriteGarments();
+      this.fetchFavoriteFits();
     } catch (error) {
       console.error(error);
     }
   };
 
-  fetchFavorites = async () => {
-    this.state.favorites.map(async fitId => {
-      const response = await axios.get(`${baseURL}/fits/${fitId}`);
+  fetchFavoriteGarments = async () => {
+    this.state.favorites.map(async garmentId => {
+      const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
       try {
         this.setState({
-          favoriteFits: [...this.state.favoriteFits, response.data],
+          favoriteGarments: [...this.state.favoriteGarments, response.data],
           error: null,
           loading: false
         });
@@ -80,6 +82,29 @@ class Profile extends Component {
       }
     });
   };
+
+  fetchFavoriteFits = async () => {
+    this.state.favorites.map(async fitId => {
+      const response = await axios.get(`${baseURL}/fits/${fitId}`);
+
+      try {
+        this.setState({
+          favoriteFits: [...this.state.favoriteFits, response.data],
+          error: null,
+          loading: false
+        });
+
+        console.tron.log(this.state.favoriteFits);
+      } catch (error) {
+        this.setState({
+          error,
+          loading: false
+        });
+      }
+    });
+  };
+
+  handleLoadMore = () => {};
 
   render() {
     return (
@@ -105,20 +130,23 @@ class Profile extends Component {
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
+    const { favoriteGarments, favoriteFits, loading, page } = this.state;
+
     switch (route.key) {
       case 'garments':
         return (
-          <FitsGrid
-            data={this.state.favoriteFits}
+          <GarmentsGrid
+            data={favoriteGarments}
             navigation={this.props.navigation}
+            numCol={3}
+            handleLoadMore={this.handleLoadMore}
+            refreshing={loading}
+            loading={loading}
           />
         );
       case 'fits':
         return (
-          <FitsGrid
-            data={this.state.favoriteFits}
-            navigation={this.props.navigation}
-          />
+          <FitsGrid data={favoriteFits} navigation={this.props.navigation} />
         );
       default:
         return null;

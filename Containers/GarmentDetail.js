@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  FlatList
+  FlatList,
+  AsyncStorage
 } from 'react-native';
 import { Metrics } from '../Themes';
 
@@ -43,6 +44,23 @@ class GarmentDetail extends Component {
     }
   };
 
+  favoriteGarment = async () => {
+    const { id } = this.props.navigation.state.params;
+    const userToken = await AsyncStorage.getItem('userToken');
+
+    await axios.patch(
+      `${baseURL}/profiles/52`,
+      {
+        favorites: [id]
+      },
+      {
+        headers: {
+          Authorization: `Token ${userToken}`
+        }
+      }
+    );
+  };
+
   render() {
     const {
       id,
@@ -59,7 +77,7 @@ class GarmentDetail extends Component {
           <View>
             <Image style={styles.image} source={{ uri: `https://${photo}` }} />
             <View style={styles.favorite}>
-              <FavoriteButton />
+              <FavoriteButton onPress={this.favoriteGarment} />
               <Text>{this.state.fits.photo}</Text>
             </View>
           </View>

@@ -3,13 +3,13 @@ import { createSwitchNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import AppNav from './AppNav';
 import AuthStack from './AuthStack';
-import AuthLoadingScreen from '../Containers/AuthLoadingScreen';
+import AuthLoading from '../Containers/AuthLoading';
 
 import styles from './Styles/NavigationStyles';
 
 export const RootNav = createSwitchNavigator(
   {
-    AuthLoading: { screen: AuthLoadingScreen },
+    AuthLoading: { screen: AuthLoading },
     Auth: { screen: AuthStack },
     App: { screen: AppNav }
   },

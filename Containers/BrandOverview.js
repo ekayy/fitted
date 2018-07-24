@@ -75,8 +75,6 @@ class BrandOverview extends Component {
   };
 
   handleLoadMore = () => {
-    const { id } = this.props.navigation.state.params;
-
     this.setState(
       {
         page: this.state.page + 1
@@ -87,23 +85,12 @@ class BrandOverview extends Component {
     );
   };
 
-  renderFooter = () => {
-    const { loading } = this.state;
-
-    if (!loading) return null;
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  };
-
   _handleIndexChange = index => this.setState({ index });
 
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
-    const { garments, fits, loading } = this.state;
+    const { garments, fits, loading, page } = this.state;
 
     switch (route.key) {
       case 'garments':
@@ -114,7 +101,8 @@ class BrandOverview extends Component {
             numCol={2}
             handleLoadMore={this.handleLoadMore}
             refreshing={loading}
-            ListFooterComponent={this.renderFooter}
+            loading={loading}
+            page={page}
           />
         );
       case 'fits':

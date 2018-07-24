@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator
+} from 'react-native';
 import { Metrics } from '../Themes';
 
 import { profiles } from '../data.json';
@@ -37,7 +44,14 @@ class GarmentsGrid extends Component {
   }
 
   renderFooter = () => {
-    return this.props.ListFooterComponent();
+    const { loading } = this.props;
+
+    if (!loading) return null;
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
   };
 
   handleLoadMore = () => {

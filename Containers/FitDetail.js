@@ -6,11 +6,13 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  FlatList
+  FlatList,
+  AsyncStorage
 } from 'react-native';
 import { Metrics } from '../Themes';
 
 import GarmentsList from '../Components/GarmentsList';
+import FavoriteButton from '../Components/FavoriteButton';
 import axios from 'axios';
 import { baseURL } from '../Config';
 
@@ -18,7 +20,8 @@ class FitDetail extends Component {
   state = {
     error: null,
     loading: true,
-    garments: []
+    garments: [],
+    toggled: false
   };
 
   componentDidMount() {
@@ -46,13 +49,44 @@ class FitDetail extends Component {
     });
   };
 
+  favoriteFit = async () => {
+    const { id } = this.props.navigation.state.params;
+    const userToken = await AsyncStorage.getItem('userToken');
+
+    // console.tron.log(id);
+    // console.tron.log(userToken);
+
+    await axios.patch(
+      `${baseURL}/profiles/52`,
+      {
+        favorites: [2]
+      },
+      {
+        headers: {
+          Authorization: `Token ${userToken}`
+        }
+      }
+    );
+  };
+
   render() {
     const { photo } = this.props.navigation.state.params;
 
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Image style={styles.image} source={{ uri: photo }} />
+          <View>
+            <Image style={styles.image} source={{ uri: photo }} />
+
+            <View style={styles.favorite}>
+              <FavoriteButton
+                onPress={this.favoriteFit}
+                toggled={this.state.toggled}
+              />
+              <Text>{this.state.garments.photo}</Text>
+            </View>
+          </View>
+
           <GarmentsList
             data={this.state.garments}
             navigation={this.props.navigation}
@@ -72,6 +106,11 @@ const styles = {
   image: {
     width: Metrics.screenWidth,
     minHeight: 400
+  },
+  favorite: {
+    position: 'absolute',
+    bottom: Metrics.doubleBaseMargin,
+    right: Metrics.doubleBaseMargin
   },
   gridItem: {
     flex: 1,

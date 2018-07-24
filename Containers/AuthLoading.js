@@ -2,9 +2,9 @@ import React from 'react';
 import { ActivityIndicator, AsyncStorage, StatusBar, View } from 'react-native';
 
 // Styles
-import styles from './Styles/LoadingScreenStyle';
+import styles from './Styles/AuthLoadingStyles';
 
-class AuthLoadingScreen extends React.Component {
+class AuthLoading extends React.Component {
   constructor(props) {
     super(props);
     this._bootstrapAsync();
@@ -29,4 +29,4 @@ class AuthLoadingScreen extends React.Component {
   }
 }
 
-export default AuthLoadingScreen;
+export default AuthLoading;

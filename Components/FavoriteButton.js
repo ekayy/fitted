@@ -10,24 +10,24 @@ class FavoriteButton extends Component {
     onPress: PropTypes.func
   };
 
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
+  //
+  //   this.state = {
+  //     toggled: false
+  //   };
+  // }
 
-    this.state = {
-      toggled: false
-    };
-  }
-
-  toggleItem = () => {
-    this.setState({ toggled: !this.state.toggled });
-  };
+  // toggleItem = () => {
+  //   this.setState({ toggled: !this.state.toggled });
+  // };
 
   render() {
     return (
-      <TouchableOpacity onPress={this.toggleItem}>
+      <TouchableOpacity onPress={this.props.onPress}>
         <View style={{ alignItems: 'center' }}>
           <Ionicons
-            name={this.state.toggled ? 'ios-star' : 'ios-star-outline'}
+            name={this.props.toggled ? 'ios-star' : 'ios-star-outline'}
             size={30}
             color="#000"
             style={{
