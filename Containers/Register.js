@@ -35,19 +35,20 @@ class Register extends Component {
   }
 
   signInAsync = async () => {
-    const { username, password } = this.state;
-
-    try {
-      const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
-        username,
-        password
-      });
-
-      await AsyncStorage.setItem('userToken', response.data.token);
-      this.props.navigation.navigate('App');
-    } catch (error) {
-      console.error(error);
-    }
+    // const { username, password } = this.state;
+    //
+    // try {
+    //   const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
+    //     username,
+    //     password
+    //   });
+    //
+    //   await AsyncStorage.setItem('userToken', response.data.token);
+    //   this.props.navigation.navigate('App');
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    this.props.navigation.navigate('RegisterMeasurements');
   };
 
   render() {

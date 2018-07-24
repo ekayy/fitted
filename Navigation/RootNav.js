@@ -14,8 +14,8 @@ export const RootNav = createSwitchNavigator(
     App: { screen: AppNav }
   },
   {
-    initialRouteName: 'AuthLoading',
-    headerMode: 'none'
+    initialRouteName: 'AuthLoading'
+    // headerMode: 'none'
   }
 );
 
