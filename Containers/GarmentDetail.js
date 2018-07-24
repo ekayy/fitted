@@ -9,6 +9,7 @@ import {
   FlatList,
   AsyncStorage
 } from 'react-native';
+import { WebBrowser } from 'expo';
 import { Metrics } from '../Themes';
 
 import FavoriteButton from '../Components/FavoriteButton';
@@ -61,6 +62,12 @@ class GarmentDetail extends Component {
     );
   };
 
+  handleOpenWithWebBrowser = () => {
+    WebBrowser.openBrowserAsync(
+      'https://www.3sixteen.com/products/bdu-shirt-khaki-ripstop'
+    );
+  };
+
   render() {
     const {
       id,
@@ -75,7 +82,13 @@ class GarmentDetail extends Component {
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <Image style={styles.image} source={{ uri: `https://${photo}` }} />
+            <TouchableOpacity onPress={this.handleOpenWithWebBrowser}>
+              <Image
+                style={styles.image}
+                source={{ uri: `https://${photo}` }}
+              />
+            </TouchableOpacity>
+
             <View style={styles.favorite}>
               <FavoriteButton onPress={this.favoriteGarment} />
               <Text>{this.state.fits.photo}</Text>
