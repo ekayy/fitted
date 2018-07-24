@@ -20,17 +20,6 @@ const MainNav = createBottomTabNavigator(
         header: null
       }
     },
-    GarmentStack: {
-      screen: GarmentsGrid,
-      navigationOptions: {
-        title: 'Garments',
-        tabBarLabel: 'Garments',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-person" size={26} color={tintColor} />
-        ),
-        header: null
-      }
-    },
     ProfileStack: {
       screen: ProfileStack,
       navigationOptions: {

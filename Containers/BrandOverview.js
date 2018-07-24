@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator
+} from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import { Metrics } from '../Themes';
 
 import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
-
-import { connect } from 'react-redux';
-import { fetchGarments } from '../Redux/GarmentsRedux';
-import { fetchFits } from '../Redux/FitsRedux';
-// import { garments } from '../data.json';
+import Reactotron from 'reactotron-react-native';
+import axios from 'axios';
+import { baseURL } from '../Config';
 
 const initialLayout = {
   height: 0,
@@ -24,22 +29,81 @@ class BrandOverview extends Component {
       { key: 'garments', title: 'Garments' },
       { key: 'fits', title: 'Fits' }
     ],
+    garments: [],
+    error: null,
+    loading: true,
     page: 1
   };
 
   componentDidMount() {
     const { id } = this.props.navigation.state.params;
 
-    this.props.fetchFits(this.state.page);
-    this.props.fetchGarments(id);
+    this.fetchFits(this.state.page);
+    this.fetchGarments(this.state.page, id);
   }
+
+  fetchGarments = async page => {
+    const { id } = this.props.navigation.state.params;
+
+    const response = await axios.get(
+      `${baseURL}/garments/?page=${page}&brand=${id}`
+    );
+
+    try {
+      this.setState({
+        garments: [...this.state.garments, ...response.data.results],
+        error: null,
+        loading: false
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchFits = async () => {
+    const response = await axios.get(`${baseURL}/fits/?page=1`);
+
+    try {
+      this.setState({
+        fits: response.data.results,
+        error: null,
+        loading: false
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  handleLoadMore = () => {
+    const { id } = this.props.navigation.state.params;
+
+    this.setState(
+      {
+        page: this.state.page + 1
+      },
+      () => {
+        this.fetchGarments(this.state.page);
+      }
+    );
+  };
+
+  renderFooter = () => {
+    const { loading } = this.state;
+
+    if (!loading) return null;
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  };
 
   _handleIndexChange = index => this.setState({ index });
 
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
-    const { fits, garments } = this.props;
+    const { garments, fits, loading } = this.state;
 
     switch (route.key) {
       case 'garments':
@@ -48,6 +112,9 @@ class BrandOverview extends Component {
             data={garments}
             navigation={this.props.navigation}
             numCol={2}
+            handleLoadMore={this.handleLoadMore}
+            refreshing={loading}
+            ListFooterComponent={this.renderFooter}
           />
         );
       case 'fits':
@@ -57,30 +124,9 @@ class BrandOverview extends Component {
     }
   };
 
-  // _renderItem() {
-  //   const { navigate } = this.props.navigation;
-  //   const { garmentIds } = this.props.navigation.state.params;
-  //   const filteredGarments = garmentIds.map(id => garments[id]);
-  //   return filteredGarments.map(garment => {
-  //     const { id, color, model, sku, brand, image } = garment;
-  //     return (
-  //       <TouchableOpacity
-  //         style={styles.imageContainer}
-  //         onPress={() => {
-  //           navigate('GarmentDetail', garment);
-  //         }}
-  //         key={id}
-  //       >
-  //         <Image style={styles.image} source={{ uri: image }} />
-  //         <Text style={styles.text}>{model}</Text>
-  //       </TouchableOpacity>
-  //     );
-  //   });
-  // }
-
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <TabViewAnimated
           navigationState={this.state}
           renderScene={this._renderScene}
@@ -88,7 +134,7 @@ class BrandOverview extends Component {
           onIndexChange={this._handleIndexChange}
           initialLayout={initialLayout}
         />
-      </ScrollView>
+      </View>
     );
   }
 }
@@ -108,17 +154,11 @@ const styles = {
     height: 200,
     marginVertical: 10,
     width: Metrics.screenWidth / 2 - 20
+  },
+  loading: {
+    paddingVertical: 20,
+    flex: 1
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    fits: state.fits.items,
-    garments: state.garments.items
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { fetchGarments, fetchFits }
-)(BrandOverview);
+export default BrandOverview;

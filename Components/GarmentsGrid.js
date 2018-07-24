@@ -36,15 +36,29 @@ class GarmentsGrid extends Component {
     );
   }
 
+  renderFooter = () => {
+    return this.props.ListFooterComponent();
+  };
+
+  handleLoadMore = () => {
+    return this.props.handleLoadMore();
+  };
+
   render() {
-    const { data, numColumns } = this.props;
+    const { data, numColumns, ListFooterComponent, fetching } = this.props;
     return (
       <FlatList
+        style={{ flex: 1 }}
         data={data}
         keyExtractor={item => item.id}
         numColumns={3}
         renderItem={({ item }) => this.renderGarment(item)}
-        scrollEnabled={false}
+        onEndReached={this.handleLoadMore}
+        onEndReachedThreshold={0}
+        refreshing={fetching}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        ListFooterComponent={this.renderFooter}
       />
     );
   }

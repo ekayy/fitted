@@ -12,8 +12,7 @@ import { Metrics } from '../Themes';
 
 import GarmentsList from '../Components/GarmentsList';
 import axios from 'axios';
-
-// import { garments } from '../data.json';
+import { baseURL } from '../Config';
 
 class FitDetail extends Component {
   state = {
@@ -30,9 +29,7 @@ class FitDetail extends Component {
     const { garments } = this.props.navigation.state.params;
 
     const filteredGarments = garments.map(async garmentId => {
-      const response = await axios.get(
-        `http://localhost:8000/garments/${garmentId}`
-      );
+      const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
       try {
         this.setState({

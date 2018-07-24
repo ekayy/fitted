@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { baseURL } from '../Config';
 
 // Actions
 const FETCH_PROFILES_BEGIN = 'FETCH_PROFILES_BEGIN';
@@ -61,7 +62,7 @@ export function fetchProfiles(page) {
     dispatch(fetchProfilesBegin());
     // console.log(page);
     return axios
-      .get(`http://localhost:8000/profiles/?page=${page}`)
+      .get(`${baseURL}/profiles/?page=${page}`)
       .then(response => dispatch(fetchProfilesSuccess(response.data.results)))
       .catch(error => dispatch(fetchProfilesFailure(error)));
   };

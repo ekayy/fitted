@@ -14,8 +14,7 @@ import FavoriteButton from '../Components/FavoriteButton';
 import FitsGrid from '../Components/FitsGrid';
 
 import axios from 'axios';
-
-import { brands } from '../data.json';
+import { baseURL } from '../Config';
 
 class GarmentDetail extends Component {
   state = {
@@ -31,9 +30,7 @@ class GarmentDetail extends Component {
   fetchFits = async () => {
     const { id } = this.props.navigation.state.params;
 
-    const response = await axios.get(
-      `http://localhost:8000/fits/?garment=${id}`
-    );
+    const response = await axios.get(`${baseURL}/fits/?garment=${id}`);
 
     try {
       this.setState({
@@ -56,8 +53,6 @@ class GarmentDetail extends Component {
       photo
     } = this.props.navigation.state.params;
 
-    const brandName = brands[brand].name;
-
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -71,7 +66,7 @@ class GarmentDetail extends Component {
           <View style={styles.description}>
             <View>
               <Text>
-                {brandName} - {model} in {color}
+                {model} in {color}
               </Text>
             </View>
           </View>

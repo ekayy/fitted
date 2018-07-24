@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { baseURL } from '../Config';
 
 // Actions
 const FETCH_GARMENTS_BEGIN = 'FETCH_GARMENTS_BEGIN';
@@ -56,11 +57,11 @@ export const fetchGarmentsFailure = error => ({
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function fetchGarments(brandId) {
+export function fetchGarments(page, brandId) {
   return dispatch => {
     dispatch(fetchGarmentsBegin());
     return axios
-      .get(`http://localhost:8000/garments/?brand=${brandId}`)
+      .get(`${baseURL}/garments/?page=${page}&brand=${brandId}`)
       .then(response => dispatch(fetchGarmentsSuccess(response.data.results)))
       .catch(error => dispatch(fetchGarmentsFailure(error)));
   };

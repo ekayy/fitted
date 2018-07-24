@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { baseURL } from '../Config';
 
 // Actions
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -63,7 +64,7 @@ export function login(username, password) {
   return dispatch => {
     dispatch(loginRequest());
     return axios
-      .post('http://localhost:8000/user/get_auth_token/', {
+      .post(baseURL + '/user/get_auth_token/', {
         username,
         password
       })

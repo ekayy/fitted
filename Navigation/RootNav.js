@@ -14,7 +14,7 @@ export const RootNav = createStackNavigator(
     MainNav: { screen: MainNav }
   },
   {
-    initialRouteName: 'MainNav',
+    initialRouteName: 'LoggedOutNav',
     headerMode: 'none'
   }
 );

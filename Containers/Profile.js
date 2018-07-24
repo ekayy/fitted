@@ -13,6 +13,7 @@ import {
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import { connect } from 'react-redux';
 import { fetchProfiles } from '../Redux/ProfilesRedux';
+import { baseURL } from '../Config';
 
 const initialLayout = {
   height: 0,
@@ -41,7 +42,7 @@ class Profile extends Component {
     const { currentId } = this.props;
 
     axios
-      .get(`http://localhost:8000/profiles/${this.state.currentId}`)
+      .get(`${baseURL}/${this.state.currentId}`)
       .then(response => {
         this.setState({ favorites: response.data.favorites });
 

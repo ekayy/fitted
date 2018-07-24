@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { baseURL } from '../Config';
 
 // Actions
 const FETCH_FITS_BEGIN = 'FETCH_FITS_BEGIN';
@@ -60,7 +61,7 @@ export function fetchFits(page) {
   return dispatch => {
     dispatch(fetchFitsBegin());
     return axios
-      .get(`http://localhost:8000/fits/?page=${page}`)
+      .get(`${baseURL}/fits/?page=${page}`)
       .then(response => dispatch(fetchFitsSuccess(response.data.results)))
       .catch(error => dispatch(fetchFitsFailure(error)));
   };

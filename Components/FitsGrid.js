@@ -32,11 +32,11 @@ class FitsGrid extends Component {
 
     return (
       <FlatList
+        style={{ flex: 1 }}
         data={data}
         keyExtractor={(item, index) => index.toString()}
         numColumns={3}
         renderItem={({ item }) => this.renderFit(item)}
-        scrollEnabled={false}
       />
     );
   }
