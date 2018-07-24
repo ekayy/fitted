@@ -11,8 +11,7 @@ import {
   FlatList
 } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
-import { connect } from 'react-redux';
-import { fetchProfiles } from '../Redux/ProfilesRedux';
+import ProfileHeader from '../Components/ProfileHeader';
 import { baseURL } from '../Config';
 
 const initialLayout = {
@@ -24,7 +23,7 @@ import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
 
 import axios from 'axios';
-import { fits } from '../data.json';
+// import { fits } from '../data.json';
 
 class Profile extends Component {
   state = {
@@ -33,27 +32,39 @@ class Profile extends Component {
       { key: 'garments', title: 'Favorites' },
       { key: 'fits', title: 'Fits' }
     ],
+    loading: true,
     currentId: 52,
+    user: [],
     favorites: [],
-    favoriteFits: ''
+    favoriteFits: []
   };
 
   componentDidMount() {
     const { currentId } = this.props;
 
-    axios
-      .get(`${baseURL}/${this.state.currentId}`)
-      .then(response => {
-        this.setState({ favorites: response.data.favorites });
-
-        this.fetchFavorites();
-      })
-      .catch(error => console.log(error));
+    this.fetchProfile();
   }
+
+  fetchProfile = async () => {
+    try {
+      const profile = await axios.get(
+        `${baseURL}/profiles/${this.state.currentId}`
+      );
+
+      this.setState({
+        favorites: profile.data.favorites,
+        user: profile.data.user
+      });
+
+      this.fetchFavorites();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   fetchFavorites = async () => {
     this.state.favorites.map(async fitId => {
-      const response = await axios.get(`http://localhost:8000/fits/${fitId}`);
+      const response = await axios.get(`${baseURL}/fits/${fitId}`);
 
       try {
         this.setState({
@@ -61,8 +72,6 @@ class Profile extends Component {
           error: null,
           loading: false
         });
-
-        console.log(this.state.favoriteFits);
       } catch (error) {
         this.setState({
           error,
@@ -71,6 +80,25 @@ class Profile extends Component {
       }
     });
   };
+
+  render() {
+    return (
+      <ScrollView style={styles.container}>
+        <ProfileHeader
+          navigation={this.props.navigation}
+          user={this.state.user}
+        />
+
+        <TabViewAnimated
+          navigationState={this.state}
+          renderScene={this._renderScene}
+          renderHeader={this._renderHeader}
+          onIndexChange={this._handleIndexChange}
+          initialLayout={initialLayout}
+        />
+      </ScrollView>
+    );
+  }
 
   _handleIndexChange = index => this.setState({ index });
 
@@ -96,27 +124,6 @@ class Profile extends Component {
         return null;
     }
   };
-
-  handlePress = () => {
-    this.props.fetchProfiles(2);
-  };
-
-  render() {
-    return (
-      <ScrollView style={styles.container}>
-        <TabViewAnimated
-          navigationState={this.state}
-          renderScene={this._renderScene}
-          renderHeader={this._renderHeader}
-          onIndexChange={this._handleIndexChange}
-          initialLayout={initialLayout}
-        />
-        <TouchableOpacity onPress={this.handlePress}>
-          <Text>Load More</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    );
-  }
 }
 
 const styles = {
@@ -126,15 +133,4 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    currentId: state.login.id,
-    garments: state.garments.items,
-    fits: state.fits.items
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { fetchProfiles }
-)(Profile);
+export default Profile;

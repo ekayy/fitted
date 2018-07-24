@@ -1,20 +1,20 @@
 import React from 'react';
-import { createStackNavigator, addNavigationHelpers } from 'react-navigation';
+import { createSwitchNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import MainNav from './MainNav';
-import LoggedOutNav from './LoggedOutNav';
-import LoadingScreen from '../Containers/LoadingScreen';
+import AppNav from './AppNav';
+import AuthStack from './AuthStack';
+import AuthLoadingScreen from '../Containers/AuthLoadingScreen';
 
 import styles from './Styles/NavigationStyles';
 
-export const RootNav = createStackNavigator(
+export const RootNav = createSwitchNavigator(
   {
-    LoadingScreen: { screen: LoadingScreen },
-    LoggedOutNav: { screen: LoggedOutNav },
-    MainNav: { screen: MainNav }
+    AuthLoading: { screen: AuthLoadingScreen },
+    Auth: { screen: AuthStack },
+    App: { screen: AppNav }
   },
   {
-    initialRouteName: 'LoggedOutNav',
+    initialRouteName: 'AuthLoading',
     headerMode: 'none'
   }
 );

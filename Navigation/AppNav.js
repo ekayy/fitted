@@ -7,7 +7,7 @@ import ProfileStack from './ProfileStack';
 import styles from './Styles/NavigationStyles';
 import { Ionicons } from '@expo/vector-icons';
 
-const MainNav = createBottomTabNavigator(
+const AppNav = createBottomTabNavigator(
   {
     BrandStack: {
       screen: BrandStack,
@@ -42,4 +42,4 @@ const MainNav = createBottomTabNavigator(
   }
 );
 
-export default MainNav;
+export default AppNav;

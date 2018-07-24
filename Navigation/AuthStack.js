@@ -5,7 +5,7 @@ import Login from '../Containers/Login';
 import styles from './Styles/NavigationStyles';
 import { Ionicons } from '@expo/vector-icons';
 
-const LoggedOutNav = createStackNavigator(
+const AuthStack = createStackNavigator(
   {
     Login: {
       screen: Login,
@@ -22,4 +22,4 @@ const LoggedOutNav = createStackNavigator(
   }
 );
 
-export default LoggedOutNav;
+export default AuthStack;

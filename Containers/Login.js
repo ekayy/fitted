@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  AsyncStorage,
   View,
   ScrollView,
   Text,
@@ -11,9 +12,10 @@ import {
   LayoutAnimation,
   Button
 } from 'react-native';
-import { connect } from 'react-redux';
 import { Metrics } from '../Themes';
-import { login } from '../Redux/LoginRedux';
+import axios from 'axios';
+import { baseURL } from '../Config';
+import Reactotron from 'reactotron-react-native';
 
 import styles from './Styles/LoginStyles';
 
@@ -26,43 +28,36 @@ class Login extends Component {
     super(props);
     this.state = {
       username: 'fittedsf',
-      password: 'original'
+      password: 'original',
+      loading: false
     };
     this.isAttempting = false;
   }
 
-  componentWillReceiveProps(newProps) {
-    this.forceUpdate();
-    // Did the login attempt complete?
-    if (this.isAttempting && !newProps.loading) {
-      this.props.navigation.goBack();
-    }
-  }
-
-  handlePressLogin = () => {
+  signInAsync = async () => {
     const { username, password } = this.state;
-    this.isAttempting = true;
 
-    this.props.login(username, password);
-    this.props.navigation.dispatch(resetAction);
-  };
+    try {
+      const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
+        username,
+        password
+      });
 
-  handleChangeUsername = text => {
-    this.setState({ username: text });
-  };
-
-  handleChangePassword = text => {
-    this.setState({ password: text });
+      await AsyncStorage.setItem('userToken', response.data.token);
+      this.props.navigation.navigate('App');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   render() {
-    const { username, password } = this.state;
-    const { loading } = this.props;
+    const { username, password, loading } = this.state;
     const editable = !loading;
     const textInputStyle = editable
       ? styles.textInput
       : styles.textInputReadonly;
     const { navigate } = this.props.navigation;
+
     return (
       <ScrollView
         contentContainerStyle={{ justifyContent: 'center' }}
@@ -81,7 +76,7 @@ class Login extends Component {
               returnKeyType="next"
               autoCapitalize="none"
               autoCorrect={false}
-              onChangeText={this.handleChangeUsername}
+              onChangeText={this._handleChangeUsername}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
               placeholder="Username"
@@ -100,9 +95,8 @@ class Login extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry
-              onChangeText={this.handleChangePassword}
+              onChangeText={this._handleChangePassword}
               underlineColorAndroid="transparent"
-              onSubmitEditing={this.handlePressLogin}
               placeholder="Password"
             />
           </View>
@@ -110,7 +104,7 @@ class Login extends Component {
           <View style={[styles.loginRow]}>
             <TouchableOpacity
               style={styles.loginButtonWrapper}
-              onPress={this.handlePressLogin}
+              onPress={this.signInAsync}
             >
               <View style={styles.loginButton}>
                 <Text style={styles.loginText}>Sign In</Text>
@@ -121,12 +115,14 @@ class Login extends Component {
       </ScrollView>
     );
   }
+
+  _handleChangeUsername = text => {
+    this.setState({ username: text });
+  };
+
+  _handleChangePassword = text => {
+    this.setState({ password: text });
+  };
 }
 
-const mapStateToProps = state => {
-  return {
-    loading: state.login.loading
-  };
-};
-
-export default connect(mapStateToProps, { login })(Login);
+export default Login;
