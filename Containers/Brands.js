@@ -41,12 +41,7 @@ const brands = [
 ];
 
 class Brands extends Component {
-  componentDidMount() {
-    // this.props.fetchBrands();
-  }
-
   renderBrands() {
-    // return Object.values(this.props.brands).map(brand => {
     return brands.map(brand => {
       const { navigate } = this.props.navigation;
       const { id, name, photo } = brand;
@@ -56,11 +51,13 @@ class Brands extends Component {
           key={name}
           onPress={() => navigate('BrandOverview', brand)}
         >
-          <Image
-            resizeMode={'contain'}
-            style={styles.image}
-            source={{ uri: photo }}
-          />
+          <View style={styles.gridItem}>
+            <Image
+              resizeMode={'contain'}
+              style={styles.image}
+              source={{ uri: photo }}
+            />
+          </View>
         </TouchableOpacity>
       );
     });
@@ -68,20 +65,11 @@ class Brands extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>{this.renderBrands()}</ScrollView>
+      <ScrollView contentContainerStyle={styles.container}>
+        {this.renderBrands()}
+      </ScrollView>
     );
   }
 }
-
-// const mapStateToProps = state => {
-//   return {
-//     brands: state.brands.items
-//   };
-// };
-
-// export default connect(
-//   mapStateToProps,
-//   { fetchBrands }
-// )(Brands);
 
 export default Brands;
