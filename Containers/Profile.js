@@ -93,8 +93,6 @@ class Profile extends Component {
           error: null,
           loading: false
         });
-
-        console.tron.log(this.state.favoriteFits);
       } catch (error) {
         this.setState({
           error,
@@ -157,7 +155,8 @@ class Profile extends Component {
 const styles = {
   container: {
     flex: 1,
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
+    backgroundColor: '#f3f3f3'
   }
 };
 

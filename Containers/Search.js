@@ -69,10 +69,10 @@ class Search extends Component {
         <SearchBar
           round
           lightTheme
-          showLoading
           placeholder="Search"
           onChangeText={this.handleChange}
           autoCapitalize="none"
+          platform="ios"
           value={this.state.searchTerm}
         />
 
