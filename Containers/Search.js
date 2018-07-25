@@ -15,10 +15,17 @@ import axios from 'axios';
 import { baseURL } from '../Config';
 
 class Search extends Component {
+  static navigationOptions = {
+    title: 'Search'
+  };
+
   constructor(props) {
     super(props);
+
     this.state = {
+      searchTerm: '',
       garments: [],
+      results: [],
       error: null,
       loading: true,
       page: 1
@@ -43,7 +50,16 @@ class Search extends Component {
     }
   };
 
-  handleChange = text => {
+  handleChange = searchTerm => {
+    const filteredResult = this.state.garments.filter(result => {
+      return result.model.toLowerCase().includes(searchTerm);
+    });
+
+    this.setState({
+      searchTerm,
+      results: filteredResult
+    });
+
     // this.fetchGarments();
   };
 
@@ -57,10 +73,11 @@ class Search extends Component {
           placeholder="Search"
           onChangeText={this.handleChange}
           autoCapitalize="none"
+          value={this.state.searchTerm}
         />
 
         <FlatList
-          data={this.state.garments}
+          data={this.state.results}
           renderItem={this.renderItem}
           keyExtractor={(item, index) => index.toString()}
         />

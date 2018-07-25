@@ -19,5 +19,4 @@ export const RootNav = createSwitchNavigator(
   }
 );
 
-// export default PrimaryNav
 export default RootNav;

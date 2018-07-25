@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
 import BrandStack from './BrandStack';
-import Search from '../Containers/Search';
+import SearchStack from './SearchStack';
 import ProfileStack from './ProfileStack';
 
 import styles from './Styles/NavigationStyles';
@@ -16,19 +16,17 @@ const AppNav = createBottomTabNavigator(
         tabBarLabel: 'Brands',
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-home" size={26} color={tintColor} />
-        ),
-        header: null
+        )
       }
     },
     Search: {
-      screen: Search,
+      screen: SearchStack,
       navigationOptions: {
         title: 'Search',
         tabBarLabel: 'Search',
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-search" size={26} color={tintColor} />
         )
-        // header: null
       }
     },
     ProfileStack: {
@@ -38,8 +36,7 @@ const AppNav = createBottomTabNavigator(
         tabBarLabel: 'Profile',
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-person" size={26} color={tintColor} />
-        ),
-        header: null
+        )
       }
     }
   },
