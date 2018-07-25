@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
 import BrandStack from './BrandStack';
 import SearchStack from './SearchStack';
+import CameraStack from './CameraStack';
 import ProfileStack from './ProfileStack';
 
 import styles from './Styles/NavigationStyles';
@@ -26,6 +27,16 @@ const AppNav = createBottomTabNavigator(
         tabBarLabel: 'Search',
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-search" size={26} color={tintColor} />
+        )
+      }
+    },
+    CameraStack: {
+      screen: CameraStack,
+      navigationOptions: {
+        title: 'Camera',
+        tabBarLabel: 'Camera',
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="ios-camera" size={26} color={tintColor} />
         )
       }
     },
