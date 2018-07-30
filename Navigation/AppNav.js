@@ -16,7 +16,7 @@ const AppNav = createBottomTabNavigator(
         title: 'Brands',
         tabBarLabel: 'Brands',
         tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-home" size={26} color={tintColor} />
+          <Ionicons name="ios-shirt" size={26} color={tintColor} />
         )
       }
     },

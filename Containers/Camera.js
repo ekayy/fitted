@@ -32,6 +32,8 @@ class CameraScreen extends Component {
   }
 
   pickImage = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true
       // aspect: [4, 3]

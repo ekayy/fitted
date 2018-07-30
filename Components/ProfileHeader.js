@@ -58,12 +58,6 @@ class ProfileHeader extends Component {
             {first_name} {last_name}
           </Text>
           <Text style={styles.headerText}>@{username}</Text>
-
-          <View style={styles.button}>
-            <TouchableOpacity onPress={() => navigate('ProfileSettingsEdit')}>
-              <Text>Edit Profile</Text>
-            </TouchableOpacity>
-          </View>
         </View>
 
         <View style={styles.descriptionContainer}>

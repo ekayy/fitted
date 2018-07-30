@@ -3,14 +3,48 @@ import {
   View,
   Text,
   ScrollView,
-  TextInput,
   Button,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableHighlight,
+  Modal
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import TextInput from '../Components/FormikTextInput';
+import { Formik } from 'formik';
+
+const MyForm = props => (
+  <View>
+    <Formik
+      onSubmit={(values, actions) => {
+        setTimeout(() => {
+          console.log(JSON.stringify(values, null, 2));
+          actions.setSubmitting(false);
+        }, 1000);
+      }}
+      render={props => (
+        <View>
+          <TextInput
+            name="email"
+            onChangeText={props.setFieldValue}
+            value={props.values.email}
+          />
+          <Button title="submit" onPress={props.handleSubmit} />
+        </View>
+      )}
+    />
+  </View>
+);
 
 class CreateFit extends Component {
+  state = {
+    modalVisible: false
+  };
+
+  setModalVisible = () => {
+    this.setState({ modalVisible: !this.state.modalVisible });
+  };
+
   render() {
     const { navigate } = this.props.navigation;
     const { image } = this.props.navigation.state.params;
@@ -50,7 +84,7 @@ class CreateFit extends Component {
               </Text>
             </View>
           </View>
-          <Button title="Add" onPress={() => {}} />
+          <Button title="Add" onPress={this.setModalVisible} />
         </View>
 
         <View style={styles.formContainer}>
@@ -63,6 +97,15 @@ class CreateFit extends Component {
           <View style={styles.formRow} />
         </View>
         <TouchableOpacity>Share Fit</TouchableOpacity>
+
+        <Modal visible={this.state.modalVisible} animationType="slide">
+          <View style={styles.modal}>
+            <TouchableHighlight onPress={this.setModalVisible}>
+              <Text>Hide Modal</Text>
+            </TouchableHighlight>
+            <MyForm />
+          </View>
+        </Modal>
       </ScrollView>
     );
   }
@@ -86,6 +129,14 @@ const styles = {
     alignSelf: 'center',
     fontSize: 20,
     marginBottom: 10
+  },
+
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
+    backgroundColor: '#f3f3f3'
   }
 };
 
