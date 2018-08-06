@@ -11,6 +11,10 @@ const PROFILE_REQUEST = 'PROFILE_REQUEST';
 const PROFILE_SUCCESS = 'PROFILE_SUCCESS';
 const PROFILE_FAILURE = 'PROFILE_FAILURE';
 
+const FAVORITE_REQUEST = 'FAVORITE_REQUEST';
+const FAVORITE_SUCCESS = 'FAVORITE_SUCCESS';
+const FAVORITE_FAILURE = 'FAVORITE_FAILURE';
+
 export const INITIAL_STATE = {
   loading: false,
   error: null,
@@ -36,7 +40,6 @@ export default function(state = INITIAL_STATE, action = {}) {
         profile_id: action.payload.profile_id,
         favorites: action.payload.favorites
       };
-
     case LOGIN_FAILURE:
       return {
         ...state,
@@ -46,6 +49,7 @@ export default function(state = INITIAL_STATE, action = {}) {
         profile_id: null,
         favorites: []
       };
+
     case PROFILE_REQUEST:
       return {
         ...state,
@@ -58,13 +62,31 @@ export default function(state = INITIAL_STATE, action = {}) {
         error: null,
         favorites: action.payload.favorites
       };
-
     case PROFILE_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload.error,
         favorites: []
+      };
+
+    case FAVORITE_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case FAVORITE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        favorites: [...action.payload.favorites]
+      };
+    case FAVORITE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
       };
 
     default:
@@ -101,6 +123,20 @@ export const profileFailure = error => ({
   payload: { error }
 });
 
+export const favoriteFailure = error => ({
+  type: FAVORITE_FAILURE,
+  payload: { error }
+});
+
+export const favoriteRequest = () => ({
+  type: FAVORITE_REQUEST
+});
+
+export const favoriteSuccess = ({ favorites }) => ({
+  type: FAVORITE_SUCCESS,
+  payload: { favorites }
+});
+
 // login to app
 export const login = (username, password) => async dispatch => {
   dispatch(loginRequest());
@@ -130,6 +166,30 @@ export const fetchProfile = profileId => async dispatch => {
   }
 };
 
+export const favoriteFit = params => async dispatch => {
+  const { id, token, profile_id, favorites } = params;
+
+  dispatch(favoriteRequest());
+
+  try {
+    const res = await axios.patch(
+      `${baseURL}/profiles/${profile_id}`,
+      {
+        favorites: [...favorites, id]
+      },
+      {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    );
+
+    dispatch(favoriteSuccess(res.data));
+  } catch (error) {
+    dispatch(favoriteFailure(error));
+  }
+};
+
 // Selectors
 // Is the current user logged in?
-export const isLoggedIn = loginState => loginState.username !== null;
+export const token = state => state.user.token;

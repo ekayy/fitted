@@ -46,13 +46,18 @@ class GarmentDetail extends Component {
   };
 
   favoriteGarment = async () => {
+    // garmentId
     const { id } = this.props.navigation.state.params;
     const userToken = await AsyncStorage.getItem('userToken');
+    const userId = await AsyncStorage.getItem('userId');
+    const favorites = await AsyncStorage.getItem(JSON.parse('favorites'));
+
+    console.tron.log(favorites);
 
     await axios.patch(
-      `${baseURL}/profiles/52`,
+      `${baseURL}/profiles/${userId}`,
       {
-        favorites: [id]
+        favorites: [...favorites, id]
       },
       {
         headers: {

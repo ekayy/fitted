@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { Metrics } from '../Themes';
 import axios from 'axios';
 import { baseURL, fbAppId } from '../Config';
-import { login, fetchProfile } from '../Redux/LoginRedux';
+import { login, fetchProfile } from '../Redux/UserRedux';
 
 import styles from './Styles/LoginStyles';
 
@@ -161,8 +161,8 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    loading: state.login.loading,
-    profileId: state.login.profile_id
+    loading: state.user.loading,
+    profileId: state.user.profile_id
   };
 };
 

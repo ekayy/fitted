@@ -9,12 +9,13 @@ import {
   FlatList,
   AsyncStorage
 } from 'react-native';
+import { connect } from 'react-redux';
 import { Metrics } from '../Themes';
-
 import GarmentsList from '../Components/GarmentsList';
 import FavoriteButton from '../Components/FavoriteButton';
 import axios from 'axios';
 import { baseURL } from '../Config';
+import { favoriteFit } from '../Redux/UserRedux';
 
 class FitDetail extends Component {
   state = {
@@ -51,22 +52,14 @@ class FitDetail extends Component {
 
   favoriteFit = async () => {
     const { id } = this.props.navigation.state.params;
-    const userToken = await AsyncStorage.getItem('userToken');
+    const { token, profile_id, favorites } = this.props.user;
 
-    // console.tron.log(id);
-    // console.tron.log(userToken);
-
-    await axios.patch(
-      `${baseURL}/profiles/52`,
-      {
-        favorites: [2]
-      },
-      {
-        headers: {
-          Authorization: `Token ${userToken}`
-        }
-      }
-    );
+    await this.props.favoriteFit({
+      id,
+      token,
+      profile_id,
+      favorites
+    });
   };
 
   render() {
@@ -124,4 +117,11 @@ const styles = {
   }
 };
 
-export default FitDetail;
+const mapStateToProps = ({ user }) => {
+  return { user };
+};
+
+export default connect(
+  mapStateToProps,
+  { favoriteFit }
+)(FitDetail);

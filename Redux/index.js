@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import configureStore from './CreateStore';
 // import navigation from './NavigationRedux';
-import login from './LoginRedux';
-import profiles from './ProfilesRedux';
+import user from './UserRedux';
+// import profiles from './ProfilesRedux';
 // import brands from './BrandsRedux';
 // import garments from './GarmentsRedux';
 // import fits from './FitsRedux';
@@ -11,8 +11,8 @@ export default () => {
   /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
     // navigation,
-    login,
-    profiles
+    user
+    // profiles
     // brands,
     // garments,
     // fits
