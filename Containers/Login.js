@@ -12,9 +12,11 @@ import {
   LayoutAnimation,
   Button
 } from 'react-native';
+import { connect } from 'react-redux';
 import { Metrics } from '../Themes';
 import axios from 'axios';
 import { baseURL, fbAppId } from '../Config';
+import { login, fetchProfile } from '../Redux/LoginRedux';
 
 import styles from './Styles/LoginStyles';
 
@@ -26,9 +28,10 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'fittedsf',
-      password: 'original',
-      loading: false
+      username: 'wesley',
+      password: 'password',
+      loading: false,
+      profileId: null
     };
     this.isAttempting = false;
   }
@@ -36,17 +39,11 @@ class Login extends Component {
   signInAsync = async () => {
     const { username, password } = this.state;
 
-    try {
-      const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
-        username,
-        password
-      });
+    await this.props.login(username, password);
 
-      await AsyncStorage.setItem('userToken', response.data.token);
-      this.props.navigation.navigate('App');
-    } catch (error) {
-      console.error(error);
-    }
+    await this.props.fetchProfile(this.props.profileId);
+
+    this.props.navigation.navigate('App');
   };
 
   loginFb = async () => {
@@ -162,4 +159,14 @@ class Login extends Component {
   };
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    loading: state.login.loading,
+    profileId: state.login.profile_id
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { login, fetchProfile }
+)(Login);
