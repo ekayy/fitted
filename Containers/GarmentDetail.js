@@ -10,6 +10,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import { WebBrowser } from 'expo';
+import { Button } from 'react-native-elements';
 import { Metrics } from '../Themes';
 
 import FavoriteButton from '../Components/FavoriteButton';
@@ -45,27 +46,27 @@ class GarmentDetail extends Component {
     }
   };
 
-  favoriteGarment = async () => {
-    // garmentId
-    const { id } = this.props.navigation.state.params;
-    const userToken = await AsyncStorage.getItem('userToken');
-    const userId = await AsyncStorage.getItem('userId');
-    const favorites = await AsyncStorage.getItem(JSON.parse('favorites'));
-
-    console.tron.log(favorites);
-
-    await axios.patch(
-      `${baseURL}/profiles/${userId}`,
-      {
-        favorites: [...favorites, id]
-      },
-      {
-        headers: {
-          Authorization: `Token ${userToken}`
-        }
-      }
-    );
-  };
+  // favoriteGarment = async () => {
+  //   // garmentId
+  //   const { id } = this.props.navigation.state.params;
+  //   const userToken = await AsyncStorage.getItem('userToken');
+  //   const userId = await AsyncStorage.getItem('userId');
+  //   const favorites = await AsyncStorage.getItem(JSON.parse('favorites'));
+  //
+  //   console.tron.log(favorites);
+  //
+  //   await axios.patch(
+  //     `${baseURL}/profiles/${userId}`,
+  //     {
+  //       favorites: [...favorites, id]
+  //     },
+  //     {
+  //       headers: {
+  //         Authorization: `Token ${userToken}`
+  //       }
+  //     }
+  //   );
+  // };
 
   handleOpenWithWebBrowser = () => {
     WebBrowser.openBrowserAsync(
@@ -87,18 +88,21 @@ class GarmentDetail extends Component {
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <TouchableOpacity onPress={this.handleOpenWithWebBrowser}>
-              <Image
-                style={styles.image}
-                source={{ uri: `https://${photo}` }}
-              />
-            </TouchableOpacity>
+            <Image style={styles.image} source={{ uri: `https://${photo}` }} />
 
             <View style={styles.favorite}>
               <FavoriteButton onPress={this.favoriteGarment} />
               <Text>{this.state.fits.photo}</Text>
             </View>
           </View>
+
+          <View style={styles.button}>
+            <Button
+              title="Visit Store"
+              onPress={this.handleOpenWithWebBrowser}
+            />
+          </View>
+
           <View style={styles.description}>
             <View>
               <Text>
@@ -124,10 +128,13 @@ const styles = {
     width: Metrics.screenWidth,
     minHeight: 400
   },
+  button: {
+    marginVertical: 20
+  },
   favorite: {
     position: 'absolute',
-    bottom: Metrics.doubleBaseMargin,
-    right: Metrics.doubleBaseMargin
+    bottom: 0,
+    right: Metrics.baseMargin
   },
   gridItem: {
     flex: 1,
