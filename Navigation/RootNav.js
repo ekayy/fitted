@@ -1,6 +1,5 @@
 import React from 'react';
 import { createSwitchNavigator } from 'react-navigation';
-import { connect } from 'react-redux';
 import AppNav from './AppNav';
 import AuthStack from './AuthStack';
 import AuthLoading from '../Containers/AuthLoading';
