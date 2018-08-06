@@ -27,7 +27,7 @@ class FavoriteButton extends Component {
       <TouchableOpacity onPress={this.props.onPress}>
         <View style={{ alignItems: 'center' }}>
           <Ionicons
-            name={this.props.toggled ? 'ios-star' : 'ios-star-outline'}
+            name={this.props.toggled ? 'ios-bookmark' : 'ios-bookmark-outline'}
             size={30}
             color="#000"
             style={{
