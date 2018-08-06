@@ -17,7 +17,7 @@ import styles from './Styles/ProfileHeaderStyles';
 class ProfileHeader extends Component {
   render() {
     const { navigate } = this.props.navigation;
-    const { first_name, last_name, username } = this.props.user;
+    const { first_name, last_name, username } = this.props.profile;
 
     return (
       <ImageBackground

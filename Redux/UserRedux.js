@@ -20,6 +20,7 @@ export const INITIAL_STATE = {
   error: null,
   token: null,
   profile_id: null,
+  profile: null,
   favorites: []
 };
 
@@ -60,6 +61,7 @@ export default function(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
+        profile: action.payload.user,
         favorites: action.payload.favorites
       };
     case PROFILE_FAILURE:
@@ -67,6 +69,7 @@ export default function(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: action.payload.error,
+        profile: null,
         favorites: []
       };
 
@@ -113,9 +116,9 @@ export const profileRequest = () => ({
   type: PROFILE_REQUEST
 });
 
-export const profileSuccess = ({ favorites }) => ({
+export const profileSuccess = ({ user, favorites }) => ({
   type: PROFILE_SUCCESS,
-  payload: { favorites }
+  payload: { user, favorites }
 });
 
 export const profileFailure = error => ({
