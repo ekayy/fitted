@@ -8,7 +8,8 @@ import {
   ImageBackground,
   TouchableOpacity,
   Dimensions,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 
 import { profiles } from '../data.json';
@@ -27,8 +28,19 @@ class FitsGrid extends Component {
     );
   }
 
+  renderFooter = () => {
+    const { loading } = this.props;
+
+    if (!loading) return null;
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  };
+
   render() {
-    const { data } = this.props;
+    const { data, numColumns, ListFooterComponent, fetching } = this.props;
 
     return (
       <FlatList
@@ -37,6 +49,12 @@ class FitsGrid extends Component {
         keyExtractor={(item, index) => index.toString()}
         numColumns={3}
         renderItem={({ item }) => this.renderFit(item)}
+        onEndReached={this.handleLoadMore}
+        onEndReachedThreshold={0}
+        refreshing={fetching}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        ListFooterComponent={this.renderFooter}
       />
     );
   }

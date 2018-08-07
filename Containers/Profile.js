@@ -39,23 +39,17 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    // this.fetchFavoriteGarments();
+    this.fetchFavoriteGarments();
     this.fetchFavoriteFits();
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (!this.props.isFocused && nextProps.isFocused) {
-  //     this.fetchFavoriteFits();
-  //   }
-  // }
-
-  fetchFavoriteGarments = async () => {
+  fetchFavoriteGarments = () => {
     this.props.favorites.map(async garmentId => {
       const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
       try {
         this.setState({
-          favoriteGarments: [response.data],
+          favoriteGarments: [...this.state.favoriteGarments, response.data],
           error: null,
           loading: false
         });
@@ -68,7 +62,7 @@ class Profile extends Component {
     });
   };
 
-  fetchFavoriteFits = async () => {
+  fetchFavoriteFits = () => {
     this.props.favorites.map(async fitId => {
       const response = await axios.get(`${baseURL}/fits/${fitId}`);
 
@@ -130,7 +124,13 @@ class Profile extends Component {
         );
       case 'fits':
         return (
-          <FitsGrid data={favoriteFits} navigation={this.props.navigation} />
+          <FitsGrid
+            data={favoriteFits}
+            navigation={this.props.navigation}
+            handleLoadMore={this.handleLoadMore}
+            refreshing={loading}
+            loading={loading}
+          />
         );
       default:
         return null;
