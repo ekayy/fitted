@@ -9,6 +9,7 @@ import {
   FlatList,
   AsyncStorage
 } from 'react-native';
+import { connect } from 'react-redux';
 import { WebBrowser } from 'expo';
 import { Button } from 'react-native-elements';
 import { Metrics } from '../Themes';
@@ -23,11 +24,13 @@ class GarmentDetail extends Component {
   state = {
     error: null,
     loading: true,
-    fits: []
+    fits: [],
+    toggled: false
   };
 
   componentDidMount() {
     this.fetchFits();
+    this.getFavoriteState();
   }
 
   fetchFits = async () => {
@@ -43,6 +46,17 @@ class GarmentDetail extends Component {
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  getFavoriteState = () => {
+    const { id } = this.props.navigation.state.params;
+    const { favorites } = this.props.user;
+
+    if (favorites.includes(id)) {
+      this.setState({ toggled: true });
+    } else {
+      this.setState({ toggled: false });
     }
   };
 
@@ -155,4 +169,8 @@ const styles = {
   }
 };
 
-export default GarmentDetail;
+const mapStateToProps = ({ user }) => {
+  return { user };
+};
+
+export default connect(mapStateToProps)(GarmentDetail);

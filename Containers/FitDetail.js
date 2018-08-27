@@ -27,6 +27,8 @@ class FitDetail extends Component {
 
   componentDidMount() {
     this.fetchGarments();
+    this.setState({ toggled: false });
+    this.getFavoriteState();
   }
 
   fetchGarments = async () => {
@@ -50,16 +52,46 @@ class FitDetail extends Component {
     });
   };
 
+  getFavoriteState = () => {
+    const { id } = this.props.navigation.state.params;
+    const { favorites } = this.props.user;
+
+    if (favorites.includes(id)) {
+      this.setState({ toggled: true });
+    } else {
+      this.setState({ toggled: false });
+    }
+  };
+
   favoriteFit = async () => {
     const { id } = this.props.navigation.state.params;
     const { token, profile_id, favorites } = this.props.user;
 
-    await this.props.favoriteFit({
-      id,
-      token,
-      profile_id,
-      favorites
-    });
+    if (!this.state.toggled) {
+      try {
+        await this.props.favoriteFit({
+          id,
+          token,
+          profile_id,
+          favorites
+        });
+        this.setState({ toggled: true });
+      } catch (error) {
+        console.tron.log(error);
+      }
+    } else {
+      try {
+        await this.props.favoriteFit({
+          id,
+          token,
+          profile_id,
+          favorites
+        });
+        this.setState({ toggled: true });
+      } catch (error) {
+        console.tron.log(error);
+      }
+    }
   };
 
   render() {

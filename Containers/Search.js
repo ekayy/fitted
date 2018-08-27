@@ -12,6 +12,7 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Metrics } from '../Themes';
 import axios from 'axios';
 
+import GarmentsGrid from '../Components/GarmentsGrid';
 import { baseURL } from '../Config';
 
 class Search extends Component {
@@ -28,16 +29,17 @@ class Search extends Component {
       results: [],
       error: null,
       loading: true,
-      page: 1
+      page: 1,
+      limit: 9999
     };
   }
 
   componentDidMount() {
-    this.fetchGarments(this.state.page);
+    this.fetchGarments(this.state.limit);
   }
 
-  fetchGarments = async page => {
-    const response = await axios.get(`${baseURL}/garments/?page=${page}`);
+  fetchGarments = async limit => {
+    const response = await axios.get(`${baseURL}/garments/?limit=${limit}`);
 
     try {
       this.setState({
@@ -63,6 +65,11 @@ class Search extends Component {
     // this.fetchGarments();
   };
 
+  // do nothing because the entire page is loaded
+  handleLoadMore = () => {
+      true;
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -76,11 +83,15 @@ class Search extends Component {
           value={this.state.searchTerm}
         />
 
-        <FlatList
-          data={this.state.results}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+      <GarmentsGrid
+        data={this.state.results}
+        navigation={this.props.navigation}
+        numCol={2}
+        handleLoadMore={this.handleLoadMore}
+        refreshing={this.state.loading}
+        loading={this.state.loading}
+        page={this.state.page}
+      />
       </View>
     );
   }

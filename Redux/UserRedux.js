@@ -176,7 +176,7 @@ export const favoriteFit = params => async dispatch => {
 
   try {
     const res = await axios.patch(
-      `${baseURL}/profiles/${profile_id}`,
+      `${baseURL}/profiles/${profile_id}/`,
       {
         favorites: [...favorites, id]
       },
