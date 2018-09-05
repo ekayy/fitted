@@ -44,7 +44,7 @@ class Profile extends Component {
   }
 
   fetchFavoriteGarments = () => {
-    this.props.favorites.map(async garmentId => {
+    this.props.favorite_garments.map(async garmentId => {
       const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
       try {
@@ -63,7 +63,7 @@ class Profile extends Component {
   };
 
   fetchFavoriteFits = () => {
-    this.props.favorites.map(async fitId => {
+    this.props.favorite_fits.map(async fitId => {
       const response = await axios.get(`${baseURL}/fits/${fitId}`);
 
       try {
@@ -151,7 +151,8 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-    favorites: state.user.favorites,
+    favorite_garments: state.user.favorite_garments,
+    favorite_fits: state.user.favorite_fits,
     profile: state.user.profile
   };
 };
