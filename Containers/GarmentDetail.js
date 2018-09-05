@@ -102,7 +102,7 @@ class GarmentDetail extends Component {
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <Image style={styles.image} source={{ uri: `https://${photo}` }} />
+            <Image style={styles.image} source={{ uri: photo }} />
 
             <View style={styles.favorite}>
               <FavoriteButton onPress={this.favoriteGarment} />
