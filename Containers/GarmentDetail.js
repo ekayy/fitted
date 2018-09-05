@@ -83,9 +83,9 @@ class GarmentDetail extends Component {
   // };
 
   handleOpenWithWebBrowser = () => {
-    WebBrowser.openBrowserAsync(
-      'https://www.3sixteen.com/products/bdu-shirt-khaki-ripstop'
-    );
+    const { purchase_page } = this.props.navigation.state.params;
+
+    WebBrowser.openBrowserAsync(purchase_page);
   };
 
   render() {
