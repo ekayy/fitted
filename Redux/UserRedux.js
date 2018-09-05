@@ -21,7 +21,8 @@ export const INITIAL_STATE = {
   token: null,
   profile_id: null,
   profile: null,
-  favorites: []
+  favorite_garments: [],
+  favorite_fits: []
 };
 
 // Reducer
@@ -30,7 +31,8 @@ export default function(state = INITIAL_STATE, action = {}) {
     case LOGIN_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: true,
+        error: null
       };
     case LOGIN_SUCCESS:
       return {
@@ -38,8 +40,7 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null,
         token: action.payload.token,
-        profile_id: action.payload.profile_id,
-        favorites: action.payload.favorites
+        profile_id: action.payload.profile_id
       };
     case LOGIN_FAILURE:
       return {
@@ -47,8 +48,7 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: action.payload.error,
         token: null,
-        profile_id: null,
-        favorites: []
+        profile_id: null
       };
 
     case PROFILE_REQUEST:
@@ -62,7 +62,8 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null,
         profile: action.payload.user,
-        favorites: action.payload.favorites
+        favorite_garments: action.payload.favorite_garments,
+        favorite_fits: action.payload.favorite_fits
       };
     case PROFILE_FAILURE:
       return {
@@ -70,7 +71,8 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: action.payload.error,
         profile: null,
-        favorites: []
+        favorite_garments: [],
+        favorite_fits: []
       };
 
     case FAVORITE_REQUEST:
@@ -83,7 +85,8 @@ export default function(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        favorites: [...action.payload.favorites]
+        favorite_garments: [...action.payload.favorite_garments],
+        favorite_fits: [...action.payload.favorite_fits]
       };
     case FAVORITE_FAILURE:
       return {
@@ -116,9 +119,9 @@ export const profileRequest = () => ({
   type: PROFILE_REQUEST
 });
 
-export const profileSuccess = ({ user, favorites }) => ({
+export const profileSuccess = ({ user, favorite_garments, favorite_fits }) => ({
   type: PROFILE_SUCCESS,
-  payload: { user, favorites }
+  payload: { user, favorite_garments, favorite_fits }
 });
 
 export const profileFailure = error => ({
@@ -135,9 +138,9 @@ export const favoriteRequest = () => ({
   type: FAVORITE_REQUEST
 });
 
-export const favoriteSuccess = ({ favorites }) => ({
+export const favoriteSuccess = ({ favorite_garments, favorite_fits }) => ({
   type: FAVORITE_SUCCESS,
-  payload: { favorites }
+  payload: { favorite_garments, favorite_fits }
 });
 
 // login to app
@@ -152,7 +155,9 @@ export const login = (username, password) => async dispatch => {
 
     dispatch(loginSuccess(res.data));
   } catch (error) {
-    dispatch(loginFailure(error));
+    dispatch(loginFailure(error.response.data));
+
+    throw new Error(400);
   }
 };
 
@@ -169,8 +174,8 @@ export const fetchProfile = profileId => async dispatch => {
   }
 };
 
-export const favoriteFit = params => async dispatch => {
-  const { id, token, profile_id, favorites } = params;
+export const favoriteGarment = (id, userParams) => async dispatch => {
+  const { token, profile_id, favorite_garments } = userParams;
 
   dispatch(favoriteRequest());
 
@@ -178,7 +183,31 @@ export const favoriteFit = params => async dispatch => {
     const res = await axios.patch(
       `${baseURL}/profiles/${profile_id}/`,
       {
-        favorites: [...favorites, id]
+        favorite_garments: [...favorite_garments, id]
+      },
+      {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    );
+
+    dispatch(favoriteSuccess(res.data));
+  } catch (error) {
+    dispatch(favoriteFailure(error));
+  }
+};
+
+export const favoriteFit = (id, userParams) => async dispatch => {
+  const { token, profile_id, favorite_fits } = userParams;
+
+  dispatch(favoriteRequest());
+
+  try {
+    const res = await axios.patch(
+      `${baseURL}/profiles/${profile_id}/`,
+      {
+        favorite_fits: [...favorite_fits, id]
       },
       {
         headers: {
