@@ -53,9 +53,9 @@ class GarmentDetail extends Component {
 
   getFavoriteState = () => {
     const { id } = this.props.navigation.state.params;
-    const { favorite_garments } = this.props.user;
+    const { favoriteGarments } = this.props.user;
 
-    if (favorite_garments.includes(id)) {
+    if (favoriteGarments.includes(id)) {
       this.setState({ toggled: true });
     } else {
       this.setState({ toggled: false });
