@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import Reactotron from 'reactotron-react-native';
 import thunk from 'redux-thunk';
+import * as Config from '../Config';
 
 // creates the store
 export default rootReducer => {
@@ -18,7 +18,10 @@ export default rootReducer => {
 
   enhancers.push(applyMiddleware(...middleware));
 
-  const store = Reactotron.createStore(rootReducer, compose(...enhancers));
+  const createAppropriateStore = Config.useReactotron
+    ? Reactotron.createStore
+    : createStore;
+  const store = createAppropriateStore(rootReducer, compose(...enhancers));
 
-  return store;
+  return { store };
 };
