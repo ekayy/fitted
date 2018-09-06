@@ -16,6 +16,7 @@ import { Metrics } from '../Themes';
 
 import FavoriteButton from '../Components/FavoriteButton';
 import FitsGrid from '../Components/FitsGrid';
+import { favoriteGarment } from '../Redux/UserRedux';
 
 import axios from 'axios';
 import { baseURL } from '../Config';
@@ -25,7 +26,8 @@ class GarmentDetail extends Component {
     error: null,
     loading: true,
     fits: [],
-    toggled: false
+    toggled: false,
+    refreshing: false
   };
 
   componentDidMount() {
@@ -51,41 +53,39 @@ class GarmentDetail extends Component {
 
   getFavoriteState = () => {
     const { id } = this.props.navigation.state.params;
-    const { favorites } = this.props.user;
+    const { favorite_garments } = this.props.user;
 
-    if (favorites.includes(id)) {
+    if (favorite_garments.includes(id)) {
       this.setState({ toggled: true });
     } else {
       this.setState({ toggled: false });
     }
   };
 
-  // favoriteGarment = async () => {
-  //   // garmentId
-  //   const { id } = this.props.navigation.state.params;
-  //   const userToken = await AsyncStorage.getItem('userToken');
-  //   const userId = await AsyncStorage.getItem('userId');
-  //   const favorites = await AsyncStorage.getItem(JSON.parse('favorites'));
-  //
-  //   console.tron.log(favorites);
-  //
-  //   await axios.patch(
-  //     `${baseURL}/profiles/${userId}`,
-  //     {
-  //       favorites: [...favorites, id]
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Token ${userToken}`
-  //       }
-  //     }
-  //   );
-  // };
+  favoriteGarment = async () => {
+    // garmentId
+    const { id } = this.props.navigation.state.params;
+
+    await this.props.favoriteGarment(id, this.props.user);
+
+    this.getFavoriteState();
+  };
 
   handleOpenWithWebBrowser = () => {
     const { purchase_page } = this.props.navigation.state.params;
 
     WebBrowser.openBrowserAsync(purchase_page);
+  };
+
+  handleLoadMore = () => {
+    // this.setState(
+    //   {
+    //     page: this.state.page + 1
+    //   },
+    //   () => {
+    //     this.fetchGarments(this.state.page);
+    //   }
+    // );
   };
 
   render() {
@@ -98,6 +98,8 @@ class GarmentDetail extends Component {
       photo
     } = this.props.navigation.state.params;
 
+    const { refreshing } = this.state;
+
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -105,7 +107,10 @@ class GarmentDetail extends Component {
             <Image style={styles.image} source={{ uri: photo }} />
 
             <View style={styles.favorite}>
-              <FavoriteButton onPress={this.favoriteGarment} />
+              <FavoriteButton
+                onPress={this.favoriteGarment}
+                toggled={this.state.toggled}
+              />
               <Text>{this.state.fits.photo}</Text>
             </View>
           </View>
@@ -125,7 +130,12 @@ class GarmentDetail extends Component {
             </View>
           </View>
 
-          <FitsGrid data={this.state.fits} navigation={this.props.navigation} />
+          <FitsGrid
+            data={this.state.fits}
+            navigation={this.props.navigation}
+            handleLoadMore={this.handleLoadMore}
+            refreshing={refreshing}
+          />
         </ScrollView>
       </View>
     );
@@ -173,4 +183,7 @@ const mapStateToProps = ({ user }) => {
   return { user };
 };
 
-export default connect(mapStateToProps)(GarmentDetail);
+export default connect(
+  mapStateToProps,
+  { favoriteGarment }
+)(GarmentDetail);

@@ -30,8 +30,10 @@ class BrandOverview extends Component {
       { key: 'fits', title: 'Fits' }
     ],
     garments: [],
+    fits: [],
     error: null,
     loading: true,
+    refreshing: false,
     page: 1
   };
 
@@ -90,7 +92,7 @@ class BrandOverview extends Component {
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
-    const { garments, fits, loading, page } = this.state;
+    const { garments, fits, loading, page, refreshing } = this.state;
 
     switch (route.key) {
       case 'garments':
@@ -106,7 +108,16 @@ class BrandOverview extends Component {
           />
         );
       case 'fits':
-        return <FitsGrid data={fits} navigation={this.props.navigation} />;
+        return (
+          <FitsGrid
+            data={fits}
+            navigation={this.props.navigation}
+            handleLoadMore={this.handleLoadMore}
+            refreshing={refreshing}
+            loading={loading}
+            page={page}
+          />
+        );
       default:
         return null;
     }

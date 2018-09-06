@@ -54,9 +54,9 @@ class FitDetail extends Component {
 
   getFavoriteState = () => {
     const { id } = this.props.navigation.state.params;
-    const { favorites } = this.props.user;
+    const { favorite_fits } = this.props.user;
 
-    if (favorites.includes(id)) {
+    if (favorite_fits.includes(id)) {
       this.setState({ toggled: true });
     } else {
       this.setState({ toggled: false });
@@ -64,34 +64,14 @@ class FitDetail extends Component {
   };
 
   favoriteFit = async () => {
+    // favoriteId
     const { id } = this.props.navigation.state.params;
-    const { token, profile_id, favorites } = this.props.user;
 
-    if (!this.state.toggled) {
-      try {
-        await this.props.favoriteFit({
-          id,
-          token,
-          profile_id,
-          favorites
-        });
-        this.setState({ toggled: true });
-      } catch (error) {
-        console.tron.log(error);
-      }
-    } else {
-      try {
-        await this.props.favoriteFit({
-          id,
-          token,
-          profile_id,
-          favorites
-        });
-        this.setState({ toggled: true });
-      } catch (error) {
-        console.tron.log(error);
-      }
-    }
+    await this.props.favoriteFit(id, this.props.user);
+
+    this.getFavoriteState();
+
+    this.getFavoriteState();
   };
 
   render() {

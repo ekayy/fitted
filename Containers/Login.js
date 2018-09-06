@@ -28,10 +28,9 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'wesley',
+      username: 'wesleylulee',
       password: 'password',
-      loading: false,
-      profileId: null
+      loading: false
     };
     this.isAttempting = false;
   }
@@ -43,7 +42,9 @@ class Login extends Component {
 
     await this.props.fetchProfile(this.props.profileId);
 
-    this.props.navigation.navigate('App');
+    if (!this.props.error) {
+      await this.props.navigation.navigate('App');
+    }
   };
 
   loginFb = async () => {
@@ -57,9 +58,9 @@ class Login extends Component {
       const response = await fetch(
         `https://graph.facebook.com/me?access_token=${token}`
       );
-    }
 
-    this.props.navigation.navigate('App');
+      this.props.navigation.navigate('App');
+    }
   };
 
   render() {
@@ -161,6 +162,7 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
+    error: state.user.error,
     loading: state.user.loading,
     profileId: state.user.profile_id
   };

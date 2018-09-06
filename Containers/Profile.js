@@ -34,6 +34,7 @@ class Profile extends Component {
       { key: 'fits', title: 'Fits' }
     ],
     loading: true,
+    refreshing: false,
     favoriteFits: [],
     favoriteGarments: []
   };
@@ -43,42 +44,74 @@ class Profile extends Component {
     this.fetchFavoriteFits();
   }
 
-  fetchFavoriteGarments = () => {
-    this.props.favorites.map(async garmentId => {
+  fetchFavoriteGarments = async () => {
+    this.setState({
+      error: null,
+      loading: true,
+      refreshing: true
+    });
+
+    await this.props.favorite_garments.map(async garmentId => {
       const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
       try {
         this.setState({
-          favoriteGarments: [...this.state.favoriteGarments, response.data],
-          error: null,
-          loading: false
+          favoriteGarments: [...this.state.favoriteGarments, response.data]
         });
       } catch (error) {
         this.setState({
           error,
-          loading: false
+          loading: false,
+          refreshing: false
         });
       }
     });
+
+    this.setState({
+      error: null,
+      loading: false,
+      refreshing: false
+    });
   };
 
-  fetchFavoriteFits = () => {
-    this.props.favorites.map(async fitId => {
+  fetchFavoriteFits = async () => {
+    this.setState({
+      error: null,
+      loading: true,
+      refreshing: true
+    });
+
+    await this.props.favorite_fits.map(async fitId => {
       const response = await axios.get(`${baseURL}/fits/${fitId}`);
 
       try {
         this.setState({
-          favoriteFits: [...this.state.favoriteFits, response.data],
-          error: null,
-          loading: false
+          favoriteFits: [...this.state.favoriteFits, response.data]
         });
       } catch (error) {
         this.setState({
           error,
-          loading: false
+          loading: false,
+          refreshing: false
         });
       }
     });
+
+    this.setState({
+      error: null,
+      loading: false,
+      refreshing: false
+    });
+  };
+
+  handleRefresh = () => {
+    this.setState(
+      { refreshing: true, favoriteGarments: [], favoriteFits: [] },
+      () => {
+        this.fetchFavoriteGarments();
+        this.fetchFavoriteFits();
+      }
+    );
   };
 
   handleLoadMore = () => {};
@@ -108,7 +141,13 @@ class Profile extends Component {
   _renderHeader = props => <TabBar {...props} />;
 
   _renderScene = ({ route }) => {
-    const { favoriteGarments, favoriteFits, loading, page } = this.state;
+    const {
+      favoriteGarments,
+      favoriteFits,
+      loading,
+      page,
+      refreshing
+    } = this.state;
 
     switch (route.key) {
       case 'garments':
@@ -118,7 +157,8 @@ class Profile extends Component {
             navigation={this.props.navigation}
             numCol={3}
             handleLoadMore={this.handleLoadMore}
-            refreshing={loading}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
             loading={loading}
           />
         );
@@ -128,7 +168,8 @@ class Profile extends Component {
             data={favoriteFits}
             navigation={this.props.navigation}
             handleLoadMore={this.handleLoadMore}
-            refreshing={loading}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
             loading={loading}
           />
         );
@@ -151,7 +192,8 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-    favorites: state.user.favorites,
+    favorite_garments: state.user.favorite_garments,
+    favorite_fits: state.user.favorite_fits,
     profile: state.user.profile
   };
 };
