@@ -174,16 +174,30 @@ export const fetchProfile = profileId => async dispatch => {
   }
 };
 
+// favorite or unfavorite
 export const favoriteGarment = (id, userParams) => async dispatch => {
   const { token, profile_id, favorite_garments } = userParams;
+  let favorites = [];
 
   dispatch(favoriteRequest());
+
+  if (favorite_garments.includes(id)) {
+    // Unfavoriting
+    let filteredGarments = favorite_garments.filter(
+      garmentId => garmentId !== id
+    );
+
+    favorites = [...filteredGarments];
+  } else {
+    // Favoriting, so add id
+    favorites = [...favorite_garments, id];
+  }
 
   try {
     const res = await axios.patch(
       `${baseURL}/profiles/${profile_id}/`,
       {
-        favorite_garments: [...favorite_garments, id]
+        favorite_garments: favorites
       },
       {
         headers: {
@@ -200,14 +214,25 @@ export const favoriteGarment = (id, userParams) => async dispatch => {
 
 export const favoriteFit = (id, userParams) => async dispatch => {
   const { token, profile_id, favorite_fits } = userParams;
+  let favorites = [];
 
   dispatch(favoriteRequest());
+
+  if (favorite_fits.includes(id)) {
+    // Unfavoriting
+    let filteredFits = favorite_fits.filter(fitId => fitId !== id);
+
+    favorites = [...filteredFits];
+  } else {
+    // Favoriting, so add id
+    favorites = [...favorite_fits, id];
+  }
 
   try {
     const res = await axios.patch(
       `${baseURL}/profiles/${profile_id}/`,
       {
-        favorite_fits: [...favorite_fits, id]
+        favorite_fits: favorites
       },
       {
         headers: {
