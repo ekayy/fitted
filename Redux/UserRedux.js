@@ -19,10 +19,10 @@ export const INITIAL_STATE = {
   loading: false,
   error: null,
   token: null,
-  profile_id: null,
+  profileId: null,
   profile: null,
-  favorite_garments: [],
-  favorite_fits: []
+  favoriteGarments: [],
+  favoriteFits: []
 };
 
 // Reducer
@@ -40,7 +40,7 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null,
         token: action.payload.token,
-        profile_id: action.payload.profile_id
+        profileId: action.payload.profile_id
       };
     case LOGIN_FAILURE:
       return {
@@ -48,7 +48,7 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: action.payload.error,
         token: null,
-        profile_id: null
+        profileId: null
       };
 
     case PROFILE_REQUEST:
@@ -62,8 +62,8 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null,
         profile: action.payload.user,
-        favorite_garments: action.payload.favorite_garments,
-        favorite_fits: action.payload.favorite_fits
+        favoriteGarments: action.payload.favorite_garments,
+        favoriteFits: action.payload.favorite_fits
       };
     case PROFILE_FAILURE:
       return {
@@ -71,8 +71,8 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: action.payload.error,
         profile: null,
-        favorite_garments: [],
-        favorite_fits: []
+        favoriteGarments: [],
+        favoriteFits: []
       };
 
     case FAVORITE_REQUEST:
@@ -85,8 +85,8 @@ export default function(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        favorite_garments: [...action.payload.favorite_garments],
-        favorite_fits: [...action.payload.favorite_fits]
+        favoriteGarments: [...action.payload.favorite_garments],
+        favoriteFits: [...action.payload.favorite_fits]
       };
     case FAVORITE_FAILURE:
       return {
@@ -176,26 +176,26 @@ export const fetchProfile = profileId => async dispatch => {
 
 // favorite or unfavorite
 export const favoriteGarment = (id, userParams) => async dispatch => {
-  const { token, profile_id, favorite_garments } = userParams;
+  const { token, profileId, favoriteGarments } = userParams;
   let favorites = [];
 
   dispatch(favoriteRequest());
 
-  if (favorite_garments.includes(id)) {
+  if (favoriteGarments.includes(id)) {
     // Unfavoriting
-    let filteredGarments = favorite_garments.filter(
+    let filteredGarments = favoriteGarments.filter(
       garmentId => garmentId !== id
     );
 
     favorites = [...filteredGarments];
   } else {
     // Favoriting, so add id
-    favorites = [...favorite_garments, id];
+    favorites = [...favoriteGarments, id];
   }
 
   try {
     const res = await axios.patch(
-      `${baseURL}/profiles/${profile_id}/`,
+      `${baseURL}/profiles/${profileId}/`,
       {
         favorite_garments: favorites
       },
@@ -213,24 +213,24 @@ export const favoriteGarment = (id, userParams) => async dispatch => {
 };
 
 export const favoriteFit = (id, userParams) => async dispatch => {
-  const { token, profile_id, favorite_fits } = userParams;
+  const { token, profileId, favoriteFits } = userParams;
   let favorites = [];
 
   dispatch(favoriteRequest());
 
-  if (favorite_fits.includes(id)) {
+  if (favoriteFits.includes(id)) {
     // Unfavoriting
-    let filteredFits = favorite_fits.filter(fitId => fitId !== id);
+    let filteredFits = favoriteFits.filter(fitId => fitId !== id);
 
     favorites = [...filteredFits];
   } else {
     // Favoriting, so add id
-    favorites = [...favorite_fits, id];
+    favorites = [...favoriteFits, id];
   }
 
   try {
     const res = await axios.patch(
-      `${baseURL}/profiles/${profile_id}/`,
+      `${baseURL}/profiles/${profileId}/`,
       {
         favorite_fits: favorites
       },

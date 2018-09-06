@@ -164,7 +164,7 @@ const mapStateToProps = state => {
   return {
     error: state.user.error,
     loading: state.user.loading,
-    profileId: state.user.profile_id
+    profileId: state.user.profileId
   };
 };
 

@@ -54,9 +54,9 @@ class FitDetail extends Component {
 
   getFavoriteState = () => {
     const { id } = this.props.navigation.state.params;
-    const { favorite_fits } = this.props.user;
+    const { favoriteFits } = this.props.user;
 
-    if (favorite_fits.includes(id)) {
+    if (favoriteFits.includes(id)) {
       this.setState({ toggled: true });
     } else {
       this.setState({ toggled: false });
