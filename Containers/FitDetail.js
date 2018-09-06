@@ -70,8 +70,6 @@ class FitDetail extends Component {
     await this.props.favoriteFit(id, this.props.user);
 
     this.getFavoriteState();
-
-    this.getFavoriteState();
   };
 
   render() {
