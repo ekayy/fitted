@@ -22,7 +22,8 @@ export const INITIAL_STATE = {
   profileId: null,
   profile: null,
   favoriteGarments: [],
-  favoriteFits: []
+  favoriteFits: [],
+  isLoggedIn: false
 };
 
 // Reducer
@@ -40,7 +41,8 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null,
         token: action.payload.token,
-        profileId: action.payload.profile_id
+        profileId: action.payload.profile_id,
+        isLoggedIn: true
       };
     case LOGIN_FAILURE:
       return {
@@ -50,6 +52,9 @@ export default function(state = INITIAL_STATE, action = {}) {
         token: null,
         profileId: null
       };
+
+    case LOGOUT:
+      return INITIAL_STATE;
 
     case PROFILE_REQUEST:
       return {
@@ -115,6 +120,10 @@ export const loginFailure = error => ({
   payload: { error }
 });
 
+export const logout = () => ({
+  type: LOGOUT
+});
+
 export const profileRequest = () => ({
   type: PROFILE_REQUEST
 });
@@ -143,6 +152,7 @@ export const favoriteSuccess = ({ favorite_garments, favorite_fits }) => ({
   payload: { favorite_garments, favorite_fits }
 });
 
+// Asynchronous actions
 // login to app
 export const login = (username, password) => async dispatch => {
   dispatch(loginRequest());
@@ -249,4 +259,4 @@ export const favoriteFit = (id, userParams) => async dispatch => {
 
 // Selectors
 // Is the current user logged in?
-export const token = state => state.user.token;
+// export const isLoggedIn = loginState => loginState.username !== null;
