@@ -39,8 +39,12 @@ class FitsGrid extends Component {
     );
   };
 
+  handleLoadMore = () => {
+    return this.props.handleLoadMore();
+  };
+
   render() {
-    const { data, numColumns, ListFooterComponent, fetching } = this.props;
+    const { data, numColumns, ListFooterComponent, refreshing } = this.props;
 
     return (
       <FlatList
@@ -49,9 +53,10 @@ class FitsGrid extends Component {
         keyExtractor={(item, index) => index.toString()}
         numColumns={3}
         renderItem={({ item }) => this.renderFit(item)}
+        onRefresh={() => this.props.onRefresh()}
         onEndReached={this.handleLoadMore}
         onEndReachedThreshold={0}
-        refreshing={fetching}
+        refreshing={refreshing}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
         ListFooterComponent={this.renderFooter}

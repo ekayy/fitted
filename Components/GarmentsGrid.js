@@ -17,6 +17,7 @@ class GarmentsGrid extends Component {
     const { navigate } = this.props.navigation;
     const { numCol, grid } = this.props;
     const { id, color, model, sku, brand, photo } = item;
+
     return numCol == 2 ? (
       <TouchableOpacity
         style={styles.gridItem}
@@ -59,7 +60,8 @@ class GarmentsGrid extends Component {
   };
 
   render() {
-    const { data, numColumns, ListFooterComponent, fetching } = this.props;
+    const { data, numColumns, ListFooterComponent, refreshing } = this.props;
+
     return (
       <FlatList
         style={{ flex: 1 }}
@@ -67,9 +69,10 @@ class GarmentsGrid extends Component {
         keyExtractor={item => item.id}
         numColumns={3}
         renderItem={({ item }) => this.renderGarment(item)}
+        onRefresh={() => this.props.onRefresh()}
         onEndReached={this.handleLoadMore}
         onEndReachedThreshold={0}
-        refreshing={fetching}
+        refreshing={refreshing}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
         ListFooterComponent={this.renderFooter}

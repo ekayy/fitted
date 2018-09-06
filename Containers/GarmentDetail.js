@@ -26,7 +26,8 @@ class GarmentDetail extends Component {
     error: null,
     loading: true,
     fits: [],
-    toggled: false
+    toggled: false,
+    refreshing: false
   };
 
   componentDidMount() {
@@ -76,6 +77,17 @@ class GarmentDetail extends Component {
     WebBrowser.openBrowserAsync(purchase_page);
   };
 
+  handleLoadMore = () => {
+    // this.setState(
+    //   {
+    //     page: this.state.page + 1
+    //   },
+    //   () => {
+    //     this.fetchGarments(this.state.page);
+    //   }
+    // );
+  };
+
   render() {
     const {
       id,
@@ -85,6 +97,8 @@ class GarmentDetail extends Component {
       model,
       photo
     } = this.props.navigation.state.params;
+
+    const { refreshing } = this.state;
 
     return (
       <View style={styles.container}>
@@ -116,7 +130,12 @@ class GarmentDetail extends Component {
             </View>
           </View>
 
-          <FitsGrid data={this.state.fits} navigation={this.props.navigation} />
+          <FitsGrid
+            data={this.state.fits}
+            navigation={this.props.navigation}
+            handleLoadMore={this.handleLoadMore}
+            refreshing={refreshing}
+          />
         </ScrollView>
       </View>
     );
