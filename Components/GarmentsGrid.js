@@ -24,7 +24,7 @@ class GarmentsGrid extends Component {
         onPress={() => navigate('GarmentDetail', item)}
       >
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: `https://${photo}` }} />
+          <Image style={styles.image} source={{ uri: photo }} />
         </View>
         <Text>{model}</Text>
       </TouchableOpacity>
@@ -37,7 +37,7 @@ class GarmentsGrid extends Component {
         <View
           style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}
         >
-          <Image style={styles.image} source={{ uri: `https://${photo}` }} />
+          <Image style={styles.image} source={{ uri: photo }} />
         </View>
       </TouchableOpacity>
     );

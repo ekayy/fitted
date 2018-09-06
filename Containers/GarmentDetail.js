@@ -83,9 +83,9 @@ class GarmentDetail extends Component {
   // };
 
   handleOpenWithWebBrowser = () => {
-    WebBrowser.openBrowserAsync(
-      'https://www.3sixteen.com/products/bdu-shirt-khaki-ripstop'
-    );
+    const { purchase_page } = this.props.navigation.state.params;
+
+    WebBrowser.openBrowserAsync(purchase_page);
   };
 
   render() {
@@ -102,7 +102,7 @@ class GarmentDetail extends Component {
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <Image style={styles.image} source={{ uri: `https://${photo}` }} />
+            <Image style={styles.image} source={{ uri: photo }} />
 
             <View style={styles.favorite}>
               <FavoriteButton onPress={this.favoriteGarment} />
