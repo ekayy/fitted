@@ -1,22 +1,25 @@
+import createSecureStore from 'redux-persist-expo-securestore';
+// import storage from 'redux-persist/lib/storage';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { combineReducers } from 'redux';
 import configureStore from './CreateStore';
-// import navigation from './NavigationRedux';
+import { persistReducer } from 'redux-persist';
+
 import user from './UserRedux';
-// import profiles from './ProfilesRedux';
-// import brands from './BrandsRedux';
-// import garments from './GarmentsRedux';
-// import fits from './FitsRedux';
+
+const storage = createSecureStore();
+const persistConfig = {
+  key: 'root',
+  storage
+};
+
+/* ------------- Assemble The Reducers ------------- */
+const rootReducer = combineReducers({
+  user
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export default () => {
-  /* ------------- Assemble The Reducers ------------- */
-  const rootReducer = combineReducers({
-    // navigation,
-    user
-    // profiles
-    // brands,
-    // garments,
-    // fits
-  });
-
-  return configureStore(rootReducer);
+  return configureStore(persistedReducer);
 };

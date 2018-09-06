@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { persistStore } from 'redux-persist';
 import Reactotron from 'reactotron-react-native';
 import thunk from 'redux-thunk';
 import * as Config from '../Config';
@@ -22,6 +23,7 @@ export default rootReducer => {
     ? Reactotron.createStore
     : createStore;
   const store = createAppropriateStore(rootReducer, compose(...enhancers));
+  const persistor = persistStore(store);
 
-  return { store };
+  return { persistor, store };
 };
