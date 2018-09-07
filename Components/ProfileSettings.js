@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { AsyncStorage, View, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { View, ScrollView } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import { logout } from '../Redux/UserRedux';
 
 class ProfileSettings extends Component {
   signOutAsync = async () => {
-    await AsyncStorage.clear();
+    this.props.logout();
+
     this.props.navigation.navigate('Auth');
   };
 
@@ -43,4 +46,7 @@ class ProfileSettings extends Component {
   }
 }
 
-export default ProfileSettings;
+export default connect(
+  null,
+  { logout }
+)(ProfileSettings);

@@ -35,6 +35,12 @@ class Login extends Component {
     this.isAttempting = false;
   }
 
+  componentDidMount() {
+    if (this.props.isLoggedIn) {
+      this.props.navigation.navigate('App');
+    }
+  }
+
   signInAsync = async () => {
     const { username, password } = this.state;
 
@@ -164,7 +170,8 @@ const mapStateToProps = state => {
   return {
     error: state.user.error,
     loading: state.user.loading,
-    profileId: state.user.profileId
+    profileId: state.user.profileId,
+    isLoggedIn: state.user.isLoggedIn
   };
 };
 
