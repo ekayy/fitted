@@ -29,7 +29,7 @@ class Search extends Component {
       results: [],
       remainingResults: [],
       error: null,
-      loading: true,
+      loading: false,
       refreshing: false,
       limit: 9999
     };
