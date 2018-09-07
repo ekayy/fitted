@@ -16,7 +16,7 @@ class GarmentsList extends Component {
       <View style={styles.listItem}>
         <TouchableOpacity onPress={() => navigate('GarmentDetail', item)}>
           <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: `http://${photo}` }} />
+            <Image style={styles.image} source={{ uri: photo }} />
           </View>
         </TouchableOpacity>
         <View style={styles.description}>
