@@ -31,13 +31,12 @@ class Search extends Component {
       error: null,
       loading: true,
       refreshing: false,
-      page: 1,
       limit: 9999
     };
   }
 
   componentDidMount() {
-    this.fetchGarments(this.state.limit);
+    this.handleRefresh();
   }
 
   fetchGarments = async limit => {
@@ -50,7 +49,7 @@ class Search extends Component {
         loading: false
       });
     } catch (error) {
-      console.log(error);
+      console.tron.log(error);
     }
   };
 
@@ -70,8 +69,14 @@ class Search extends Component {
   };
 
   handleRefresh = () => {
-    this.setState({ refreshing: true, results: [] }, () => {
-      this.fetchGarments();
+    this.setState({ refreshing: true, results: [] }, async () => {
+      await this.fetchGarments(this.state.limit);
+
+      this.setState({
+        refreshing: false,
+        results: [...this.state.garments.slice(0, 10)],
+        remainingResults: [...this.state.garments.slice(10)]
+      });
     });
   };
 
@@ -91,7 +96,7 @@ class Search extends Component {
   };
 
   render() {
-    const { searchTerm, results, loading, refreshing, page } = this.state;
+    const { searchTerm, results, loading, refreshing } = this.state;
 
     return (
       <View style={styles.container}>
@@ -113,7 +118,6 @@ class Search extends Component {
           onRefresh={this.handleRefresh}
           refreshing={refreshing}
           loading={loading}
-          page={page}
         />
       </View>
     );
