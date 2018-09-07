@@ -32,7 +32,7 @@ class BrandOverview extends Component {
     garments: [],
     fits: [],
     error: null,
-    loading: true,
+    loading: false,
     refreshing: false,
     page: 1
   };
@@ -76,6 +76,28 @@ class BrandOverview extends Component {
     }
   };
 
+  handleGarmentsRefresh = () => {
+    this.setState({ refreshing: true, garments: [] }, async () => {
+      const { id } = this.props.navigation.state.params;
+
+      await this.fetchGarments(this.state.page, id);
+
+      this.setState({
+        refreshing: false
+      });
+    });
+  };
+
+  handleFitsRefresh = () => {
+    this.setState({ refreshing: true, fits: [] }, async () => {
+      await this.fetchFits(this.state.page);
+
+      this.setState({
+        refreshing: false
+      });
+    });
+  };
+
   handleLoadMore = () => {
     this.setState(
       {
@@ -101,6 +123,7 @@ class BrandOverview extends Component {
             data={garments}
             navigation={this.props.navigation}
             numCol={2}
+            onRefresh={this.handleGarmentsRefresh}
             handleLoadMore={this.handleLoadMore}
             refreshing={loading}
             loading={loading}
@@ -112,6 +135,7 @@ class BrandOverview extends Component {
           <FitsGrid
             data={fits}
             navigation={this.props.navigation}
+            onRefresh={this.handleFitsRefresh}
             handleLoadMore={this.handleLoadMore}
             refreshing={refreshing}
             loading={loading}

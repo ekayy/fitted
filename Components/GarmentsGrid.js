@@ -18,6 +18,11 @@ class GarmentsGrid extends Component {
     const { numCol, grid } = this.props;
     const { id, color, model, sku, brand, photo } = item;
 
+    let formattedModel = model
+      .split(' ')
+      .map(word => word.charAt(0) + word.toLowerCase().slice(1))
+      .join(' ');
+
     return numCol == 2 ? (
       <TouchableOpacity
         style={styles.gridItem}
@@ -27,7 +32,7 @@ class GarmentsGrid extends Component {
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
-        <Text>{model}</Text>
+        <Text style={styles.text}>{formattedModel}</Text>
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
@@ -89,7 +94,8 @@ class GarmentsGrid extends Component {
 
 const styles = {
   gridItem: {
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 40
   },
   imageContainer: {
     flex: 1,
@@ -99,6 +105,10 @@ const styles = {
   image: {
     width: undefined,
     height: 200
+  },
+  text: {
+    maxWidth: '80%',
+    textAlign: 'center'
   }
 };
 
