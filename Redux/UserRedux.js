@@ -23,6 +23,8 @@ export const INITIAL_STATE = {
   profile: null,
   favoriteGarments: [],
   favoriteFits: [],
+  height: null,
+  weight: null,
   isLoggedIn: false
 };
 
@@ -68,7 +70,9 @@ export default function(state = INITIAL_STATE, action = {}) {
         error: null,
         profile: action.payload.user,
         favoriteGarments: action.payload.favorite_garments,
-        favoriteFits: action.payload.favorite_fits
+        favoriteFits: action.payload.favorite_fits,
+        height: action.payload.height,
+        weight: action.payload.weight
       };
     case PROFILE_FAILURE:
       return {
@@ -77,7 +81,9 @@ export default function(state = INITIAL_STATE, action = {}) {
         error: action.payload.error,
         profile: null,
         favoriteGarments: [],
-        favoriteFits: []
+        favoriteFits: [],
+        height: null,
+        weight: null
       };
 
     case FAVORITE_REQUEST:
@@ -128,9 +134,15 @@ export const profileRequest = () => ({
   type: PROFILE_REQUEST
 });
 
-export const profileSuccess = ({ user, favorite_garments, favorite_fits }) => ({
+export const profileSuccess = ({
+  user,
+  favorite_garments,
+  favorite_fits,
+  height,
+  weight
+}) => ({
   type: PROFILE_SUCCESS,
-  payload: { user, favorite_garments, favorite_fits }
+  payload: { user, favorite_garments, favorite_fits, height, weight }
 });
 
 export const profileFailure = error => ({
