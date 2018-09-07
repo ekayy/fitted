@@ -21,11 +21,6 @@ import { fetchProfiles } from '../Redux/ProfilesRedux';
 import { baseURL } from '../Config';
 import { withNavigationFocus } from 'react-navigation';
 
-const initialLayout = {
-  height: 0,
-  width: Dimensions.get('window').width
-};
-
 class Profile extends Component {
   state = {
     index: 0,
@@ -117,12 +112,18 @@ class Profile extends Component {
   handleLoadMore = () => {};
 
   render() {
+    const initialLayout = {
+      height: 0,
+      width: Dimensions.get('window').width
+    };
+
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <ProfileHeader
           navigation={this.props.navigation}
           profile={this.props.profile}
         />
+
         <View style={styles.tabContainer}>
           <TabViewAnimated
             navigationState={this.state}
@@ -132,7 +133,7 @@ class Profile extends Component {
             initialLayout={initialLayout}
           />
         </View>
-      </ScrollView>
+      </View>
     );
   }
 

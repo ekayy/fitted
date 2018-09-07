@@ -60,11 +60,17 @@ class GarmentsGrid extends Component {
   };
 
   render() {
-    const { data, numColumns, ListFooterComponent, refreshing } = this.props;
+    const {
+      style,
+      data,
+      numColumns,
+      ListFooterComponent,
+      refreshing
+    } = this.props;
 
     return (
       <FlatList
-        style={{ flex: 1 }}
+        style={style}
         data={data}
         keyExtractor={item => item.id}
         numColumns={3}

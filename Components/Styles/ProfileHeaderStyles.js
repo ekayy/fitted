@@ -2,15 +2,6 @@ import { StyleSheet } from 'react-native';
 import { Metrics, Colors, Fonts } from '../../Themes/';
 
 export default StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    // marginTop: Metrics.navBarHeight,
-    backgroundColor: Colors.background
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background
-  },
   headerText: {
     backgroundColor: 'transparent',
     color: Colors.snow,
@@ -19,7 +10,9 @@ export default StyleSheet.create({
     ...Fonts.style.h4
   },
   backgroundImage: {
-    paddingTop: 20
+    flex: 1,
+    paddingTop: 20,
+    maxHeight: 200
   },
   settingsIcon: {
     position: 'absolute',
@@ -30,7 +23,6 @@ export default StyleSheet.create({
 
   descriptionContainer: {
     backgroundColor: '#000',
-    flex: 1,
     flexDirection: 'row'
   },
   descriptionItem: {
