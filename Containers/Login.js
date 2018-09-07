@@ -69,6 +69,18 @@ class Login extends Component {
     }
   };
 
+  renderError() {
+    const { error } = this.props;
+
+    if (error) {
+      return (
+        <View>
+          <Text style={styles.error}>{error.non_field_errors}</Text>
+        </View>
+      );
+    }
+  }
+
   render() {
     const { username, password, loading } = this.state;
     const editable = !loading;
@@ -128,6 +140,8 @@ class Login extends Component {
               <View style={styles.loginButton}>
                 <Text style={styles.loginText}>Sign In</Text>
               </View>
+
+              {this.renderError()}
             </TouchableOpacity>
           </View>
         </View>

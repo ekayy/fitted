@@ -61,5 +61,11 @@ export default StyleSheet.create({
     textAlign: 'center',
     marginVertical: Metrics.marginVertical,
     ...Fonts.style.h4
+  },
+
+  error: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20
   }
 });
