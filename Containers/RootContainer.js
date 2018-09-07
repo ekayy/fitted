@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
 import RootNav from '../Navigation/RootNav';
@@ -11,7 +11,10 @@ class RootContainer extends Component {
   render() {
     return (
       <View style={styles.applicationView}>
-        <RootNav />
+        <RootNav
+          persistenceKey={'NavigationState'}
+          renderLoadingExperimental={() => <ActivityIndicator />}
+        />
       </View>
     );
   }
