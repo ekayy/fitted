@@ -72,7 +72,7 @@ class GarmentsGrid extends Component {
       <FlatList
         style={style}
         data={data}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index.toString()}
         numColumns={3}
         renderItem={({ item }) => this.renderGarment(item)}
         onRefresh={() => this.props.onRefresh()}
