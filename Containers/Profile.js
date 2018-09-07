@@ -21,11 +21,6 @@ import { fetchProfiles } from '../Redux/ProfilesRedux';
 import { baseURL } from '../Config';
 import { withNavigationFocus } from 'react-navigation';
 
-const initialLayout = {
-  height: 0,
-  width: Dimensions.get('window').width
-};
-
 class Profile extends Component {
   state = {
     index: 0,
@@ -44,28 +39,41 @@ class Profile extends Component {
     this.fetchFavoriteFits();
   }
 
+  componentDidUpdate(previousProps) {
+    if (previousProps.favoriteGarments != this.props.favoriteGarments) {
+      this.setState({ refreshing: true, favoriteGarments: [] }, () => {
+        this.fetchFavoriteGarments();
+      });
+    }
+
+    if (previousProps.favoriteFits != this.props.favoriteFits) {
+      this.setState({ refreshing: true, favoriteFits: [] }, () => {
+        this.fetchFavoriteFits();
+      });
+    }
+  }
+
   fetchFavoriteGarments = async () => {
     this.setState({
       error: null,
-      loading: true,
       refreshing: true
     });
 
-    await this.props.favoriteGarments.map(async garmentId => {
-      const response = await axios.get(`${baseURL}/garments/${garmentId}`);
+    await Promise.all(
+      this.props.favoriteGarments.map(async garmentId => {
+        const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
-      try {
-        this.setState({
-          favoriteGarments: [...this.state.favoriteGarments, response.data]
-        });
-      } catch (error) {
-        this.setState({
-          error,
-          loading: false,
-          refreshing: false
-        });
-      }
-    });
+        try {
+          this.setState({
+            favoriteGarments: [...this.state.favoriteGarments, response.data]
+          });
+        } catch (error) {
+          this.setState({
+            error
+          });
+        }
+      })
+    );
 
     this.setState({
       error: null,
@@ -77,29 +85,27 @@ class Profile extends Component {
   fetchFavoriteFits = async () => {
     this.setState({
       error: null,
-      loading: true,
       refreshing: true
     });
 
-    await this.props.favoriteFits.map(async fitId => {
-      const response = await axios.get(`${baseURL}/fits/${fitId}`);
+    await Promise.all(
+      this.props.favoriteFits.map(async fitId => {
+        const response = await axios.get(`${baseURL}/fits/${fitId}`);
 
-      try {
-        this.setState({
-          favoriteFits: [...this.state.favoriteFits, response.data]
-        });
-      } catch (error) {
-        this.setState({
-          error,
-          loading: false,
-          refreshing: false
-        });
-      }
-    });
+        try {
+          this.setState({
+            favoriteFits: [...this.state.favoriteFits, response.data]
+          });
+        } catch (error) {
+          this.setState({
+            error
+          });
+        }
+      })
+    );
 
     this.setState({
       error: null,
-      loading: false,
       refreshing: false
     });
   };
@@ -117,12 +123,18 @@ class Profile extends Component {
   handleLoadMore = () => {};
 
   render() {
+    const initialLayout = {
+      height: 0,
+      width: Dimensions.get('window').width
+    };
+
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <ProfileHeader
           navigation={this.props.navigation}
           user={this.props.user}
         />
+
         <View style={styles.tabContainer}>
           <TabViewAnimated
             navigationState={this.state}
@@ -132,7 +144,7 @@ class Profile extends Component {
             initialLayout={initialLayout}
           />
         </View>
-      </ScrollView>
+      </View>
     );
   }
 
