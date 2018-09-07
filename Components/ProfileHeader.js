@@ -17,7 +17,12 @@ import styles from './Styles/ProfileHeaderStyles';
 class ProfileHeader extends Component {
   render() {
     const { navigate } = this.props.navigation;
-    const { first_name, last_name, username } = this.props.profile;
+    const { first_name, last_name, username } = this.props.user.profile;
+    const { height, weight } = this.props.user;
+
+    const feetFromInches = Math.floor(height / 12);
+    const inchesRemainder = height % 12;
+    const imperialHeight = `${feetFromInches}' ${inchesRemainder}"`;
 
     return (
       <ImageBackground
@@ -63,9 +68,11 @@ class ProfileHeader extends Component {
         <View style={styles.descriptionContainer}>
           <View style={styles.descriptionItem}>
             <Text style={styles.descriptionText}>Height</Text>
+            <Text style={styles.descriptionText}>{imperialHeight}</Text>
           </View>
           <View style={styles.descriptionItem}>
             <Text style={styles.descriptionText}>Weight</Text>
+            <Text style={styles.descriptionText}>{weight} lbs</Text>
           </View>
           <View style={styles.descriptionItem}>
             <Text style={styles.descriptionText}>Followers</Text>

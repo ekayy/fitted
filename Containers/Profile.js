@@ -121,7 +121,7 @@ class Profile extends Component {
       <View style={styles.container}>
         <ProfileHeader
           navigation={this.props.navigation}
-          profile={this.props.profile}
+          user={this.props.user}
         />
 
         <View style={styles.tabContainer}>
@@ -195,7 +195,7 @@ const mapStateToProps = state => {
   return {
     favoriteGarments: state.user.favoriteGarments,
     favoriteFits: state.user.favoriteFits,
-    profile: state.user.profile
+    user: state.user
   };
 };
 
