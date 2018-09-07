@@ -27,8 +27,10 @@ class Search extends Component {
       searchTerm: '',
       garments: [],
       results: [],
+      remainingResults: [],
       error: null,
       loading: true,
+      refreshing: false,
       page: 1,
       limit: 9999
     };
@@ -53,24 +55,44 @@ class Search extends Component {
   };
 
   handleChange = searchTerm => {
-    const filteredResult = this.state.garments.filter(result => {
+    const filteredResults = this.state.garments.filter(result => {
       return result.model.toLowerCase().includes(searchTerm);
     });
 
+    let slicedResults = filteredResults.slice(0, 10);
+    let remainingResults = filteredResults.slice(10);
+
     this.setState({
       searchTerm,
-      results: filteredResult
+      remainingResults: remainingResults,
+      results: slicedResults
     });
+  };
 
-    // this.fetchGarments();
+  handleRefresh = () => {
+    this.setState({ refreshing: true, results: [] }, () => {
+      this.fetchGarments();
+    });
   };
 
   // do nothing because the entire page is loaded
   handleLoadMore = () => {
-      true;
+    const { remainingResults, results } = this.state;
+
+    this.setState({
+      loading: true
+    });
+
+    this.setState({
+      remainingResults: remainingResults.slice(10),
+      results: [...results, ...remainingResults.slice(0, 10)],
+      loading: false
+    });
   };
 
   render() {
+    const { searchTerm, results, loading, refreshing, page } = this.state;
+
     return (
       <View style={styles.container}>
         <SearchBar
@@ -80,18 +102,19 @@ class Search extends Component {
           onChangeText={this.handleChange}
           autoCapitalize="none"
           platform="ios"
-          value={this.state.searchTerm}
+          value={searchTerm}
         />
 
-      <GarmentsGrid
-        data={this.state.results}
-        navigation={this.props.navigation}
-        numCol={2}
-        handleLoadMore={this.handleLoadMore}
-        refreshing={this.state.loading}
-        loading={this.state.loading}
-        page={this.state.page}
-      />
+        <GarmentsGrid
+          data={results}
+          navigation={this.props.navigation}
+          numCol={2}
+          handleLoadMore={this.handleLoadMore}
+          onRefresh={this.handleRefresh}
+          refreshing={refreshing}
+          loading={loading}
+          page={page}
+        />
       </View>
     );
   }
@@ -116,7 +139,8 @@ class Search extends Component {
 const styles = {
   container: {
     flex: 1,
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
+    backgroundColor: '#f3f3f3'
   },
   mainImage: {
     width: Metrics.screenWidth,
