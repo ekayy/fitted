@@ -28,7 +28,7 @@ class Profile extends Component {
       { key: 'garments', title: 'Favorites' },
       { key: 'fits', title: 'Fits' }
     ],
-    loading: true,
+    loading: false,
     refreshing: false,
     favoriteFits: [],
     favoriteGarments: []
@@ -110,14 +110,16 @@ class Profile extends Component {
     });
   };
 
-  handleRefresh = () => {
-    this.setState(
-      { refreshing: true, favoriteGarments: [], favoriteFits: [] },
-      () => {
-        this.fetchFavoriteGarments();
-        this.fetchFavoriteFits();
-      }
-    );
+  handleGarmentRefresh = () => {
+    this.setState({ refreshing: true, favoriteGarments: [] }, () => {
+      this.fetchFavoriteGarments();
+    });
+  };
+
+  handleFitRefresh = () => {
+    this.setState({ refreshing: true, favoriteFits: [] }, () => {
+      this.fetchFavoriteFits();
+    });
   };
 
   handleLoadMore = () => {};
@@ -150,7 +152,14 @@ class Profile extends Component {
 
   _handleIndexChange = index => this.setState({ index });
 
-  _renderHeader = props => <TabBar {...props} />;
+  _renderHeader = props => (
+    <TabBar
+      {...props}
+      indicatorStyle={styles.indicatorStyle}
+      tabStyle={styles.tabStyle}
+      style={styles.tabBarStyle}
+    />
+  );
 
   _renderScene = ({ route }) => {
     const {
@@ -169,7 +178,7 @@ class Profile extends Component {
             navigation={this.props.navigation}
             numCol={3}
             handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleRefresh}
+            onRefresh={this.handleGarmentRefresh}
             refreshing={refreshing}
             loading={loading}
           />
@@ -180,7 +189,7 @@ class Profile extends Component {
             data={favoriteFits}
             navigation={this.props.navigation}
             handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleRefresh}
+            onRefresh={this.handleFitRefresh}
             refreshing={refreshing}
             loading={loading}
           />
@@ -199,6 +208,16 @@ const styles = {
   },
   tabContainer: {
     flex: 1
+  },
+
+  tabBarStyle: {
+    backgroundColor: '#fff'
+  },
+  tabStyle: {
+    backgroundColor: 'red'
+  },
+  indicatorStyle: {
+    backgroundColor: 'red'
   }
 };
 

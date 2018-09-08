@@ -115,19 +115,20 @@ class GarmentDetail extends Component {
             </View>
           </View>
 
-          <View style={styles.button}>
-            <Button
-              title="Visit Store"
-              onPress={this.handleOpenWithWebBrowser}
-            />
-          </View>
-
           <View style={styles.description}>
             <View>
               <Text>
                 {model} in {color}
               </Text>
             </View>
+          </View>
+
+          <View style={styles.button}>
+            <Button
+              title="Visit Store"
+              onPress={this.handleOpenWithWebBrowser}
+              buttonStyle={styles.buttonStyle}
+            />
           </View>
 
           <FitsGrid
@@ -155,6 +156,10 @@ const styles = {
   button: {
     marginVertical: 20
   },
+  buttonStyle: {
+    backgroundColor: 'red'
+  },
+
   favorite: {
     position: 'absolute',
     bottom: 0,

@@ -28,7 +28,7 @@ class ProfileHeader extends Component {
       <ImageBackground
         source={{
           uri:
-            'https://www.omm.com/~/media/images/site/locations/san_francisco_780x520px.ashx'
+            'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&h=350'
         }}
         style={styles.backgroundImage}
       >
@@ -48,8 +48,8 @@ class ProfileHeader extends Component {
           </View>
         </TouchableOpacity>
 
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Avatar
+        <View style={styles.header}>
+          {/*<Avatar
             large
             rounded
             source={{
@@ -61,7 +61,7 @@ class ProfileHeader extends Component {
           />
           <Text style={styles.headerText}>
             {first_name} {last_name}
-          </Text>
+          </Text>*/}
           <Text style={styles.headerText}>@{username}</Text>
         </View>
 

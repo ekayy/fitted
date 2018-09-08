@@ -111,7 +111,14 @@ class BrandOverview extends Component {
 
   _handleIndexChange = index => this.setState({ index });
 
-  _renderHeader = props => <TabBar {...props} />;
+  _renderHeader = props => (
+    <TabBar
+      {...props}
+      indicatorStyle={styles.indicatorStyle}
+      tabStyle={styles.tabStyle}
+      style={styles.tabBarStyle}
+    />
+  );
 
   _renderScene = ({ route }) => {
     const { garments, fits, loading, page, refreshing } = this.state;
@@ -181,6 +188,16 @@ const styles = {
   loading: {
     paddingVertical: 20,
     flex: 1
+  },
+
+  tabBarStyle: {
+    backgroundColor: '#fff'
+  },
+  tabStyle: {
+    backgroundColor: 'red'
+  },
+  indicatorStyle: {
+    backgroundColor: 'red'
   }
 };
 

@@ -2,8 +2,13 @@ import { StyleSheet } from 'react-native';
 import { Metrics, Colors, Fonts } from '../../Themes/';
 
 export default StyleSheet.create({
+  header: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
   headerText: {
-    backgroundColor: 'transparent',
     color: Colors.snow,
     textAlign: 'center',
     marginVertical: Metrics.marginVertical,
@@ -22,7 +27,7 @@ export default StyleSheet.create({
   },
 
   descriptionContainer: {
-    backgroundColor: '#000',
+    backgroundColor: 'rgba(0,0,0, 0.5)',
     flexDirection: 'row'
   },
   descriptionItem: {
