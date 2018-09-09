@@ -4,9 +4,15 @@ import { Colors, Metrics, Fonts } from '../../Themes';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 70,
-    backgroundColor: Colors.background
+    paddingTop: 70
+    // backgroundColor: Colors.background
   },
+  headerText: {
+    textAlign: 'center',
+    marginVertical: Metrics.marginVertical,
+    ...Fonts.style.h4
+  },
+
   form: {
     backgroundColor: Colors.snow,
     margin: Metrics.baseMargin,
@@ -16,8 +22,8 @@ export default StyleSheet.create({
     paddingVertical: Metrics.doubleBaseMargin,
     paddingHorizontal: Metrics.doubleBaseMargin,
     flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   rowLabel: {
     color: Colors.charcoal
@@ -27,28 +33,16 @@ export default StyleSheet.create({
     color: Colors.coal
   },
   rowInput: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  switchLabel: {
-    color: Colors.charcoal
-  },
-  switch: {
-    marginHorizontal: 10
-  },
-  headerText: {
-    color: Colors.snow,
-    textAlign: 'center',
-    marginVertical: Metrics.marginVertical,
-    ...Fonts.style.h4
-  },
-
-  formContainer: {
     flex: 1
   },
-  picker: {
-    backgroundColor: '#fff'
+  switchContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
+  switchLabel: {},
+  switch: {
+    marginHorizontal: 10
   }
 });
