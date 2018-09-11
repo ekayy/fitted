@@ -12,6 +12,7 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Metrics } from '../Themes';
 import axios from 'axios';
 
+import SearchFilter from '../Components/SearchFilter';
 import GarmentsGrid from '../Components/GarmentsGrid';
 import { baseURL } from '../Config';
 
@@ -31,7 +32,9 @@ class Search extends Component {
       error: null,
       loading: false,
       refreshing: false,
-      limit: 9999
+      limit: 9999,
+      showFilters: false,
+      brand: ''
     };
   }
 
@@ -54,9 +57,17 @@ class Search extends Component {
   };
 
   handleChange = searchTerm => {
-    const filteredResults = this.state.garments.filter(result => {
-      return result.model.toLowerCase().includes(searchTerm);
+    const searchedResults = this.state.garments.filter(result => {
+      return searchTerm
+        ? result.model.toLowerCase().includes(searchTerm)
+        : this.state.garments;
     });
+
+    const filteredResults = this.state.brand
+      ? searchedResults.filter(result => {
+          return result.brand === this.state.brand;
+        })
+      : searchedResults;
 
     let slicedResults = filteredResults.slice(0, 10);
     let remainingResults = filteredResults.slice(10);
@@ -95,8 +106,48 @@ class Search extends Component {
     });
   };
 
+  // Search filters
+  applyFilters = brandId => {
+    const { searchTerm } = this.state;
+
+    this.setState({
+      results: [],
+      brand: brandId
+    });
+
+    const searchedResults = this.state.garments.filter(result => {
+      return searchTerm
+        ? result.model.toLowerCase().includes(searchTerm)
+        : this.state.garments;
+    });
+
+    const filteredResults = searchedResults.filter(result => {
+      return result.brand === brandId;
+    });
+
+    let slicedResults = filteredResults.slice(0, 10);
+    let remainingResults = filteredResults.slice(10);
+
+    this.setState({
+      searchTerm,
+      remainingResults: remainingResults,
+      results: slicedResults
+    });
+  };
+
+  // Toggle search filters overlay
+  toggleFilters = () => {
+    this.setState({ showFilters: !this.state.showFilters });
+  };
+
   render() {
-    const { searchTerm, results, loading, refreshing } = this.state;
+    const {
+      searchTerm,
+      results,
+      loading,
+      refreshing,
+      showFilters
+    } = this.state;
 
     return (
       <View style={styles.container}>
@@ -110,15 +161,30 @@ class Search extends Component {
           value={searchTerm}
         />
 
-        <GarmentsGrid
-          data={results}
-          navigation={this.props.navigation}
-          numCol={2}
-          handleLoadMore={this.handleLoadMore}
-          onRefresh={this.handleRefresh}
-          refreshing={refreshing}
-          loading={loading}
-        />
+        <View>
+          <TouchableOpacity style={styles.filter} onPress={this.toggleFilters}>
+            <View>
+              <Text style={styles.filterText}>Filters</Text>
+            </View>
+          </TouchableOpacity>
+
+          <SearchFilter
+            navigation={this.props.navigation}
+            showFilters={showFilters}
+            onClose={this.toggleFilters}
+            applyFilters={this.applyFilters}
+          />
+
+          <GarmentsGrid
+            data={results}
+            navigation={this.props.navigation}
+            numCol={2}
+            handleLoadMore={this.handleLoadMore}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
+            loading={loading}
+          />
+        </View>
       </View>
     );
   }
@@ -130,7 +196,6 @@ class Search extends Component {
     return (
       <ListItem
         title={model}
-        style={{ backgroundColor: '#fff' }}
         titleStyle={{ color: '#000' }}
         onPress={() => {
           navigate('GarmentDetail', item);
@@ -146,19 +211,20 @@ const styles = {
     paddingHorizontal: 5,
     backgroundColor: '#f3f3f3'
   },
-  mainImage: {
-    width: Metrics.screenWidth,
-    minHeight: 500
+
+  filter: {
+    alignSelf: 'flex-start',
+    marginHorizontal: 20,
+    marginTop: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: 'rgba(255,0,0, 0.8)',
+    borderRadius: 10,
+    position: 'absolute',
+    zIndex: 10
   },
-  imageContainer: {
-    flex: 0.5,
-    alignItems: 'center',
-    width: Metrics.screenWidth / 2 - 20
-  },
-  image: {
-    height: 200,
-    marginVertical: 10,
-    width: Metrics.screenWidth / 2 - 20
+  filterText: {
+    color: '#fff'
   }
 };
 
