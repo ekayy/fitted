@@ -25,27 +25,45 @@ const brands = [
   }
 ];
 
+const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'violet'];
+
 class SearchFilter extends Component {
+  selectColor(color) {
+    this.props.onClose();
+    // this.props.applyFilters(color);
+  }
+
   selectBrand(brand) {
     this.props.onClose();
     this.props.applyFilters(brand);
   }
 
-  renderBrands() {
-    return brands.map(brand => {
-      const { navigate } = this.props.navigation;
-
+  renderColors() {
+    return colors.map(color => {
       return (
         <TouchableOpacity
-          key={brand.name}
-          onPress={this.selectBrand.bind(this, brand)}
+          key={color}
+          onPress={this.selectColor.bind(this, color)}
         >
           <View style={styles.gridItem}>
-            <Text>{brand.name}</Text>
+            <Text>{color}</Text>
           </View>
         </TouchableOpacity>
       );
     });
+  }
+
+  renderBrands() {
+    return brands.map(brand => (
+      <TouchableOpacity
+        key={brand.name}
+        onPress={this.selectBrand.bind(this, brand)}
+      >
+        <View style={styles.gridItem}>
+          <Text>{brand.name}</Text>
+        </View>
+      </TouchableOpacity>
+    ));
   }
 
   render() {
@@ -71,8 +89,15 @@ class SearchFilter extends Component {
           </View>
 
           <View style={styles.modalContent}>
-            <Text>Brands</Text>
-            {this.renderBrands()}
+            <View style={styles.filterSection}>
+              <Text style={styles.filterTitle}>Colors</Text>
+              {this.renderColors()}
+            </View>
+
+            <View style={styles.filterSection}>
+              <Text style={styles.filterTitle}>Brands</Text>
+              {this.renderBrands()}
+            </View>
           </View>
         </View>
       </Modal>
@@ -83,16 +108,21 @@ class SearchFilter extends Component {
 const styles = {
   modal: {
     flex: 1,
-    alignItems: 'center',
     padding: 40
   },
   modalHeader: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center'
   },
   modalContent: {
     flex: 1
+  },
+
+  filterSection: {
+    marginBottom: 20
+  },
+  filterTitle: {
+    fontWeight: 'bold'
   }
 };
 
