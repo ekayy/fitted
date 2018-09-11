@@ -260,7 +260,8 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3'
+    backgroundColor: '#f3f3f3',
+    marginTop: 30
   },
 
   filterWrapper: {

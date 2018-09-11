@@ -26,20 +26,20 @@ const AppNav = createBottomTabNavigator(
         title: 'Search',
         tabBarLabel: 'Search',
         tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-search" size={26} color={tintColor} />
+          <Ionicons name="ios-shirt" size={26} color={tintColor} />
         )
       }
     },
-    CameraStack: {
-      screen: CameraStack,
-      navigationOptions: {
-        title: 'Camera',
-        tabBarLabel: 'Camera',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-camera" size={26} color={tintColor} />
-        )
-      }
-    },
+    // CameraStack: {
+    //   screen: CameraStack,
+    //   navigationOptions: {
+    //     title: 'Camera',
+    //     tabBarLabel: 'Camera',
+    //     tabBarIcon: ({ tintColor }) => (
+    //       <Ionicons name="ios-camera" size={26} color={tintColor} />
+    //     )
+    //   }
+    // },
     ProfileStack: {
       screen: ProfileStack,
       navigationOptions: {

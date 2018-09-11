@@ -9,7 +9,8 @@ const SearchStack = createStackNavigator(
     Search: {
       screen: Search,
       navigationOptions: {
-        title: 'Search'
+        title: 'Search',
+        header: null
       }
     },
     GarmentDetail: {
