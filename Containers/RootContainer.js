@@ -11,14 +11,16 @@ class RootContainer extends Component {
   render() {
     return (
       <View style={styles.applicationView}>
-        <RootNav
-          persistenceKey={'NavigationState'}
-          renderLoadingExperimental={() => <ActivityIndicator />}
-        />
+        <RootNav />
       </View>
     );
   }
 }
+
+// <RootNav
+//   persistenceKey={'NavigationState'}
+//   renderLoadingExperimental={() => <ActivityIndicator />}
+// />
 
 // wraps dispatch to create nicer functions to call within our component
 // const mapDispatchToProps = dispatch => ({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
-import BrandStack from './BrandStack';
+// import BrandStack from './BrandStack';
 import SearchStack from './SearchStack';
 import CameraStack from './CameraStack';
 import ProfileStack from './ProfileStack';
@@ -10,16 +10,16 @@ import { Ionicons } from '@expo/vector-icons';
 
 const AppNav = createBottomTabNavigator(
   {
-    BrandStack: {
-      screen: BrandStack,
-      navigationOptions: {
-        title: 'Brands',
-        tabBarLabel: 'Brands',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-shirt" size={26} color={tintColor} />
-        )
-      }
-    },
+    // BrandStack: {
+    //   screen: SearchStack,
+    //   navigationOptions: {
+    //     title: 'Brands',
+    //     tabBarLabel: 'Brands',
+    //     tabBarIcon: ({ tintColor }) => (
+    //       <Ionicons name="ios-shirt" size={26} color={tintColor} />
+    //     )
+    //   }
+    // },
     Search: {
       screen: SearchStack,
       navigationOptions: {
@@ -52,7 +52,7 @@ const AppNav = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'BrandStack',
+    initialRouteName: 'Search',
     tabBarOptions: {
       activeTintColor: '#e91e63',
       showLabel: false,

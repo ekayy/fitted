@@ -4,7 +4,7 @@ import Search from '../Containers/Search';
 import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 
-const BrandStack = createStackNavigator(
+const SearchStack = createStackNavigator(
   {
     Search: {
       screen: Search,
@@ -30,4 +30,4 @@ const BrandStack = createStackNavigator(
   }
 );
 
-export default BrandStack;
+export default SearchStack;
