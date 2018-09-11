@@ -39,7 +39,15 @@ class Search extends Component {
   }
 
   componentDidMount() {
-    this.handleRefresh();
+    this.setState({ refreshing: true, results: [] }, async () => {
+      await this.fetchGarments(this.state.limit);
+
+      this.setState({
+        refreshing: false,
+        results: [...this.state.garments.slice(0, 10)],
+        remainingResults: [...this.state.garments.slice(10)]
+      });
+    });
   }
 
   fetchGarments = async limit => {
@@ -63,11 +71,16 @@ class Search extends Component {
         : this.state.garments;
     });
 
+    console.tron.log('searched', searchedResults);
+
     const filteredResults = this.state.brand
       ? searchedResults.filter(result => {
-          return result.brand === this.state.brand;
+          return result.brand === this.state.brand.id;
         })
       : searchedResults;
+
+    console.tron.log(this.state.brand);
+    console.tron.log('filtered', filteredResults);
 
     let slicedResults = filteredResults.slice(0, 10);
     let remainingResults = filteredResults.slice(10);
@@ -80,15 +93,15 @@ class Search extends Component {
   };
 
   handleRefresh = () => {
-    this.setState({ refreshing: true, results: [] }, async () => {
-      await this.fetchGarments(this.state.limit);
-
-      this.setState({
-        refreshing: false,
-        results: [...this.state.garments.slice(0, 10)],
-        remainingResults: [...this.state.garments.slice(10)]
-      });
-    });
+    // this.setState({ refreshing: true, results: [] }, async () => {
+    //   await this.fetchGarments(this.state.limit);
+    //
+    //   this.setState({
+    //     refreshing: false,
+    //     results: [...this.state.garments.slice(0, 10)],
+    //     remainingResults: [...this.state.garments.slice(10)]
+    //   });
+    // });
   };
 
   // do nothing because the entire page is loaded
@@ -107,12 +120,12 @@ class Search extends Component {
   };
 
   // Search filters
-  applyFilters = brandId => {
+  applyFilters = brand => {
     const { searchTerm } = this.state;
 
     this.setState({
       results: [],
-      brand: brandId
+      brand: brand
     });
 
     const searchedResults = this.state.garments.filter(result => {
@@ -122,7 +135,7 @@ class Search extends Component {
     });
 
     const filteredResults = searchedResults.filter(result => {
-      return result.brand === brandId;
+      return result.brand === brand.id;
     });
 
     let slicedResults = filteredResults.slice(0, 10);
@@ -140,13 +153,44 @@ class Search extends Component {
     this.setState({ showFilters: !this.state.showFilters });
   };
 
+  // Show currently active brand filter
+  renderActiveFilter = () => {
+    if (!this.state.brand.name) {
+      return null;
+    }
+
+    return (
+      <TouchableOpacity
+        style={[styles.filter, styles.activeFilter]}
+        onPress={this.removeFilter}
+      >
+        <View>
+          <Text style={styles.filterText}>{this.state.brand.name} x</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  removeFilter = () => {
+    this.setState(
+      {
+        results: [],
+        brand: ''
+      },
+      () => {
+        this.handleChange(this.state.searchTerm);
+      }
+    );
+  };
+
   render() {
     const {
       searchTerm,
       results,
       loading,
       refreshing,
-      showFilters
+      showFilters,
+      brand
     } = this.state;
 
     return (
@@ -161,30 +205,37 @@ class Search extends Component {
           value={searchTerm}
         />
 
-        <View>
-          <TouchableOpacity style={styles.filter} onPress={this.toggleFilters}>
-            <View>
-              <Text style={styles.filterText}>Filters</Text>
-            </View>
-          </TouchableOpacity>
+        <View style={styles.filterWrapper}>
+          <View style={styles.filterContainer}>
+            <TouchableOpacity
+              style={styles.filter}
+              onPress={this.toggleFilters}
+            >
+              <View>
+                <Text style={styles.filterText}>Filters</Text>
+              </View>
+            </TouchableOpacity>
 
-          <SearchFilter
-            navigation={this.props.navigation}
-            showFilters={showFilters}
-            onClose={this.toggleFilters}
-            applyFilters={this.applyFilters}
-          />
-
-          <GarmentsGrid
-            data={results}
-            navigation={this.props.navigation}
-            numCol={2}
-            handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleRefresh}
-            refreshing={refreshing}
-            loading={loading}
-          />
+            {this.renderActiveFilter()}
+          </View>
         </View>
+
+        <SearchFilter
+          navigation={this.props.navigation}
+          showFilters={showFilters}
+          onClose={this.toggleFilters}
+          applyFilters={this.applyFilters}
+        />
+
+        <GarmentsGrid
+          data={results}
+          navigation={this.props.navigation}
+          numCol={2}
+          handleLoadMore={this.handleLoadMore}
+          onRefresh={this.handleRefresh}
+          refreshing={refreshing}
+          loading={loading}
+        />
       </View>
     );
   }
@@ -212,19 +263,31 @@ const styles = {
     backgroundColor: '#f3f3f3'
   },
 
+  filterWrapper: {
+    alignSelf: 'flex-start',
+    position: 'relative',
+    zIndex: 10
+  },
+  filterContainer: {
+    position: 'absolute',
+    flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: 5
+  },
   filter: {
     alignSelf: 'flex-start',
-    marginHorizontal: 20,
     marginTop: 5,
+    marginHorizontal: 10,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: 'rgba(255,0,0, 0.8)',
-    borderRadius: 10,
-    position: 'absolute',
-    zIndex: 10
+    backgroundColor: 'rgba(255,0,0, 0.9)',
+    borderRadius: 10
   },
   filterText: {
     color: '#fff'
+  },
+  activeFilter: {
+    backgroundColor: 'rgba(255,0,0, 0.8)'
   }
 };
 

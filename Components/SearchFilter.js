@@ -26,20 +26,22 @@ const brands = [
 ];
 
 class SearchFilter extends Component {
-  selectBrand(brandId) {
+  selectBrand(brand) {
     this.props.onClose();
-    this.props.applyFilters(brandId);
+    this.props.applyFilters(brand);
   }
 
   renderBrands() {
     return brands.map(brand => {
       const { navigate } = this.props.navigation;
-      const { id, name } = brand;
 
       return (
-        <TouchableOpacity key={name} onPress={this.selectBrand.bind(this, id)}>
+        <TouchableOpacity
+          key={brand.name}
+          onPress={this.selectBrand.bind(this, brand)}
+        >
           <View style={styles.gridItem}>
-            <Text>{name}</Text>
+            <Text>{brand.name}</Text>
           </View>
         </TouchableOpacity>
       );
