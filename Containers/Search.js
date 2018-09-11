@@ -71,16 +71,11 @@ class Search extends Component {
         : this.state.garments;
     });
 
-    console.tron.log('searched', searchedResults);
-
     const filteredResults = this.state.brand
       ? searchedResults.filter(result => {
           return result.brand === this.state.brand.id;
         })
       : searchedResults;
-
-    console.tron.log(this.state.brand);
-    console.tron.log('filtered', filteredResults);
 
     let slicedResults = filteredResults.slice(0, 10);
     let remainingResults = filteredResults.slice(10);
