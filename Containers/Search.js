@@ -12,6 +12,7 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Metrics } from '../Themes';
 import axios from 'axios';
 
+import SearchFilter from '../Components/SearchFilter';
 import GarmentsGrid from '../Components/GarmentsGrid';
 import { baseURL } from '../Config';
 
@@ -31,12 +32,22 @@ class Search extends Component {
       error: null,
       loading: false,
       refreshing: false,
-      limit: 9999
+      limit: 9999,
+      showFilters: false,
+      brand: ''
     };
   }
 
   componentDidMount() {
-    this.handleRefresh();
+    this.setState({ refreshing: true, results: [] }, async () => {
+      await this.fetchGarments(this.state.limit);
+
+      this.setState({
+        refreshing: false,
+        results: [...this.state.garments.slice(0, 10)],
+        remainingResults: [...this.state.garments.slice(10)]
+      });
+    });
   }
 
   fetchGarments = async limit => {
@@ -54,9 +65,17 @@ class Search extends Component {
   };
 
   handleChange = searchTerm => {
-    const filteredResults = this.state.garments.filter(result => {
-      return result.model.toLowerCase().includes(searchTerm);
+    const searchedResults = this.state.garments.filter(result => {
+      return searchTerm
+        ? result.model.toLowerCase().includes(searchTerm)
+        : this.state.garments;
     });
+
+    const filteredResults = this.state.brand
+      ? searchedResults.filter(result => {
+          return result.brand === this.state.brand.id;
+        })
+      : searchedResults;
 
     let slicedResults = filteredResults.slice(0, 10);
     let remainingResults = filteredResults.slice(10);
@@ -69,15 +88,15 @@ class Search extends Component {
   };
 
   handleRefresh = () => {
-    this.setState({ refreshing: true, results: [] }, async () => {
-      await this.fetchGarments(this.state.limit);
-
-      this.setState({
-        refreshing: false,
-        results: [...this.state.garments.slice(0, 10)],
-        remainingResults: [...this.state.garments.slice(10)]
-      });
-    });
+    // this.setState({ refreshing: true, results: [] }, async () => {
+    //   await this.fetchGarments(this.state.limit);
+    //
+    //   this.setState({
+    //     refreshing: false,
+    //     results: [...this.state.garments.slice(0, 10)],
+    //     remainingResults: [...this.state.garments.slice(10)]
+    //   });
+    // });
   };
 
   // do nothing because the entire page is loaded
@@ -95,8 +114,79 @@ class Search extends Component {
     });
   };
 
+  // Search filters
+  applyFilters = brand => {
+    const { searchTerm } = this.state;
+
+    this.setState({
+      results: [],
+      brand: brand
+    });
+
+    const searchedResults = this.state.garments.filter(result => {
+      return searchTerm
+        ? result.model.toLowerCase().includes(searchTerm)
+        : this.state.garments;
+    });
+
+    const filteredResults = searchedResults.filter(result => {
+      return result.brand === brand.id;
+    });
+
+    let slicedResults = filteredResults.slice(0, 10);
+    let remainingResults = filteredResults.slice(10);
+
+    this.setState({
+      searchTerm,
+      remainingResults: remainingResults,
+      results: slicedResults
+    });
+  };
+
+  // Toggle search filters overlay
+  toggleFilters = () => {
+    this.setState({ showFilters: !this.state.showFilters });
+  };
+
+  // Show currently active brand filter
+  renderActiveFilter = () => {
+    if (!this.state.brand.name) {
+      return null;
+    }
+
+    return (
+      <TouchableOpacity
+        style={[styles.filter, styles.activeFilter]}
+        onPress={this.removeFilter}
+      >
+        <View>
+          <Text style={styles.filterText}>{this.state.brand.name} x</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  removeFilter = () => {
+    this.setState(
+      {
+        results: [],
+        brand: ''
+      },
+      () => {
+        this.handleChange(this.state.searchTerm);
+      }
+    );
+  };
+
   render() {
-    const { searchTerm, results, loading, refreshing } = this.state;
+    const {
+      searchTerm,
+      results,
+      loading,
+      refreshing,
+      showFilters,
+      brand
+    } = this.state;
 
     return (
       <View style={styles.container}>
@@ -108,6 +198,28 @@ class Search extends Component {
           autoCapitalize="none"
           platform="ios"
           value={searchTerm}
+        />
+
+        <View style={styles.filterWrapper}>
+          <View style={styles.filterContainer}>
+            <TouchableOpacity
+              style={styles.filter}
+              onPress={this.toggleFilters}
+            >
+              <View>
+                <Text style={styles.filterText}>Filters</Text>
+              </View>
+            </TouchableOpacity>
+
+            {this.renderActiveFilter()}
+          </View>
+        </View>
+
+        <SearchFilter
+          navigation={this.props.navigation}
+          showFilters={showFilters}
+          onClose={this.toggleFilters}
+          applyFilters={this.applyFilters}
         />
 
         <GarmentsGrid
@@ -130,7 +242,6 @@ class Search extends Component {
     return (
       <ListItem
         title={model}
-        style={{ backgroundColor: '#fff' }}
         titleStyle={{ color: '#000' }}
         onPress={() => {
           navigate('GarmentDetail', item);
@@ -144,21 +255,35 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3'
+    backgroundColor: '#f3f3f3',
+    marginTop: 30
   },
-  mainImage: {
-    width: Metrics.screenWidth,
-    minHeight: 500
+
+  filterWrapper: {
+    alignSelf: 'flex-start',
+    position: 'relative',
+    zIndex: 10
   },
-  imageContainer: {
-    flex: 0.5,
-    alignItems: 'center',
-    width: Metrics.screenWidth / 2 - 20
+  filterContainer: {
+    position: 'absolute',
+    flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: 5
   },
-  image: {
-    height: 200,
-    marginVertical: 10,
-    width: Metrics.screenWidth / 2 - 20
+  filter: {
+    alignSelf: 'flex-start',
+    marginTop: 5,
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: 'rgba(255,0,0, 0.9)',
+    borderRadius: 10
+  },
+  filterText: {
+    color: '#fff'
+  },
+  activeFilter: {
+    backgroundColor: 'rgba(255,0,0, 0.8)'
   }
 };
 

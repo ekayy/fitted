@@ -23,6 +23,14 @@ class GarmentsGrid extends Component {
       .map(word => word.charAt(0) + word.toLowerCase().slice(1))
       .join(' ');
 
+    // if not valid photo, add a stock image
+    if (photo.length > 10) {
+      photoUrl = photo;
+    } else {
+      photoUrl =
+        'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
+    }
+
     return numCol == 2 ? (
       <TouchableOpacity
         style={styles.gridItem}
@@ -30,7 +38,7 @@ class GarmentsGrid extends Component {
         onPress={() => navigate('GarmentDetail', item)}
       >
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: photo }} />
+          <Image style={styles.image} source={{ uri: photoUrl }} />
         </View>
         <Text style={styles.text}>{formattedModel}</Text>
       </TouchableOpacity>
