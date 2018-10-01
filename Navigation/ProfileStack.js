@@ -31,7 +31,7 @@ const ProfileStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: "UserProfile"
+    initialRouteName: "MyProfile"
   }
 );
 

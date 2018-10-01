@@ -10,6 +10,7 @@ import {
   Dimensions,
   FlatList
 } from "react-native";
+import { Avatar } from "react-native-elements";
 import axios from "axios";
 import { TabViewAnimated, TabBar, SceneMap } from "react-native-tab-view";
 import ProfileHeader from "../Components/ProfileHeader";
@@ -35,6 +36,7 @@ class Profile extends Component {
   }
 
   // fetchProfile = async () => {
+  //   console.tron.log(this.props.navigation.state.params);
   //   this.setState({
   //     error: null,
   //     refreshing: true
@@ -55,12 +57,19 @@ class Profile extends Component {
       width: Dimensions.get("window").width
     };
 
+    const { user } = this.props.navigation.state.params;
+    const { first_name, last_name, username } = user;
+    const firstName = first_name.charAt(0).toUpperCase() + first_name.slice(1);
+    const lastName = last_name.charAt(0).toUpperCase() + last_name.slice(1);
+    const initials =
+      first_name.charAt(0).toUpperCase() + last_name.charAt(0).toUpperCase();
+
     return (
       <View style={styles.container}>
-        {/*}<ProfileHeader
-          navigation={this.props.navigation}
-          user={this.props.user}
-        />*/}
+        <View style={styles.header}>
+          <Avatar size="large" rounded title={initials} activeOpacity={0.7} />
+          <Text style={styles.headerText}>{firstName}</Text>
+        </View>
 
         <View style={styles.tabContainer}>
           <TabViewAnimated
@@ -87,13 +96,7 @@ class Profile extends Component {
   );
 
   _renderScene = ({ route }) => {
-    const {
-      favoriteGarments,
-      favoriteFits,
-      loading,
-      page,
-      refreshing
-    } = this.state;
+    const { garments, fits, loading, page, refreshing } = this.state;
 
     switch (route.key) {
       case "garments":
@@ -131,10 +134,18 @@ const styles = {
     paddingHorizontal: 5,
     backgroundColor: "#f3f3f3"
   },
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginVertical: 30
+  },
+  headerText: {
+    marginLeft: 10
+  },
+
   tabContainer: {
     flex: 1
   },
-
   tabBarStyle: {
     backgroundColor: "#fff"
   },

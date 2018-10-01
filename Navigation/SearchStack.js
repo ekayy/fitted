@@ -29,7 +29,7 @@ const SearchStack = createStackNavigator(
     Profile: {
       screen: Profile,
       navigationOptions: ({ navigation }) => ({
-        title: "Profile"
+        title: navigation.state.params.user.username
       })
     }
   },
