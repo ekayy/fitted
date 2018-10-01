@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import {
   ScrollView,
   View,
@@ -8,117 +8,42 @@ import {
   ImageBackground,
   TouchableOpacity,
   Dimensions,
-  FlatList,
-  AsyncStorage
-} from 'react-native';
-import { connect } from 'react-redux';
-import axios from 'axios';
-import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
-import ProfileHeader from '../Components/ProfileHeader';
-import FitsGrid from '../Components/FitsGrid';
-import GarmentsGrid from '../Components/GarmentsGrid';
-import { fetchProfiles } from '../Redux/ProfilesRedux';
-import { baseURL } from '../Config';
-import { withNavigationFocus } from 'react-navigation';
+  FlatList
+} from "react-native";
+import axios from "axios";
+import { TabViewAnimated, TabBar, SceneMap } from "react-native-tab-view";
+import ProfileHeader from "../Components/ProfileHeader";
+import FitsGrid from "../Components/FitsGrid";
+import GarmentsGrid from "../Components/GarmentsGrid";
+import { baseURL } from "../Config";
 
 class Profile extends Component {
   state = {
     index: 0,
     routes: [
-      { key: 'garments', title: 'Favorites' },
-      { key: 'fits', title: 'Fits' }
+      { key: "garments", title: "Garments" },
+      { key: "fits", title: "Fits" }
     ],
     loading: false,
     refreshing: false,
-    favoriteFits: [],
-    favoriteGarments: []
+    garments: [],
+    fits: []
   };
 
   componentDidMount() {
-    this.fetchFavoriteGarments();
-    this.fetchFavoriteFits();
+    // this.fetchProfile();
   }
 
-  componentDidUpdate(previousProps) {
-    if (previousProps.favoriteGarments != this.props.favoriteGarments) {
-      this.setState({ refreshing: true, favoriteGarments: [] }, () => {
-        this.fetchFavoriteGarments();
-      });
-    }
+  // fetchProfile = async () => {
+  //   this.setState({
+  //     error: null,
+  //     refreshing: true
+  //   });
+  // };
 
-    if (previousProps.favoriteFits != this.props.favoriteFits) {
-      this.setState({ refreshing: true, favoriteFits: [] }, () => {
-        this.fetchFavoriteFits();
-      });
-    }
-  }
-
-  fetchFavoriteGarments = async () => {
-    this.setState({
-      error: null,
-      refreshing: true
-    });
-
-    await Promise.all(
-      this.props.favoriteGarments.map(async garmentId => {
-        const response = await axios.get(`${baseURL}/garments/${garmentId}`);
-
-        try {
-          this.setState({
-            favoriteGarments: [...this.state.favoriteGarments, response.data]
-          });
-        } catch (error) {
-          this.setState({
-            error
-          });
-        }
-      })
-    );
-
-    this.setState({
-      error: null,
-      loading: false,
-      refreshing: false
-    });
-  };
-
-  fetchFavoriteFits = async () => {
-    this.setState({
-      error: null,
-      refreshing: true
-    });
-
-    await Promise.all(
-      this.props.favoriteFits.map(async fitId => {
-        const response = await axios.get(`${baseURL}/fits/${fitId}`);
-
-        try {
-          this.setState({
-            favoriteFits: [...this.state.favoriteFits, response.data]
-          });
-        } catch (error) {
-          this.setState({
-            error
-          });
-        }
-      })
-    );
-
-    this.setState({
-      error: null,
-      refreshing: false
-    });
-  };
-
-  handleGarmentRefresh = () => {
-    this.setState({ refreshing: true, favoriteGarments: [] }, () => {
-      this.fetchFavoriteGarments();
-    });
-  };
-
-  handleFitRefresh = () => {
-    this.setState({ refreshing: true, favoriteFits: [] }, () => {
-      this.fetchFavoriteFits();
+  handleRefresh = () => {
+    this.setState({ refreshing: true, garments: [], fits: [] }, () => {
+      this.fetchProfile();
     });
   };
 
@@ -127,15 +52,15 @@ class Profile extends Component {
   render() {
     const initialLayout = {
       height: 0,
-      width: Dimensions.get('window').width
+      width: Dimensions.get("window").width
     };
 
     return (
       <View style={styles.container}>
-        <ProfileHeader
+        {/*}<ProfileHeader
           navigation={this.props.navigation}
           user={this.props.user}
-        />
+        />*/}
 
         <View style={styles.tabContainer}>
           <TabViewAnimated
@@ -171,25 +96,25 @@ class Profile extends Component {
     } = this.state;
 
     switch (route.key) {
-      case 'garments':
+      case "garments":
         return (
           <GarmentsGrid
-            data={favoriteGarments}
+            data={garments}
             navigation={this.props.navigation}
             numCol={3}
             handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleGarmentRefresh}
+            onRefresh={this.handleRefresh}
             refreshing={refreshing}
             loading={loading}
           />
         );
-      case 'fits':
+      case "fits":
         return (
           <FitsGrid
-            data={favoriteFits}
+            data={fits}
             navigation={this.props.navigation}
             handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleFitRefresh}
+            onRefresh={this.handleRefresh}
             refreshing={refreshing}
             loading={loading}
           />
@@ -204,29 +129,21 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3'
+    backgroundColor: "#f3f3f3"
   },
   tabContainer: {
     flex: 1
   },
 
   tabBarStyle: {
-    backgroundColor: '#fff'
+    backgroundColor: "#fff"
   },
   tabStyle: {
-    backgroundColor: 'red'
+    backgroundColor: "red"
   },
   indicatorStyle: {
-    backgroundColor: 'red'
+    backgroundColor: "red"
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    favoriteGarments: state.user.favoriteGarments,
-    favoriteFits: state.user.favoriteFits,
-    user: state.user
-  };
-};
-
-export default connect(mapStateToProps)(withNavigationFocus(Profile));
+export default Profile;
