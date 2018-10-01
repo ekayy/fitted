@@ -158,6 +158,7 @@ class MyProfile extends Component {
       {...props}
       indicatorStyle={styles.indicatorStyle}
       tabStyle={styles.tabStyle}
+      labelStyle={styles.labelStyle}
       style={styles.tabBarStyle}
     />
   );
@@ -233,6 +234,9 @@ const styles = {
   },
   indicatorStyle: {
     backgroundColor: "red"
+  },
+  labelStyle: {
+    textAlign: "center"
   }
 };
 
