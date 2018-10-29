@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import {
   View,
   Text,
@@ -7,25 +7,25 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList
-} from 'react-native';
-import { SearchBar, ListItem } from 'react-native-elements';
-import { Metrics } from '../Themes';
-import axios from 'axios';
+} from "react-native";
+import { SearchBar, ListItem } from "react-native-elements";
+import { Metrics } from "../Themes";
+import axios from "axios";
 
-import SearchFilter from '../Components/SearchFilter';
-import GarmentsGrid from '../Components/GarmentsGrid';
-import { baseURL } from '../Config';
+import SearchFilter from "../Components/SearchFilter";
+import GarmentsGrid from "../Components/GarmentsGrid";
+import { baseURL } from "../Config";
 
 class Search extends Component {
   static navigationOptions = {
-    title: 'Search'
+    title: "Search"
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      searchTerm: '',
+      searchTerm: "",
       garments: [],
       results: [],
       remainingResults: [],
@@ -34,7 +34,7 @@ class Search extends Component {
       refreshing: false,
       limit: 9999,
       showFilters: false,
-      brand: ''
+      brand: ""
     };
   }
 
@@ -170,12 +170,14 @@ class Search extends Component {
     this.setState(
       {
         results: [],
-        brand: ''
+        brand: ""
       },
       () => {
         this.handleChange(this.state.searchTerm);
       }
     );
+
+    this.child.clearFilters();
   };
 
   render() {
@@ -220,6 +222,9 @@ class Search extends Component {
           showFilters={showFilters}
           onClose={this.toggleFilters}
           applyFilters={this.applyFilters}
+          ref={instance => {
+            this.child = instance;
+          }}
         />
 
         <GarmentsGrid
@@ -242,9 +247,9 @@ class Search extends Component {
     return (
       <ListItem
         title={model}
-        titleStyle={{ color: '#000' }}
+        titleStyle={{ color: "#000" }}
         onPress={() => {
-          navigate('GarmentDetail', item);
+          navigate("GarmentDetail", item);
         }}
       />
     );
@@ -255,35 +260,35 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3',
+    backgroundColor: "#f3f3f3",
     marginTop: 30
   },
 
   filterWrapper: {
-    alignSelf: 'flex-start',
-    position: 'relative',
+    alignSelf: "flex-start",
+    position: "relative",
     zIndex: 10
   },
   filterContainer: {
-    position: 'absolute',
+    position: "absolute",
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     marginHorizontal: 5
   },
   filter: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginTop: 5,
     marginHorizontal: 10,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: 'rgba(255,0,0, 0.9)',
+    backgroundColor: "rgba(255,0,0, 0.9)",
     borderRadius: 10
   },
   filterText: {
-    color: '#fff'
+    color: "#fff"
   },
   activeFilter: {
-    backgroundColor: 'rgba(255,0,0, 0.8)'
+    backgroundColor: "rgba(255,0,0, 0.8)"
   }
 };
 
