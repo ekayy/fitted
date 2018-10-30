@@ -22,18 +22,75 @@ class Profile extends Component {
   state = {
     index: 0,
     routes: [
-      { key: "garments", title: "Garments" },
-      { key: "fits", title: "Fits" }
+      { key: "fits", title: "Fits" },
+      { key: "garments", title: "Favorite Garments" }
     ],
     loading: false,
     refreshing: false,
-    garments: [],
-    fits: []
+    favoriteGarments: [],
+    myFits: []
   };
 
   componentDidMount() {
-    // this.fetchProfile();
+    this.fetchMyFits();
+    this.fetchFavoriteGarments();
   }
+
+  fetchMyFits = async () => {
+    const { id } = this.props.navigation.state.params;
+
+    this.setState({
+      error: null,
+      refreshing: true
+    });
+
+    const response = await axios.get(`${baseURL}/profiles/${id}/fits`);
+
+    try {
+      this.setState({
+        myFits: response.data,
+        error: null,
+        refreshing: false
+      });
+    } catch (error) {
+      this.setState({
+        error
+      });
+    }
+  };
+
+  fetchFavoriteGarments = async () => {
+    const { favorite_garments } = this.props.navigation.state.params;
+
+    console.tron.log(favorite_garments);
+
+    this.setState({
+      error: null,
+      refreshing: true
+    });
+
+    await Promise.all(
+      favorite_garments.map(async garmentId => {
+        const response = await axios.get(`${baseURL}/garments/${garmentId}`);
+
+        try {
+          this.setState({
+            favoriteGarments: [...this.state.favoriteGarments, response.data]
+          });
+        } catch (error) {
+          this.setState({
+            error
+          });
+        }
+      })
+    );
+
+    this.setState({
+      error: null,
+      loading: false,
+      refreshing: false
+    });
+  };
 
   // fetchProfile = async () => {
   //   console.tron.log(this.props.navigation.state.params);
@@ -44,9 +101,13 @@ class Profile extends Component {
   // };
 
   handleRefresh = () => {
-    this.setState({ refreshing: true, garments: [], fits: [] }, () => {
-      this.fetchProfile();
-    });
+    this.setState(
+      { refreshing: true, favoriteGarments: [], myFits: [] },
+      () => {
+        this.fetchMyFits();
+        this.fetchFavoriteGarments();
+      }
+    );
   };
 
   handleLoadMore = () => {};
@@ -96,25 +157,24 @@ class Profile extends Component {
   );
 
   _renderScene = ({ route }) => {
-    const { garments, fits, loading, page, refreshing } = this.state;
+    const { favoriteGarments, myFits, loading, page, refreshing } = this.state;
 
     switch (route.key) {
-      case "garments":
+      case "fits":
         return (
-          <GarmentsGrid
-            data={garments}
+          <FitsGrid
+            data={myFits}
             navigation={this.props.navigation}
-            numCol={3}
             handleLoadMore={this.handleLoadMore}
             onRefresh={this.handleRefresh}
             refreshing={refreshing}
             loading={loading}
           />
         );
-      case "fits":
+      case "garments":
         return (
-          <FitsGrid
-            data={fits}
+          <GarmentsGrid
+            data={favoriteGarments}
             navigation={this.props.navigation}
             handleLoadMore={this.handleLoadMore}
             onRefresh={this.handleRefresh}
@@ -137,6 +197,7 @@ const styles = {
   header: {
     alignItems: "center",
     flexDirection: "row",
+    justifyContent: "center",
     marginVertical: 30
   },
   headerText: {

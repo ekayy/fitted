@@ -123,8 +123,6 @@ class MyProfile extends Component {
 
     const response = await axios.get(`${baseURL}/profiles/${profileId}/fits`);
 
-    console.tron.log(response.data);
-
     try {
       this.setState({
         myFits: response.data,
