@@ -32,12 +32,14 @@ class MyProfile extends Component {
     loading: false,
     refreshing: false,
     favoriteFits: [],
-    favoriteGarments: []
+    favoriteGarments: [],
+    myFits: []
   };
 
   componentDidMount() {
     this.fetchFavoriteGarments();
     this.fetchFavoriteFits();
+    this.fetchMyFits();
   }
 
   componentDidUpdate(previousProps) {
@@ -111,6 +113,31 @@ class MyProfile extends Component {
     });
   };
 
+  fetchMyFits = async () => {
+    const { profileId } = this.props.user;
+
+    this.setState({
+      error: null,
+      refreshing: true
+    });
+
+    const response = await axios.get(`${baseURL}/profiles/${profileId}/fits`);
+
+    console.tron.log(response.data);
+
+    try {
+      this.setState({
+        myFits: response.data,
+        error: null,
+        refreshing: false
+      });
+    } catch (error) {
+      this.setState({
+        error
+      });
+    }
+  };
+
   handleGarmentRefresh = () => {
     this.setState({ refreshing: true, favoriteGarments: [] }, () => {
       this.fetchFavoriteGarments();
@@ -120,6 +147,12 @@ class MyProfile extends Component {
   handleFitRefresh = () => {
     this.setState({ refreshing: true, favoriteFits: [] }, () => {
       this.fetchFavoriteFits();
+    });
+  };
+
+  handleMyFitRefresh = () => {
+    this.setState({ refreshing: true, myFits: [] }, () => {
+      this.fetchMyFits();
     });
   };
 
@@ -167,6 +200,7 @@ class MyProfile extends Component {
     const {
       favoriteGarments,
       favoriteFits,
+      myFits,
       loading,
       page,
       refreshing
@@ -199,10 +233,10 @@ class MyProfile extends Component {
       case "myfits":
         return (
           <FitsGrid
-            data={favoriteFits}
+            data={myFits}
             navigation={this.props.navigation}
             handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleFitRefresh}
+            onRefresh={this.handleMyFitRefresh}
             refreshing={refreshing}
             loading={loading}
           />
