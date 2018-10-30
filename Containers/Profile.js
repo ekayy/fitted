@@ -62,8 +62,6 @@ class Profile extends Component {
   fetchFavoriteGarments = async () => {
     const { favorite_garments } = this.props.navigation.state.params;
 
-    console.tron.log(favorite_garments);
-
     this.setState({
       error: null,
       refreshing: true
