@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import {
   View,
   Text,
@@ -8,27 +8,31 @@ import {
   ScrollView,
   FlatList,
   AsyncStorage
-} from 'react-native';
-import { connect } from 'react-redux';
-import { Metrics } from '../Themes';
-import GarmentsList from '../Components/GarmentsList';
-import FavoriteButton from '../Components/FavoriteButton';
-import axios from 'axios';
-import { baseURL } from '../Config';
-import { favoriteFit } from '../Redux/UserRedux';
+} from "react-native";
+import { Avatar } from "react-native-elements";
+import { connect } from "react-redux";
+import { Metrics } from "../Themes";
+import GarmentsList from "../Components/GarmentsList";
+import FavoriteButton from "../Components/FavoriteButton";
+import axios from "axios";
+import { baseURL } from "../Config";
+import { favoriteFit } from "../Redux/UserRedux";
 
 class FitDetail extends Component {
   state = {
     error: null,
     loading: true,
     garments: [],
-    toggled: false
+    toggled: false,
+    profile: "",
+    username: ""
   };
 
   componentDidMount() {
     this.fetchGarments();
     this.setState({ toggled: false });
     this.getFavoriteState();
+    this.fetchProfile();
   }
 
   fetchGarments = async () => {
@@ -52,6 +56,23 @@ class FitDetail extends Component {
     });
   };
 
+  fetchProfile = async () => {
+    const { profile } = this.props.navigation.state.params;
+
+    const response = await axios.get(`${baseURL}/profiles/${profile}`);
+
+    try {
+      this.setState({
+        profile: response.data,
+        username: response.data.user.username
+      });
+    } catch (error) {
+      this.setState({
+        error
+      });
+    }
+  };
+
   getFavoriteState = () => {
     const { id } = this.props.navigation.state.params;
     const { favoriteFits } = this.props.user;
@@ -72,8 +93,16 @@ class FitDetail extends Component {
     this.getFavoriteState();
   };
 
+  handlePress = () => {
+    const { navigate } = this.props.navigation;
+    const { profile } = this.state;
+
+    navigate("Profile", profile);
+  };
+
   render() {
     const { photo } = this.props.navigation.state.params;
+    const { profile, username } = this.state;
 
     return (
       <View style={styles.container}>
@@ -90,6 +119,20 @@ class FitDetail extends Component {
             </View>
           </View>
 
+          <TouchableOpacity style={styles.profile} onPress={this.handlePress}>
+            <Avatar
+              large
+              rounded
+              source={{
+                uri:
+                  "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+              }}
+              activeOpacity={0.7}
+              style={styles.profileImage}
+            />
+            <Text style={styles.profileText}>@{username}</Text>
+          </TouchableOpacity>
+
           <GarmentsList
             data={this.state.garments}
             navigation={this.props.navigation}
@@ -103,7 +146,7 @@ class FitDetail extends Component {
 const styles = {
   container: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: 5
   },
   image: {
@@ -111,7 +154,7 @@ const styles = {
     minHeight: 400
   },
   favorite: {
-    position: 'absolute',
+    position: "absolute",
     bottom: Metrics.doubleBaseMargin,
     right: Metrics.doubleBaseMargin
   },
@@ -119,11 +162,23 @@ const styles = {
     flex: 1,
     width: Metrics.screenWidth / 3,
     height: 200,
-    backgroundColor: '#333'
+    backgroundColor: "#333"
   },
   image2: {
     width: undefined,
     height: 200
+  },
+
+  profile: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginVertical: 30
+  },
+  profileImage: {
+    marginLeft: 30
+  },
+  profileText: {
+    marginLeft: 30
   }
 };
 
