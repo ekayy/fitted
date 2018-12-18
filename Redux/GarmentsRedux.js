@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { baseURL } from '../Config';
+import {
+  baseURL
+} from '../Config';
 
 // Actions
 const FETCH_GARMENTS_BEGIN = 'FETCH_GARMENTS_BEGIN';
@@ -25,7 +27,8 @@ export default function garments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        items: [...state.items, ...action.payload.garments]
+        // items: [...state.items, ...action.payload.garments]
+        items: [...action.payload.garments]
       };
 
     case FETCH_GARMENTS_FAILURE:
@@ -47,21 +50,25 @@ export const fetchGarmentsBegin = () => ({
 
 export const fetchGarmentsSuccess = garments => ({
   type: FETCH_GARMENTS_SUCCESS,
-  payload: { garments }
+  payload: {
+    garments
+  }
 });
 
 export const fetchGarmentsFailure = error => ({
   type: FETCH_GARMENTS_FAILURE,
-  payload: { error }
+  payload: {
+    error
+  }
 });
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function fetchGarments(page, brandId) {
+export function fetchGarments() {
   return dispatch => {
     dispatch(fetchGarmentsBegin());
     return axios
-      .get(`${baseURL}/garments/?page=${page}&brand=${brandId}`)
+      .get(`${baseURL}/garments/?limit=9999`)
       .then(response => dispatch(fetchGarmentsSuccess(response.data.results)))
       .catch(error => dispatch(fetchGarmentsFailure(error)));
   };
