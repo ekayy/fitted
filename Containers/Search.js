@@ -11,6 +11,8 @@ import {
 import { SearchBar, ListItem } from "react-native-elements";
 import { Metrics } from "../Themes";
 import axios from "axios";
+import { connect } from "react-redux";
+import { fetchGarments } from "../Redux/GarmentsRedux";
 
 import SearchFilter from "../Components/SearchFilter";
 import GarmentsGrid from "../Components/GarmentsGrid";
@@ -39,8 +41,14 @@ class Search extends Component {
   }
 
   componentDidMount() {
+    const { garments } = this.props;
+
     this.setState({ refreshing: true, results: [] }, async () => {
-      await this.fetchGarments(this.state.limit);
+      // Get garments from redux store
+      await this.props.fetchGarments();
+      this.setState({
+        garments
+      });
 
       this.setState({
         refreshing: false,
@@ -50,19 +58,19 @@ class Search extends Component {
     });
   }
 
-  fetchGarments = async limit => {
-    const response = await axios.get(`${baseURL}/garments/?limit=${limit}`);
-
-    try {
-      this.setState({
-        garments: [...this.state.garments, ...response.data.results],
-        error: null,
-        loading: false
-      });
-    } catch (error) {
-      console.tron.log(error);
-    }
-  };
+  // fetchGarments = async limit => {
+  //   const response = await axios.get(`${baseURL}/garments/?limit=${limit}`);
+  //
+  //   try {
+  //     this.setState({
+  //       garments: [...this.state.garments, ...response.data.results],
+  //       error: null,
+  //       loading: false
+  //     });
+  //   } catch (error) {
+  //     console.tron.log(error);
+  //   }
+  // };
 
   handleChange = searchTerm => {
     const searchedResults = this.state.garments.filter(result => {
@@ -292,4 +300,13 @@ const styles = {
   }
 };
 
-export default Search;
+const mapStateToProps = state => {
+  return {
+    garments: state.garments.items
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchGarments }
+)(Search);

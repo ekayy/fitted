@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   View,
   Text,
@@ -8,41 +8,54 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Modal
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import TextInput from '../Components/FormikTextInput';
-import { Formik } from 'formik';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import SearchGarments from "./SearchGarments";
+import { connect } from "react-redux";
+import { fetchGarments } from "../Redux/GarmentsRedux";
 
-const MyForm = props => (
-  <View>
-    <Formik
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          console.log(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
-        }, 1000);
-      }}
-      render={props => (
-        <View>
-          <TextInput
-            name="email"
-            onChangeText={props.setFieldValue}
-            value={props.values.email}
-          />
-          <Button title="submit" onPress={props.handleSubmit} />
-        </View>
-      )}
-    />
-  </View>
-);
+import t from "tcomb-form-native";
+
+const Form = t.form.Form;
+
+const Fit = t.struct({
+  profile: t.String,
+  style: t.maybe(t.String),
+  photo: t.String,
+  garments: t.String
+});
+
+const Garment = t.struct({
+  color: t.String,
+  sku: t.String,
+  model: t.String,
+  photo: t.String
+});
 
 class CreateFit extends Component {
   state = {
-    modalVisible: false
+    modalVisible: false,
+    searchTerm: "",
+    garments: [],
+    results: [],
+    remainingResults: [],
+    error: null,
+    loading: false,
+    refreshing: false,
+    limit: 9999
   };
 
   setModalVisible = () => {
-    this.setState({ modalVisible: !this.state.modalVisible });
+    this.setState({
+      modalVisible: !this.state.modalVisible
+    });
+  };
+
+  addPiece = () => {
+    const value = this.refs.form.getValue();
+    if (value) {
+      console.tron.log(value);
+    }
   };
 
   render() {
@@ -59,11 +72,7 @@ class CreateFit extends Component {
                 style={{ width: 80, height: 80 }}
               />
             </View>
-            <TextInput
-              style={styles.textInput}
-              multiline={true}
-              placeholder="Add a comment"
-            />
+            <Text>Placeholder</Text>
           </View>
         </View>
         <View style={styles.formContainer}>
@@ -75,16 +84,16 @@ class CreateFit extends Component {
                 style={{ width: 80, height: 80 }}
               />
             </View>
-            <View style={{ alignSelf: 'center' }}>
+            <View style={{ alignSelf: "center" }}>
               <Text>
-                Acne Studios{'\n'}
-                Chelsea Boots{'\n'}
-                Brown{'\n'}
+                Acne Studios{"\n"}
+                Chelsea Boots{"\n"}
+                Brown{"\n"}
                 8.5 US
               </Text>
             </View>
           </View>
-          <Button title="Add" onPress={this.setModalVisible} />
+          <Button title="Add" onPress={() => navigate("SearchGarments")} />
         </View>
 
         <View style={styles.formContainer}>
@@ -92,20 +101,28 @@ class CreateFit extends Component {
           <View style={styles.formRow} />
           <Button title="Add" onPress={() => {}} />
         </View>
-        <View style={styles.formContainer}>
-          <Text style={styles.formTitle}>Social</Text>
-          <View style={styles.formRow} />
-        </View>
         <TouchableOpacity>Share Fit</TouchableOpacity>
 
         <Modal visible={this.state.modalVisible} animationType="slide">
           <View style={styles.modal}>
-            <TouchableHighlight onPress={this.setModalVisible}>
-              <Text>Hide Modal</Text>
+            <TouchableHighlight
+              onPress={this.setModalVisible}
+              style={styles.close}
+            >
+              <Ionicons
+                name="ios-close"
+                size={50}
+                color="#000"
+                style={styles.close}
+              />
             </TouchableHighlight>
-            <MyForm />
+
+            {/*}<Form ref="form" type={Fit} />*/}
+            <Button title="Add Piece" onPress={this.addPiece} />
           </View>
         </Modal>
+
+        <Button title="Save Fit" onPress={() => {}} />
       </ScrollView>
     );
   }
@@ -115,29 +132,50 @@ const styles = {
   formContainer: {
     padding: 10,
     margin: 10,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff"
   },
   formRow: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: "row"
     // alignItems: 'top'
   },
-  image: { marginRight: 10 },
-  textInput: { flex: 1 },
+  image: {
+    marginRight: 10
+  },
+  textInput: {
+    flex: 1
+  },
   formTitle: {
     flex: 1,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 20,
     marginBottom: 10
   },
 
+  close: {
+    position: "absolute",
+    top: 5,
+    right: 15,
+    backgroundColor: "transparent"
+  },
   modal: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    paddingHorizontal: 40,
     marginTop: 25,
-    backgroundColor: '#f3f3f3'
+    backgroundColor: "#f3f3f3"
   }
 };
 
-export default CreateFit;
+const mapStateToProps = state => {
+  return {
+    garments: state.garments.items
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    fetchGarments
+  }
+)(CreateFit);
