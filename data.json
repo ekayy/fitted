@@ -29,6 +29,11 @@
       "photo":
         "http://whatdropsnow.s3.amazonaws.com/brands/logos/458/768aef705d72a269b8799a083c25b985de9016b0.png",
       "id": 5
+    },
+    "6": {
+      "name": "N/A",
+      "photo": "https://google.com",
+      "id": 6
     }
   },
   "garments": [
