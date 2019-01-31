@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Camera, FileSystem, Permissions, ImagePicker } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
+import styles from './Styles/CameraStyles';
 
 class CameraScreen extends Component {
   state = {
@@ -53,47 +54,54 @@ class CameraScreen extends Component {
 
     return (
       <Camera
-        style={{ flex: 1 }}
+        style={styles.container}
         type={this.state.type}
         ref={ref => {
           this.camera = ref;
         }}
       >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'transparent',
-            // flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end'
-          }}
-        >
-          <TouchableOpacity
-            style={{ position: 'absolute', right: 20 }}
-            onPress={() => {
-              this.setState({
-                type:
-                  this.state.type === Camera.Constants.Type.back
-                    ? Camera.Constants.Type.front
-                    : Camera.Constants.Type.back
-              });
-            }}
-          >
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-              Flip
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{}} onPress={this.takePicture}>
-            <Ionicons
-              name="ios-radio-button-on-outline"
-              size={60}
-              color="#fff"
-            />
-          </TouchableOpacity>
+        <View style={styles.controlsContainer}>
+          <View style={styles.controls}>
+            <View style={styles.toggle}>
+              <Button
+                title="Library"
+                onPress={this.pickImage}
+                buttonStyle={styles.toggleButtons}
+                color="#fff"
+              />
+            </View>
+
+            <TouchableOpacity style={{}} onPress={this.takePicture}>
+              <Ionicons
+                name="ios-radio-button-on-outline"
+                size={90}
+                color="#fff"
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.reverse}
+              onPress={() => {
+                this.setState({
+                  type:
+                    this.state.type === Camera.Constants.Type.back
+                      ? Camera.Constants.Type.front
+                      : Camera.Constants.Type.back
+                });
+              }}
+            >
+              <Ionicons
+                name="ios-reverse-camera-outline"
+                size={40}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          </View>
+
           {image && (
             <Image
               source={{ uri: image }}
-              style={{ width: 200, height: 200 }}
+              style={{ width: 200, height: 200, backgroundColor: '#fff' }}
             />
           )}
         </View>
@@ -118,7 +126,7 @@ class CameraScreen extends Component {
             photoId: this.state.photoId + 1
           });
           Vibration.vibrate();
-          this.props.navigation.navigate('CreateFit', { image });
+          // this.props.navigation.navigate('CreateFit', { image });
         });
       });
 
@@ -134,21 +142,7 @@ class CameraScreen extends Component {
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
-      return (
-        <View style={{ flex: 1 }}>
-          {this.renderCamera()}
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 20,
-              backgroundColor: 'transparent'
-            }}
-          >
-            <Button title="Library" onPress={this.pickImage} />
-          </View>
-        </View>
-      );
+      return <View style={styles.container}>{this.renderCamera()}</View>;
     }
   }
 }
