@@ -19,7 +19,7 @@ const colors = {
   fire: '#e73536',
   drawer: 'rgba(30, 30, 29, 0.95)',
   eggplant: '#251a34',
-  border: '#483F53',
+  border: '#eee',
   banner: '#5F3E63',
   text: '#E0D7E5'
 };
