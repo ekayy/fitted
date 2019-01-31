@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { WebBrowser } from 'expo';
 import { Button, Avatar } from 'react-native-elements';
-import { Metrics } from '../Themes';
+import { AppStyles, Metrics } from '../Themes';
 import styles from './Styles/GarmentDetailStyles';
 
 import FavoriteButton from '../Components/FavoriteButton';
@@ -149,23 +149,29 @@ class GarmentDetail extends Component {
         <View style={styles.buttonSection}>
           <Button
             title="Add to favorites"
-            buttonStyle={styles.buttonAltStyle}
+            buttonStyle={[
+              AppStyles.buttonAltStyle,
+              { width: Metrics.screenWidth / 2 - 20 }
+            ]}
             titleStyle={{ color: '#000', fontSize: 13 }}
           />
           <Button
             title="View website"
             onPress={this.handleOpenWithWebBrowser}
-            buttonStyle={styles.buttonDefaultStyle}
+            buttonStyle={[
+              AppStyles.buttonDefaultStyle,
+              { width: Metrics.screenWidth / 2 - 20 }
+            ]}
             titleStyle={{ fontSize: 13 }}
           />
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionTitle}>
-            <Text style={styles.sectionTitleText}>Photos</Text>
+        <View style={AppStyles.section}>
+          <View style={AppStyles.sectionTitle}>
+            <Text style={AppStyles.sectionTitleText}>Photos</Text>
           </View>
 
-          <TouchableOpacity style={styles.sectionSubtitle}>
+          <TouchableOpacity style={AppStyles.sectionSubtitle}>
             <Ionicons
               name="ios-camera"
               size={25}
@@ -181,21 +187,21 @@ class GarmentDetail extends Component {
             refreshing={refreshing}
           />
 
-          <View style={styles.button}>
+          <View style={AppStyles.button}>
             <Button
               title="See all 130 photos"
-              buttonStyle={[styles.buttonAltStyle, { width: '100%' }]}
-              titleStyle={styles.buttonAltTitleStyle}
+              buttonStyle={[AppStyles.buttonAltStyle]}
+              titleStyle={AppStyles.buttonAltTitleStyle}
             />
           </View>
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionTitle}>
-            <Text style={styles.sectionTitleText}>Top Reviews</Text>
+        <View style={AppStyles.section}>
+          <View style={AppStyles.sectionTitle}>
+            <Text style={AppStyles.sectionTitleText}>Top Reviews</Text>
           </View>
 
-          <TouchableOpacity style={styles.sectionSubtitle}>
+          <TouchableOpacity style={AppStyles.sectionSubtitle}>
             <Ionicons
               name="ios-brush"
               size={25}
@@ -224,27 +230,27 @@ class GarmentDetail extends Component {
             </View>
           </View>
 
-          <View style={styles.button}>
+          <View style={AppStyles.button}>
             <Button
               title="See all 987 reviews"
-              buttonStyle={[styles.buttonAltStyle, { width: '100%' }]}
-              titleStyle={styles.buttonAltTitleStyle}
+              buttonStyle={[AppStyles.buttonAltStyle]}
+              titleStyle={AppStyles.buttonAltTitleStyle}
             />
           </View>
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionTitle}>
-            <Text style={styles.sectionTitleText}>Discussion</Text>
+        <View style={AppStyles.section}>
+          <View style={AppStyles.sectionTitle}>
+            <Text style={AppStyles.sectionTitleText}>Discussion</Text>
           </View>
 
           <Comments user={true} />
 
-          <View style={styles.button}>
+          <View style={AppStyles.button}>
             <Button
               title="See all 2,900 comments"
-              buttonStyle={[styles.buttonAltStyle, { width: '100%' }]}
-              titleStyle={styles.buttonAltTitleStyle}
+              buttonStyle={[AppStyles.buttonAltStyle]}
+              titleStyle={AppStyles.buttonAltTitleStyle}
             />
           </View>
         </View>

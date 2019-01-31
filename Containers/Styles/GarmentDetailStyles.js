@@ -11,50 +11,6 @@ export default StyleSheet.create({
     minHeight: 400
   },
 
-  section: {
-    display: 'flex',
-    padding: Metrics.baseMargin
-  },
-  sectionTitle: {
-    display: 'flex',
-    paddingBottom: Metrics.smallMargin,
-    marginBottom: Metrics.smallMargin,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border
-  },
-  sectionTitleText: {
-    color: '#333'
-  },
-  sectionSubtitle: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-
-  buttonAltStyle: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#444',
-    paddingVertical: Metrics.baseMargin,
-    width: Metrics.screenWidth / 2 - 20
-  },
-  buttonAltTitleStyle: {
-    color: '#444',
-    fontSize: 13
-  },
-  buttonDefaultStyle: {
-    backgroundColor: '#444',
-    borderWidth: 1,
-    borderColor: '#444',
-    paddingVertical: Metrics.baseMargin,
-    width: Metrics.screenWidth / 2 - 20
-  },
-  button: {
-    display: 'flex',
-    width: '100%',
-    paddingVertical: Metrics.doubleBaseMargin
-  },
-
   favorite: {
     position: 'absolute',
     bottom: 0,

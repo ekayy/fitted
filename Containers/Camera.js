@@ -45,7 +45,7 @@ class CameraScreen extends Component {
       // this.setState({ image: result.uri });
 
       // move on
-      this.props.navigation.navigate('CreateFit', { image });
+      this.props.navigation.navigate('TagPhoto', { image });
     }
   };
 
@@ -126,7 +126,7 @@ class CameraScreen extends Component {
             photoId: this.state.photoId + 1
           });
           Vibration.vibrate();
-          // this.props.navigation.navigate('CreateFit', { image });
+          this.props.navigation.navigate('TagPhoto', { image });
         });
       });
 
