@@ -1,8 +1,16 @@
 # fitted
-React Native app for fitted.tv
+React Native app for Fitted.tv using Expo SDK
 
-npm install
+## Installing Expo
+https://docs.expo.io/versions/latest/introduction/installation/
 
-exp start
+## Installing Reactron
+https://github.com/infinitered/reactotron/blob/master/docs/installing.md
 
-exp ios
+## Running Project
+clone repo
+
+yarn install or npm install
+
+expo start
+expo ios
