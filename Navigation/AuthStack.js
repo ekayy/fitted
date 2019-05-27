@@ -11,25 +11,27 @@ const AuthStack = createStackNavigator(
   {
     Login: {
       screen: Login,
-      navigationOptions: { title: 'Fitted' }
+      navigationOptions: { title: 'LOGIN' }
     },
 
     Register: {
       screen: Register,
-      navigationOptions: { title: 'Register' }
+      navigationOptions: {
+        title: 'SIGNUP'
+      }
     },
 
     RegisterMeasurements: {
       screen: RegisterMeasurements,
-      navigationOptions: { title: 'Enter Measurements' }
+      navigationOptions: { title: 'WELCOME' }
     }
   },
   {
     // Default config for all screens
-    // headerMode: 'none'
-    // navigationOptions: {
-    //   headerStyle: styles.header
-    // }
+    navigationOptions: {
+      headerStyle: styles.header,
+      headerTitleStyle: styles.title
+    }
   }
 );
 

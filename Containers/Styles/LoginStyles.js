@@ -4,53 +4,59 @@ import { Colors, Metrics, Fonts } from '../../Themes';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 70
-    // backgroundColor: Colors.snow
+    paddingTop: 45
   },
   form: {
     backgroundColor: Colors.snow,
     margin: Metrics.baseMargin,
-    borderRadius: 4
+    borderRadius: 5,
+    width: 315
   },
-  row: {
+  loginRow: {
     paddingVertical: Metrics.doubleBaseMargin,
     paddingHorizontal: Metrics.doubleBaseMargin
+  },
+  formRow: {
+    paddingVertical: Metrics.doubleBaseMargin,
+    paddingHorizontal: Metrics.doubleBaseMargin,
+    borderWidth: 0.5,
+    borderColor: 'rgb(236,236,237)',
+    height: 50.5,
+    paddingVertical: 5
   },
   rowLabel: {
     color: Colors.charcoal
   },
   textInput: {
     height: 40,
-    color: Colors.coal
+    color: Colors.coal,
+    fontSize: 17
   },
   textInputReadonly: {
     height: 40,
     color: Colors.steel
   },
-  loginRow: {
-    paddingBottom: Metrics.doubleBaseMargin,
-    paddingHorizontal: Metrics.doubleBaseMargin,
-    flexDirection: 'row'
-  },
   loginButtonWrapper: {
-    flex: 1
+    height: 44
   },
   loginButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: Colors.charcoal,
-    backgroundColor: Colors.panther,
-    padding: 6
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: 'rgb(141,141,141)',
+    width: 315
   },
   loginText: {
     textAlign: 'center',
-    color: Colors.snow
+    color: Colors.snow,
+    fontSize: 17
   },
   facebookButton: {
-    backgroundColor: '#3b5998',
+    backgroundColor: 'rgb(59,89,152)',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 5
+    borderRadius: 5,
+    width: 315
   },
   switchText: {
     textAlign: 'center',
@@ -61,6 +67,11 @@ export default StyleSheet.create({
     textAlign: 'center',
     marginVertical: Metrics.marginVertical,
     ...Fonts.style.h4
+  },
+  or: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'rgb(135,136,140)'
   },
 
   error: {
