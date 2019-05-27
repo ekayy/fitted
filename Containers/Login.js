@@ -147,7 +147,11 @@ class Login extends Component {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.or}>OR</Text>
+          <View style={styles.divider}>
+            <View style={styles.hairline} />
+            <Text style={styles.or}>OR</Text>
+            <View style={styles.hairline} />
+          </View>
 
           <View style={[styles.loginRow, { alignItems: 'center' }]}>
             <TouchableOpacity

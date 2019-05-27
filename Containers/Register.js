@@ -61,13 +61,12 @@ class Register extends Component {
 
     return (
       <ScrollView
-        contentContainerStyle={{ justifyContent: 'center' }}
+        contentContainerStyle={{ alignItems: 'center' }}
         style={styles.container}
         keyboardShouldPersistTaps="always"
       >
         <View style={styles.form}>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Username</Text>
+          <View style={styles.formRow}>
             <TextInput
               ref="username"
               style={textInputStyle}
@@ -80,12 +79,43 @@ class Register extends Component {
               onChangeText={this._handleChangeUsername}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
-              placeholder="Username"
+              placeholder="Name*"
+            />
+          </View>
+          <View style={styles.formRow}>
+            <TextInput
+              ref="username"
+              style={textInputStyle}
+              value={username}
+              editable={editable}
+              keyboardType="default"
+              returnKeyType="next"
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={this._handleChangeUsername}
+              underlineColorAndroid="transparent"
+              onSubmitEditing={() => this.refs.password.focus()}
+              placeholder="Email Address*"
+            />
+          </View>
+          <View style={styles.formRow}>
+            <TextInput
+              ref="username"
+              style={textInputStyle}
+              value={username}
+              editable={editable}
+              keyboardType="default"
+              returnKeyType="next"
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={this._handleChangeUsername}
+              underlineColorAndroid="transparent"
+              onSubmitEditing={() => this.refs.password.focus()}
+              placeholder="Username*"
             />
           </View>
 
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Password</Text>
+          <View style={styles.formRow}>
             <TextInput
               ref="password"
               style={textInputStyle}
@@ -98,11 +128,13 @@ class Register extends Component {
               secureTextEntry
               onChangeText={this._handleChangePassword}
               underlineColorAndroid="transparent"
-              placeholder="Password"
+              placeholder="Password*"
             />
           </View>
+        </View>
 
-          <View style={[styles.loginRow]}>
+        <View style={styles.loginWrapper}>
+          <View style={[styles.loginRow, { alignItems: 'center' }]}>
             <TouchableOpacity
               style={styles.loginButtonWrapper}
               onPress={this.signInAsync}

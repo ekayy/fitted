@@ -68,12 +68,24 @@ export default StyleSheet.create({
     marginVertical: Metrics.marginVertical,
     ...Fonts.style.h4
   },
+  divider: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10
+  },
   or: {
     textAlign: 'center',
     fontSize: 20,
-    color: 'rgb(135,136,140)'
+    color: 'rgb(135,136,140)',
+    alignSelf: 'center',
+    paddingHorizontal: 13
   },
-
+  hairline: {
+    backgroundColor: 'rgb(135,136,140)',
+    height: 1,
+    width: 128
+  },
   error: {
     color: 'red',
     textAlign: 'center',

@@ -30,6 +30,7 @@ const AuthStack = createStackNavigator(
     // Default config for all screens
     navigationOptions: {
       headerStyle: styles.header,
+      headerTintColor: 'rgb(245,245,246)',
       headerTitleStyle: styles.title
     }
   }
