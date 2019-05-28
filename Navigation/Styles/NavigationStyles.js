@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '100',
+    fontWeight: '200',
     color: 'rgb(245,245,246)'
   }
 });

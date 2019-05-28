@@ -34,13 +34,13 @@ export default StyleSheet.create({
   rowLabel: {
     color: 'rgb(0,0,0)',
     marginVertical: Metrics.marginVertical,
-    width: 51,
+    width: 53,
     fontSize: 14
   },
   textInput: {
     height: 36,
     width: 160,
-    marginHorizontal: 28,
+    marginHorizontal: 26,
     color: Colors.coal,
     borderWidth: 0.5,
     borderColor: 'rgb(236,236,237)',
