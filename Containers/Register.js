@@ -27,6 +27,8 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: '',
+      email: '',
       username: '',
       password: '',
       loading: false
@@ -52,7 +54,7 @@ class Register extends Component {
   };
 
   render() {
-    const { username, password, loading } = this.state;
+    const { name, email, username, password, loading } = this.state;
     const editable = !loading;
     const textInputStyle = editable
       ? styles.textInput
@@ -68,15 +70,15 @@ class Register extends Component {
         <View style={styles.form}>
           <View style={styles.formRow}>
             <TextInput
-              ref="username"
+              ref="name"
               style={textInputStyle}
-              value={username}
+              value={name}
               editable={editable}
               keyboardType="default"
               returnKeyType="next"
               autoCapitalize="none"
               autoCorrect={false}
-              onChangeText={this._handleChangeUsername}
+              onChangeText={name => this.setState({ name })}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
               placeholder="Name*"
@@ -84,15 +86,15 @@ class Register extends Component {
           </View>
           <View style={styles.formRow}>
             <TextInput
-              ref="username"
+              ref="email"
               style={textInputStyle}
-              value={username}
+              value={email}
               editable={editable}
               keyboardType="default"
               returnKeyType="next"
               autoCapitalize="none"
               autoCorrect={false}
-              onChangeText={this._handleChangeUsername}
+              onChangeText={email => this.setState({ email })}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
               placeholder="Email Address*"
@@ -108,7 +110,7 @@ class Register extends Component {
               returnKeyType="next"
               autoCapitalize="none"
               autoCorrect={false}
-              onChangeText={this._handleChangeUsername}
+              onChangeText={username => this.setState({ username })}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
               placeholder="Username*"
@@ -126,7 +128,7 @@ class Register extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry
-              onChangeText={this._handleChangePassword}
+              onChangeText={password => this.setState({ password })}
               underlineColorAndroid="transparent"
               placeholder="Password*"
             />
@@ -159,14 +161,6 @@ class Register extends Component {
       </ScrollView>
     );
   }
-
-  _handleChangeUsername = text => {
-    this.setState({ username: text });
-  };
-
-  _handleChangePassword = text => {
-    this.setState({ password: text });
-  };
 }
 
 export default Register;
