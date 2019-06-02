@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback
+} from 'react-native';
 import styles from './Styles/LoginStyles';
 import { fbAppId } from '../Config';
 import { connect } from 'react-redux';
@@ -39,7 +44,7 @@ class Landing extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View>
+      <View style={styles.landingContainer}>
         <View style={styles.welcomeContainer}>
           <View style={styles.welcomeText}>
             <Text style={styles.welcomeTitle}>Welcome!</Text>
@@ -76,6 +81,23 @@ class Landing extends Component {
                 <Text style={styles.loginText}>Sign Up With Email</Text>
               </View>
             </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.bottomContainer}>
+          <View style={[styles.bottomTextContainer, styles.policy]}>
+            <Text style={[styles.switchText, styles.bottomText]}>
+              By signing up, you agree to our Terms & Privacy Policy
+            </Text>
+          </View>
+          <View style={styles.bottomTextContainer}>
+            <TouchableWithoutFeedback onPress={() => navigate('Login')}>
+              <View>
+                <Text style={[styles.switchText, styles.bottomText]}>
+                  Already have an account?
+                  <Text style={styles.highlightBlue}> Sign In</Text>
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
       </View>

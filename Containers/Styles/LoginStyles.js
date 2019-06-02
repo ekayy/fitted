@@ -2,6 +2,9 @@ import { StyleSheet } from 'react-native';
 import { Colors, Metrics, Fonts } from '../../Themes';
 
 export default StyleSheet.create({
+  landingContainer: {
+    flex: 1
+  },
   welcomeContainer: {
     alignItems: 'center',
     backgroundColor: 'rgb(0,0,0.8)',
@@ -106,6 +109,24 @@ export default StyleSheet.create({
     backgroundColor: 'rgb(135,136,140)',
     height: 1,
     width: 128
+  },
+  bottomContainer: {
+    flex: 1,
+    justifyContent: 'flex-end'
+  },
+  bottomTextContainer: {
+    backgroundColor: 'rgb(0,0,0)',
+    paddingVertical: 15
+  },
+  bottomText: {
+    color: 'rgb(255,255,255)'
+  },
+  policy: {
+    borderWidth: 1,
+    borderBottomColor: 'rgb(151,151,151)'
+  },
+  highlightBlue: {
+    color: 'rgb(74,144,226)'
   },
   error: {
     color: 'red',
