@@ -93,7 +93,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10
+    marginVertical: 5
   },
   or: {
     textAlign: 'center',

@@ -2,18 +2,22 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styles from './Styles/LoginStyles';
 import { fbAppId } from '../Config';
+import { connect } from 'react-redux';
+import { login, fetchProfile } from '../Redux/UserRedux';
 
 class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
-      username: '',
-      password: '',
       loading: false
     };
     this.isAttempting = false;
+  }
+
+  componentDidMount() {
+    if (this.props.isLoggedIn) {
+      this.props.navigation.navigate('App');
+    }
   }
 
   loginFb = async () => {
@@ -79,4 +83,16 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+const mapStateToProps = state => {
+  return {
+    error: state.user.error,
+    loading: state.user.loading,
+    profileId: state.user.profileId,
+    isLoggedIn: state.user.isLoggedIn
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { login, fetchProfile }
+)(Landing);

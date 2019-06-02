@@ -35,12 +35,6 @@ class Login extends Component {
     this.isAttempting = false;
   }
 
-  componentDidMount() {
-    if (this.props.isLoggedIn) {
-      this.props.navigation.navigate('App');
-    }
-  }
-
   signInAsync = async () => {
     const { username, password } = this.state;
 
