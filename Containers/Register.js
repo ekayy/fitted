@@ -149,7 +149,7 @@ class Register extends Component {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity onPress={() => goBack(null)}>
+          <TouchableOpacity onPress={() => navigate('Login')}>
             <View>
               <Text style={styles.switchText}>
                 Already have an account?

@@ -2,6 +2,27 @@ import { StyleSheet } from 'react-native';
 import { Colors, Metrics, Fonts } from '../../Themes';
 
 export default StyleSheet.create({
+  welcomeContainer: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(0,0,0.8)',
+    height: 300,
+    marginBottom: 5
+  },
+  welcomeText: {
+    paddingTop: 70
+  },
+  welcomeTitle: {
+    textAlign: 'center',
+    paddingBottom: 13,
+    fontSize: 32,
+    color: 'rgb(255,255,255)'
+  },
+  welcomeSubtitle: {
+    textAlign: 'center',
+    paddingVertical: 2,
+    fontSize: 17,
+    color: 'rgb(255,255,255)'
+  },
   container: {
     flex: 1,
     paddingTop: 45

@@ -14,6 +14,9 @@ export default StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '200',
-    color: 'rgb(245,245,246)'
+    color: 'rgb(245,245,246)',
+    flex: 1,
+    textAlign: 'center',
+    alignSelf: 'center'
   }
 });
