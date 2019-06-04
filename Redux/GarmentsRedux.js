@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {
-  baseURL
-} from '../Config';
+import { baseURL } from '../Config';
 
 // Actions
 const FETCH_GARMENTS_BEGIN = 'FETCH_GARMENTS_BEGIN';
@@ -68,7 +66,7 @@ export function fetchGarments() {
   return dispatch => {
     dispatch(fetchGarmentsBegin());
     return axios
-      .get(`${baseURL}/garments/?limit=9999`)
+      .get(`${baseURL}/garments/?format=json&limit=9999`)
       .then(response => dispatch(fetchGarmentsSuccess(response.data.results)))
       .catch(error => dispatch(fetchGarmentsFailure(error)));
   };
