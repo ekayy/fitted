@@ -63,20 +63,6 @@ class Search extends Component {
     });
   }
 
-  // fetchGarments = async limit => {
-  //   const response = await axios.get(`${baseURL}/garments/?limit=${limit}`);
-  //
-  //   try {
-  //     this.setState({
-  //       garments: [...this.state.garments, ...response.data.results],
-  //       error: null,
-  //       loading: false
-  //     });
-  //   } catch (error) {
-  //     console.tron.log(error);
-  //   }
-  // };
-
   handleChange = searchTerm => {
     const searchedResults = this.state.garments.filter(result => {
       return searchTerm
