@@ -35,12 +35,6 @@ class Login extends Component {
     this.isAttempting = false;
   }
 
-  componentDidMount() {
-    if (this.props.isLoggedIn) {
-      this.props.navigation.navigate('App');
-    }
-  }
-
   signInAsync = async () => {
     const { username, password } = this.state;
 
@@ -91,13 +85,14 @@ class Login extends Component {
 
     return (
       <ScrollView
-        contentContainerStyle={{ justifyContent: 'center' }}
+        contentContainerStyle={{
+          alignItems: 'center'
+        }}
         style={styles.container}
         keyboardShouldPersistTaps="always"
       >
         <View style={styles.form}>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Username</Text>
+          <View style={styles.formRow}>
             <TextInput
               ref="username"
               style={textInputStyle}
@@ -110,12 +105,11 @@ class Login extends Component {
               onChangeText={this._handleChangeUsername}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
-              placeholder="Username"
+              placeholder="Username or Email"
             />
           </View>
 
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Password</Text>
+          <View style={styles.formRow}>
             <TextInput
               ref="password"
               style={textInputStyle}
@@ -131,41 +125,49 @@ class Login extends Component {
               placeholder="Password"
             />
           </View>
+        </View>
 
-          <View style={[styles.loginRow]}>
+        <View style={styles.loginWrapper}>
+          <View style={[styles.loginRow, { alignItems: 'center' }]}>
             <TouchableOpacity
               style={styles.loginButtonWrapper}
               onPress={this.signInAsync}
             >
               <View style={styles.loginButton}>
-                <Text style={styles.loginText}>Sign In</Text>
+                <Text style={styles.loginText}>LOGIN</Text>
               </View>
 
               {this.renderError()}
             </TouchableOpacity>
           </View>
-        </View>
 
-        <View style={[styles.row, { alignItems: 'center' }]}>
-          <TouchableOpacity
-            style={styles.loginButtonWrapper}
-            onPress={this.loginFb}
-          >
-            <View style={styles.facebookButton}>
-              <Text style={styles.loginText}>Sign In With Facebook</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.divider}>
+            <View style={styles.hairline} />
+            <Text style={styles.or}>OR</Text>
+            <View style={styles.hairline} />
+          </View>
 
-        <View style={styles.row}>
-          <TouchableOpacity onPress={() => navigate('Register')}>
-            <View>
-              <Text style={styles.switchText}>
-                Don't have an account?
-                <Text style={styles.switchText}> Sign Up</Text>
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <View style={[styles.loginRow, { alignItems: 'center' }]}>
+            <TouchableOpacity
+              style={styles.loginButtonWrapper}
+              onPress={this.loginFb}
+            >
+              <View style={styles.facebookButton}>
+                <Text style={styles.loginText}>Log In With Facebook</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.loginRow}>
+            <TouchableOpacity onPress={() => navigate('Register')}>
+              <View>
+                <Text style={styles.switchText}>
+                  Don't have an account?
+                  <Text style={styles.switchText}> Sign Up</Text>
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     );

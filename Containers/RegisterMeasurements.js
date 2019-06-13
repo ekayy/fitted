@@ -6,7 +6,7 @@ import {
   Switch,
   Picker,
   TouchableOpacity,
-  ImageBackground
+  ScrollView
 } from 'react-native';
 import { Button } from 'react-native-elements';
 
@@ -39,21 +39,16 @@ class RegisterMeasurements extends Component {
     const { isMetric } = this.state;
 
     return (
-      <ImageBackground
-        source={{
-          uri:
-            'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&h=350'
-        }}
-        style={{ flex: 1 }}
-      >
-        <View style={styles.container}>
-          <View style={styles.formContainer}>
-            <Text style={styles.headerText}>Congrats!</Text>
+      <View style={styles.container} keyboardShouldPersistTaps="always">
+        <View style={styles.formContainer}>
+          <Text style={styles.headerText}>
+            Congratulations on your new account!
+          </Text>
 
+          <View style={styles.form}>
             <View style={styles.row}>
-              <Text style={styles.rowLabel}>Units</Text>
               <View style={styles.switchContainer}>
-                <Text style={styles.switchLabel}>US</Text>
+                <Text style={styles.switchLabel}>USA</Text>
                 <Switch
                   style={styles.switch}
                   onTintColor="white"
@@ -63,48 +58,42 @@ class RegisterMeasurements extends Component {
                 <Text style={styles.switchLabel}>Metric</Text>
               </View>
             </View>
-
-            <View style={styles.form}>
-              <View style={styles.row}>
-                <View style={styles.rowInput}>
-                  <Text style={styles.rowLabel}>Height (Feet)</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    underlineColorAndroid="transparent"
-                    placeholder="5"
-                  />
-                </View>
-
-                <View style={styles.rowInput}>
-                  <Text style={styles.rowLabel}>Height (Inches)</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    underlineColorAndroid="transparent"
-                    placeholder="7"
-                  />
-                </View>
+            <View style={styles.row}>
+              <View style={styles.rowInput}>
+                <Text style={styles.rowLabel}>Height*</Text>
+                <TextInput
+                  style={styles.textInput}
+                  underlineColorAndroid="transparent"
+                  placeholder="5' 5''"
+                />
               </View>
-
-              <View style={styles.row}>
-                <View style={styles.rowInput}>
-                  <Text style={styles.rowLabel}>Weight (lbs)</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    underlineColorAndroid="transparent"
-                    placeholder="130"
-                    keyboardType="number-pad"
-                  />
-                </View>
+            </View>
+            <View style={styles.spacer} />
+            <View style={styles.row}>
+              <View style={styles.rowInput}>
+                <Text style={styles.rowLabel}>Weight*</Text>
+                <TextInput
+                  style={styles.textInput}
+                  underlineColorAndroid="transparent"
+                  placeholder="130"
+                  keyboardType="number-pad"
+                />
               </View>
-
-              <Button
-                title="Next"
-                onPress={this.handleLogin}
-                backgroundColor="#000"
-              />
             </View>
           </View>
 
+          <View style={styles.buttonWrapper}>
+            <View style={[styles.buttonRow, { alignItems: 'center' }]}>
+              <TouchableOpacity
+                style={styles.nextButtonWrapper}
+                onPress={this.handleLogin}
+              >
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>NEXT</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
           {/*}<View style={styles.pickerContainer}>
           <Picker
             style={styles.picker}
@@ -118,7 +107,7 @@ class RegisterMeasurements extends Component {
           </Picker>
         </View>*/}
         </View>
-      </ImageBackground>
+      </View>
     );
   }
 }
