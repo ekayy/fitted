@@ -12,10 +12,12 @@ import {
   LayoutAnimation,
   Button
 } from 'react-native';
+import { connect } from 'react-redux';
 import { Metrics } from '../Themes';
 import axios from 'axios';
 import { baseURL } from '../Config';
 import Reactotron from 'reactotron-react-native';
+import { login, fetchProfile } from '../Redux/UserRedux';
 
 import styles from './Styles/LoginStyles';
 
@@ -38,18 +40,7 @@ class Register extends Component {
 
   signInAsync = async () => {
     const { name, email, username, password } = this.state;
-    //
-    // try {
-    //   const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
-    //     username,
-    //     password
-    //   });
-    //
-    //   await AsyncStorage.setItem('userToken', response.data.token);
-    //   this.props.navigation.navigate('App');
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    // Package together profile object to have ready for POST request
     const postPayload = {
       user: {
         username: username,
@@ -61,8 +52,16 @@ class Register extends Component {
       height: '66',
       weight: '115'
     };
+    // POST for new user
     const newUser = await axios.post(`${baseURL}/profiles/`, postPayload);
-    //this.props.navigation.navigate('RegisterMeasurements');
+    // Login with new user once new user is created
+    await this.props.login(username, password);
+    // Fetch profile of new user once new user is created
+    await this.props.fetchProfile(this.props.profileId);
+    // Move on to next step (RegisterMeasurements) if everything is good
+    if (!this.props.error) {
+      await this.props.navigation.navigate('RegisterMeasurements');
+    }
   };
 
   render() {
@@ -175,4 +174,15 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = state => {
+  return {
+    error: state.user.error,
+    loading: state.user.loading,
+    profileId: state.user.profileId
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { login, fetchProfile }
+)(Register);
