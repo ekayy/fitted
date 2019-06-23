@@ -37,7 +37,7 @@ class Register extends Component {
   }
 
   signInAsync = async () => {
-    // const { username, password } = this.state;
+    const { name, email, username, password } = this.state;
     //
     // try {
     //   const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
@@ -50,7 +50,19 @@ class Register extends Component {
     // } catch (error) {
     //   console.error(error);
     // }
-    this.props.navigation.navigate('RegisterMeasurements');
+    const postPayload = {
+      user: {
+        username: username,
+        password: password,
+        first_name: name,
+        last_name: 'Doe',
+        email: email
+      },
+      height: '66',
+      weight: '115'
+    };
+    const newUser = await axios.post(`${baseURL}/profiles/`, postPayload);
+    //this.props.navigation.navigate('RegisterMeasurements');
   };
 
   render() {

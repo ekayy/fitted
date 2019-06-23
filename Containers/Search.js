@@ -41,6 +41,9 @@ class Search extends Component {
   }
 
   componentDidMount() {
+    if (!this.props.isLoggedIn) {
+      this.props.navigation.navigate('Landing');
+    }
     const { garments } = this.props;
 
     this.setState({ refreshing: true, results: [] }, async () => {
