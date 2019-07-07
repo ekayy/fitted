@@ -1,10 +1,10 @@
-import React from 'react';
-import { createSwitchNavigator } from 'react-navigation';
-import AppNav from './AppNav';
-import AuthStack from './AuthStack';
-import AuthLoading from '../Containers/AuthLoading';
+import React from "react";
+import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import AppNav from "./AppNav";
+import AuthStack from "./AuthStack";
+import AuthLoading from "../Containers/AuthLoading";
 
-import styles from './Styles/NavigationStyles';
+import styles from "./Styles/NavigationStyles";
 
 export const RootNav = createSwitchNavigator(
   {
@@ -13,9 +13,9 @@ export const RootNav = createSwitchNavigator(
     App: { screen: AppNav }
   },
   {
-    initialRouteName: 'AuthLoading'
+    initialRouteName: "AuthLoading"
     // headerMode: 'none'
   }
 );
 
-export default RootNav;
+export default createAppContainer(RootNav);
