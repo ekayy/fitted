@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import axios from "axios";
-import { TabViewAnimated, TabBar, SceneMap } from "react-native-tab-view";
+import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import ProfileHeader from "../Components/ProfileHeader";
 import FitsGrid from "../Components/FitsGrid";
 import GarmentsGrid from "../Components/GarmentsGrid";
@@ -170,7 +170,7 @@ class MyProfile extends Component {
         />
 
         <View style={styles.tabContainer}>
-          <TabViewAnimated
+          <TabView
             navigationState={this.state}
             renderScene={this._renderScene}
             renderHeader={this._renderHeader}
