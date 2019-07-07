@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { View, Text, TouchableOpacity } from 'react-native';
-import styles from './Styles/FavoriteButtonStyles';
-import { Ionicons } from '@expo/vector-icons';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { View, Text, TouchableOpacity } from "react-native";
+import styles from "./Styles/FavoriteButtonStyles";
+import { Ionicons } from "@expo/vector-icons";
 
 class FavoriteButton extends Component {
   static propTypes = {
@@ -25,13 +25,13 @@ class FavoriteButton extends Component {
   render() {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: "center" }}>
           <Ionicons
-            name={this.props.toggled ? 'ios-bookmark' : 'ios-bookmark-outline'}
+            name="ios-bookmark"
             size={30}
-            color="#000"
+            color={this.props.toggled ? "#000" : "#ddd"}
             style={{
-              backgroundColor: 'transparent'
+              backgroundColor: "transparent"
             }}
           />
         </View>
