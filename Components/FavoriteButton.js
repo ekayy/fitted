@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./Styles/FavoriteButtonStyles";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 class FavoriteButton extends Component {
   static propTypes = {
@@ -26,10 +26,10 @@ class FavoriteButton extends Component {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
         <View style={{ alignItems: "center" }}>
-          <Ionicons
-            name="ios-bookmark"
+          <MaterialIcons
+            name={this.props.toggled ? "bookmark" : "bookmark-border"}
             size={30}
-            color={this.props.toggled ? "#000" : "#ddd"}
+            color="#000"
             style={{
               backgroundColor: "transparent"
             }}
