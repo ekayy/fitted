@@ -31,7 +31,7 @@ class RegisterMeasurements extends Component {
   handleLogin = () => {
     const { navigate } = this.props.navigation;
 
-    // navigate('App')
+    navigate('App');
   };
 
   render() {
