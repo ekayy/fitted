@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import {
   View,
   Text,
@@ -8,21 +8,21 @@ import {
   ScrollView,
   FlatList,
   AsyncStorage
-} from 'react-native';
-import { connect } from 'react-redux';
-import { WebBrowser } from 'expo';
-import { Button, Avatar } from 'react-native-elements';
-import { AppStyles, Metrics } from '../Themes';
-import styles from './Styles/GarmentDetailStyles';
+} from "react-native";
+import { connect } from "react-redux";
+import * as WebBrowser from "expo-web-browser";
+import { Button, Avatar } from "react-native-elements";
+import { AppStyles, Metrics } from "../Themes";
+import styles from "./Styles/GarmentDetailStyles";
 
-import FavoriteButton from '../Components/FavoriteButton';
-import FitsGrid from '../Components/FitsGrid';
-import Comments from '../Components/Comment/List';
-import { favoriteGarment } from '../Redux/UserRedux';
-import { Ionicons } from '@expo/vector-icons';
+import FavoriteButton from "../Components/FavoriteButton";
+import FitsGrid from "../Components/FitsGrid";
+import Comments from "../Components/Comment/List";
+import { favoriteGarment } from "../Redux/UserRedux";
+import { Ionicons } from "@expo/vector-icons";
 
-import axios from 'axios';
-import { baseURL } from '../Config';
+import axios from "axios";
+import { baseURL } from "../Config";
 
 class GarmentDetail extends Component {
   state = {
@@ -153,7 +153,7 @@ class GarmentDetail extends Component {
               AppStyles.buttonAltStyle,
               { width: Metrics.screenWidth / 2 - 20 }
             ]}
-            titleStyle={{ color: '#000', fontSize: 13 }}
+            titleStyle={{ color: "#000", fontSize: 13 }}
           />
           <Button
             title="View website"
@@ -175,7 +175,7 @@ class GarmentDetail extends Component {
             <Ionicons
               name="ios-camera"
               size={25}
-              style={{ marginRight: 10, color: '#aaa' }}
+              style={{ marginRight: 10, color: "#aaa" }}
             />
             <Text>Add a photo</Text>
           </TouchableOpacity>
@@ -205,7 +205,7 @@ class GarmentDetail extends Component {
             <Ionicons
               name="ios-brush"
               size={25}
-              style={{ marginRight: 10, color: '#aaa' }}
+              style={{ marginRight: 10, color: "#aaa" }}
             />
             <Text>Write a review</Text>
           </TouchableOpacity>

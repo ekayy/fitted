@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Text,
   View,
@@ -6,10 +6,13 @@ import {
   Button,
   Image,
   Vibration
-} from 'react-native';
-import { Camera, FileSystem, Permissions, ImagePicker } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
-import styles from './Styles/CameraStyles';
+} from "react-native";
+import { Camera } from "expo-camera";
+import * as FileSystem from "expo-file-system";
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
+import styles from "./Styles/CameraStyles";
 
 class CameraScreen extends Component {
   state = {
@@ -21,7 +24,7 @@ class CameraScreen extends Component {
 
   componentDidMount() {
     FileSystem.makeDirectoryAsync(
-      FileSystem.documentDirectory + 'photos'
+      FileSystem.documentDirectory + "photos"
     ).catch(e => {
       // console.log(e, 'Directory exists');
     });
@@ -29,7 +32,7 @@ class CameraScreen extends Component {
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' });
+    this.setState({ hasCameraPermission: status === "granted" });
   }
 
   pickImage = async () => {
@@ -45,7 +48,7 @@ class CameraScreen extends Component {
       // this.setState({ image: result.uri });
 
       // move on
-      this.props.navigation.navigate('TagPhoto', { image });
+      this.props.navigation.navigate("TagPhoto", { image });
     }
   };
 
@@ -72,11 +75,7 @@ class CameraScreen extends Component {
             </View>
 
             <TouchableOpacity style={{}} onPress={this.takePicture}>
-              <Ionicons
-                name="ios-radio-button-on-outline"
-                size={90}
-                color="#fff"
-              />
+              <Ionicons name="ios-radio-button-on" size={90} color="#fff" />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -90,18 +89,14 @@ class CameraScreen extends Component {
                 });
               }}
             >
-              <Ionicons
-                name="ios-reverse-camera-outline"
-                size={40}
-                color="#fff"
-              />
+              <Ionicons name="ios-reverse-camera" size={40} color="#fff" />
             </TouchableOpacity>
           </View>
 
           {image && (
             <Image
               source={{ uri: image }}
-              style={{ width: 200, height: 200, backgroundColor: '#fff' }}
+              style={{ width: 200, height: 200, backgroundColor: "#fff" }}
             />
           )}
         </View>
@@ -126,7 +121,7 @@ class CameraScreen extends Component {
             photoId: this.state.photoId + 1
           });
           Vibration.vibrate();
-          this.props.navigation.navigate('TagPhoto', { image });
+          this.props.navigation.navigate("TagPhoto", { image });
         });
       });
 
