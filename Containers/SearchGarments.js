@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -8,25 +8,21 @@ import {
   ScrollView,
   FlatList,
   Button
-} from "react-native";
-import { SearchBar, ListItem } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
-import { Metrics } from "../Themes";
-import axios from "axios";
-import { connect } from "react-redux";
-import { fetchGarments } from "../Redux/GarmentsRedux";
+} from 'react-native';
+import { SearchBar, ListItem } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { fetchGarments } from '../Redux/GarmentsRedux';
 
-import { brands } from "../data.json";
-
-import { baseURL } from "../Config";
+import { brands } from '../data.json';
 
 class SearchGarments extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Searching Database",
+      title: 'Searching Database',
       headerRight: (
         <TouchableOpacity
-          onPress={navigation.getParam("CreatePiece")}
+          onPress={navigation.getParam('addCustomGarment')}
           style={{
             marginRight: 20
           }}
@@ -41,7 +37,7 @@ class SearchGarments extends Component {
     super(props);
 
     this.state = {
-      searchTerm: "",
+      searchTerm: '',
       garments: [],
       results: [],
       remainingResults: [],
@@ -61,7 +57,9 @@ class SearchGarments extends Component {
   componentDidMount() {
     const { garments } = this.props;
 
-    this.props.navigation.setParams({ createPiece: this._createPiece });
+    this.props.navigation.setParams({
+      addCustomGarment: this._addCustomGarment
+    });
 
     this.setState(
       {
@@ -82,8 +80,8 @@ class SearchGarments extends Component {
     );
   }
 
-  _createPiece = () => {
-    this.props.navigation.navigate("CreatePiece");
+  _addCustomGarment = () => {
+    this.props.navigation.navigate('AddCustomGarment');
   };
 
   handleChange = searchTerm => {
@@ -167,7 +165,7 @@ class SearchGarments extends Component {
     return (
       <View>
         <TouchableOpacity
-          onPress={() => navigate("SelectSizing", item)}
+          onPress={() => navigate('SelectSizing', item)}
           style={styles.listItem}
         >
           <View style={styles.imageContainer}>
@@ -187,13 +185,13 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: "#f3f3f3"
+    backgroundColor: '#f3f3f3'
   },
   listItem: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flexDirection: "row"
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'row'
   },
   imageContainer: {
     flex: 1,
@@ -201,13 +199,13 @@ const styles = {
     height: 150
   },
   image: {
-    width: "100%",
+    width: '100%',
     height: 150,
     marginHorizontal: 20
   },
   description: {
     flex: 1,
-    alignItems: "center"
+    alignItems: 'center'
   }
 };
 

@@ -13,28 +13,10 @@ import { Button } from 'react-native-elements';
 import SearchGarments from './SearchGarments';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
-import styles from './Styles/TagPhotoStyles';
+import styles from './Styles/TagGarmentsStyles';
 import { AppStyles, Colors } from '../Themes';
 
-import t from 'tcomb-form-native';
-
-const Form = t.form.Form;
-
-const Fit = t.struct({
-  profile: t.String,
-  style: t.maybe(t.String),
-  photo: t.String,
-  garments: t.String
-});
-
-const Garment = t.struct({
-  color: t.String,
-  sku: t.String,
-  model: t.String,
-  photo: t.String
-});
-
-class TagPhoto extends Component {
+class TagGarments extends Component {
   state = {
     modalVisible: false,
     searchTerm: '',
@@ -156,4 +138,4 @@ export default connect(
   {
     fetchGarments
   }
-)(TagPhoto);
+)(TagGarments);
