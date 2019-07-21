@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
-  AsyncStorage,
   View,
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
-  Image,
-  Keyboard,
-  LayoutAnimation,
-  Button
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Metrics } from '../Themes';
-import axios from 'axios';
 import { baseURL, fbAppId } from '../Config';
 import { login, fetchProfile } from '../Redux/UserRedux';
 

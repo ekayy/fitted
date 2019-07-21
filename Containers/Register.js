@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
-  AsyncStorage,
   View,
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
-  Image,
-  Keyboard,
-  LayoutAnimation,
-  Button
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Metrics } from '../Themes';
 import axios from 'axios';
 import { baseURL } from '../Config';
 import Reactotron from 'reactotron-react-native';
@@ -29,7 +22,7 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      firstName: '',
       email: '',
       username: '',
       password: '',
@@ -39,18 +32,15 @@ class Register extends Component {
   }
 
   signInAsync = async () => {
-    const { name, email, username, password } = this.state;
+    const { firstName, email, username, password } = this.state;
     // Package together profile object to have ready for POST request
     const postPayload = {
       user: {
         username: username,
         password: password,
-        first_name: name,
-        last_name: 'Doe',
+        first_name: firstName,
         email: email
-      },
-      height: '66',
-      weight: '115'
+      }
     };
     // POST for new user
     const newUser = await axios.post(`${baseURL}/profiles/`, postPayload);
@@ -65,12 +55,12 @@ class Register extends Component {
   };
 
   render() {
-    const { name, email, username, password, loading } = this.state;
+    const { firstName, email, username, password, loading } = this.state;
     const editable = !loading;
     const textInputStyle = editable
       ? styles.textInput
       : styles.textInputReadonly;
-    const { navigate, goBack } = this.props.navigation;
+    const { navigate } = this.props.navigation;
 
     return (
       <ScrollView
@@ -81,18 +71,18 @@ class Register extends Component {
         <View style={styles.form}>
           <View style={styles.formRow}>
             <TextInput
-              ref="name"
+              ref="firstName"
               style={textInputStyle}
-              value={name}
+              value={firstName}
               editable={editable}
               keyboardType="default"
               returnKeyType="next"
               autoCapitalize="none"
               autoCorrect={false}
-              onChangeText={name => this.setState({ name })}
+              onChangeText={firstName => this.setState({ firstName })}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
-              placeholder="Name*"
+              placeholder="First Name*"
             />
           </View>
           <View style={styles.formRow}>
