@@ -51,7 +51,10 @@ class RegisterMeasurements extends Component {
                 <Text style={styles.switchLabel}>USA</Text>
                 <Switch
                   style={styles.switch}
-                  onTintColor="white"
+                  trackColor={{
+                    true: 'rgb(155,155,155)',
+                    false: 'rgb(155,155,155)'
+                  }}
                   onValueChange={this.toggleUnits}
                   value={isMetric}
                 />

@@ -42,15 +42,17 @@ class Register extends Component {
         email: email
       }
     };
-    // POST for new user
-    const newUser = await axios.post(`${baseURL}/profiles/`, postPayload);
-    // Login with new user once new user is created
-    await this.props.login(username, password);
-    // Fetch profile of new user once new user is created
-    await this.props.fetchProfile(this.props.profileId);
-    // Move on to next step (RegisterMeasurements) if everything is good
-    if (!this.props.error) {
+    try {
+      // POST for new user
+      const newUser = await axios.post(`${baseURL}/profiles/`, postPayload);
+      // Login with new user once new user is created
+      await this.props.login(username, password);
+      // Fetch profile of new user once new user is created
+      await this.props.fetchProfile(this.props.profileId);
+      // Move on to next step (RegisterMeasurements) if everything is good
       await this.props.navigation.navigate('RegisterMeasurements');
+    } catch (error) {
+      console.log('fudge', error);
     }
   };
 
