@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Switch,
-  Picker,
-  TouchableOpacity,
-  ScrollView
-} from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, Text, TextInput, Switch, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import { baseURL } from '../Config';
 
 // Styles
 import styles from './Styles/RegisterMeasurementsStyles';
@@ -18,7 +12,9 @@ class RegisterMeasurements extends Component {
     super(props);
 
     this.state = {
-      isMetric: false
+      isMetric: false,
+      height: null,
+      weight: null
     };
   }
 
@@ -28,15 +24,51 @@ class RegisterMeasurements extends Component {
     }));
   };
 
-  handleLogin = () => {
-    const { navigate } = this.props.navigation;
+  // Convert all height to inches and all weight to lbs and return an object ready for PATCH request
+  convertMeasurements = (height, weight) => {
+    let convertedHeight = null;
+    let convertedWeight = null;
+    if (this.state.isMetric) {
+      if (height) {
+        convertedHeight = (parseFloat(height) / 2.54).toFixed(2);
+      }
+      if (weight) {
+        convertedWeight = (parseFloat(weight) * 2.2046).toFixed(2);
+      }
+    } else {
+      if (height) {
+        convertedHeight = parseFloat(height);
+      }
+      if (weight) {
+        convertedWeight = parseFloat(weight);
+      }
+    }
+    return {
+      height: convertedHeight,
+      weight: convertedWeight
+    };
+  };
 
-    navigate('App');
+  registerMeasurements = async () => {
+    const { height, weight } = this.state;
+    const { navigate } = this.props.navigation;
+    // Package together profile object to have ready for PATCH
+    const patchPayload = this.convertMeasurements(height, weight);
+    console.log(patchPayload);
+    try {
+      const newMeasurements = await axios.patch(
+        `${baseURL}/profiles/${this.props.profileId}/`,
+        patchPayload
+      );
+      //navigate('App');
+    } catch (error) {
+      console.log('error: ', error);
+    }
   };
 
   render() {
     const { goBack } = this.props.navigation;
-    const { isMetric } = this.state;
+    const { isMetric, height, weight } = this.state;
 
     return (
       <View style={styles.container} keyboardShouldPersistTaps="always">
@@ -63,22 +95,28 @@ class RegisterMeasurements extends Component {
             </View>
             <View style={styles.row}>
               <View style={styles.rowInput}>
-                <Text style={styles.rowLabel}>Height*</Text>
+                <Text style={styles.rowLabel}>Height</Text>
                 <TextInput
+                  ref="height"
+                  value={height}
+                  onChangeText={height => this.setState({ height })}
                   style={styles.textInput}
                   underlineColorAndroid="transparent"
-                  placeholder="5' 5''"
+                  placeholder={isMetric ? '182' : `5' 5"`}
                 />
               </View>
             </View>
             <View style={styles.spacer} />
             <View style={styles.row}>
               <View style={styles.rowInput}>
-                <Text style={styles.rowLabel}>Weight*</Text>
+                <Text style={styles.rowLabel}>Weight</Text>
                 <TextInput
+                  ref="weight"
+                  value={weight}
+                  onChangeText={weight => this.setState({ weight })}
                   style={styles.textInput}
                   underlineColorAndroid="transparent"
-                  placeholder="130"
+                  placeholder={isMetric ? '68' : '150'}
                   keyboardType="number-pad"
                 />
               </View>
@@ -89,7 +127,7 @@ class RegisterMeasurements extends Component {
             <View style={[styles.buttonRow, { alignItems: 'center' }]}>
               <TouchableOpacity
                 style={styles.nextButtonWrapper}
-                onPress={this.handleLogin}
+                onPress={this.registerMeasurements}
               >
                 <View style={styles.button}>
                   <Text style={styles.buttonText}>NEXT</Text>
@@ -97,22 +135,16 @@ class RegisterMeasurements extends Component {
               </TouchableOpacity>
             </View>
           </View>
-          {/*}<View style={styles.pickerContainer}>
-          <Picker
-            style={styles.picker}
-            selectedValue={this.state.language}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({ language: itemValue })
-            }
-          >
-            <Picker.Item label="5" value="5" />
-            <Picker.Item label="6" value="6" />
-          </Picker>
-        </View>*/}
         </View>
       </View>
     );
   }
 }
 
-export default RegisterMeasurements;
+const mapStateToProps = state => {
+  return {
+    profileId: state.user.profileId
+  };
+};
+
+export default connect(mapStateToProps)(RegisterMeasurements);
