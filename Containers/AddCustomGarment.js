@@ -12,7 +12,64 @@ class AddCustomGarment extends Component {
   }
 
   render() {
-    return <View style={styles.container} />;
+    return (
+      <View style={styles.container}>
+        <Text>
+          Complete all fields below to tag custom piece to your fit. We will add
+          it to our database ASAP!
+        </Text>
+
+        <Formik
+          initialValues={{ brand: '', model: '', color: '', size: '' }}
+          onSubmit={values => console.tron.log(values)}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
+            <View style={formStyles.form}>
+              <View style={formStyles.formRow}>
+                <TextInput
+                  style={formStyles.textInput}
+                  placeholder="Brand"
+                  onChangeText={handleChange('brand')}
+                  onBlur={handleBlur('brand')}
+                  value={values.brand}
+                />
+              </View>
+
+              <View style={formStyles.formRow}>
+                <TextInput
+                  style={formStyles.textInput}
+                  placeholder="Model"
+                  onChangeText={handleChange('model')}
+                  onBlur={handleBlur('model')}
+                  value={values.model}
+                />
+              </View>
+
+              <View style={formStyles.formRow}>
+                <TextInput
+                  style={formStyles.textInput}
+                  placeholder="Color"
+                  onChangeText={handleChange('color')}
+                  onBlur={handleBlur('color')}
+                  value={values.color}
+                />
+              </View>
+
+              <View style={formStyles.formRow}>
+                <TextInput
+                  style={formStyles.textInput}
+                  placeholder="Size"
+                  onChangeText={handleChange('size')}
+                  onBlur={handleBlur('size')}
+                  value={values.size}
+                />
+              </View>
+              <Button onPress={handleSubmit} title="Tag to Fit!" />
+            </View>
+          )}
+        </Formik>
+      </View>
+    );
   }
 }
 
