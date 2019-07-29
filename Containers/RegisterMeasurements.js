@@ -91,6 +91,7 @@ class RegisterMeasurements extends Component {
                     true: 'rgb(155,155,155)',
                     false: 'rgb(155,155,155)'
                   }}
+                  thumbColor={'rgb(225,225,225)'}
                   onValueChange={this.toggleUnits}
                   value={isMetric}
                 />
@@ -111,12 +112,12 @@ class RegisterMeasurements extends Component {
                     keyboardType="numeric"
                   />
                 ) : (
-                  <View>
+                  <View style={styles.imperialRow}>
                     <TextInput
                       ref="feet"
                       value={feet}
                       onChangeText={feet => this.setState({ feet })}
-                      style={styles.textInput}
+                      style={styles.imperialInput}
                       underlineColorAndroid="transparent"
                       placeholder="ft"
                       keyboardType="numeric"
@@ -125,7 +126,7 @@ class RegisterMeasurements extends Component {
                       ref="inches"
                       value={inches}
                       onChangeText={inches => this.setState({ inches })}
-                      style={styles.textInput}
+                      style={styles.imperialInput}
                       underlineColorAndroid="transparent"
                       placeholder="in"
                       keyboardType="numeric"
