@@ -13,7 +13,9 @@ class RegisterMeasurements extends Component {
 
     this.state = {
       isMetric: false,
-      height: null,
+      feet: null,
+      inches: null,
+      cm: null,
       weight: null
     };
   }
@@ -25,22 +27,25 @@ class RegisterMeasurements extends Component {
   };
 
   // Convert all height to inches and all weight to lbs and return an object ready for PATCH request
-  convertMeasurements = (height, weight) => {
+  convertMeasurements = (feet, inches, cm, weight) => {
     let convertedHeight = null;
     let convertedWeight = null;
     if (this.state.isMetric) {
-      if (height) {
-        convertedHeight = (parseFloat(height) / 2.54).toFixed(2);
+      if (cm) {
+        convertedHeight = Math.round(parseFloat(cm) / 2.54);
       }
       if (weight) {
-        convertedWeight = (parseFloat(weight) * 2.2046).toFixed(2);
+        convertedWeight = Math.round(parseFloat(weight) * 2.2046);
       }
     } else {
-      if (height) {
-        convertedHeight = parseFloat(height);
+      if (feet) {
+        convertedHeight = parseInt(feet) * 12;
+        if (inches) {
+          convertedHeight += parseInt(inches);
+        }
       }
       if (weight) {
-        convertedWeight = parseFloat(weight);
+        convertedWeight = parseInt(weight);
       }
     }
     return {
@@ -50,17 +55,16 @@ class RegisterMeasurements extends Component {
   };
 
   registerMeasurements = async () => {
-    const { height, weight } = this.state;
+    const { feet, inches, cm, weight } = this.state;
     const { navigate } = this.props.navigation;
     // Package together profile object to have ready for PATCH
-    const patchPayload = this.convertMeasurements(height, weight);
-    console.log(patchPayload);
+    const patchPayload = this.convertMeasurements(feet, inches, cm, weight);
     try {
       const newMeasurements = await axios.patch(
         `${baseURL}/profiles/${this.props.profileId}/`,
         patchPayload
       );
-      //navigate('App');
+      navigate('App');
     } catch (error) {
       console.log('error: ', error);
     }
@@ -68,7 +72,7 @@ class RegisterMeasurements extends Component {
 
   render() {
     const { goBack } = this.props.navigation;
-    const { isMetric, height, weight } = this.state;
+    const { isMetric, cm, feet, inches, weight } = this.state;
 
     return (
       <View style={styles.container} keyboardShouldPersistTaps="always">
@@ -96,14 +100,38 @@ class RegisterMeasurements extends Component {
             <View style={styles.row}>
               <View style={styles.rowInput}>
                 <Text style={styles.rowLabel}>Height</Text>
-                <TextInput
-                  ref="height"
-                  value={height}
-                  onChangeText={height => this.setState({ height })}
-                  style={styles.textInput}
-                  underlineColorAndroid="transparent"
-                  placeholder={isMetric ? '182' : `5' 5"`}
-                />
+                {isMetric ? (
+                  <TextInput
+                    ref="cm"
+                    value={cm}
+                    onChangeText={cm => this.setState({ cm })}
+                    style={styles.textInput}
+                    underlineColorAndroid="transparent"
+                    placeholder="cm"
+                    keyboardType="numeric"
+                  />
+                ) : (
+                  <View>
+                    <TextInput
+                      ref="feet"
+                      value={feet}
+                      onChangeText={feet => this.setState({ feet })}
+                      style={styles.textInput}
+                      underlineColorAndroid="transparent"
+                      placeholder="ft"
+                      keyboardType="numeric"
+                    />
+                    <TextInput
+                      ref="inches"
+                      value={inches}
+                      onChangeText={inches => this.setState({ inches })}
+                      style={styles.textInput}
+                      underlineColorAndroid="transparent"
+                      placeholder="in"
+                      keyboardType="numeric"
+                    />
+                  </View>
+                )}
               </View>
             </View>
             <View style={styles.spacer} />
@@ -116,8 +144,8 @@ class RegisterMeasurements extends Component {
                   onChangeText={weight => this.setState({ weight })}
                   style={styles.textInput}
                   underlineColorAndroid="transparent"
-                  placeholder={isMetric ? '68' : '150'}
-                  keyboardType="number-pad"
+                  placeholder={isMetric ? 'kg' : 'lbs'}
+                  keyboardType="numeric"
                 />
               </View>
             </View>
