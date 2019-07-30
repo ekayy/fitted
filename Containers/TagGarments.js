@@ -12,7 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { removeGarmentFromFit } from '../Redux/FitsRedux';
+import { removeGarmentFromFit, createFit } from '../Redux/FitsRedux';
 import styles from './Styles/TagGarmentsStyles';
 import { AppStyles } from '../Themes';
 
@@ -41,18 +41,20 @@ class TagGarments extends Component {
 
   shareFit = () => {
     const { navigate } = this.props.navigation;
-    const profile = this.props.profileId;
     const { image } = this.props.navigation.state.params;
+    const { garments, profileId, createFit } = this.props;
 
-    // create fit with tagged garments
-    axios.post(url, {
-      profile,
+    const garmentIds = garments.map(item => item.id);
+
+    createFit({
+      profile: profileId,
       photo: image,
-      garments: []
+      likes: [1],
+      garments: garmentIds
     });
 
     // navigate to newly created Fit
-    navigate('');
+    // navigate('FitDetail', );
   };
 
   render() {
@@ -169,6 +171,7 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
-    removeGarmentFromFit
+    removeGarmentFromFit,
+    createFit
   }
 )(TagGarments);
