@@ -6,27 +6,24 @@ import {
   Image,
   TouchableOpacity,
   TouchableHighlight,
-  Modal
+  Modal,
+  FlatList
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
-import SearchGarments from './SearchGarments';
 import { connect } from 'react-redux';
-import { fetchGarments } from '../Redux/GarmentsRedux';
+import { removeGarmentFromFit } from '../Redux/FitsRedux';
 import styles from './Styles/TagGarmentsStyles';
-import { AppStyles, Colors } from '../Themes';
+import { AppStyles } from '../Themes';
+
+import { brands } from '../data.json';
 
 class TagGarments extends Component {
   state = {
     modalVisible: false,
-    searchTerm: '',
-    garments: [],
-    results: [],
-    remainingResults: [],
     error: null,
     loading: false,
-    refreshing: false,
-    limit: 9999
+    refreshing: false
   };
 
   setModalVisible = () => {
@@ -42,9 +39,27 @@ class TagGarments extends Component {
     }
   };
 
+  shareFit = () => {
+    const { navigate } = this.props.navigation;
+    const profile = this.props.profileId;
+    const { image } = this.props.navigation.state.params;
+
+    // create fit with tagged garments
+    axios.post(url, {
+      profile,
+      photo: image,
+      garments: []
+    });
+
+    // navigate to newly created Fit
+    navigate('');
+  };
+
   render() {
     const { navigate } = this.props.navigation;
+    // user captured image
     const { image } = this.props.navigation.state.params;
+    const { garments, refreshing } = this.props;
 
     return (
       <ScrollView style={AppStyles.container}>
@@ -66,32 +81,17 @@ class TagGarments extends Component {
               <Text>Add a garment</Text>
             </TouchableOpacity>
 
-            <View style={styles.formRow}>
-              <View style={styles.product}>
-                <View style={styles.productImage}>
-                  <Image
-                    source={{ uri: image }}
-                    style={{ width: 80, height: 80 }}
-                  />
-                </View>
-                <View style={styles.productAttributes}>
-                  <Text>
-                    Acne Studios{'\n'}
-                    Chelsea Boots{'\n'}
-                    Brown
-                  </Text>
-                </View>
-              </View>
-
-              <TouchableOpacity style={AppStyles.sectionSubtitle}>
-                <Ionicons
-                  name="ios-add"
-                  size={25}
-                  style={{ marginRight: 10, color: '#aaa' }}
-                />
-                <Text>Add size</Text>
-              </TouchableOpacity>
-            </View>
+            <FlatList
+              data={garments}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={1}
+              renderItem={this.renderGarment}
+              onEndReached={this.handleLoadMore}
+              onEndReachedThreshold={0}
+              refreshing={refreshing}
+              initialNumToRender={10}
+              maxToRenderPerBatch={10}
+            />
           </View>
 
           <View style={AppStyles.button}>
@@ -99,7 +99,7 @@ class TagGarments extends Component {
               title="Share"
               buttonStyle={[AppStyles.buttonDefaultStyle]}
               titleStyle={AppStyles.buttonDefaultTitleStyle}
-              onPress={() => navigate('SearchGarments')}
+              onPress={this.shareFit}
             />
           </View>
         </View>
@@ -125,17 +125,50 @@ class TagGarments extends Component {
       </ScrollView>
     );
   }
+
+  renderGarment = ({ item }) => {
+    const { id, brand, model, photo } = item;
+
+    const brandName = brands[brand].name;
+
+    return (
+      <View style={styles.formRow} key={id}>
+        <View style={styles.product}>
+          <View style={styles.productImage}>
+            <Image source={{ uri: photo }} style={{ width: 80, height: 80 }} />
+          </View>
+          <View style={styles.productAttributes}>
+            <Text>
+              {brandName}
+              {'\n'}
+              {model}
+            </Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={AppStyles.sectionSubtitle}>
+          <Ionicons
+            name="ios-add"
+            size={25}
+            style={{ marginRight: 10, color: '#aaa' }}
+          />
+          <Text>Add size</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 }
 
 const mapStateToProps = state => {
   return {
-    garments: state.garments.items
+    garments: state.fits.garments,
+    profileId: state.user.profileId
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    fetchGarments
+    removeGarmentFromFit
   }
 )(TagGarments);

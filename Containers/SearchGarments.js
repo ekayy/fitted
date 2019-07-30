@@ -13,6 +13,9 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
+import { tagGarmentToFit, removeGarmentFromFit } from '../Redux/FitsRedux';
+import { AppStyles } from '../Themes';
+import styles from './Styles/TagGarmentsStyles';
 
 import { brands } from '../data.json';
 
@@ -126,11 +129,20 @@ class SearchGarments extends Component {
     });
   };
 
+  tagToFit = item => {
+    const { goBack } = this.props.navigation;
+    const { id, photo } = item;
+
+    this.props.tagGarmentToFit(item);
+
+    goBack();
+  };
+
   render() {
     const { searchTerm, results, loading, refreshing } = this.state;
 
     return (
-      <View style={styles.container}>
+      <View style={AppStyles.container}>
         <SearchBar
           round="round"
           lightTheme="lightTheme"
@@ -163,51 +175,65 @@ class SearchGarments extends Component {
     const brandName = brands[brand].name;
 
     return (
-      <View>
-        <TouchableOpacity
-          onPress={() => navigate('SelectSizing', item)}
-          style={styles.listItem}
-        >
-          <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: photo }} />
+      <View style={styles.section}>
+        <View style={styles.formRow}>
+          <View style={styles.product}>
+            <View style={styles.productImage}>
+              <Image
+                source={{ uri: photo }}
+                style={{ width: 80, height: 80 }}
+              />
+            </View>
+            <View style={styles.productAttributes}>
+              <Text>
+                {brandName}
+                {'\n'}
+                {model}
+              </Text>
+            </View>
           </View>
-          <View style={styles.description}>
-            <Text>{brandName}</Text>
-            <Text>{model}</Text>
-          </View>
-        </TouchableOpacity>
+
+          <TouchableOpacity
+            style={AppStyles.sectionSubtitle}
+            onPress={() => this.tagToFit(item)}
+          >
+            <Text style={{ marginRight: 10 }}>Tag to fit</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
 }
 
-const styles = {
-  container: {
-    flex: 1,
-    paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3'
-  },
-  listItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'row'
-  },
-  imageContainer: {
-    flex: 1,
-    width: 160,
-    height: 150
-  },
-  image: {
-    width: '100%',
-    height: 150,
-    marginHorizontal: 20
-  },
-  description: {
-    flex: 1,
-    alignItems: 'center'
-  }
-};
+// const styles = {
+//   container: {
+//     flex: 1,
+//     paddingHorizontal: 5,
+//     backgroundColor: '#f3f3f3'
+//   },
+//   listItem: {
+//     flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'flex-start',
+//     flexDirection: 'row'
+//   },
+//   imageContainer: {
+//     flex: 1,
+//     alignItems: 'center',
+//     width: 160,
+//     height: 150
+//   },
+//   image: {
+//     width: '100%',
+//     height: 150,
+//     marginHorizontal: 20
+//   },
+//   description: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center'
+//   }
+// };
 
 const mapStateToProps = state => {
   return {
@@ -217,5 +243,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchGarments }
+  { fetchGarments, tagGarmentToFit, removeGarmentFromFit }
 )(SearchGarments);
