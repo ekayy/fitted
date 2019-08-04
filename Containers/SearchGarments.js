@@ -132,8 +132,14 @@ class SearchGarments extends Component {
   tagToFit = item => {
     const { goBack } = this.props.navigation;
     const { id, photo } = item;
+    const { taggedGarments } = this.props.fits;
 
-    this.props.tagGarmentToFit(item);
+    // check if garment id already tagged to a fit
+    if (!taggedGarments.filter(garment => garment.id === id).length) {
+      this.props.tagGarmentToFit(item);
+    } else {
+      // display an error message to user
+    }
 
     goBack();
   };
@@ -205,39 +211,10 @@ class SearchGarments extends Component {
   };
 }
 
-// const styles = {
-//   container: {
-//     flex: 1,
-//     paddingHorizontal: 5,
-//     backgroundColor: '#f3f3f3'
-//   },
-//   listItem: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'flex-start',
-//     flexDirection: 'row'
-//   },
-//   imageContainer: {
-//     flex: 1,
-//     alignItems: 'center',
-//     width: 160,
-//     height: 150
-//   },
-//   image: {
-//     width: '100%',
-//     height: 150,
-//     marginHorizontal: 20
-//   },
-//   description: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   }
-// };
-
 const mapStateToProps = state => {
   return {
-    garments: state.garments.items
+    garments: state.garments.items,
+    fits: state.fits
   };
 };
 

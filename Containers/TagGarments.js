@@ -42,9 +42,9 @@ class TagGarments extends Component {
   shareFit = () => {
     const { navigate } = this.props.navigation;
     const { image } = this.props.navigation.state.params;
-    const { garments, profileId, createFit } = this.props;
+    const { taggedGarments, profileId, createFit } = this.props;
 
-    const garmentIds = garments.map(item => item.id);
+    const garmentIds = taggedGarments.map(item => item.id);
 
     createFit({
       profile: profileId,
@@ -61,7 +61,7 @@ class TagGarments extends Component {
     const { navigate } = this.props.navigation;
     // user captured image
     const { image } = this.props.navigation.state.params;
-    const { garments, refreshing } = this.props;
+    const { taggedGarments, refreshing } = this.props;
 
     return (
       <ScrollView style={AppStyles.container}>
@@ -84,7 +84,7 @@ class TagGarments extends Component {
             </TouchableOpacity>
 
             <FlatList
-              data={garments}
+              data={taggedGarments}
               keyExtractor={(item, index) => index.toString()}
               numColumns={1}
               renderItem={this.renderGarment}
@@ -163,7 +163,7 @@ class TagGarments extends Component {
 
 const mapStateToProps = state => {
   return {
-    garments: state.fits.garments,
+    taggedGarments: state.fits.taggedGarments,
     profileId: state.user.profileId
   };
 };
