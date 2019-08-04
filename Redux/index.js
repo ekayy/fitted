@@ -1,5 +1,5 @@
-import createSecureStore from 'redux-persist-expo-securestore';
-// import storage from 'redux-persist/lib/storage';
+// import createSecureStore from 'redux-persist-expo-securestore';
+import storage from 'redux-persist/lib/storage';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { combineReducers } from 'redux';
 import configureStore from './CreateStore';
@@ -9,7 +9,7 @@ import user from './UserRedux';
 import garments from './GarmentsRedux';
 import fits from './FitsRedux';
 
-const storage = createSecureStore();
+// const storage = createSecureStore();
 const persistConfig = {
   key: 'root',
   storage
