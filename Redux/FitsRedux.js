@@ -9,7 +9,7 @@ const TAG_GARMENT_TO_FIT = 'TAG_GARMENT_TO_FIT';
 const REMOVE_GARMENT_FROM_FIT = 'REMOVE_GARMENT_FROM_FIT';
 
 export const INITIAL_STATE = {
-  garments: [],
+  taggedGarments: [],
   loading: false,
   error: null
 };
@@ -39,13 +39,15 @@ export default function fits(state = INITIAL_STATE, action = {}) {
     case TAG_GARMENT_TO_FIT:
       return {
         ...state,
-        garments: [...state.garments, action.payload.garmentId]
+        taggedGarments: [...state.taggedGarments, action.payload.garmentId]
       };
 
     case REMOVE_GARMENT_FROM_FIT:
       return {
         ...state,
-        garments: state.garments.filter(id => id !== action.payload.garmentId)
+        taggedGarments: state.taggedGarments.filter(
+          id => id !== action.payload.garmentId
+        )
       };
 
     default:
