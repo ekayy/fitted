@@ -9,6 +9,7 @@ const TAG_GARMENT_TO_FIT = 'TAG_GARMENT_TO_FIT';
 const REMOVE_GARMENT_FROM_FIT = 'REMOVE_GARMENT_FROM_FIT';
 
 export const INITIAL_STATE = {
+  createdFit: null,
   taggedGarments: [],
   loading: false,
   error: null
@@ -26,7 +27,8 @@ export default function fits(state = INITIAL_STATE, action = {}) {
     case CREATE_FIT_SUCCESS:
       return {
         ...state,
-        loading: false
+        loading: false,
+        createdFit: action.payload.createdFit
       };
 
     case CREATE_FIT_FAILURE:
@@ -60,9 +62,9 @@ export const createFitBegin = () => ({
   type: CREATE_FIT_BEGIN
 });
 
-export const createFitSuccess = fits => ({
+export const createFitSuccess = createdFit => ({
   type: CREATE_FIT_SUCCESS,
-  payload: { fits }
+  payload: { createdFit }
 });
 
 export const createFitFailure = error => ({

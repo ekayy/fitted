@@ -1,14 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-  Modal,
-  FlatList
-} from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -20,26 +11,12 @@ import { brands } from '../data.json';
 
 class TagGarments extends Component {
   state = {
-    modalVisible: false,
     error: null,
     loading: false,
     refreshing: false
   };
 
-  setModalVisible = () => {
-    this.setState({
-      modalVisible: !this.state.modalVisible
-    });
-  };
-
-  addPiece = () => {
-    const value = this.refs.form.getValue();
-    if (value) {
-      console.tron.log(value);
-    }
-  };
-
-  shareFit = () => {
+  shareFit = async () => {
     const { navigate } = this.props.navigation;
     const { image } = this.props.navigation.state.params;
     const { taggedGarments, profileId, createFit } = this.props;
@@ -49,7 +26,7 @@ class TagGarments extends Component {
     // post fit to api
     // TODO: to remove required like to allow post with no initial likes
     // TODO: set up s3 for image upload
-    createFit({
+    await createFit({
       profile: profileId,
       photo: image,
       likes: [1],
@@ -57,7 +34,7 @@ class TagGarments extends Component {
     });
 
     // navigate to newly created Fit
-    // navigate('FitDetail', );
+    navigate('FitDetail', this.props.createdFit);
   };
 
   render() {
@@ -92,14 +69,8 @@ class TagGarments extends Component {
               numColumns={1}
               renderItem={this.renderGarment}
               renderHiddenItem={this.renderHiddenItem}
+              onRowOpen={this.onRowOpen}
               rightOpenValue={-150}
-              onRowOpen={(rowKey, rowMap) => {
-                setTimeout(() => {
-                  if (rowMap[rowKey]) {
-                    rowMap[rowKey].closeRow();
-                  }
-                }, 3000);
-              }}
               onEndReached={this.handleLoadMore}
               onEndReachedThreshold={0}
               refreshing={refreshing}
@@ -117,32 +88,12 @@ class TagGarments extends Component {
             />
           </View>
         </View>
-
-        <Modal visible={this.state.modalVisible} animationType="slide">
-          <View style={styles.modal}>
-            <TouchableHighlight
-              onPress={this.setModalVisible}
-              style={styles.close}
-            >
-              <Ionicons
-                name="ios-close"
-                size={50}
-                color="#000"
-                style={styles.close}
-              />
-            </TouchableHighlight>
-
-            {/*}<Form ref="form" type={Fit} />*/}
-            <Button title="Add Piece" onPress={this.addPiece} />
-          </View>
-        </Modal>
       </ScrollView>
     );
   }
 
   renderGarment = (rowData, rowMap) => {
     const { id, brand, model, photo } = rowData.item;
-
     const brandName = brands[brand].name;
 
     return (
@@ -187,11 +138,21 @@ class TagGarments extends Component {
       </View>
     );
   };
+
+  // Close swiped row after time
+  onRowOpen = (rowKey, rowMap) => {
+    setTimeout(() => {
+      if (rowMap[rowKey]) {
+        rowMap[rowKey].closeRow();
+      }
+    }, 3000);
+  };
 }
 
 const mapStateToProps = state => {
   return {
     taggedGarments: state.fits.taggedGarments,
+    createdFit: state.fits.createdFit,
     profileId: state.user.profileId
   };
 };
