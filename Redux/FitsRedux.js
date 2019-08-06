@@ -46,7 +46,7 @@ export default function fits(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         taggedGarments: state.taggedGarments.filter(
-          id => id !== action.payload.garmentId
+          taggedGarment => taggedGarment.id !== action.payload.garmentId
         )
       };
 

@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { connect } from 'react-redux';
 import { removeGarmentFromFit, createFit } from '../Redux/FitsRedux';
 import styles from './Styles/TagGarmentsStyles';
 import { AppStyles } from '../Themes';
-
 import { brands } from '../data.json';
 
 class TagGarments extends Component {
@@ -46,6 +46,9 @@ class TagGarments extends Component {
 
     const garmentIds = taggedGarments.map(item => item.id);
 
+    // post fit to api
+    // TODO: to remove required like to allow post with no initial likes
+    // TODO: set up s3 for image upload
     createFit({
       profile: profileId,
       photo: image,
@@ -83,11 +86,20 @@ class TagGarments extends Component {
               <Text>Add a garment</Text>
             </TouchableOpacity>
 
-            <FlatList
+            <SwipeListView
               data={taggedGarments}
               keyExtractor={(item, index) => index.toString()}
               numColumns={1}
               renderItem={this.renderGarment}
+              renderHiddenItem={this.renderHiddenItem}
+              rightOpenValue={-150}
+              onRowOpen={(rowKey, rowMap) => {
+                setTimeout(() => {
+                  if (rowMap[rowKey]) {
+                    rowMap[rowKey].closeRow();
+                  }
+                }, 3000);
+              }}
               onEndReached={this.handleLoadMore}
               onEndReachedThreshold={0}
               refreshing={refreshing}
@@ -128,8 +140,8 @@ class TagGarments extends Component {
     );
   }
 
-  renderGarment = ({ item }) => {
-    const { id, brand, model, photo } = item;
+  renderGarment = (rowData, rowMap) => {
+    const { id, brand, model, photo } = rowData.item;
 
     const brandName = brands[brand].name;
 
@@ -155,6 +167,22 @@ class TagGarments extends Component {
             style={{ marginRight: 10, color: '#aaa' }}
           />
           <Text>Add size</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  // render swipe list view to delete
+  renderHiddenItem = (rowData, rowMap) => {
+    const { id } = rowData.item;
+
+    return (
+      <View style={styles.rowBack}>
+        <TouchableOpacity
+          style={styles.rightBtn}
+          onPress={_ => this.props.removeGarmentFromFit(id)}
+        >
+          <Text style={styles.rightBtnText}>Delete</Text>
         </TouchableOpacity>
       </View>
     );

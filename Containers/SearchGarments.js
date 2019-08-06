@@ -137,11 +137,11 @@ class SearchGarments extends Component {
     // check if garment id already tagged to a fit
     if (!taggedGarments.filter(garment => garment.id === id).length) {
       this.props.tagGarmentToFit(item);
+      this.props.navigation.navigate('TagGarments');
     } else {
       // display an error message to user
+      goBack();
     }
-
-    goBack();
   };
 
   render() {

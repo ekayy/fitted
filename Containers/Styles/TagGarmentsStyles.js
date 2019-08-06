@@ -7,11 +7,11 @@ export default StyleSheet.create({
     borderBottomColor: Colors.border
   },
   formRow: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: Metrics.baseMargin
+    justifyContent: 'center',
+    paddingVertical: Metrics.baseMargin,
+    backgroundColor: '#fff'
   },
   product: {
     flex: 1,
@@ -45,5 +45,27 @@ export default StyleSheet.create({
     paddingHorizontal: 40,
     marginTop: 25,
     backgroundColor: '#f3f3f3'
+  },
+
+  rowBack: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15
+  },
+
+  rightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+    right: 0,
+    backgroundColor: 'red'
+  },
+  rightBtnText: {
+    color: '#fff'
   }
 });
