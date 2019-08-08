@@ -46,8 +46,20 @@ export default StyleSheet.create({
     borderColor: 'rgb(236,236,237)',
     padding: 7
   },
+  imperialInput: {
+    height: 36,
+    width: 67,
+    marginLeft: 26,
+    color: Colors.coal,
+    borderWidth: 0.5,
+    borderColor: 'rgb(236,236,237)',
+    padding: 7
+  },
   rowInput: {
     flex: 1,
+    flexDirection: 'row'
+  },
+  imperialRow: {
     flexDirection: 'row'
   },
   switchContainer: {
