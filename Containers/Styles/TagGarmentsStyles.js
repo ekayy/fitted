@@ -67,5 +67,21 @@ export default StyleSheet.create({
   },
   rightBtnText: {
     color: '#fff'
+  },
+
+  capturedPhotoSection: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  photo: {
+    width: 150,
+    height: 150
+  },
+  textArea: {
+    flex: 1,
+    marginLeft: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    backgroundColor: '#fafafa'
   }
 });

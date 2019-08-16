@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  TextInput
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -10,16 +17,44 @@ import { AppStyles } from '../Themes';
 import { brands } from '../data.json';
 
 class TagGarments extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Searching Database',
+      headerRight: (
+        <TouchableOpacity
+          onPress={navigation.getParam('searchGarments')}
+          style={{
+            marginRight: 20
+          }}
+        >
+          <Ionicons name="ios-add" size={40} color="#000" />
+        </TouchableOpacity>
+      )
+    };
+  };
+
   state = {
+    description: null,
     error: null,
     loading: false,
     refreshing: false
+  };
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      searchGarments: this._searchGarments
+    });
+  }
+
+  _searchGarments = () => {
+    this.props.navigation.navigate('SearchGarments');
   };
 
   shareFit = async () => {
     const { navigate } = this.props.navigation;
     const { image } = this.props.navigation.state.params;
     const { taggedGarments, profileId, createFit } = this.props;
+    const { description } = this.state;
 
     const garmentIds = taggedGarments.map(item => item.id);
 
@@ -30,7 +65,8 @@ class TagGarments extends Component {
       profile: profileId,
       photo: image,
       likes: [1],
-      garments: garmentIds
+      garments: garmentIds,
+      description
     });
 
     // navigate to newly created Fit
@@ -47,11 +83,20 @@ class TagGarments extends Component {
       <ScrollView style={AppStyles.container}>
         <View style={AppStyles.section}>
           <View style={styles.section}>
-            <View style={AppStyles.sectionTitle}>
-              <Text style={AppStyles.sectionTitleText}>Garments</Text>
+            <View style={styles.capturedPhotoSection}>
+              <Image source={{ uri: image }} style={styles.photo} />
+
+              <TextInput
+                multiline={true}
+                numberOfLines={4}
+                placeholder="Describe your fit here!"
+                onChangeText={description => this.setState({ description })}
+                value={this.state.description}
+                style={styles.textArea}
+              />
             </View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={AppStyles.sectionSubtitle}
               onPress={() => navigate('SearchGarments')}
             >
@@ -61,7 +106,7 @@ class TagGarments extends Component {
                 style={{ marginRight: 10, color: '#aaa' }}
               />
               <Text>Add a garment</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <SwipeListView
               data={taggedGarments}
@@ -111,14 +156,14 @@ class TagGarments extends Component {
           </View>
         </View>
 
-        <TouchableOpacity style={AppStyles.sectionSubtitle}>
+        {/* <TouchableOpacity style={AppStyles.sectionSubtitle}>
           <Ionicons
             name="ios-add"
             size={25}
             style={{ marginRight: 10, color: '#aaa' }}
           />
           <Text>Add size</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     );
   };
