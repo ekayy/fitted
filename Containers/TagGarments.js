@@ -11,7 +11,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { connect } from 'react-redux';
-import { removeGarmentFromFit, createFit } from '../Redux/FitsRedux';
+import {
+  removeGarmentFromFit,
+  createFit,
+  clearCreatedFit
+} from '../Redux/FitsRedux';
 import styles from './Styles/TagGarmentsStyles';
 import { AppStyles } from '../Themes';
 import { brands } from '../data.json';
@@ -51,9 +55,14 @@ class TagGarments extends Component {
   };
 
   shareFit = async () => {
-    const { navigate } = this.props.navigation;
+    const { navigate, reset } = this.props.navigation;
     const { image } = this.props.navigation.state.params;
-    const { taggedGarments, profileId, createFit } = this.props;
+    const {
+      taggedGarments,
+      profileId,
+      createFit,
+      clearCreatedFit
+    } = this.props;
     const { description } = this.state;
 
     const garmentIds = taggedGarments.map(item => item.id);
@@ -71,6 +80,8 @@ class TagGarments extends Component {
 
     // navigate to newly created Fit
     navigate('FitDetail', this.props.createdFit);
+
+    clearCreatedFit();
   };
 
   render() {
@@ -206,6 +217,7 @@ export default connect(
   mapStateToProps,
   {
     removeGarmentFromFit,
-    createFit
+    createFit,
+    clearCreatedFit
   }
 )(TagGarments);

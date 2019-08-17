@@ -5,6 +5,7 @@ import { baseURL } from '../Config';
 const CREATE_FIT_BEGIN = 'CREATE_FIT_BEGIN';
 const CREATE_FIT_SUCCESS = 'CREATE_FIT_SUCCESS';
 const CREATE_FIT_FAILURE = 'CREATE_FIT_FAILURE';
+const CLEAR_CREATED_FIT = 'CLEAR_CREATED_FIT';
 const TAG_GARMENT_TO_FIT = 'TAG_GARMENT_TO_FIT';
 const REMOVE_GARMENT_FROM_FIT = 'REMOVE_GARMENT_FROM_FIT';
 
@@ -24,11 +25,20 @@ export default function fits(state = INITIAL_STATE, action = {}) {
         loading: true,
         error: null
       };
+
     case CREATE_FIT_SUCCESS:
       return {
         ...state,
         loading: false,
         createdFit: action.payload.createdFit
+      };
+
+    case CLEAR_CREATED_FIT:
+      return {
+        ...state,
+        loading: false,
+        createdFit: null,
+        taggedGarments: []
       };
 
     case CREATE_FIT_FAILURE:
@@ -70,6 +80,10 @@ export const createFitSuccess = createdFit => ({
 export const createFitFailure = error => ({
   type: CREATE_FIT_FAILURE,
   payload: { error }
+});
+
+export const clearCreatedFit = () => ({
+  type: CLEAR_CREATED_FIT
 });
 
 export const tagGarmentToFit = garmentId => ({
