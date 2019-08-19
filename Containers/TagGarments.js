@@ -52,6 +52,7 @@ class TagGarments extends Component {
   }
 
   _searchGarments = () => {
+    this.setState({ error: null });
     this.props.navigation.navigate('SearchGarments');
   };
 
@@ -71,28 +72,34 @@ class TagGarments extends Component {
     // post fit to api
     // TODO: to remove required like to allow post with no initial likes
     // TODO: set up s3 for image upload
-    await createFit({
-      profile: profileId,
-      photo: image,
-      likes: [1],
-      garments: garmentIds,
-      description
-    });
+    if (garmentIds.length > 0) {
+      await createFit({
+        profile: profileId,
+        photo: image,
+        likes: [1],
+        garments: garmentIds,
+        description
+      });
 
-    this.setState({ description: null });
+      this.setState({ description: null });
 
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Camera' })]
-    });
+      // reset navigation to Camera route on successful fit creation
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Camera' })]
+      });
+      dispatch(resetAction);
 
-    dispatch(resetAction);
+      // navigate to newly created Fit
+      navigate('FitDetail', this.props.createdFit);
 
-    // navigate to newly created Fit
-    navigate('FitDetail', this.props.createdFit);
-
-    // reset fit redux
-    clearCreatedFit();
+      // reset fit redux
+      clearCreatedFit();
+    } else {
+      this.setState({
+        error: 'You must tag a garment to this fit'
+      });
+    }
   };
 
   render() {
@@ -154,6 +161,7 @@ class TagGarments extends Component {
               onPress={this.shareFit}
             />
           </View>
+          <Text style={AppStyles.error}>{this.state.error}</Text>
         </View>
       </ScrollView>
     );

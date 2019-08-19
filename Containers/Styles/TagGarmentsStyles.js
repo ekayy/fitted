@@ -83,5 +83,14 @@ export default StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     backgroundColor: '#fafafa'
-  }
+  },
+
+  button: {
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    backgroundColor: 'rgb(74,144,225)',
+    marginRight: 10
+  },
+  buttonText: { color: '#fff' }
 });

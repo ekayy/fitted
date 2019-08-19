@@ -203,7 +203,9 @@ class SearchGarments extends Component {
             style={AppStyles.sectionSubtitle}
             onPress={() => this.tagToFit(item)}
           >
-            <Text style={{ marginRight: 10 }}>Tag to fit</Text>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>Tag to fit</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </View>

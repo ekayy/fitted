@@ -109,6 +109,12 @@ const AppStyles = {
   textInputReadonly: {
     height: 40,
     color: Colors.steel
+  },
+
+  error: {
+    color: 'red',
+    flex: 1,
+    textAlign: 'center'
   }
 };
 
