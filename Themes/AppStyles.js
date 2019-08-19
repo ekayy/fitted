@@ -81,7 +81,6 @@ const AppStyles = {
   },
 
   form: {
-    backgroundColor: Colors.snow,
     margin: Metrics.baseMargin,
     borderRadius: 5,
     width: 315
@@ -91,6 +90,7 @@ const AppStyles = {
     paddingHorizontal: Metrics.doubleBaseMargin
   },
   formRow: {
+    backgroundColor: Colors.snow,
     paddingVertical: Metrics.doubleBaseMargin,
     paddingHorizontal: Metrics.doubleBaseMargin,
     borderWidth: 0.5,

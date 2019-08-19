@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-import formStyles from '../Themes/AppStyles';
+import { View, Text, TextInput } from 'react-native';
+import { Button } from 'react-native-elements';
+import AppStyles from '../Themes/AppStyles';
+import styles from './Styles/AddCustomGarmentStyles';
 
 import { Formik, ErrorMessage } from 'formik';
+import axios from 'axios';
+import { baseURL } from '../Config';
 
 class AddCustomGarment extends Component {
   static navigationOptions = {};
@@ -11,60 +15,84 @@ class AddCustomGarment extends Component {
     super(props);
   }
 
+  onSubmit = async ({ brand, model, color, size }) => {
+    const response = await axios.post(`${baseURL}/garments/`, {
+      brand,
+      model,
+      color,
+      size: '',
+      sku: '',
+      photo: '',
+      purchase_page: ''
+    });
+
+    // console.tron.log(response);
+
+    // this.props.navigation.navigate('TagGarments', response);
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>
+        <Text style={styles.directions}>
           Complete all fields below to tag custom piece to your fit. We will add
           it to our database ASAP!
         </Text>
 
         <Formik
           initialValues={{ brand: '', model: '', color: '', size: '' }}
-          onSubmit={values => console.tron.log(values)}
+          onSubmit={values => this.onSubmit(values)}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <View style={formStyles.form}>
-              <View style={formStyles.formRow}>
+            <View style={AppStyles.form}>
+              <View style={AppStyles.formRow}>
                 <TextInput
-                  style={formStyles.textInput}
-                  placeholder="Brand"
+                  style={AppStyles.textInput}
+                  placeholder="*Brand"
                   onChangeText={handleChange('brand')}
                   onBlur={handleBlur('brand')}
                   value={values.brand}
                 />
               </View>
 
-              <View style={formStyles.formRow}>
+              <View style={AppStyles.formRow}>
                 <TextInput
-                  style={formStyles.textInput}
-                  placeholder="Model"
+                  style={AppStyles.textInput}
+                  placeholder="*Model (Name of piece)"
                   onChangeText={handleChange('model')}
                   onBlur={handleBlur('model')}
                   value={values.model}
                 />
               </View>
 
-              <View style={formStyles.formRow}>
+              <View style={AppStyles.formRow}>
                 <TextInput
-                  style={formStyles.textInput}
-                  placeholder="Color"
+                  style={AppStyles.textInput}
+                  placeholder="*Color"
                   onChangeText={handleChange('color')}
                   onBlur={handleBlur('color')}
                   value={values.color}
                 />
               </View>
 
-              <View style={formStyles.formRow}>
+              <View style={AppStyles.formRow}>
                 <TextInput
-                  style={formStyles.textInput}
-                  placeholder="Size"
+                  style={AppStyles.textInput}
+                  placeholder="*Size"
                   onChangeText={handleChange('size')}
                   onBlur={handleBlur('size')}
                   value={values.size}
                 />
               </View>
-              <Button onPress={handleSubmit} title="Tag to Fit!" />
+
+              <View style={styles.buttonWrapper}>
+                <Button
+                  onPress={handleSubmit}
+                  title="Tag to Fit!"
+                  buttonStyle={[AppStyles.buttonDefaultStyle]}
+                  titleStyle={AppStyles.buttonDefaultTitleStyle}
+                />
+              </View>
             </View>
           )}
         </Formik>
@@ -72,33 +100,5 @@ class AddCustomGarment extends Component {
     );
   }
 }
-
-const styles = {
-  container: {
-    flex: 1,
-    paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3'
-  },
-  listItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'row'
-  },
-  imageContainer: {
-    flex: 1,
-    width: 160,
-    height: 150
-  },
-  image: {
-    width: '100%',
-    height: 150,
-    marginHorizontal: 20
-  },
-  description: {
-    flex: 1,
-    alignItems: 'center'
-  }
-};
 
 export default AddCustomGarment;
