@@ -19,6 +19,7 @@ import {
 import styles from './Styles/TagGarmentsStyles';
 import { AppStyles } from '../Themes';
 import { brands } from '../data.json';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 class TagGarments extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -55,7 +56,7 @@ class TagGarments extends Component {
   };
 
   shareFit = async () => {
-    const { navigate, reset } = this.props.navigation;
+    const { navigate, dispatch } = this.props.navigation;
     const { image } = this.props.navigation.state.params;
     const {
       taggedGarments,
@@ -78,9 +79,19 @@ class TagGarments extends Component {
       description
     });
 
+    this.setState({ description: null });
+
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'Camera' })]
+    });
+
+    dispatch(resetAction);
+
     // navigate to newly created Fit
     navigate('FitDetail', this.props.createdFit);
 
+    // reset fit redux
     clearCreatedFit();
   };
 
