@@ -163,6 +163,11 @@ class MyProfile extends Component {
     favoriteGarment(id, user);
   };
 
+  // render an icon in closet/fits tab bar
+  _renderIcon = ({ route, color }) => (
+    <MaterialCommunityIcons name={route.icon} size={24} color={color} />
+  );
+
   render() {
     const initialLayout = {
       height: 0,
@@ -214,14 +219,10 @@ class MyProfile extends Component {
       editingCloset
     } = this.state;
 
-    _renderIcon = ({ route, color }) => (
-      <MaterialCommunityIcons name={route.icon} size={24} color={color} />
-    );
-
     switch (route.key) {
       case 'garments':
         return (
-          <ScrollView style={{ flex: 1 }}>
+          <ScrollView style={{ flex: 1, paddingHorizontal: 10 }}>
             <View style={styles.closet}>
               <Text>Closet</Text>
               <Button
