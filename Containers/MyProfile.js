@@ -1,33 +1,23 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import {
-  ScrollView,
-  View,
-  Text,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  Dimensions,
-  FlatList,
-  AsyncStorage
-} from "react-native";
-import { connect } from "react-redux";
-import axios from "axios";
-import { TabView, TabBar, SceneMap } from "react-native-tab-view";
-import ProfileHeader from "../Components/ProfileHeader";
-import FitsGrid from "../Components/FitsGrid";
-import GarmentsGrid from "../Components/GarmentsGrid";
-import { fetchProfiles } from "../Redux/ProfilesRedux";
-import { baseURL } from "../Config";
-import { withNavigationFocus } from "react-navigation";
+import React, { Component } from 'react';
+import { View, Dimensions, Text } from 'react-native';
+import { Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import ProfileHeader from '../Components/ProfileHeader';
+import FitsGrid from '../Components/FitsGrid';
+import GarmentsGrid from '../Components/GarmentsGrid';
+import { baseURL } from '../Config';
+import { withNavigationFocus } from 'react-navigation';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 
 class MyProfile extends Component {
   state = {
     index: 0,
     routes: [
-      { key: "garments", title: "Favorite Garments" },
-      { key: "fits", title: "Favorite Fits" },
-      { key: "myfits", title: "My Fits" }
+      { key: 'garments', title: 'Closet', icon: 'hanger' },
+      { key: 'fits', title: 'Favorite Fits', icon: 'tshirt-crew' }
+      // { key: 'myfits', title: 'My Fits' }
     ],
     loading: false,
     refreshing: false,
@@ -156,10 +146,14 @@ class MyProfile extends Component {
 
   handleLoadMore = () => {};
 
+  _renderIcon = ({ route, color }) => (
+    <MaterialCommunityIcons name={route.icon} size={24} color={color} />
+  );
+
   render() {
     const initialLayout = {
       height: 0,
-      width: Dimensions.get("window").width
+      width: Dimensions.get('window').width
     };
 
     return (
@@ -173,9 +167,10 @@ class MyProfile extends Component {
           <TabView
             navigationState={this.state}
             renderScene={this._renderScene}
-            renderHeader={this._renderHeader}
+            renderTabBar={this._renderTabBar}
             onIndexChange={this._handleIndexChange}
             initialLayout={initialLayout}
+            tabBarPosition="bottom"
           />
         </View>
       </View>
@@ -184,13 +179,14 @@ class MyProfile extends Component {
 
   _handleIndexChange = index => this.setState({ index });
 
-  _renderHeader = props => (
+  _renderTabBar = props => (
     <TabBar
       {...props}
       indicatorStyle={styles.indicatorStyle}
       tabStyle={styles.tabStyle}
       labelStyle={styles.labelStyle}
       style={styles.tabBarStyle}
+      renderIcon={this._renderIcon}
     />
   );
 
@@ -205,40 +201,52 @@ class MyProfile extends Component {
     } = this.state;
 
     switch (route.key) {
-      case "garments":
+      case 'garments':
         return (
-          <GarmentsGrid
-            data={favoriteGarments}
-            navigation={this.props.navigation}
-            numCol={3}
-            handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleGarmentRefresh}
-            refreshing={refreshing}
-            loading={loading}
-          />
+          <View style={{ flex: 1 }}>
+            <View style={styles.closet}>
+              <Text>Closet</Text>
+              <Button
+                title="Edit"
+                buttonStyle={styles.editButtonStyle}
+                titleStyle={styles.editButtonTitleStyle}
+              />
+            </View>
+
+            <GarmentsGrid
+              data={favoriteGarments}
+              navigation={this.props.navigation}
+              numCol={2}
+              handleLoadMore={this.handleLoadMore}
+              onRefresh={this.handleGarmentRefresh}
+              refreshing={refreshing}
+              loading={loading}
+            />
+          </View>
         );
-      case "fits":
+      case 'fits':
         return (
           <FitsGrid
             data={favoriteFits}
             navigation={this.props.navigation}
+            numCol={2}
             handleLoadMore={this.handleLoadMore}
             onRefresh={this.handleFitRefresh}
             refreshing={refreshing}
             loading={loading}
           />
         );
-      case "myfits":
-        return (
-          <FitsGrid
-            data={myFits}
-            navigation={this.props.navigation}
-            handleLoadMore={this.handleLoadMore}
-            onRefresh={this.handleMyFitRefresh}
-            refreshing={refreshing}
-            loading={loading}
-          />
-        );
+      // case "myfits":
+      //   return (
+      //     <FitsGrid
+      //       data={myFits}
+      //       navigation={this.props.navigation}
+      //       handleLoadMore={this.handleLoadMore}
+      //       onRefresh={this.handleMyFitRefresh}
+      //       refreshing={refreshing}
+      //       loading={loading}
+      //     />
+      //   );
       default:
         return null;
     }
@@ -249,26 +257,44 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: "#f3f3f3"
+    backgroundColor: '#f3f3f3'
   },
   tabContainer: {
     flex: 1
   },
 
   tabBarStyle: {
-    backgroundColor: "#fff"
+    // backgroundColor: '#4a4a4a'
   },
   tabStyle: {
-    backgroundColor: "red",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    backgroundColor: '#4a4a4a',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 80
   },
   indicatorStyle: {
-    backgroundColor: "red"
+    backgroundColor: '#4a4a4a'
   },
   labelStyle: {
-    textAlign: "center"
+    textAlign: 'center'
+  },
+
+  closet: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 20
+  },
+  editButtonStyle: {
+    marginLeft: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 6,
+    borderRadius: 10,
+    backgroundColor: '#737373'
+  },
+  editButtonTitleStyle: {
+    color: '#fff',
+    fontSize: 12,
+    textTransform: 'uppercase'
   }
 };
 
