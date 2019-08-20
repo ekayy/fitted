@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Dimensions, Text } from 'react-native';
+import { View, Dimensions, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
+import { favoriteGarment } from '../Redux/UserRedux';
 import axios from 'axios';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import ProfileHeader from '../Components/ProfileHeader';
@@ -10,6 +11,7 @@ import GarmentsGrid from '../Components/GarmentsGrid';
 import { baseURL } from '../Config';
 import { withNavigationFocus } from 'react-navigation';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import styles from './Styles/MyProfileStyles';
 
 class MyProfile extends Component {
   state = {
@@ -23,7 +25,8 @@ class MyProfile extends Component {
     refreshing: false,
     favoriteFits: [],
     favoriteGarments: [],
-    myFits: []
+    myFits: [],
+    editingCloset: false
   };
 
   componentDidMount() {
@@ -146,9 +149,19 @@ class MyProfile extends Component {
 
   handleLoadMore = () => {};
 
-  _renderIcon = ({ route, color }) => (
-    <MaterialCommunityIcons name={route.icon} size={24} color={color} />
-  );
+  // show button to remove garments from closet
+  editCloset = () => {
+    this.setState({
+      editingCloset: !this.state.editingCloset
+    });
+  };
+
+  // Remove garment from closet
+  unfavoriteGarment = id => {
+    const { user, favoriteGarment } = this.props;
+
+    favoriteGarment(id, user);
+  };
 
   render() {
     const initialLayout = {
@@ -197,19 +210,25 @@ class MyProfile extends Component {
       myFits,
       loading,
       page,
-      refreshing
+      refreshing,
+      editingCloset
     } = this.state;
+
+    _renderIcon = ({ route, color }) => (
+      <MaterialCommunityIcons name={route.icon} size={24} color={color} />
+    );
 
     switch (route.key) {
       case 'garments':
         return (
-          <View style={{ flex: 1 }}>
+          <ScrollView style={{ flex: 1 }}>
             <View style={styles.closet}>
               <Text>Closet</Text>
               <Button
-                title="Edit"
+                title={editingCloset ? 'Close' : 'Edit'}
                 buttonStyle={styles.editButtonStyle}
                 titleStyle={styles.editButtonTitleStyle}
+                onPress={this.editCloset}
               />
             </View>
 
@@ -221,8 +240,10 @@ class MyProfile extends Component {
               onRefresh={this.handleGarmentRefresh}
               refreshing={refreshing}
               loading={loading}
+              editingCloset={editingCloset}
+              unfavoriteGarment={this.unfavoriteGarment}
             />
-          </View>
+          </ScrollView>
         );
       case 'fits':
         return (
@@ -253,51 +274,6 @@ class MyProfile extends Component {
   };
 }
 
-const styles = {
-  container: {
-    flex: 1,
-    paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3'
-  },
-  tabContainer: {
-    flex: 1
-  },
-
-  tabBarStyle: {
-    // backgroundColor: '#4a4a4a'
-  },
-  tabStyle: {
-    backgroundColor: '#4a4a4a',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 80
-  },
-  indicatorStyle: {
-    backgroundColor: '#4a4a4a'
-  },
-  labelStyle: {
-    textAlign: 'center'
-  },
-
-  closet: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 20
-  },
-  editButtonStyle: {
-    marginLeft: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 6,
-    borderRadius: 10,
-    backgroundColor: '#737373'
-  },
-  editButtonTitleStyle: {
-    color: '#fff',
-    fontSize: 12,
-    textTransform: 'uppercase'
-  }
-};
-
 const mapStateToProps = state => {
   return {
     favoriteGarments: state.user.favoriteGarments,
@@ -306,4 +282,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(withNavigationFocus(MyProfile));
+export default connect(
+  mapStateToProps,
+  { favoriteGarment }
+)(withNavigationFocus(MyProfile));

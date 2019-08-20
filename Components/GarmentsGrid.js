@@ -8,14 +8,15 @@ import {
   FlatList,
   ActivityIndicator
 } from 'react-native';
-import { Metrics } from '../Themes';
+import { Badge } from 'react-native-elements';
+import { Metrics, Dimensions } from '../Themes';
 
 import { profiles } from '../data.json';
 
 class GarmentsGrid extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
-    const { numCol, grid } = this.props;
+    const { numCol, grid, editingCloset, unfavoriteGarment } = this.props;
     const { id, color, model, sku, brand, photo } = item;
 
     let formattedModel = model
@@ -39,6 +40,14 @@ class GarmentsGrid extends Component {
       >
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: photoUrl }} />
+          {editingCloset && (
+            <Badge
+              value="X"
+              status="error"
+              containerStyle={{ top: 0, right: 0, position: 'absolute' }}
+              onPress={() => this.props.unfavoriteGarment(id)}
+            />
+          )}
         </View>
         <Text style={styles.text}>{formattedModel}</Text>
       </TouchableOpacity>
@@ -108,7 +117,8 @@ const styles = {
   imageContainer: {
     flex: 1,
     width: Metrics.screenWidth / 2,
-    height: 200
+    height: 200,
+    position: 'relative'
   },
   image: {
     width: undefined,
