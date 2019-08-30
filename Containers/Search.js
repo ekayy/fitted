@@ -4,6 +4,7 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Colors } from '../Themes';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
+import { login } from '../Redux/UserRedux';
 
 import SearchFilter from '../Components/SearchFilter';
 import GarmentsGrid from '../Components/GarmentsGrid';
@@ -31,6 +32,9 @@ class Search extends Component {
   }
 
   componentDidMount() {
+    if (!this.props.isLoggedIn) {
+      this.props.navigation.navigate('Landing');
+    }
     const { garments } = this.props;
 
     this.setState({ refreshing: true, results: [] }, async () => {
@@ -307,11 +311,12 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-    garments: state.garments.items
+    garments: state.garments.items,
+    isLoggedIn: state.user.isLoggedIn
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchGarments }
+  { login, fetchGarments }
 )(Search);

@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
-  AsyncStorage,
   View,
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
-  Image,
-  Keyboard,
-  LayoutAnimation,
-  Button
+  TouchableOpacity
 } from 'react-native';
-import { Metrics } from '../Themes';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { baseURL } from '../Config';
 import Reactotron from 'reactotron-react-native';
+import { login, fetchProfile } from '../Redux/UserRedux';
 
 import styles from './Styles/LoginStyles';
 
@@ -27,7 +22,7 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      firstName: '',
       email: '',
       username: '',
       password: '',
@@ -37,29 +32,37 @@ class Register extends Component {
   }
 
   signInAsync = async () => {
-    // const { username, password } = this.state;
-    //
-    // try {
-    //   const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
-    //     username,
-    //     password
-    //   });
-    //
-    //   await AsyncStorage.setItem('userToken', response.data.token);
-    //   this.props.navigation.navigate('App');
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    this.props.navigation.navigate('RegisterMeasurements');
+    const { firstName, email, username, password } = this.state;
+    // Package together profile object to have ready for POST request
+    const postPayload = {
+      user: {
+        username: username,
+        password: password,
+        first_name: firstName,
+        email: email
+      }
+    };
+    try {
+      // POST for new user
+      const newUser = await axios.post(`${baseURL}/profiles/`, postPayload);
+      // Login with new user once new user is created
+      await this.props.login(username, password);
+      // Fetch profile of new user once new user is created
+      await this.props.fetchProfile(this.props.profileId);
+      // Move on to next step (RegisterMeasurements) if everything is good
+      await this.props.navigation.navigate('RegisterMeasurements');
+    } catch (error) {
+      console.log('fudge', error);
+    }
   };
 
   render() {
-    const { name, email, username, password, loading } = this.state;
+    const { firstName, email, username, password, loading } = this.state;
     const editable = !loading;
     const textInputStyle = editable
       ? styles.textInput
       : styles.textInputReadonly;
-    const { navigate, goBack } = this.props.navigation;
+    const { navigate } = this.props.navigation;
 
     return (
       <ScrollView
@@ -70,18 +73,18 @@ class Register extends Component {
         <View style={styles.form}>
           <View style={styles.formRow}>
             <TextInput
-              ref="name"
+              ref="firstName"
               style={textInputStyle}
-              value={name}
+              value={firstName}
               editable={editable}
               keyboardType="default"
               returnKeyType="next"
               autoCapitalize="none"
               autoCorrect={false}
-              onChangeText={name => this.setState({ name })}
+              onChangeText={firstName => this.setState({ firstName })}
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.refs.password.focus()}
-              placeholder="Name*"
+              placeholder="First Name*"
             />
           </View>
           <View style={styles.formRow}>
@@ -163,4 +166,15 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = state => {
+  return {
+    error: state.user.error,
+    loading: state.user.loading,
+    profileId: state.user.profileId
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { login, fetchProfile }
+)(Register);
