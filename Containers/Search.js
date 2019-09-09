@@ -47,17 +47,15 @@ class Search extends Component {
     }
     const { garments } = this.props;
 
-    this.setState({ refreshing: true, results: [] }, async () => {
-      // Get garments from redux store
-      await this.props.fetchGarments();
+    this.setState({ refreshing: true, results: [] });
+    // Get garments from redux store
+    this.props.fetchGarments().then(data => {
+      let garments = data.payload.garments;
       this.setState({
-        garments
-      });
-
-      this.setState({
-        refreshing: false,
-        results: [...this.state.garments.slice(0, 10)],
-        remainingResults: [...this.state.garments.slice(10)]
+        garments: garments,
+        results: garments.slice(0, 10),
+        remainingResults: garments.slice(10),
+        refreshing: false
       });
     });
   }
