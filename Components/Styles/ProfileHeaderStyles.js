@@ -17,7 +17,7 @@ export default StyleSheet.create({
   backgroundImage: {
     flex: 1,
     paddingTop: 20,
-    maxHeight: 200
+    maxHeight: 150
   },
   settingsIcon: {
     position: 'absolute',

@@ -11,17 +11,23 @@ import {
   FlatList,
   ActivityIndicator
 } from 'react-native';
-
-import { profiles } from '../data.json';
+import { Metrics } from '../Themes';
 
 class FitsGrid extends Component {
   renderFit(item) {
     const { navigate } = this.props.navigation;
     const { profile, description, style, photo, likes, garments } = item;
+    const { numCol } = this.props;
 
-    return (
+    return numCol == 2 ? (
       <TouchableOpacity onPress={() => navigate('FitDetail', item)}>
-        <View style={styles.gridItem}>
+        <View style={[styles.gridItem, { width: Metrics.screenWidth / 2 }]}>
+          <Image style={styles.image} source={{ uri: photo }} />
+        </View>
+      </TouchableOpacity>
+    ) : (
+      <TouchableOpacity onPress={() => navigate('FitDetail', item)}>
+        <View style={[styles.gridItem, { width: Metrics.screenWidth / 3 }]}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
       </TouchableOpacity>
@@ -44,13 +50,7 @@ class FitsGrid extends Component {
   };
 
   render() {
-    const {
-      style,
-      data,
-      numColumns,
-      ListFooterComponent,
-      refreshing
-    } = this.props;
+    const { style, data, numCol, refreshing } = this.props;
 
     return (
       <FlatList
@@ -78,7 +78,7 @@ const styles = {
   },
   gridItem: {
     flex: 1,
-    width: Dimensions.get('window').width / 3,
+    // width: Dimensions.get('window').width / 2,
     height: 200,
     backgroundColor: '#333'
   },
