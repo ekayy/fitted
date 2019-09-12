@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -8,25 +8,24 @@ import {
   ScrollView,
   FlatList,
   Button
-} from "react-native";
-import { SearchBar, ListItem } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
-import { Metrics } from "../Themes";
-import axios from "axios";
-import { connect } from "react-redux";
-import { fetchGarments } from "../Redux/GarmentsRedux";
+} from 'react-native';
+import { SearchBar, ListItem } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { fetchGarments } from '../Redux/GarmentsRedux';
+import { tagGarmentToFit, removeGarmentFromFit } from '../Redux/FitsRedux';
+import { AppStyles } from '../Themes';
+import styles from './Styles/TagGarmentsStyles';
 
-import { brands } from "../data.json";
-
-import { baseURL } from "../Config";
+import { brands } from '../data.json';
 
 class SearchGarments extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Searching Database",
+      title: 'Searching Database',
       headerRight: (
         <TouchableOpacity
-          onPress={navigation.getParam("CreatePiece")}
+          onPress={navigation.getParam('addCustomGarment')}
           style={{
             marginRight: 20
           }}
@@ -41,7 +40,7 @@ class SearchGarments extends Component {
     super(props);
 
     this.state = {
-      searchTerm: "",
+      searchTerm: '',
       garments: [],
       results: [],
       remainingResults: [],
@@ -61,7 +60,9 @@ class SearchGarments extends Component {
   componentDidMount() {
     const { garments } = this.props;
 
-    this.props.navigation.setParams({ createPiece: this._createPiece });
+    this.props.navigation.setParams({
+      addCustomGarment: this._addCustomGarment
+    });
 
     this.setState(
       {
@@ -82,8 +83,8 @@ class SearchGarments extends Component {
     );
   }
 
-  _createPiece = () => {
-    this.props.navigation.navigate("CreatePiece");
+  _addCustomGarment = () => {
+    this.props.navigation.navigate('AddCustomGarment');
   };
 
   handleChange = searchTerm => {
@@ -128,11 +129,26 @@ class SearchGarments extends Component {
     });
   };
 
+  tagToFit = item => {
+    const { goBack } = this.props.navigation;
+    const { id, photo } = item;
+    const { taggedGarments } = this.props.fits;
+
+    // check if garment id already tagged to a fit
+    if (!taggedGarments.filter(garment => garment.id === id).length) {
+      this.props.tagGarmentToFit(item);
+      this.props.navigation.navigate('TagGarments');
+    } else {
+      // display an error message to user
+      goBack();
+    }
+  };
+
   render() {
     const { searchTerm, results, loading, refreshing } = this.state;
 
     return (
-      <View style={styles.container}>
+      <View style={AppStyles.container}>
         <SearchBar
           round="round"
           lightTheme="lightTheme"
@@ -165,59 +181,46 @@ class SearchGarments extends Component {
     const brandName = brands[brand].name;
 
     return (
-      <View>
-        <TouchableOpacity
-          onPress={() => navigate("SelectSizing", item)}
-          style={styles.listItem}
-        >
-          <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: photo }} />
+      <View style={styles.section}>
+        <View style={styles.formRow}>
+          <View style={styles.product}>
+            <View style={styles.productImage}>
+              <Image
+                source={{ uri: photo }}
+                style={{ width: 80, height: 80 }}
+              />
+            </View>
+            <View style={styles.productAttributes}>
+              <Text>
+                {brandName}
+                {'\n'}
+                {model}
+              </Text>
+            </View>
           </View>
-          <View style={styles.description}>
-            <Text>{brandName}</Text>
-            <Text>{model}</Text>
-          </View>
-        </TouchableOpacity>
+
+          <TouchableOpacity
+            style={AppStyles.sectionSubtitle}
+            onPress={() => this.tagToFit(item)}
+          >
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>Tag to fit</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
 }
 
-const styles = {
-  container: {
-    flex: 1,
-    paddingHorizontal: 5,
-    backgroundColor: "#f3f3f3"
-  },
-  listItem: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flexDirection: "row"
-  },
-  imageContainer: {
-    flex: 1,
-    width: 160,
-    height: 150
-  },
-  image: {
-    width: "100%",
-    height: 150,
-    marginHorizontal: 20
-  },
-  description: {
-    flex: 1,
-    alignItems: "center"
-  }
-};
-
 const mapStateToProps = state => {
   return {
-    garments: state.garments.items
+    garments: state.garments.items,
+    fits: state.fits
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchGarments }
+  { fetchGarments, tagGarmentToFit, removeGarmentFromFit }
 )(SearchGarments);

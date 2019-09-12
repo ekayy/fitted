@@ -1,23 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  FlatList
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
-import { Metrics, Colors } from '../Themes';
-import axios from 'axios';
+import { Colors } from '../Themes';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { login } from '../Redux/UserRedux';
 
 import SearchFilter from '../Components/SearchFilter';
 import GarmentsGrid from '../Components/GarmentsGrid';
-import { baseURL } from '../Config';
 
 class Search extends Component {
   static navigationOptions = {
@@ -58,6 +48,18 @@ class Search extends Component {
         refreshing: false
       });
     });
+
+    // this.setState({ refreshing: true, results: [] });
+    // // Get garments from redux store
+    // this.props.fetchGarments().then(data => {
+    //   let garments = data.payload.garments;
+    //   this.setState({
+    //     garments: garments,
+    //     results: garments.slice(0, 10),
+    //     remainingResults: garments.slice(10),
+    //     refreshing: false
+    //   });
+    // });
   }
 
   // fetchGarments = async limit => {
@@ -252,7 +254,7 @@ class Search extends Component {
 
   renderItem = ({ item }) => {
     const { brand, model, color, sku, photo } = item;
-    const { state, navigate } = this.props.navigation;
+    const { navigate } = this.props.navigation;
 
     return (
       <ListItem

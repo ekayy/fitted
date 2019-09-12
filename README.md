@@ -10,7 +10,7 @@ https://github.com/infinitered/reactotron/blob/master/docs/installing.md
 ## Running Project
 clone repo
 
-yarn install or npm install
+npm install
 
 expo start
 expo ios

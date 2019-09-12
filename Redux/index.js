@@ -1,22 +1,15 @@
-import createSecureStore from 'redux-persist-expo-securestore';
-// import storage from 'redux-persist/lib/storage';
-import {
-  createStore,
-  applyMiddleware,
-  compose
-} from 'redux';
-import {
-  combineReducers
-} from 'redux';
+// import createSecureStore from 'redux-persist-expo-securestore';
+import storage from 'redux-persist/lib/storage';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { combineReducers } from 'redux';
 import configureStore from './CreateStore';
-import {
-  persistReducer
-} from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 
 import user from './UserRedux';
 import garments from './GarmentsRedux';
+import fits from './FitsRedux';
 
-const storage = createSecureStore();
+// const storage = createSecureStore();
 const persistConfig = {
   key: 'root',
   storage
@@ -25,7 +18,8 @@ const persistConfig = {
 /* ------------- Assemble The Reducers ------------- */
 const rootReducer = combineReducers({
   user,
-  garments
+  garments,
+  fits
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

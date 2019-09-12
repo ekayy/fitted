@@ -78,6 +78,43 @@ const AppStyles = {
     display: 'flex',
     width: '100%',
     paddingVertical: Metrics.doubleBaseMargin
+  },
+
+  form: {
+    margin: Metrics.baseMargin,
+    borderRadius: 5,
+    width: 315
+  },
+  loginRow: {
+    paddingVertical: Metrics.doubleBaseMargin,
+    paddingHorizontal: Metrics.doubleBaseMargin
+  },
+  formRow: {
+    backgroundColor: Colors.snow,
+    paddingVertical: Metrics.doubleBaseMargin,
+    paddingHorizontal: Metrics.doubleBaseMargin,
+    borderWidth: 0.5,
+    borderColor: 'rgb(236,236,237)',
+    height: 50.5,
+    paddingVertical: 5
+  },
+  rowLabel: {
+    color: Colors.charcoal
+  },
+  textInput: {
+    height: 40,
+    color: Colors.coal,
+    fontSize: 17
+  },
+  textInputReadonly: {
+    height: 40,
+    color: Colors.steel
+  },
+
+  error: {
+    color: 'red',
+    flex: 1,
+    textAlign: 'center'
   }
 };
 
