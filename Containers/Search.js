@@ -48,18 +48,6 @@ class Search extends Component {
         refreshing: false
       });
     });
-
-    // this.setState({ refreshing: true, results: [] });
-    // // Get garments from redux store
-    // this.props.fetchGarments().then(data => {
-    //   let garments = data.payload.garments;
-    //   this.setState({
-    //     garments: garments,
-    //     results: garments.slice(0, 10),
-    //     remainingResults: garments.slice(10),
-    //     refreshing: false
-    //   });
-    // });
   }
 
   // fetchGarments = async limit => {
@@ -199,7 +187,8 @@ class Search extends Component {
       loading,
       refreshing,
       showFilters,
-      brand
+      brand,
+      garments
     } = this.state;
 
     return (
@@ -207,14 +196,16 @@ class Search extends Component {
         <SearchBar
           round
           lightTheme
-          placeholder="Search"
           onChangeText={this.handleChange}
           autoCapitalize="none"
           platform="ios"
           value={searchTerm}
+          containerStyle={{backgroundColor:'rgb(0,0,0)'}}
+          inputStyle={{backgroundColor:'rgb(255,255,255)'}}
+          inputContainerStyle={{backgroundColor:'rgb(255,255,255)'}}
         />
 
-        <View style={styles.filterWrapper}>
+        {/*<View style={styles.filterWrapper}>
           <View style={styles.filterContainer}>
             <TouchableOpacity
               style={styles.filter}
@@ -227,9 +218,9 @@ class Search extends Component {
 
             {this.renderActiveFilter()}
           </View>
-        </View>
+        </View>*/}
 
-        <SearchFilter
+        {/*<SearchFilter
           navigation={this.props.navigation}
           showFilters={showFilters}
           onClose={this.toggleFilters}
@@ -237,10 +228,10 @@ class Search extends Component {
           ref={instance => {
             this.child = instance;
           }}
-        />
+        />*/}
 
         <GarmentsGrid
-          data={results}
+          data={garments}
           navigation={this.props.navigation}
           numCol={2}
           handleLoadMore={this.handleLoadMore}
@@ -271,9 +262,7 @@ class Search extends Component {
 const styles = {
   container: {
     flex: 1,
-    paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3',
-    marginTop: 30
+    backgroundColor: '#f3f3f3'
   },
 
   filterWrapper: {

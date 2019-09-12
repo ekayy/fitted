@@ -55,8 +55,12 @@ const AppNav = createBottomTabNavigator(
     initialRouteName: "Search",
     tabBarOptions: {
       activeTintColor: "#e91e63",
+      inactiveTintColor: 'rgb(255,255,255)',
       showLabel: false,
-      showIcon: true
+      showIcon: true,
+      style: {
+        backgroundColor: 'rgb(0,0,0)'
+      }
     }
   }
 );
