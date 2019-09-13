@@ -112,17 +112,18 @@ class GarmentsGrid extends Component {
 const styles = {
   gridItem: {
     alignItems: 'center',
-    marginBottom: 40
+    marginBottom: 40,
+    marginHorizontal: 20
   },
   imageContainer: {
     flex: 1,
-    width: Metrics.screenWidth / 2,
-    height: 200,
+    width: 136,
+    height: 136,
     position: 'relative'
   },
   image: {
     width: undefined,
-    height: 200
+    height: 136
   },
   text: {
     maxWidth: '80%',
