@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -8,15 +8,15 @@ import {
   ScrollView,
   FlatList,
   AsyncStorage
-} from "react-native";
-import { Avatar } from "react-native-elements";
-import { connect } from "react-redux";
-import { Metrics } from "../Themes";
-import GarmentsList from "../Components/GarmentsList";
-import FavoriteButton from "../Components/FavoriteButton";
-import axios from "axios";
-import { baseURL } from "../Config";
-import { favoriteFit } from "../Redux/UserRedux";
+} from 'react-native';
+import { Avatar } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { Metrics } from '../Themes';
+import GarmentsList from '../Components/GarmentsList';
+import FavoriteButton from '../Components/FavoriteButton';
+import axios from 'axios';
+import { baseURL } from '../Config';
+import { favoriteFit } from '../Redux/UserRedux';
 
 class FitDetail extends Component {
   state = {
@@ -24,8 +24,8 @@ class FitDetail extends Component {
     loading: true,
     garments: [],
     toggled: false,
-    profile: "",
-    username: ""
+    profile: '',
+    username: ''
   };
 
   componentDidMount() {
@@ -57,9 +57,9 @@ class FitDetail extends Component {
   };
 
   fetchProfile = async () => {
-    const { profile } = this.props.navigation.state.params;
+    const { profileId } = this.props.user;
 
-    const response = await axios.get(`${baseURL}/profiles/${profile}`);
+    const response = await axios.get(`${baseURL}/profiles/${profileId}`);
 
     try {
       this.setState({
@@ -97,7 +97,7 @@ class FitDetail extends Component {
     const { navigate } = this.props.navigation;
     const { profile } = this.state;
 
-    navigate("Profile", profile);
+    navigate('Profile', profile);
   };
 
   render() {
@@ -125,7 +125,7 @@ class FitDetail extends Component {
               rounded
               source={{
                 uri:
-                  "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+                  'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
               }}
               activeOpacity={0.7}
               style={styles.profileImage}
@@ -146,7 +146,7 @@ class FitDetail extends Component {
 const styles = {
   container: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 5
   },
   image: {
@@ -154,7 +154,7 @@ const styles = {
     minHeight: 400
   },
   favorite: {
-    position: "absolute",
+    position: 'absolute',
     bottom: Metrics.doubleBaseMargin,
     right: Metrics.doubleBaseMargin
   },
@@ -162,7 +162,7 @@ const styles = {
     flex: 1,
     width: Metrics.screenWidth / 3,
     height: 200,
-    backgroundColor: "#333"
+    backgroundColor: '#333'
   },
   image2: {
     width: undefined,
@@ -170,8 +170,8 @@ const styles = {
   },
 
   profile: {
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
     marginVertical: 30
   },
   profileImage: {

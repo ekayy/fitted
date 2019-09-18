@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -8,21 +8,22 @@ import {
   ScrollView,
   FlatList,
   AsyncStorage
-} from "react-native";
-import { connect } from "react-redux";
-import * as WebBrowser from "expo-web-browser";
-import { Button, Avatar } from "react-native-elements";
-import { AppStyles, Metrics } from "../Themes";
-import styles from "./Styles/GarmentDetailStyles";
+} from 'react-native';
+import { connect } from 'react-redux';
+import * as WebBrowser from 'expo-web-browser';
+import { Button, Avatar } from 'react-native-elements';
+import Carousel from 'react-native-snap-carousel';
+import { AppStyles, Metrics } from '../Themes';
+import styles from './Styles/GarmentDetailStyles';
 
-import FavoriteButton from "../Components/FavoriteButton";
-import FitsGrid from "../Components/FitsGrid";
-import Comments from "../Components/Comment/List";
-import { favoriteGarment } from "../Redux/UserRedux";
-import { Ionicons } from "@expo/vector-icons";
+import FavoriteButton from '../Components/FavoriteButton';
+import FitsGrid from '../Components/FitsGrid';
+import Comments from '../Components/Comment/List';
+import { favoriteGarment } from '../Redux/UserRedux';
+import { Ionicons } from '@expo/vector-icons';
 
-import axios from "axios";
-import { baseURL } from "../Config";
+import axios from 'axios';
+import { baseURL } from '../Config';
 
 class GarmentDetail extends Component {
   state = {
@@ -41,7 +42,7 @@ class GarmentDetail extends Component {
   fetchFits = async () => {
     const { id } = this.props.navigation.state.params;
 
-    const response = await axios.get(`${baseURL}/fits/?garment=${id}`);
+    const response = await axios.get(`${baseURL}/fits/?garment=${id}&limit=10`);
 
     try {
       this.setState({
@@ -80,15 +81,24 @@ class GarmentDetail extends Component {
     WebBrowser.openBrowserAsync(purchase_page);
   };
 
-  handleLoadMore = () => {
-    // this.setState(
-    //   {
-    //     page: this.state.page + 1
-    //   },
-    //   () => {
-    //     this.fetchGarments(this.state.page);
-    //   }
-    // );
+  _renderItem = ({ item }) => {
+    const { photo } = item;
+    const { navigate } = this.props.navigation;
+
+    return (
+      <TouchableOpacity
+        style={{
+          height: 150,
+          backgroundColor: '#333'
+        }}
+        onPress={() => navigate('FitDetail', item)}
+      >
+        <Image
+          style={{ width: undefined, height: 150 }}
+          source={{ uri: photo }}
+        />
+      </TouchableOpacity>
+    );
   };
 
   render() {
@@ -153,7 +163,7 @@ class GarmentDetail extends Component {
               AppStyles.buttonAltStyle,
               { width: Metrics.screenWidth / 2 - 20 }
             ]}
-            titleStyle={{ color: "#000", fontSize: 13 }}
+            titleStyle={{ color: '#000', fontSize: 13 }}
           />
           <Button
             title="View website"
@@ -175,16 +185,22 @@ class GarmentDetail extends Component {
             <Ionicons
               name="ios-camera"
               size={25}
-              style={{ marginRight: 10, color: "#aaa" }}
+              style={{ marginRight: 10, color: '#aaa' }}
             />
             <Text>Add a photo</Text>
           </TouchableOpacity>
 
-          <FitsGrid
+          <Carousel
+            activeSlideAlignment="start"
+            ref={c => {
+              this._carousel = c;
+            }}
             data={this.state.fits}
-            navigation={this.props.navigation}
-            handleLoadMore={this.handleLoadMore}
-            refreshing={refreshing}
+            renderItem={this._renderItem}
+            sliderWidth={Metrics.screenWidth - 20}
+            itemWidth={(Metrics.screenWidth - 20) / 3}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={1}
           />
 
           <View style={AppStyles.button}>
@@ -205,7 +221,7 @@ class GarmentDetail extends Component {
             <Ionicons
               name="ios-brush"
               size={25}
-              style={{ marginRight: 10, color: "#aaa" }}
+              style={{ marginRight: 10, color: '#aaa' }}
             />
             <Text>Write a review</Text>
           </TouchableOpacity>
