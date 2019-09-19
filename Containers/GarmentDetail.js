@@ -35,7 +35,9 @@ class GarmentDetail extends Component {
   fetchFits = async () => {
     const { id } = this.props.navigation.state.params;
 
-    const response = await axios.get(`${baseURL}/fits/?garment=${id}&limit=10`);
+    const response = await axios.get(
+      `${baseURL}/fits/?garment=${id}&limit=100`
+    );
 
     try {
       this.setState({
@@ -108,6 +110,13 @@ class GarmentDetail extends Component {
     await clearCreatedFit();
     await tagGarmentToFit(this.props.navigation.state.params);
     navigate('Camera');
+  };
+
+  viewFitPhotos = () => {
+    const { navigate } = this.props.navigation;
+    const { fits } = this.state;
+
+    navigate('Fits', { fits });
   };
 
   render() {
@@ -207,7 +216,7 @@ class GarmentDetail extends Component {
             ref={c => {
               this._carousel = c;
             }}
-            data={this.state.fits}
+            data={this.state.fits.slice(0, 10)}
             renderItem={this._renderCarouselItem}
             sliderWidth={Metrics.screenWidth - 20}
             itemWidth={(Metrics.screenWidth - 20) / 3}
@@ -220,6 +229,7 @@ class GarmentDetail extends Component {
               title={`See all ${count} photos`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
+              onPress={this.viewFitPhotos}
             />
           </View>
         </View>
