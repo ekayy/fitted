@@ -112,13 +112,6 @@ class GarmentDetail extends Component {
     navigate('Camera');
   };
 
-  viewFitPhotos = () => {
-    const { navigate } = this.props.navigation;
-    const { fits } = this.state;
-
-    navigate('Fits', { fits });
-  };
-
   render() {
     const {
       id,
@@ -128,8 +121,10 @@ class GarmentDetail extends Component {
       model,
       photo
     } = this.props.navigation.state.params;
+    const currentGarment = this.props.navigation.state.params;
+    const { navigate } = this.props.navigation;
 
-    const { refreshing, count } = this.state;
+    const { refreshing, count, fits } = this.state;
 
     return (
       <ScrollView style={styles.container}>
@@ -229,7 +224,7 @@ class GarmentDetail extends Component {
               title={`See all ${count} photos`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={this.viewFitPhotos}
+              onPress={() => navigate('Fits', { fits, currentGarment })}
             />
           </View>
         </View>
@@ -289,6 +284,7 @@ class GarmentDetail extends Component {
               title="See all 2,900 comments"
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
+              onPress={() => navigate('Comments')}
             />
           </View>
         </View>
