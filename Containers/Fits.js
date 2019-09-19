@@ -1,51 +1,58 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Metrics } from '../Themes';
-
-// import { fits } from '../data.json';
+import FitsGrid from '../Components/FitsGrid';
+import { Ionicons } from '@expo/vector-icons';
 
 class Fits extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  _renderItem() {
-    const { fitIds } = this.props.navigation.state.params;
-    const filteredFits = fitIds.map(id => fits[id]);
-    return filteredFits.map(fit => {
-      const {
-        id,
-        username,
-        model,
-        size,
-        color,
-        height,
-        weight,
-        image,
-        garmentIds
-      } = fit;
-
-      return (
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Searching Database',
+      headerRight: (
         <TouchableOpacity
-          style={styles.imageContainer}
-          onPress={() => {}}
-          key={id}
+          onPress={navigation.getParam('navigateCamera')}
+          style={{
+            marginRight: 20
+          }}
         >
-          <Image style={styles.image} source={{ uri: image }} />
-          <Text style={styles.text}>{username}</Text>
+          <Ionicons name="ios-camera" size={40} color="#000" />
         </TouchableOpacity>
-      );
+      )
+    };
+  };
+
+  state = {
+    fits: [],
+    refreshing: false,
+    loading: false
+  };
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      navigateCamera: this._navigateCamera
     });
   }
 
+  _navigateCamera = () => {
+    this.setState({ error: null });
+    this.props.navigation.navigate('Camera');
+  };
+
   render() {
-    const { image } = this.props.navigation.state.params;
+    const { refreshing, loading } = this.state;
+    const { fits } = this.props.navigation.state.params;
+
     return (
-      <ScrollView>
-        <Image style={styles.mainImage} source={{ uri: image }} />
-        <View style={styles.container}>{this._renderItem()}</View>
+      <ScrollView style={styles.container}>
+        <FitsGrid
+          data={fits}
+          navigation={this.props.navigation}
+          handleLoadMore={() => {}}
+          onRefresh={() => {}}
+          refreshing={refreshing}
+          loading={loading}
+          numCol={2}
+        />
       </ScrollView>
     );
   }
@@ -53,23 +60,7 @@ class Fits extends Component {
 
 const styles = {
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 5
-  },
-  mainImage: {
-    width: Metrics.screenWidth,
-    minHeight: 500
-  },
-  imageContainer: {
-    flex: 0.5,
-    alignItems: 'center',
-    width: Metrics.screenWidth / 2 - 20
-  },
-  image: {
-    height: 200,
-    marginVertical: 10,
-    width: Metrics.screenWidth / 2 - 20
+    flex: 1
   }
 };
 

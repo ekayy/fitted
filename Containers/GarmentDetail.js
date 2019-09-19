@@ -1,28 +1,21 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  AsyncStorage
-} from "react-native";
-import { connect } from "react-redux";
-import * as WebBrowser from "expo-web-browser";
-import { Button, Avatar } from "react-native-elements";
-import { AppStyles, Metrics } from "../Themes";
-import styles from "./Styles/GarmentDetailStyles";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import * as WebBrowser from 'expo-web-browser';
+import { Button, Avatar } from 'react-native-elements';
+import Carousel from 'react-native-snap-carousel';
+import { AppStyles, Metrics } from '../Themes';
+import styles from './Styles/GarmentDetailStyles';
 
-import FavoriteButton from "../Components/FavoriteButton";
-import FitsGrid from "../Components/FitsGrid";
-import Comments from "../Components/Comment/List";
-import { favoriteGarment } from "../Redux/UserRedux";
-import { Ionicons } from "@expo/vector-icons";
+import FavoriteButton from '../Components/FavoriteButton';
+import Comments from '../Components/Comment/List';
+import { favoriteGarment } from '../Redux/UserRedux';
+import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
+import { Ionicons } from '@expo/vector-icons';
 
-import axios from "axios";
-import { baseURL } from "../Config";
+import axios from 'axios';
+import { baseURL } from '../Config';
 
 class GarmentDetail extends Component {
   state = {
@@ -30,7 +23,8 @@ class GarmentDetail extends Component {
     loading: true,
     fits: [],
     toggled: false,
-    refreshing: false
+    refreshing: false,
+    count: null
   };
 
   componentDidMount() {
@@ -41,13 +35,16 @@ class GarmentDetail extends Component {
   fetchFits = async () => {
     const { id } = this.props.navigation.state.params;
 
-    const response = await axios.get(`${baseURL}/fits/?garment=${id}`);
+    const response = await axios.get(
+      `${baseURL}/fits/?garment=${id}&limit=100`
+    );
 
     try {
       this.setState({
         fits: response.data.results,
         error: null,
-        loading: false
+        loading: false,
+        count: response.data.count
       });
     } catch (error) {
       console.log(error);
@@ -68,8 +65,9 @@ class GarmentDetail extends Component {
   favoriteGarment = async () => {
     // garmentId
     const { id } = this.props.navigation.state.params;
+    const { favoriteGarment, user } = this.props;
 
-    await this.props.favoriteGarment(id, this.props.user);
+    await favoriteGarment(id, user);
 
     this.getFavoriteState();
   };
@@ -80,15 +78,45 @@ class GarmentDetail extends Component {
     WebBrowser.openBrowserAsync(purchase_page);
   };
 
-  handleLoadMore = () => {
-    // this.setState(
-    //   {
-    //     page: this.state.page + 1
-    //   },
-    //   () => {
-    //     this.fetchGarments(this.state.page);
-    //   }
-    // );
+  _renderCarouselItem = ({ item }) => {
+    const { photo } = item;
+    const { navigate } = this.props.navigation;
+    const styles = {
+      gridItem: {
+        height: 150,
+        backgroundColor: '#333'
+      },
+      image: {
+        width: undefined,
+        height: 150
+      }
+    };
+
+    return (
+      <TouchableOpacity
+        style={styles.gridItem}
+        onPress={() => navigate('FitDetail', item)}
+      >
+        <Image style={styles.item} source={{ uri: photo }} />
+      </TouchableOpacity>
+    );
+  };
+
+  // photo taken will be associated with the current garment
+  addPhotoToFit = async () => {
+    const { navigate } = this.props.navigation;
+    const { clearCreatedFit, tagGarmentToFit } = this.props;
+
+    await clearCreatedFit();
+    await tagGarmentToFit(this.props.navigation.state.params);
+    navigate('Camera');
+  };
+
+  viewFitPhotos = () => {
+    const { navigate } = this.props.navigation;
+    const { fits } = this.state;
+
+    navigate('Fits', { fits });
   };
 
   render() {
@@ -101,7 +129,7 @@ class GarmentDetail extends Component {
       photo
     } = this.props.navigation.state.params;
 
-    const { refreshing } = this.state;
+    const { refreshing, count } = this.state;
 
     return (
       <ScrollView style={styles.container}>
@@ -153,7 +181,7 @@ class GarmentDetail extends Component {
               AppStyles.buttonAltStyle,
               { width: Metrics.screenWidth / 2 - 20 }
             ]}
-            titleStyle={{ color: "#000", fontSize: 13 }}
+            titleStyle={{ color: '#000', fontSize: 13 }}
           />
           <Button
             title="View website"
@@ -171,27 +199,37 @@ class GarmentDetail extends Component {
             <Text style={AppStyles.sectionTitleText}>Photos</Text>
           </View>
 
-          <TouchableOpacity style={AppStyles.sectionSubtitle}>
+          <TouchableOpacity
+            style={AppStyles.sectionSubtitle}
+            onPress={this.addPhotoToFit}
+          >
             <Ionicons
               name="ios-camera"
               size={25}
-              style={{ marginRight: 10, color: "#aaa" }}
+              style={{ marginRight: 10, color: '#aaa' }}
             />
             <Text>Add a photo</Text>
           </TouchableOpacity>
 
-          <FitsGrid
-            data={this.state.fits}
-            navigation={this.props.navigation}
-            handleLoadMore={this.handleLoadMore}
-            refreshing={refreshing}
+          <Carousel
+            activeSlideAlignment="start"
+            ref={c => {
+              this._carousel = c;
+            }}
+            data={this.state.fits.slice(0, 10)}
+            renderItem={this._renderCarouselItem}
+            sliderWidth={Metrics.screenWidth - 20}
+            itemWidth={(Metrics.screenWidth - 20) / 3}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={1}
           />
 
           <View style={AppStyles.button}>
             <Button
-              title="See all 130 photos"
+              title={`See all ${count} photos`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
+              onPress={this.viewFitPhotos}
             />
           </View>
         </View>
@@ -205,7 +243,7 @@ class GarmentDetail extends Component {
             <Ionicons
               name="ios-brush"
               size={25}
-              style={{ marginRight: 10, color: "#aaa" }}
+              style={{ marginRight: 10, color: '#aaa' }}
             />
             <Text>Write a review</Text>
           </TouchableOpacity>
@@ -265,5 +303,5 @@ const mapStateToProps = ({ user }) => {
 
 export default connect(
   mapStateToProps,
-  { favoriteGarment }
+  { favoriteGarment, tagGarmentToFit, clearCreatedFit }
 )(GarmentDetail);

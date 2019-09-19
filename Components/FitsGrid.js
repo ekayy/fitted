@@ -23,6 +23,11 @@ class FitsGrid extends Component {
       <TouchableOpacity onPress={() => navigate('FitDetail', item)}>
         <View style={[styles.gridItem, { width: Metrics.screenWidth / 2 }]}>
           <Image style={styles.image} source={{ uri: photo }} />
+          <View style={styles.label}>
+            <Text style={styles.labelText}>
+              H: 5'10" &#11825; W: 150 lbs &#11825; Size M
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     ) : (
@@ -78,13 +83,27 @@ const styles = {
   },
   gridItem: {
     flex: 1,
-    // width: Dimensions.get('window').width / 2,
-    height: 200,
+    height: 250,
     backgroundColor: '#333'
   },
   image: {
     width: undefined,
-    height: 200
+    height: '100%'
+  },
+
+  label: {
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,.5)',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    width: '100%'
+  },
+  labelText: {
+    color: '#fff',
+    fontSize: 11
   }
 };
 
