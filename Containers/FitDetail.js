@@ -139,13 +139,21 @@ class FitDetail extends Component {
           <View style={AppStyles.section}>
             <View style={AppStyles.sectionTitle}>
               <Text style={AppStyles.sectionTitleText}>Garments</Text>
-
-              <GarmentsList
-                data={this.state.garments}
-                navigation={this.props.navigation}
-              />
             </View>
           </View>
+
+          <GarmentsList
+            data={this.state.garments}
+            navigation={this.props.navigation}
+          />
+
+          <View style={AppStyles.section}>
+            <View style={AppStyles.sectionTitle}>
+              <Text style={AppStyles.sectionTitleText}>Comments</Text>
+            </View>
+          </View>
+
+          <Text>COMMENTS COMPONENT GOES HERE</Text>
         </ScrollView>
       </View>
     );

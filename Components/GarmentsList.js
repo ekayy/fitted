@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
-import { Metrics } from '../Themes';
+import { Metrics, AppStyles } from '../Themes';
 
 import { brands } from '../data.json';
 
@@ -14,15 +14,25 @@ class GarmentsList extends Component {
 
     return (
       <View style={styles.listItem}>
-        <TouchableOpacity onPress={() => navigate('GarmentDetail', item)}>
-          <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: photo }} />
+        <View style={styles.leftCol}>
+          <TouchableOpacity onPress={() => navigate('GarmentDetail', item)}>
+            <View style={styles.imageContainer}>
+              <Image style={styles.image} source={{ uri: photo }} />
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.description}>
+            <Text>{brandName}</Text>
+            <Text>{model}</Text>
+            <Text>{color}</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={AppStyles.sectionSubtitle} onPress={() => {}}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Explore Item</Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.description}>
-          <Text>{brandName}</Text>
-          <Text>{model}</Text>
-        </View>
       </View>
     );
   }
@@ -46,22 +56,37 @@ const styles = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingBottom: 20,
+    marginLeft: 10
   },
   imageContainer: {
     flex: 1,
     width: 120,
-    height: 200
+    height: 120
   },
   image: {
-    width: '100%',
-    height: 200,
-    margin: 20
+    height: 120
   },
   description: {
     flex: 1,
-    alignItems: 'center'
-  }
+    justifyContent: 'flex-start',
+    marginLeft: 20
+  },
+
+  leftCol: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  button: {
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    backgroundColor: '#000',
+    marginRight: 10
+  },
+  buttonText: { color: '#fff' }
 };
 
 export default GarmentsList;

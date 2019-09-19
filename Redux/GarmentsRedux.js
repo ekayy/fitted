@@ -67,7 +67,7 @@ export function fetchGarments() {
     dispatch(fetchGarmentsBegin());
     return (
       axios
-        .get(`${baseURL}/garments/?limit=100`)
+        .get(`${baseURL}/garments/?limit=5000`)
         .then(response => dispatch(fetchGarmentsSuccess(response.data.results)))
         // .catch(error => dispatch(fetchGarmentsFailure(error)));
         .catch(error => console.tron.log(error))
