@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { login } from '../Redux/UserRedux';
 
-import SearchFilter from '../Components/SearchFilter';
+import SearchFilter from '../Components/Search/SearchFilter';
 import GarmentsGrid from '../Components/GarmentsGrid';
 
 class Search extends Component {
