@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { forwardRef, useState } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
@@ -6,48 +6,62 @@ import { ListItem, CheckBox, Divider } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import SectionTitle from '../Search/SectionTitle';
 
-class SearchFilter extends Component {
-  state = {
-    checked: {}
-  };
+const SearchFilter = forwardRef((props, ref) => {
+  const [checked, setChecked] = useState({});
 
-  selectBrand(brand) {
-    // this.props.onClose();
-    this.setState({
-      checked: { [brand.id]: !this.state.checked[brand.id] }
-    });
+  // selectCategory(category) {
+  //   // this.props.onClose();
+  //   this.setState({
+  //     checked: { [category.id]: !this.state.checked[category.id] }
+  //   });
 
-    if (!this.state.checked[brand.id]) {
-      this.props.applyFilters(brand);
+  //   if (!this.state.checked[category.id]) {
+  //     this.props.applyFilters(category);
+  //   } else {
+  //     this.props.applyFilters('');
+  //   }
+  // }
+
+  // renderCategories() {
+  //   return categories.map(category => (
+  //     <View key={category.name}>
+  //       <ListItem
+  //         title={
+  //           <CheckBox
+  //             right
+  //             iconRight
+  //             title={category.name}
+  //             onPress={this.selectCategory.bind(this, category)}
+  //             checked={this.state.checked[category.id]}
+  //           />
+  //         }
+  //       />
+  //       <Divider />
+  //     </View>
+  //   ));
+  // }
+
+  function selectItem(item) {
+    setChecked({ [item.id]: !state.checked[item.id] });
+
+    if (checked) {
+      props.applyFilters(item);
     } else {
-      this.props.applyFilters('');
+      props.applyFilters('');
     }
   }
 
-  selectCategory(category) {
-    // this.props.onClose();
-    this.setState({
-      checked: { [category.id]: !this.state.checked[category.id] }
-    });
-
-    if (!this.state.checked[category.id]) {
-      this.props.applyFilters(category);
-    } else {
-      this.props.applyFilters('');
-    }
-  }
-
-  renderCategories() {
-    return categories.map(category => (
-      <View key={category.name}>
+  function renderItems(items) {
+    return items.map(item => (
+      <View key={item.name}>
         <ListItem
           title={
             <CheckBox
               right
               iconRight
-              title={category.name}
-              onPress={this.selectCategory.bind(this, category)}
-              checked={this.state.checked[category.id]}
+              title={item.name}
+              onPress={selectItem.bind(this, item)}
+              checked={checked[item.id]}
             />
           }
         />
@@ -56,63 +70,36 @@ class SearchFilter extends Component {
     ));
   }
 
-  renderBrands() {
-    return brands.map(brand => (
-      <View key={brand.name}>
-        <ListItem
-          title={
-            <CheckBox
-              right
-              iconRight
-              title={brand.name}
-              onPress={this.selectBrand.bind(this, brand)}
-              checked={this.state.checked[brand.id]}
-            />
-          }
-        />
-        <Divider />
-      </View>
-    ));
+  if (!props.showFilters) {
+    return null;
   }
 
-  clearFilters() {
-    this.setState({
-      checked: {}
-    });
-  }
+  return (
+    <StyledModal
+      animationType="slide"
+      transparent={false}
+      visible={props.showFilters}
+    >
+      <StyledHeader>
+        <StyledHeaderScroll>
+          <StyledHeaderContainer>
+            <CancelButton onPress={props.onClose}>Cancel</CancelButton>
+            <SearchButton>Search</SearchButton>
+          </StyledHeaderContainer>
 
-  render() {
-    if (!this.props.showFilters) {
-      return null;
-    }
-
-    return (
-      <StyledModal
-        animationType="slide"
-        transparent={false}
-        visible={this.props.showFilters}
-      >
-        <StyledHeader>
-          <StyledHeaderScroll>
-            <StyledHeaderContainer>
-              <CancelButton onPress={this.props.onClose}>Cancel</CancelButton>
-              <SearchButton>Search</SearchButton>
-            </StyledHeaderContainer>
-
-            <View>
-              <SectionTitle text="category" />
-              <Divider />
-              {this.renderCategories()}
-              <SectionTitle text="brands" />
-              <Divider />
-              {this.renderBrands()}
-            </View>
-          </StyledHeaderScroll>
-        </StyledHeader>
-      </StyledModal>
-    );
-  }
-}
+          <View>
+            <SectionTitle text="category" />
+            <Divider />
+            {renderItems(categories)}
+            <SectionTitle text="brands" />
+            <Divider />
+            {renderItems(brands)}
+          </View>
+        </StyledHeaderScroll>
+      </StyledHeader>
+    </StyledModal>
+  );
+});
 
 const StyledModal = styled.Modal`
   flex: 1;

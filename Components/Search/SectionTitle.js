@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import { setRecoveryProps } from 'expo/build/ErrorRecovery/ErrorRecovery';
-import { Divider } from 'react-native-elements';
 
 const SectionTitle = props => {
   return <SectionText>{props.text}</SectionText>;
