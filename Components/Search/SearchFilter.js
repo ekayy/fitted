@@ -10,7 +10,7 @@ const SearchFilter = forwardRef((props, ref) => {
   const [checked, setChecked] = useState({});
 
   function selectItem(item) {
-    setChecked({ [item.id]: !state.checked[item.id] });
+    setChecked({ [item.id]: !checked[item.id] });
 
     if (checked) {
       props.applyFilters(item);
@@ -129,19 +129,19 @@ const brands = [
 const categories = [
   {
     name: 'Tops',
-    id: 1
+    id: 6
   },
   {
     name: 'Bottoms',
-    id: 2
+    id: 7
   },
   {
     name: 'Shoes',
-    id: 3
+    id: 8
   },
   {
     name: 'Other',
-    id: 4
+    id: 9
   }
 ];
 
