@@ -9,38 +9,6 @@ import SectionTitle from '../Search/SectionTitle';
 const SearchFilter = forwardRef((props, ref) => {
   const [checked, setChecked] = useState({});
 
-  // selectCategory(category) {
-  //   // this.props.onClose();
-  //   this.setState({
-  //     checked: { [category.id]: !this.state.checked[category.id] }
-  //   });
-
-  //   if (!this.state.checked[category.id]) {
-  //     this.props.applyFilters(category);
-  //   } else {
-  //     this.props.applyFilters('');
-  //   }
-  // }
-
-  // renderCategories() {
-  //   return categories.map(category => (
-  //     <View key={category.name}>
-  //       <ListItem
-  //         title={
-  //           <CheckBox
-  //             right
-  //             iconRight
-  //             title={category.name}
-  //             onPress={this.selectCategory.bind(this, category)}
-  //             checked={this.state.checked[category.id]}
-  //           />
-  //         }
-  //       />
-  //       <Divider />
-  //     </View>
-  //   ));
-  // }
-
   function selectItem(item) {
     setChecked({ [item.id]: !state.checked[item.id] });
 
