@@ -8,7 +8,7 @@ const SectionTitle = props => {
 const SectionText = styled.Text`
   text-transform: uppercase;
   color: #909090;
-  padding: 10px 10px 5px 10px;
+  padding: 20px 10px 5px 10px;
 `;
 
 export default SectionTitle;

@@ -194,7 +194,7 @@ class Search extends Component {
       }
     );
 
-    this.child.clearFilters();
+    // this.child.clearFilters();
   };
 
   render() {

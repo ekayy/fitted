@@ -28,10 +28,16 @@ const SearchFilter = forwardRef((props, ref) => {
               right
               iconRight
               title={item.name}
-              onPress={selectItem.bind(this, item)}
+              onPress={() => selectItem(item)}
+              uncheckedIcon="circle-o"
+              checkedIcon="check-circle-o"
+              containerStyle={styles.checkboxContainer}
+              textStyle={styles.checkBoxText}
+              checkedColor="rgb(74, 144, 226)"
               checked={checked[item.id]}
             />
           }
+          containerStyle={styles.listItemContainer}
         />
         <Divider />
       </View>
@@ -40,6 +46,10 @@ const SearchFilter = forwardRef((props, ref) => {
 
   if (!props.showFilters) {
     return null;
+  }
+
+  function clearFilters() {
+    setChecked({});
   }
 
   return (
@@ -85,7 +95,7 @@ const StyledHeaderScroll = styled.ScrollView`
 
 const StyledHeaderContainer = styled.View`
   background-color: #000;
-  height: 6%;
+  height: 10%;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
@@ -102,6 +112,20 @@ const SearchButton = styled.Text`
   color: #fff;
   padding: 10px;
 `;
+
+const styles = {
+  checkboxContainer: {
+    backgroundColor: '#fff',
+    borderColor: '#fff',
+    padding: 0
+  },
+  checkBoxText: {
+    flex: 1
+  },
+  listItemContainer: {
+    padding: 0
+  }
+};
 
 const brands = [
   {
