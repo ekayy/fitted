@@ -29,9 +29,12 @@ const SearchFilter = forwardRef((props, ref) => {
               iconRight
               title={item.name}
               onPress={() => selectItem(item)}
-              uncheckedIcon="circle-o"
-              checkedIcon="check-circle-o"
+              uncheckedIcon={<Ionicons name="ios-radio-button-off" size={25} />}
+              checkedIcon={
+                <Ionicons name="ios-checkmark-circle-outline" size={25} />
+              }
               containerStyle={styles.checkboxContainer}
+              wrapperStyle={styles.checkboxContent}
               textStyle={styles.checkBoxText}
               checkedColor="rgb(74, 144, 226)"
               checked={checked[item.id]}
@@ -118,6 +121,10 @@ const styles = {
     backgroundColor: '#fff',
     borderColor: '#fff',
     padding: 0
+  },
+  checkboxContent: {
+    marginLeft: 10,
+    marginRight: 20
   },
   checkBoxText: {
     flex: 1
