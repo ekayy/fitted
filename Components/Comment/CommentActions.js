@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components/native';
+import styled from 'styled-components';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
