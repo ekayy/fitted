@@ -5,6 +5,7 @@ import { baseURL } from '../Config';
 const FETCH_COMMENTS_BEGIN = 'FETCH_COMMENTS_BEGIN';
 const FETCH_COMMENTS_SUCCESS = 'FETCH_COMMENTS_SUCCESS';
 const FETCH_COMMENTS_FAILURE = 'FETCH_COMMENTS_FAILURE';
+
 const UPVOTE_COMMENT_BEGIN = 'UPVOTE_COMMENT_BEGIN';
 const UPVOTE_COMMENT_SUCCESS = 'UPVOTE_COMMENT_SUCCESS';
 const UPVOTE_COMMENT_FAILURE = 'UPVOTE_COMMENT_FAILURE';
@@ -12,10 +13,15 @@ const DOWNVOTE_COMMENT_BEGIN = 'DOWNVOTE_COMMENT_BEGIN';
 const DOWNVOTE_COMMENT_SUCCESS = 'DOWNVOTE_COMMENT_SUCCESS';
 const DOWNVOTE_COMMENT_FAILURE = 'DOWNVOTE_COMMENT_FAILURE';
 
+const POST_COMMENT_BEGIN = 'POST_COMMENT_BEGIN';
+const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
+const POST_COMMENT_FAILURE = 'POST_COMMENT_FAILURE';
+
 export const INITIAL_STATE = {
   items: [],
   loading: false,
-  error: null
+  error: null,
+  content: null
 };
 
 // Reducer
@@ -83,6 +89,29 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         error: action.payload.error
       };
 
+    case POST_COMMENT_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        content: null
+      };
+
+    case POST_COMMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        content: action.payload.content
+      };
+
+    case POST_COMMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        content: null
+      };
+
     default:
       return state;
   }
@@ -137,6 +166,24 @@ export const downvoteCommentFailure = error => ({
   }
 });
 
+export const postCommentBegin = () => ({
+  type: POST_COMMENT_BEGIN
+});
+
+export const postCommentSuccess = content => ({
+  type: POST_COMMENT_SUCCESS,
+  payload: {
+    content
+  }
+});
+
+export const postCommentFailure = error => ({
+  type: POST_COMMENT_FAILURE,
+  payload: {
+    error
+  }
+});
+
 // side effects, only as applicable
 // e.g. thunks, epics, etc
 export function fetchComments(id) {
@@ -150,7 +197,7 @@ export function fetchComments(id) {
 }
 
 export const upvoteComment = (id, profileId) => async dispatch => {
-  dispatch(upvoteBegin());
+  dispatch(upvoteCommentBegin());
 
   try {
     const res = await axios.put(
@@ -163,7 +210,7 @@ export const upvoteComment = (id, profileId) => async dispatch => {
 };
 
 export const downvoteComment = (id, profileId) => async dispatch => {
-  dispatch(downvoteBegin());
+  dispatch(downvoteCommentBegin());
 
   try {
     const res = await axios.put(
@@ -172,5 +219,26 @@ export const downvoteComment = (id, profileId) => async dispatch => {
     dispatch(downvoteCommentSuccess(res.data));
   } catch (error) {
     dispatch(downvoteCommentFailure(error));
+  }
+};
+
+export const postComment = ({
+  contentType,
+  objectId,
+  profileId,
+  content
+}) => async dispatch => {
+  dispatch(postCommentBegin());
+
+  try {
+    const res = await axios.post(`${baseURL}/comments/`, {
+      content_type: contentType,
+      object_id: objectId,
+      profile: profileId,
+      content
+    });
+    dispatch(postCommentSuccess(res.data));
+  } catch (error) {
+    dispatch(postCommentFailure(error));
   }
 };
