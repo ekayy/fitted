@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -10,14 +11,23 @@ import {
 } from 'react-native';
 import { Badge } from 'react-native-elements';
 import { Metrics, Dimensions } from '../Themes';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { profiles } from '../data.json';
 
 class GarmentsGrid extends Component {
+  constructor() {
+    super();
+    this.state = { toggleBookMark: false };
+  }
+
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { numCol, grid, editingCloset, unfavoriteGarment } = this.props;
     const { id, color, model, sku, brand, photo } = item;
+    const bookmark = this.state.toggleBookmark
+      ? 'bookmark'
+      : 'bookmark-outline';
 
     let formattedModel = model
       .split(' ')
@@ -33,24 +43,37 @@ class GarmentsGrid extends Component {
     }
 
     return numCol == 2 ? (
-      <TouchableOpacity
-        style={styles.gridItem}
-        key={id}
-        onPress={() => navigate('GarmentDetail', item)}
-      >
-        <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: photoUrl }} />
-          {editingCloset && (
-            <Badge
-              value="X"
-              status="error"
-              containerStyle={{ top: 0, right: 0, position: 'absolute' }}
-              onPress={() => this.props.unfavoriteGarment(id)}
-            />
-          )}
-        </View>
-        <Text style={styles.text}>{formattedModel}</Text>
-      </TouchableOpacity>
+      <GarmentItemContainer>
+        <GarmentItem key={id} onPress={() => navigate('GarmentDetail', item)}>
+          <GarmentItemImageContainer>
+            <Image style={styles.image} source={{ uri: photoUrl }} />
+            {editingCloset && (
+              <Badge
+                value="X"
+                status="error"
+                containerStyle={{ top: 0, right: 0, position: 'absolute' }}
+                onPress={() => this.props.unfavoriteGarment(id)}
+              />
+            )}
+            <GarmentItemInfo>
+              <Text>{formattedModel}</Text>
+              <Text>{formattedModel}</Text>
+              <Text>{formattedModel}</Text>
+            </GarmentItemInfo>
+          </GarmentItemImageContainer>
+        </GarmentItem>
+        <GarmentBookmark
+          onPress={() =>
+            this.setState({ toggleBookmark: !this.state.toggleBookmark })
+          }
+        >
+          <MaterialCommunityIcons
+            name={bookmark}
+            size={32}
+            color="rgb(74, 144, 226)"
+          />
+        </GarmentBookmark>
+      </GarmentItemContainer>
     ) : (
       <TouchableOpacity
         style={styles.gridItem}
@@ -109,24 +132,44 @@ class GarmentsGrid extends Component {
   }
 }
 
+const GarmentItemContainer = styled.View`
+  border-top-width: 0.2px;
+  width: 100%;
+  flex-direction: row;
+`;
+
+const GarmentItem = styled.TouchableOpacity`
+  width: 80%;
+`;
+
+const GarmentItemImageContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const GarmentItemInfo = styled.View`
+  flex-direction: column;
+  padding-left: 5px;
+`;
+
+const GarmentBookmark = styled.TouchableOpacity`
+  width: 20%;
+  justify-content: center;
+  align-items: center;
+`;
+
 const styles = {
-  gridItem: {
-    alignItems: 'center',
-    marginBottom: 40
-  },
   imageContainer: {
     flex: 1,
-    width: Metrics.screenWidth / 2,
+    width: Metrics.screenWidth / 1,
     height: 200,
     position: 'relative'
   },
   image: {
-    width: undefined,
-    height: 200
-  },
-  text: {
-    maxWidth: '80%',
-    textAlign: 'center'
+    width: 60,
+    height: 60,
+    marginHorizontal: 10,
+    marginVertical: 2
   }
 };
 
