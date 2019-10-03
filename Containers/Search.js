@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { login } from '../Redux/UserRedux';
 import ModalDropdown from 'react-native-modal-dropdown';
+import { Ionicons } from '@expo/vector-icons';
 
 import SearchFilter from '../Components/Search/SearchFilter';
 import GarmentsGrid from '../Components/GarmentsGrid';
@@ -243,12 +244,20 @@ class Search extends Component {
             defaultValue={'SELECT'}
             options={['MOST RECENT', 'MOST POPULAR']}
             style={styles.dropdownButton}
-            textStyle={styles.dropdownText}
-          />
+            dropdownStyle={styles.dropdown}
+            dropdownTextStyle={styles.dropdownText}
+            dropdownTextHighlightStyle={styles.dropdownTextHighlight}
+            // onSelect={(idx, value) => }
+          >
+            <StyledDropdownButtonContainer>
+              <DropdownButtonText>SELECT</DropdownButtonText>
+              <Ionicons name="ios-arrow-down" size={25} color="#fff" />
+            </StyledDropdownButtonContainer>
+          </ModalDropdown>
           <VerticalDivider />
           <FilterButton onPress={this.toggleFilters}>
             <View>
-              <Text>FILTER</Text>
+              <FilterText>FILTER</FilterText>
             </View>
           </FilterButton>
         </StyledFilterBarContainer>
@@ -299,10 +308,25 @@ const StyledFilterBarContainer = styled.View`
   align-items: center;
   padding: 5px 0;
 `;
-const FilterButton = styled.TouchableOpacity``;
+const FilterButton = styled.TouchableOpacity`
+  min-width: 30%;
+`;
+const FilterText = styled.Text`
+  text-align: center;
+`;
 const VerticalDivider = styled.View`
   border-left-width: 1;
   align-self: stretch;
+`;
+const DropdownButtonText = styled.Text`
+  color: #fff;
+`;
+const StyledDropdownButtonContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  min-width: 144px;
+  min-height: 28px;
 `;
 
 const styles = {
@@ -349,14 +373,20 @@ const styles = {
   },
   dropdownButton: {
     backgroundColor: '#000',
-    borderRadius: 5
+    borderRadius: 4
+  },
+  dropdown: {
+    height: 'auto'
   },
   dropdownText: {
+    backgroundColor: '#000',
+    fontSize: 14,
     color: '#fff',
-    minWidth: 120,
-    minHeight: 25,
-    padding: 5,
+    minWidth: 144,
     textAlign: 'center'
+  },
+  dropdownTextHighlight: {
+    color: '#fff'
   }
 };
 
