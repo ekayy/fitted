@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
 import { Colors } from '../Themes';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { login } from '../Redux/UserRedux';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 import SearchFilter from '../Components/Search/SearchFilter';
 import GarmentsGrid from '../Components/GarmentsGrid';
@@ -210,6 +212,9 @@ class Search extends Component {
     return (
       <View style={styles.container}>
         <SearchBar
+          containerStyle={styles.searchBarContainer}
+          inputContainerStyle={styles.inputContainer}
+          cancelButtonProps={{ color: '#fff' }}
           round
           lightTheme
           placeholder="Search"
@@ -219,7 +224,7 @@ class Search extends Component {
           value={searchTerm}
         />
 
-        <View style={styles.filterWrapper}>
+        {/* <View style={styles.filterWrapper}>
           <View style={styles.filterContainer}>
             <TouchableOpacity
               style={styles.filter}
@@ -229,10 +234,24 @@ class Search extends Component {
                 <Text style={styles.filterText}>Filters</Text>
               </View>
             </TouchableOpacity>
-
             {this.renderActiveFilter()}
           </View>
-        </View>
+        </View> */}
+
+        <StyledFilterBarContainer>
+          <ModalDropdown
+            defaultValue={'SELECT'}
+            options={['MOST RECENT', 'MOST POPULAR']}
+            style={styles.dropdownButton}
+            textStyle={styles.dropdownText}
+          />
+          <VerticalDivider />
+          <FilterButton onPress={this.toggleFilters}>
+            <View>
+              <Text>FILTER</Text>
+            </View>
+          </FilterButton>
+        </StyledFilterBarContainer>
 
         <SearchFilter
           navigation={this.props.navigation}
@@ -273,10 +292,23 @@ class Search extends Component {
   };
 }
 
+const StyledFilterBarContainer = styled.View`
+  height: 6%;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 5px 0;
+`;
+const FilterButton = styled.TouchableOpacity``;
+const VerticalDivider = styled.View`
+  border-left-width: 1;
+  align-self: stretch;
+`;
+
 const styles = {
   container: {
     flex: 1,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
     backgroundColor: '#f3f3f3',
     marginTop: 30
   },
@@ -306,6 +338,25 @@ const styles = {
   },
   activeFilter: {
     backgroundColor: Colors.darkFade
+  },
+  searchBarContainer: {
+    backgroundColor: '#000',
+    paddingBottom: 10,
+    paddingTop: 10
+  },
+  inputContainer: {
+    backgroundColor: '#fff'
+  },
+  dropdownButton: {
+    backgroundColor: '#000',
+    borderRadius: 5
+  },
+  dropdownText: {
+    color: '#fff',
+    minWidth: 120,
+    minHeight: 25,
+    padding: 5,
+    textAlign: 'center'
   }
 };
 

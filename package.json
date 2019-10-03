@@ -33,6 +33,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
     "react-native-gesture-handler": "^1.2.1",
+    "react-native-modal-dropdown": "^0.7.0",
     "react-native-snap-carousel": "^3.8.0",
     "react-native-swipe-list-view": "^2.0.0",
     "react-native-tab-view": "^2.7.3",
