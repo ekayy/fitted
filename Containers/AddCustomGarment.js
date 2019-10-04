@@ -17,8 +17,6 @@ class AddCustomGarment extends Component {
   onSubmit = values => {
     this.props.createGarment(values);
 
-    console.tron.log(response);
-
     // this.props.navigation.navigate('TagGarments', response);
   };
 

@@ -117,14 +117,16 @@ export const createGarment = ({ brand, color, model }) => async dispatch => {
 
   try {
     const res = await axios.post(`${baseURL}/garments/`, {
-      brand,
-      color,
-      model,
-      sku: null,
-      photo: null,
-      purchase_page: null
+      sku: '',
+      brand: 1,
+      color: 'test',
+      model: 'Test',
+      photo: 'https://x',
+      purchase_page: 'https://x'
     });
-    dispatch(createGarmentSuccess());
+    dispatch(createGarmentSuccess(res.data));
+
+    console.tron.log(res.data);
   } catch (error) {
     dispatch(createGarmentFailure(error));
   }
