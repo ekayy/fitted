@@ -9,6 +9,7 @@ import FavoriteButton from '../Components/FavoriteButton';
 import axios from 'axios';
 import { baseURL } from '../Config';
 import { favoriteFit } from '../Redux/UserRedux';
+import { fetchBrands } from '../Redux/BrandsRedux';
 
 class FitDetail extends Component {
   state = {
@@ -21,6 +22,7 @@ class FitDetail extends Component {
   };
 
   componentDidMount() {
+    this.fetchBrands();
     this.fetchGarments();
     this.setState({ toggled: false });
     this.getFavoriteState();
@@ -145,6 +147,7 @@ class FitDetail extends Component {
           <GarmentsList
             data={this.state.garments}
             navigation={this.props.navigation}
+            brands={this.props.brands}
           />
 
           <View style={AppStyles.section}>
@@ -205,5 +208,5 @@ const mapStateToProps = ({ user }) => {
 
 export default connect(
   mapStateToProps,
-  { favoriteFit }
+  { favoriteFit, fetchBrands }
 )(FitDetail);

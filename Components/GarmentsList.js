@@ -8,7 +8,7 @@ import { brands } from '../data.json';
 class GarmentsList extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
-    const { numCol } = this.props;
+    const { numCol, brands } = this.props;
     const { id, color, model, sku, brand, photo } = item;
     const brandName = brands[brand].name;
 
