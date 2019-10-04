@@ -307,6 +307,7 @@ const StyledFilterBarContainer = styled.View`
   justify-content: space-evenly;
   align-items: center;
   padding: 5px 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 `;
 const FilterButton = styled.TouchableOpacity`
   min-width: 30%;
