@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 import AppStyles from '../Themes/AppStyles';
 import styles from './Styles/AddCustomGarmentStyles';
-
 import { Formik, ErrorMessage } from 'formik';
-import axios from 'axios';
-import { baseURL } from '../Config';
+import { createGarment } from '../Redux/GarmentsRedux';
 
 class AddCustomGarment extends Component {
   static navigationOptions = {};
@@ -15,18 +14,10 @@ class AddCustomGarment extends Component {
     super(props);
   }
 
-  onSubmit = async ({ brand, model, color, size }) => {
-    const response = await axios.post(`${baseURL}/garments/`, {
-      brand,
-      model,
-      color,
-      size: '',
-      sku: '',
-      photo: '',
-      purchase_page: ''
-    });
+  onSubmit = values => {
+    this.props.createGarment(values);
 
-    // console.tron.log(response);
+    console.tron.log(response);
 
     // this.props.navigation.navigate('TagGarments', response);
   };
@@ -101,4 +92,11 @@ class AddCustomGarment extends Component {
   }
 }
 
-export default AddCustomGarment;
+const mapStateToProps = ({ user }) => {
+  return { user };
+};
+
+export default connect(
+  mapStateToProps,
+  { createGarment }
+)(AddCustomGarment);

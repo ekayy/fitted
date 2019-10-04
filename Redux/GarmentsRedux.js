@@ -1,12 +1,14 @@
 import axios from 'axios';
-import {
-  baseURL
-} from '../Config';
+import { baseURL } from '../Config';
 
 // Actions
 const FETCH_GARMENTS_BEGIN = 'FETCH_GARMENTS_BEGIN';
 const FETCH_GARMENTS_SUCCESS = 'FETCH_GARMENTS_SUCCESS';
 const FETCH_GARMENTS_FAILURE = 'FETCH_GARMENTS_FAILURE';
+
+const CREATE_GARMENT_BEGIN = 'CREATE_GARMENT_BEGIN';
+const CREATE_GARMENT_SUCCESS = 'CREATE_GARMENT_SUCCESS';
+const CREATE_GARMENT_FAILURE = 'CREATE_GARMENT_FAILURE';
 
 export const INITIAL_STATE = {
   items: [],
@@ -38,6 +40,26 @@ export default function garments(state = INITIAL_STATE, action = {}) {
         error: action.payload.error,
         items
       };
+
+    case CREATE_GARMENT_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case CREATE_GARMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null
+      };
+
+    case CREATE_GARMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
+      };
     default:
       return state;
   }
@@ -62,14 +84,48 @@ export const fetchGarmentsFailure = error => ({
   }
 });
 
+export const createGarmentBegin = () => ({
+  type: CREATE_GARMENT_BEGIN
+});
+
+export const createGarmentSuccess = () => ({
+  type: CREATE_GARMENT_SUCCESS
+});
+
+export const createGarmentFailure = error => ({
+  type: CREATE_GARMENT_FAILURE,
+  payload: {
+    error
+  }
+});
+
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function fetchGarments() {
-  return dispatch => {
-    dispatch(fetchGarmentsBegin());
-    return axios
-      .get(`${baseURL}/garments/?limit=9999`)
-      .then(response => dispatch(fetchGarmentsSuccess(response.data.results)))
-      .catch(error => dispatch(fetchGarmentsFailure(error)));
-  };
-}
+export const fetchGarments = () => async dispatch => {
+  dispatch(fetchGarmentsBegin());
+
+  try {
+    const res = await axios.get(`${baseURL}/garments/?limit=100`);
+    dispatch(fetchGarmentsSuccess(res.data.results));
+  } catch (error) {
+    dispatch(fetchGarmentsFailure(error));
+  }
+};
+
+export const createGarment = ({ brand, color, model }) => async dispatch => {
+  dispatch(createGarmentBegin());
+
+  try {
+    const res = await axios.post(`${baseURL}/garments/`, {
+      brand,
+      color,
+      model,
+      sku: null,
+      photo: null,
+      purchase_page: null
+    });
+    dispatch(createGarmentSuccess());
+  } catch (error) {
+    dispatch(createGarmentFailure(error));
+  }
+};
