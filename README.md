@@ -13,4 +13,3 @@ clone repo
 npm install
 
 expo start
-expo ios

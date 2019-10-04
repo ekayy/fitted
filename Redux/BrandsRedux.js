@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { baseURL } from '../Config';
 
 // Actions
 const FETCH_BRANDS_BEGIN = 'FETCH_BRANDS_BEGIN';
@@ -56,12 +57,14 @@ export const fetchBrandsFailure = error => ({
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function fetchBrands() {
-  return dispatch => {
-    dispatch(fetchBrandsBegin());
-    return axios
-      .get('http://localhost:19001/data.json')
-      .then(response => dispatch(fetchBrandsSuccess(response.data.brands)))
-      .catch(error => dispatch(fetchBrandsFailure(error)));
-  };
-}
+export const fetchBrands = () => async dispatch => {
+  dispatch(fetchBrandsBegin());
+
+  try {
+    const res = await axios.get(`${baseURL}/brands/`);
+
+    dispatch(fetchBrandsSuccess(res.data.results));
+  } catch (error) {
+    dispatch(fetchBrandsFailure(error));
+  }
+};
