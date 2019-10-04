@@ -22,7 +22,7 @@ class FitDetail extends Component {
   };
 
   componentDidMount() {
-    this.fetchBrands();
+    this.props.fetchBrands();
     this.fetchGarments();
     this.setState({ toggled: false });
     this.getFavoriteState();
@@ -202,8 +202,8 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ user }) => {
-  return { user };
+const mapStateToProps = ({ user, brands }) => {
+  return { user, brands };
 };
 
 export default connect(
