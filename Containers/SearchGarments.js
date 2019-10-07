@@ -13,11 +13,10 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
+import { fetchBrands } from '../Redux/BrandsRedux';
 import { tagGarmentToFit, removeGarmentFromFit } from '../Redux/FitsRedux';
 import { AppStyles } from '../Themes';
 import styles from './Styles/TagGarmentsStyles';
-
-import { brands } from '../data.json';
 
 class SearchGarments extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -55,6 +54,8 @@ class SearchGarments extends Component {
     if (this.props.garments !== prevProps.garments) {
       this.props.fetchGarments();
     }
+
+    this.props.fetchBrands();
   }
 
   componentDidMount() {
@@ -178,7 +179,7 @@ class SearchGarments extends Component {
     const { navigate } = this.props.navigation;
     const { id, color, model, sku, brand, photo } = item;
 
-    const brandName = brands[brand].name;
+    const brandName = this.props.brands[brand].name;
 
     return (
       <View style={styles.section}>
@@ -216,11 +217,12 @@ class SearchGarments extends Component {
 const mapStateToProps = state => {
   return {
     garments: state.garments.items,
-    fits: state.fits
+    fits: state.fits,
+    brands: state.brands.items
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchGarments, tagGarmentToFit, removeGarmentFromFit }
+  { fetchGarments, tagGarmentToFit, removeGarmentFromFit, fetchBrands }
 )(SearchGarments);

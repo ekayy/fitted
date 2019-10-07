@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -10,17 +10,12 @@ import {
   FlatList,
   Button,
   Modal
-} from "react-native";
-import { Metrics } from "../Themes";
-import { Ionicons } from "@expo/vector-icons";
-import { ButtonGroup } from "react-native-elements";
-import axios from "axios";
-import { connect } from "react-redux";
-import { fetchGarments } from "../Redux/GarmentsRedux";
-
-import { brands } from "../data.json";
-
-import { baseURL } from "../Config";
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { ButtonGroup } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { fetchGarments } from '../Redux/GarmentsRedux';
+import { fetchBrands } from '../Redux/BrandsRedux';
 
 class SelectSizing extends Component {
   constructor(props) {
@@ -66,23 +61,23 @@ class SelectSizing extends Component {
       photo
     } = this.props.navigation.state.params;
 
-    const brandName = brands[brand].name;
+    const brandName = this.props.brands[brand].name;
 
-    const countryButtons = ["US", "UK", "Euro"];
-    const genderButtons = ["Men", "Women", "Youth", "Unisex"];
+    const countryButtons = ['US', 'UK', 'Euro'];
+    const genderButtons = ['Men', 'Women', 'Youth', 'Unisex'];
     const sizeButtons = [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12"
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+      '12'
     ];
     const {
       selectedCountryIndex,
@@ -104,7 +99,7 @@ class SelectSizing extends Component {
         <ButtonGroup
           onPress={this.setModalVisible}
           selectedIndex={0}
-          buttons={["9"]}
+          buttons={['9']}
           containerStyle={{ height: 40 }}
         />
         <ButtonGroup
@@ -159,33 +154,35 @@ const styles = {
     flex: 1,
     paddingHorizontal: 5,
     paddingVertical: 20,
-    backgroundColor: "#f3f3f3",
-    alignItems: "center"
+    backgroundColor: '#f3f3f3',
+    alignItems: 'center'
   },
   close: {
-    position: "absolute",
+    position: 'absolute',
     top: 5,
     right: 15,
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent'
   },
   modal: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingHorizontal: 40,
     marginTop: 25,
-    backgroundColor: "#f3f3f3"
+    backgroundColor: '#f3f3f3'
   }
 };
 
 const mapStateToProps = state => {
   return {
-    garments: state.garments.items
+    garments: state.garments.items,
+    brands: state.brands.items
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    fetchGarments
+    fetchGarments,
+    fetchBrands
   }
 )(SelectSizing);

@@ -16,9 +16,9 @@ import {
   createFit,
   clearCreatedFit
 } from '../Redux/FitsRedux';
+import { fetchBrands } from '../Redux/BrandsRedux';
 import styles from './Styles/TagGarmentsStyles';
 import { AppStyles } from '../Themes';
-import { brands } from '../data.json';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 class TagGarments extends Component {
@@ -49,6 +49,8 @@ class TagGarments extends Component {
     this.props.navigation.setParams({
       searchGarments: this._searchGarments
     });
+
+    this.props.fetchBrands();
   }
 
   _searchGarments = () => {
@@ -168,6 +170,7 @@ class TagGarments extends Component {
   }
 
   renderGarment = (rowData, rowMap) => {
+    const { brands } = this.props;
     const { id, brand, model, photo } = rowData.item;
     const brandName = brands[brand].name;
 
@@ -228,7 +231,8 @@ const mapStateToProps = state => {
   return {
     taggedGarments: state.fits.taggedGarments,
     createdFit: state.fits.createdFit,
-    profileId: state.user.profileId
+    profileId: state.user.profileId,
+    brands: state.brands.items
   };
 };
 
@@ -237,6 +241,7 @@ export default connect(
   {
     removeGarmentFromFit,
     createFit,
-    clearCreatedFit
+    clearCreatedFit,
+    fetchBrands
   }
 )(TagGarments);
