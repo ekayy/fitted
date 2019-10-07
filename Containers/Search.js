@@ -251,7 +251,12 @@ class Search extends Component {
           >
             <StyledDropdownButtonContainer>
               <DropdownButtonText>SELECT</DropdownButtonText>
-              <Ionicons name="ios-arrow-down" size={25} color="#fff" />
+              <Ionicons
+                name="ios-arrow-down"
+                size={25}
+                color="#fff"
+                style={{ marginLeft: 60 }}
+              />
             </StyledDropdownButtonContainer>
           </ModalDropdown>
           <VerticalDivider />
@@ -324,10 +329,11 @@ const DropdownButtonText = styled.Text`
 `;
 const StyledDropdownButtonContainer = styled.View`
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
   min-width: 144px;
   min-height: 28px;
+  padding: 6px;
 `;
 
 const styles = {
@@ -366,8 +372,7 @@ const styles = {
   },
   searchBarContainer: {
     backgroundColor: '#000',
-    paddingBottom: 10,
-    paddingTop: 10
+    paddingVertical: 10
   },
   inputContainer: {
     backgroundColor: '#fff'
@@ -384,7 +389,9 @@ const styles = {
     fontSize: 14,
     color: '#fff',
     minWidth: 144,
-    textAlign: 'center'
+    minHeight: 28,
+    paddingVertical: 6,
+    alignItems: 'center'
   },
   dropdownTextHighlight: {
     color: '#fff'
