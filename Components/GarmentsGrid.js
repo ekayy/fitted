@@ -66,6 +66,19 @@ class GarmentsGrid extends Component {
     );
   }
 
+  renderHeader = () => {
+    let header_View = (
+      <View style={styles.welcomeContainer}>
+        <View style={styles.welcomeText}>
+          <Text style={styles.welcomeTitle}>Welcome!</Text>
+          <Text style={styles.welcomeSubtitle}>- team fitted</Text>
+        </View>
+      </View>
+    );
+
+    return header_View;
+  };
+
   renderFooter = () => {
     const { loading } = this.props;
 
@@ -103,6 +116,7 @@ class GarmentsGrid extends Component {
         refreshing={refreshing}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
+        ListHeaderComponent={this.renderHeader}
         ListFooterComponent={this.renderFooter}
       />
     );
@@ -114,6 +128,25 @@ const styles = {
     alignItems: 'center',
     marginBottom: 40,
     marginHorizontal: 20
+  },
+  welcomeContainer: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(0,0,0.8)',
+    height: 160
+  },
+  welcomeText: {
+    paddingTop: 32
+  },
+  welcomeTitle: {
+    textAlign: 'center',
+    fontSize: 32,
+    color: 'rgb(255,255,255)'
+  },
+  welcomeSubtitle: {
+    textAlign: 'center',
+    paddingVertical: 8,
+    fontSize: 17,
+    color: 'rgb(255,255,255)'
   },
   imageContainer: {
     flex: 1,

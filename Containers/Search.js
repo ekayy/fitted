@@ -200,9 +200,9 @@ class Search extends Component {
           autoCapitalize="none"
           platform="ios"
           value={searchTerm}
-          containerStyle={{backgroundColor:'rgb(0,0,0)'}}
-          inputStyle={{backgroundColor:'rgb(255,255,255)'}}
-          inputContainerStyle={{backgroundColor:'rgb(255,255,255)'}}
+          containerStyle={{ backgroundColor: 'rgb(0,0,0)' }}
+          inputStyle={{ backgroundColor: 'rgb(255,255,255)' }}
+          inputContainerStyle={{ backgroundColor: 'rgb(255,255,255)' }}
         />
         {/*<View style={styles.filterWrapper}>
           <View style={styles.filterContainer}>
@@ -228,14 +228,7 @@ class Search extends Component {
             this.child = instance;
           }}
         />*/}
-        <View style={styles.welcomeContainer}>
-          <View style={styles.welcomeText}>
-            <Text style={styles.welcomeTitle}>Welcome!</Text>
-            <Text style={styles.welcomeSubtitle}>
-              - team fitted
-            </Text>
-          </View>
-        </View>
+
         <GarmentsGrid
           data={garments}
           navigation={this.props.navigation}
@@ -269,25 +262,6 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: '#f3f3f3'
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    backgroundColor: 'rgb(0,0,0.8)',
-    height: 160
-  },
-  welcomeText: {
-    paddingTop: 32
-  },
-  welcomeTitle: {
-    textAlign: 'center',
-    fontSize: 32,
-    color: 'rgb(255,255,255)'
-  },
-  welcomeSubtitle: {
-    textAlign: 'center',
-    paddingVertical: 8,
-    fontSize: 17,
-    color: 'rgb(255,255,255)'
   },
   filterWrapper: {
     alignSelf: 'flex-start',
