@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
   text: {
     color: '#3F51B5',
     fontWeight: 'bold',
-    fontFamily: 'Avenir',
     textAlign: 'center',
     fontSize: 15
   }

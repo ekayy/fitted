@@ -1,7 +1,7 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import { Image, StyleSheet, Text, View } from "react-native";
-import moment from "moment";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import moment from 'moment';
 
 class Comment extends PureComponent {
   static propTypes = {
@@ -37,7 +37,7 @@ class Comment extends PureComponent {
         </View>
         <View style={styles.contentContainer}>
           <Text>
-            <Text style={[styles.text, styles.name]}>{name}</Text>{" "}
+            <Text style={[styles.text, styles.name]}>{name}</Text>{' '}
             <Text style={styles.text}>{content}</Text>
           </Text>
           <Text style={[styles.text, styles.created]}>
@@ -51,10 +51,10 @@ class Comment extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row"
+    flexDirection: 'row'
   },
   avatarContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginLeft: 5,
     paddingTop: 10,
     width: 40
@@ -62,26 +62,25 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     borderBottomWidth: 1,
-    borderColor: "#EEE",
+    borderColor: '#EEE',
     padding: 5
   },
   avatar: {
     borderWidth: 1,
-    borderColor: "#EEE",
+    borderColor: '#EEE',
     borderRadius: 13,
     width: 26,
     height: 26
   },
   text: {
-    color: "#000",
-    fontFamily: "Avenir",
+    color: '#000',
     fontSize: 15
   },
   name: {
-    fontWeight: "bold"
+    fontWeight: 'bold'
   },
   created: {
-    color: "#BBB"
+    color: '#BBB'
   }
 });
 
