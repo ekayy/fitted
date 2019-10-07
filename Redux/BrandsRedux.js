@@ -62,7 +62,6 @@ export const fetchBrands = () => async dispatch => {
 
   try {
     const res = await axios.get(`${baseURL}/brands/`);
-
     dispatch(fetchBrandsSuccess(res.data.results));
   } catch (error) {
     dispatch(fetchBrandsFailure(error));
