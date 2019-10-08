@@ -36,16 +36,10 @@ const SearchStack = createStackNavigator(
       })
     },
     Comments: {
-      screen: Comments,
-      navigationOptions: ({ navigation }) => ({
-        title: navigation.state.params.model
-      })
+      screen: Comments
     },
     CommentIndex: {
-      screen: CommentIndex,
-      navigationOptions: ({ navigation }) => ({
-        title: navigation.state.params.model
-      })
+      screen: CommentIndex
     },
     Profile: {
       screen: Profile,
