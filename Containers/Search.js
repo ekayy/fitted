@@ -5,6 +5,7 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Colors } from '../Themes';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
+import { fetchBrands } from '../Redux/BrandsRedux';
 import { login } from '../Redux/UserRedux';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Ionicons } from '@expo/vector-icons';
@@ -56,6 +57,8 @@ class Search extends Component {
         }
       );
     });
+
+    this.props.fetchBrands();
 
     // this.setState({ refreshing: true, results: [] });
     // // Get garments from redux store
@@ -275,6 +278,7 @@ class Search extends Component {
           ref={instance => {
             this.child = instance;
           }}
+          brands={this.props.brands}
         />
 
         <GarmentsFilterList
@@ -402,11 +406,12 @@ const styles = {
 const mapStateToProps = state => {
   return {
     garments: state.garments.items,
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    brands: state.brands.items
   };
 };
 
 export default connect(
   mapStateToProps,
-  { login, fetchGarments }
+  { login, fetchGarments, fetchBrands }
 )(Search);

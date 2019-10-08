@@ -9,6 +9,8 @@ import SectionTitle from '../Search/SectionTitle';
 const SearchFilter = forwardRef((props, ref) => {
   const [checked, setChecked] = useState({});
 
+  const { brands } = props;
+
   function selectItem(item) {
     setChecked({ [item.id]: !checked[item.id] });
 
@@ -74,7 +76,7 @@ const SearchFilter = forwardRef((props, ref) => {
             {renderItems(categories)}
             <SectionTitle text="brands" />
             <Divider />
-            {renderItems(brands)}
+            {renderItems(brands.map(brand => brand))}
           </View>
         </StyledHeaderScroll>
       </StyledHeader>
@@ -134,29 +136,6 @@ const styles = {
     padding: 0
   }
 };
-
-const brands = [
-  {
-    name: '3sixteen',
-    id: 1
-  },
-  {
-    name: 'Carhatt WIP',
-    id: 2
-  },
-  {
-    name: 'Fear of God',
-    id: 3
-  },
-  {
-    name: 'John Elliot',
-    id: 4
-  },
-  {
-    name: 'Reigning Champ',
-    id: 5
-  }
-];
 
 const categories = [
   {
