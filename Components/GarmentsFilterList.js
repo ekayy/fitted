@@ -23,11 +23,19 @@ class GarmentsFilterList extends Component {
 
   renderGarment(item) {
     const { navigate } = this.props.navigation;
-    const { numCol, grid, editingCloset, unfavoriteGarment } = this.props;
+    const {
+      numCol,
+      grid,
+      editingCloset,
+      unfavoriteGarment,
+      brands
+    } = this.props;
     const { id, color, model, sku, brand, photo } = item;
     const bookmark = this.state.toggleBookmark
       ? 'bookmark'
       : 'bookmark-outline';
+
+    const brandName = brands[brand - 1].name;
 
     let formattedModel = model
       .split(' ')
@@ -42,7 +50,7 @@ class GarmentsFilterList extends Component {
         'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
     }
 
-    return numCol == 2 ? (
+    return (
       <GarmentItemContainer>
         <GarmentItem key={id} onPress={() => navigate('GarmentDetail', item)}>
           <GarmentItemImageContainer>
@@ -56,9 +64,9 @@ class GarmentsFilterList extends Component {
               />
             )}
             <GarmentItemInfo>
-              <Text>{formattedModel}</Text>
-              <Text>{formattedModel}</Text>
-              <Text>{formattedModel}</Text>
+              <Text>{item.model}</Text>
+              <Text>{brandName}</Text>
+              <Text>{item.color}</Text>
             </GarmentItemInfo>
           </GarmentItemImageContainer>
         </GarmentItem>
@@ -74,18 +82,6 @@ class GarmentsFilterList extends Component {
           />
         </GarmentBookmark>
       </GarmentItemContainer>
-    ) : (
-      <TouchableOpacity
-        style={styles.gridItem}
-        key={id}
-        onPress={() => navigate('GarmentDetail', item)}
-      >
-        <View
-          style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}
-        >
-          <Image style={styles.image} source={{ uri: photo }} />
-        </View>
-      </TouchableOpacity>
     );
   }
 

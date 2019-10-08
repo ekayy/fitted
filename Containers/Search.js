@@ -289,6 +289,7 @@ class Search extends Component {
           onRefresh={this.handleRefresh}
           refreshing={refreshing}
           loading={loading}
+          brands={this.props.brands}
         />
       </View>
     );
