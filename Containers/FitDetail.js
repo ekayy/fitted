@@ -202,8 +202,11 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ user, brands }) => {
-  return { user, brands };
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    brands: state.brands.items
+  };
 };
 
 export default connect(
