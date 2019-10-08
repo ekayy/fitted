@@ -5,6 +5,8 @@ import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 import Profile from '../Containers/Profile';
 import Fits from '../Containers/Fits';
+import Comments from '../Containers/Comments';
+import CommentIndex from '../Components/Comment/CommentIndex';
 
 const SearchStack = createStackNavigator(
   {
@@ -29,6 +31,18 @@ const SearchStack = createStackNavigator(
     },
     Fits: {
       screen: Fits,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.model
+      })
+    },
+    Comments: {
+      screen: Comments,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.model
+      })
+    },
+    CommentIndex: {
+      screen: CommentIndex,
       navigationOptions: ({ navigation }) => ({
         title: navigation.state.params.model
       })

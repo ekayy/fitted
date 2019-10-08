@@ -9,6 +9,7 @@ import user from './UserRedux';
 import garments from './GarmentsRedux';
 import fits from './FitsRedux';
 import comments from './CommentsRedux';
+import brands from './BrandsRedux';
 
 // const storage = createSecureStore();
 const persistConfig = {
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   user,
   garments,
   fits,
-  comments
+  comments,
+  brands
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
