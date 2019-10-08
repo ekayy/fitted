@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components/native';
+import styled from 'styled-components';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { fetchComments } from '../Redux/CommentsRedux';
 import {
@@ -13,8 +13,8 @@ import {
 import { Input } from 'react-native-elements';
 import { AppStyles, Metrics } from '../Themes';
 import { Formik, ErrorMessage } from 'formik';
-import CommentSingle from '../Components/CommentSingle';
-import CommentInput from '../Components/CommentInput';
+import CommentSingle from '../Components/Comment/CommentSingle';
+import CommentInput from '../Components/Comment/CommentInput';
 import { Ionicons } from '@expo/vector-icons';
 
 const Comments = ({ navigation }) => {
@@ -74,24 +74,16 @@ const Comments = ({ navigation }) => {
         </View>
 
         <View>
-          <CommentSingle hasReply leaveComment={openModal} />
+          <CommentSingle
+            hasReply
+            viewComments={() => navigation.navigate('CommentIndex')}
+            leaveComment={openModal}
+          />
           <CommentSingle leaveComment={openModal} />
           <CommentSingle leaveComment={openModal} />
           <CommentSingle hasReply leaveComment={openModal} />
         </View>
       </ScrollView>
-
-      <StyledInputToggle>
-        <Input
-          placeholder="Add a comment"
-          keyboardType="twitter" // keyboard with no return button
-          autoFocus={false}
-          onFocus={openModal}
-          value={commentValue}
-          onChangeText={text => onChangeComment(text)}
-          onSubmitEditing={handleSubmit}
-        />
-      </StyledInputToggle>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>
         <CommentInput
@@ -107,14 +99,9 @@ const Comments = ({ navigation }) => {
 
 Comments.navigationOptions = ({ navigation }) => ({
   headerRight: (
-    <TouchableOpacity
-      style={{
-        marginRight: 20
-      }}
-      onPress={navigation.getParam('openModal')}
-    >
+    <StyledHeaderButton onPress={navigation.getParam('openModal')}>
       <Ionicons name="ios-create" size={30} color="#000" />
-    </TouchableOpacity>
+    </StyledHeaderButton>
   )
 });
 
@@ -123,6 +110,10 @@ const StyledInputToggle = styled.View`
   left: 0;
   right: 0;
   bottom: 20px;
+`;
+
+const StyledHeaderButton = styled.TouchableOpacity`
+  margin-right: 20px;
 `;
 
 export default Comments;

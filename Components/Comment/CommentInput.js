@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Formik, ErrorMessage } from 'formik';
 import { EvilIcons } from '@expo/vector-icons';
 import { postComment } from '../../Redux/CommentsRedux';
@@ -9,13 +9,17 @@ import { postComment } from '../../Redux/CommentsRedux';
 const CommentInput = props => {
   const { closeModal } = props;
 
+  const { profileId } = useSelector(state => ({
+    profileId: state.user.profileId
+  }));
+
   const dispatch = useDispatch();
 
   const onSubmit = ({ content }) => {
     const data = {
       contentType: 'fit',
       objectId: 1,
-      profileId: 52,
+      profileId,
       content
     };
 
