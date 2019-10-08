@@ -54,8 +54,6 @@ class SearchGarments extends Component {
     if (this.props.garments !== prevProps.garments) {
       this.props.fetchGarments();
     }
-
-    this.props.fetchBrands();
   }
 
   componentDidMount() {
@@ -64,6 +62,8 @@ class SearchGarments extends Component {
     this.props.navigation.setParams({
       addCustomGarment: this._addCustomGarment
     });
+
+    this.props.fetchBrands();
 
     this.setState(
       {

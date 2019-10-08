@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 import { Metrics, AppStyles } from '../Themes';
 
-import { brands } from '../data.json';
-
 class GarmentsList extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
