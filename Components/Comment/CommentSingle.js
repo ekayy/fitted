@@ -6,7 +6,12 @@ import CommentActions from './CommentActions';
 import CommentReply from './CommentReply';
 
 const CommentSingle = props => {
-  const { hasReply, viewComments, leaveComment } = props;
+  const {
+    renderViewComments,
+    renderLeaveComment,
+    viewComments,
+    leaveComment
+  } = props;
 
   return (
     <StyledCommentSingle>
@@ -19,7 +24,8 @@ const CommentSingle = props => {
       </StyledCommentText>
 
       <CommentActions
-        renderLinks
+        renderViewComments={renderViewComments}
+        renderLeaveComment={renderLeaveComment}
         viewComments={viewComments}
         leaveComment={leaveComment}
       />

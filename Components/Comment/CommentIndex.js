@@ -8,15 +8,22 @@ import {
   Modal,
   TouchableOpacity
 } from 'react-native';
-import { Input } from 'react-native-elements';
+
 import { Formik, ErrorMessage } from 'formik';
+
 import CommentSingle from './CommentSingle';
 import CommentInput from './CommentInput';
 import CommentReply from './CommentReply';
 
-const CommentIndex = () => {
+const CommentIndex = ({ navigation }) => {
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
+
+  useEffect(() => {
+    navigation.setParams({
+      openModal
+    });
+  }, []);
 
   const closeModal = () => {
     setModal(false);
@@ -32,7 +39,8 @@ const CommentIndex = () => {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
         <View>
-          <CommentSingle hasReply leaveComment={openModal} />
+          <CommentSingle leaveComment={openModal} />
+
           <CommentReply />
           <CommentReply />
           <CommentReply />
@@ -57,11 +65,16 @@ const CommentIndex = () => {
   );
 };
 
-const StyledInputToggle = styled.View`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 20px;
+CommentIndex.navigationOptions = ({ navigation }) => ({
+  headerRight: (
+    <StyledHeaderButton onPress={navigation.getParam('openModal')}>
+      <Text>Leave Reply</Text>
+    </StyledHeaderButton>
+  )
+});
+
+const StyledHeaderButton = styled.TouchableOpacity`
+  margin-right: 20px;
 `;
 
 export default CommentIndex;

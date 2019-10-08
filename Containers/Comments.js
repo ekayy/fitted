@@ -15,7 +15,6 @@ import { AppStyles, Metrics } from '../Themes';
 import { Formik, ErrorMessage } from 'formik';
 import CommentSingle from '../Components/Comment/CommentSingle';
 import CommentInput from '../Components/Comment/CommentInput';
-import { Ionicons } from '@expo/vector-icons';
 
 const Comments = ({ navigation }) => {
   const [searchValue, onChangeSearch] = useState('');
@@ -75,13 +74,26 @@ const Comments = ({ navigation }) => {
 
         <View>
           <CommentSingle
-            hasReply
+            renderViewComments
+            renderLeaveComment
             viewComments={() => navigation.navigate('CommentIndex')}
             leaveComment={openModal}
           />
-          <CommentSingle leaveComment={openModal} />
-          <CommentSingle leaveComment={openModal} />
-          <CommentSingle hasReply leaveComment={openModal} />
+          <CommentSingle
+            renderViewComments
+            renderLeaveComment
+            leaveComment={openModal}
+          />
+          <CommentSingle
+            renderViewComments
+            renderLeaveComment
+            leaveComment={openModal}
+          />
+          <CommentSingle
+            renderViewComments
+            renderLeaveComment
+            leaveComment={openModal}
+          />
         </View>
       </ScrollView>
 
@@ -100,7 +112,7 @@ const Comments = ({ navigation }) => {
 Comments.navigationOptions = ({ navigation }) => ({
   headerRight: (
     <StyledHeaderButton onPress={navigation.getParam('openModal')}>
-      <Ionicons name="ios-create" size={30} color="#000" />
+      <Text>Post New Comment</Text>
     </StyledHeaderButton>
   )
 });

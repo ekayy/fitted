@@ -6,7 +6,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import { upvoteComment, downvoteComment } from '../../Redux/CommentsRedux';
 
 const CommentActions = props => {
-  const { renderLinks, viewComments, leaveComment } = props;
+  const {
+    renderViewComments,
+    renderLeaveComment,
+    viewComments,
+    leaveComment
+  } = props;
 
   const { commentId, profileId } = useSelector(
     state => ({
@@ -28,12 +33,14 @@ const CommentActions = props => {
 
   return (
     <StyledCommentActions>
-      {renderLinks && (
-        <StyledCommentLinks>
+      <StyledCommentLinks>
+        {renderViewComments && (
           <StyledLink onPress={viewComments}>View all comments</StyledLink>
-          <StyledLink onPress={leaveComment}>Leave a comment</StyledLink>
-        </StyledCommentLinks>
-      )}
+        )}
+        {renderLeaveComment && (
+          <StyledLink onPress={leaveComment}>Leave a reply</StyledLink>
+        )}
+      </StyledCommentLinks>
 
       <StyledCommentVotes>
         <TouchableOpacity onPress={handleUpvote}>
