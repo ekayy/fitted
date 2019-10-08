@@ -97,7 +97,8 @@ const StyledHeaderScroll = styled.ScrollView`
 `;
 
 const StyledHeaderContainer = styled.View`
-  background-color: #000;
+  background-color: #fff;
+  border-bottom-width: 0.2px;
   height: 10%;
   flex-direction: row;
   align-items: flex-end;
@@ -106,13 +107,13 @@ const StyledHeaderContainer = styled.View`
 
 const CancelButton = styled.Text`
   text-transform: uppercase;
-  color: #fff;
+  color: #000;
   padding: 10px;
 `;
 
 const SearchButton = styled.Text`
   text-transform: uppercase;
-  color: #fff;
+  color: #000;
   padding: 10px;
 `;
 

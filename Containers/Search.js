@@ -215,7 +215,7 @@ class Search extends Component {
         <SearchBar
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.inputContainer}
-          cancelButtonProps={{ color: '#fff' }}
+          cancelButtonProps={{ color: '#000' }}
           round
           lightTheme
           placeholder="Search"
@@ -313,6 +313,7 @@ const StyledFilterBarContainer = styled.View`
   align-items: center;
   padding: 5px 0;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #fff;
 `;
 const FilterButton = styled.TouchableOpacity`
   min-width: 30%;
@@ -371,11 +372,11 @@ const styles = {
     backgroundColor: Colors.darkFade
   },
   searchBarContainer: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     paddingVertical: 10
   },
   inputContainer: {
-    backgroundColor: '#fff'
+    backgroundColor: '#f3f3f3'
   },
   dropdownButton: {
     backgroundColor: '#000',
