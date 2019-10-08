@@ -10,7 +10,7 @@ import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
 import { baseURL } from '../Config';
 import { withNavigationFocus } from 'react-navigation';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from './Styles/MyProfileStyles';
 
 class MyProfile extends Component {
@@ -18,8 +18,8 @@ class MyProfile extends Component {
     index: 0,
     routes: [
       { key: 'garments', title: 'Closet', icon: 'hanger' },
-      { key: 'fits', title: 'Favorite Fits', icon: 'tshirt-crew' }
-      // { key: 'myfits', title: 'My Fits' }
+      { key: 'fits', title: 'Favorite Fits', icon: 'tshirt-crew' },
+      { key: 'myfits', title: 'My Fits', icon: 'tshirt-v-outline' }
     ],
     loading: false,
     refreshing: false,
@@ -45,6 +45,12 @@ class MyProfile extends Component {
     if (previousProps.favoriteFits != this.props.favoriteFits) {
       this.setState({ refreshing: true, favoriteFits: [] }, () => {
         this.fetchFavoriteFits();
+      });
+    }
+
+    if (previousProps.favoriteFits != this.props.favoriteFits) {
+      this.setState({ refreshing: true, myFits: [] }, () => {
+        this.fetchMyFits();
       });
     }
   }
@@ -258,17 +264,17 @@ class MyProfile extends Component {
             loading={loading}
           />
         );
-      // case "myfits":
-      //   return (
-      //     <FitsGrid
-      //       data={myFits}
-      //       navigation={this.props.navigation}
-      //       handleLoadMore={this.handleLoadMore}
-      //       onRefresh={this.handleMyFitRefresh}
-      //       refreshing={refreshing}
-      //       loading={loading}
-      //     />
-      //   );
+      case 'myfits':
+        return (
+          <FitsGrid
+            data={myFits}
+            navigation={this.props.navigation}
+            handleLoadMore={this.handleLoadMore}
+            onRefresh={this.handleMyFitRefresh}
+            refreshing={refreshing}
+            loading={loading}
+          />
+        );
       default:
         return null;
     }
