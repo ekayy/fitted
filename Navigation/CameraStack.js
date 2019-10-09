@@ -1,4 +1,5 @@
 import { createStackNavigator } from 'react-navigation';
+import CreateDiscussion from '../Containers/CreateDiscussion';
 import Camera from '../Containers/Camera';
 import TagGarments from '../Containers/TagGarments';
 import SearchGarments from '../Containers/SearchGarments';
@@ -7,6 +8,10 @@ import AddCustomGarment from '../Containers/AddCustomGarment';
 
 const CameraStack = createStackNavigator(
   {
+    CreateDiscussion: {
+      screen: CreateDiscussion,
+      navigationOptions: { title: 'Discussion' }
+    },
     Camera: {
       screen: Camera,
       navigationOptions: { title: 'Camera', header: null }
@@ -29,7 +34,7 @@ const CameraStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Camera'
+    initialRouteName: 'CreateDiscussion'
   }
 );
 
