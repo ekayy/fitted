@@ -92,7 +92,7 @@ const Form = props => {
         />
       </StyledFormRow>
 
-      <StyledFormRow style={{ zIndex: 1, alignItems: 'center' }}>
+      {/* <StyledFormRow style={{ zIndex: 1, alignItems: 'center' }}>
         {categories.map(category => (
           <Checkbox
             key={category.name}
@@ -101,13 +101,13 @@ const Form = props => {
             handlePress={() => selectItem(category)}
           />
         ))}
-      </StyledFormRow>
+      </StyledFormRow> */}
 
       <StyledFormRow style={{ zIndex: 0 }}>
         <StyledTextArea
           multiline={true}
           numberOfLines={4}
-          placeholder="Discussion"
+          placeholder="Discussion (.e.g. True to size?)"
           onChangeText={handleChange('discussion')}
           onBlur={handleBlur('discussion')}
           value={values.discussion}
@@ -124,9 +124,21 @@ const Form = props => {
 };
 
 const CreateDiscussionForm = withFormik({
-  mapPropsToValues: () => ({ brand: '', type: '', color: '', season: '' }),
+  mapPropsToValues: () => ({
+    brand: '',
+    type: '',
+    color: '',
+    season: '',
+    discussion: ''
+  }),
 
-  handleSubmit: (values, { setSubmitting }) => console.tron.log(values),
+  handleSubmit: (values, { props, setSubmitting }) => {
+    const { createGarment, navigation } = props;
+
+    createGarment(values);
+
+    // navigation.navigate('GarmentDetail', response);
+  },
 
   displayName: 'CreateDiscussionForm'
 })(Form);
@@ -141,14 +153,8 @@ class CreateDiscussion extends Component {
     this.props.fetchBrands();
   }
 
-  // onSubmit = values => {
-  //   this.props.createGarment(values);
-
-  //   // this.props.navigation.navigate('TagGarments', response);
-  // };
-
   render() {
-    const { brands } = this.props;
+    const { brands, createGarment } = this.props;
 
     return (
       <StyledContainer>
@@ -158,7 +164,7 @@ class CreateDiscussion extends Component {
         </StyledIntroduction>
         <StyledIntroduction>Get started below!</StyledIntroduction>
 
-        <CreateDiscussionForm brands={brands} />
+        <CreateDiscussionForm brands={brands} createGarment={createGarment} />
       </StyledContainer>
     );
   }
