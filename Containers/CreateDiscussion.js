@@ -168,7 +168,6 @@ const StyledContainer = styled.ScrollView`
   flex: 1;
   padding: 20px;
   background-color: #f3f3f3;
-  margin-bottom: 20px;
 `;
 
 const StyledIntroduction = styled.Text`
@@ -194,7 +193,7 @@ const StyledTextArea = styled.TextInput`
 
 const StyledButtonGroup = styled.View`
   position: relative;
-  margin-top: 20px;
+  margin: 10px 0 40px 0;
   flex-direction: row;
   justify-content: center;
   align-items: center;
