@@ -9,7 +9,7 @@ import { AppStyles, Metrics } from '../Themes';
 import styles from './Styles/GarmentDetailStyles';
 
 import FavoriteButton from '../Components/FavoriteButton';
-import Comments from '../Components/Comment/List';
+import CommentSingle from '../Components/Comment/CommentSingle';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
 import { Ionicons } from '@expo/vector-icons';
@@ -231,53 +231,10 @@ class GarmentDetail extends Component {
 
         <View style={AppStyles.section}>
           <View style={AppStyles.sectionTitle}>
-            <Text style={AppStyles.sectionTitleText}>Top Reviews</Text>
-          </View>
-
-          <TouchableOpacity style={AppStyles.sectionSubtitle}>
-            <Ionicons
-              name="ios-brush"
-              size={25}
-              style={{ marginRight: 10, color: '#aaa' }}
-            />
-            <Text>Write a review</Text>
-          </TouchableOpacity>
-
-          <View style={styles.reviews}>
-            <View style={styles.reviewItem}>
-              <Text>username1</Text>
-              <Text>
-                Irure aliquip adipisicing ullamco officia labore eu ad consequat
-                ipsum ad. Adipisicing tempor irure incididunt deserunt culpa
-                proident aute voluptate deserunt proident sit cillum.
-              </Text>
-            </View>
-
-            <View style={styles.reviewItem}>
-              <Text>username2</Text>
-              <Text>
-                Irure aliquip adipisicing ullamco officia labore eu ad consequat
-                ipsum ad. Adipisicing tempor irure incididunt deserunt culpa
-                proident aute voluptate deserunt proident sit cillum.
-              </Text>
-            </View>
-          </View>
-
-          <View style={AppStyles.button}>
-            <Button
-              title="See all 987 reviews"
-              buttonStyle={[AppStyles.buttonAltStyle]}
-              titleStyle={AppStyles.buttonAltTitleStyle}
-            />
-          </View>
-        </View>
-
-        <View style={AppStyles.section}>
-          <View style={AppStyles.sectionTitle}>
             <Text style={AppStyles.sectionTitleText}>Discussion</Text>
           </View>
 
-          <Comments user={true} />
+          <CommentSingle viewComments={() => navigate('CommentIndex')} />
 
           <View style={AppStyles.button}>
             <Button
