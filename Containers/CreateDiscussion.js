@@ -7,6 +7,30 @@ import { fetchBrands } from '../Redux/BrandsRedux';
 import { createGarment } from '../Redux/GarmentsRedux';
 import Input from '../Components/Forms/Input';
 import Checkbox from '../Components/Forms/Checkbox';
+import * as Yup from 'yup';
+
+const CreateGarmentSchema = Yup.object().shape({
+  brand: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  type: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  color: Yup.string()
+    .min(2, 'Too Short!')
+    .max(20, 'Too Long!')
+    .required('Required'),
+  season: Yup.string()
+    .min(2, 'Too Short!')
+    .max(20, 'Too Long!')
+    .required('Required'),
+  discussion: Yup.string()
+    .min(3, 'Too Short!')
+    .max(200, 'Too Long!')
+    .required('Required')
+});
 
 // Mock data
 const types = [{ name: 'box logo' }, { name: 'clean' }, { name: 'ugly' }];
@@ -50,10 +74,15 @@ const Form = props => {
           data={brands}
           handleBlur={handleBlur}
           handleChange={handleChange}
-          placeholder="Brand (e.g. Supreme)"
+          placeholder="Brand (e.g. Supreme)*"
           setFieldValue={setFieldValue}
           value={values.brand}
         />
+        <StyledErrorWrapper>
+          {errors.brand && touched.brand ? (
+            <StyledError>{errors.brand}</StyledError>
+          ) : null}
+        </StyledErrorWrapper>
       </StyledFormRow>
 
       <StyledFormRow style={{ zIndex: 4 }}>
@@ -62,10 +91,15 @@ const Form = props => {
           data={types}
           handleBlur={handleBlur}
           handleChange={handleChange}
-          placeholder="Type (e.g. Box Logo)"
+          placeholder="Type (e.g. Box Logo)*"
           setFieldValue={setFieldValue}
           value={values.type}
         />
+        <StyledErrorWrapper>
+          {errors.type && touched.type ? (
+            <StyledError>{errors.type}</StyledError>
+          ) : null}
+        </StyledErrorWrapper>
       </StyledFormRow>
 
       <StyledFormRow style={{ zIndex: 3 }}>
@@ -74,10 +108,15 @@ const Form = props => {
           data={colors}
           handleBlur={handleBlur}
           handleChange={handleChange}
-          placeholder="Color (e.g. Camo)"
+          placeholder="Color (e.g. Camo)*"
           setFieldValue={setFieldValue}
           value={values.color}
         />
+        <StyledErrorWrapper>
+          {errors.color && touched.color ? (
+            <StyledError>{errors.color}</StyledError>
+          ) : null}
+        </StyledErrorWrapper>
       </StyledFormRow>
 
       <StyledFormRow style={{ zIndex: 2 }}>
@@ -86,10 +125,15 @@ const Form = props => {
           data={seasons}
           handleBlur={handleBlur}
           handleChange={handleChange}
-          placeholder="Season (e.g. FW19)"
+          placeholder="Season (e.g. FW19)*"
           setFieldValue={setFieldValue}
           value={values.season}
         />
+        <StyledErrorWrapper>
+          {errors.season && touched.season ? (
+            <StyledError>{errors.season}</StyledError>
+          ) : null}
+        </StyledErrorWrapper>
       </StyledFormRow>
 
       {/* <StyledFormRow style={{ zIndex: 1, alignItems: 'center' }}>
@@ -107,11 +151,17 @@ const Form = props => {
         <StyledTextArea
           multiline={true}
           numberOfLines={4}
-          placeholder="Discussion (.e.g. True to size?)"
+          placeholder="Discussion (.e.g. True to size?)*"
           onChangeText={handleChange('discussion')}
           onBlur={handleBlur('discussion')}
           value={values.discussion}
+          style={errors.discussion}
         />
+        <StyledErrorWrapper>
+          {errors.discussion && touched.discussion ? (
+            <StyledError>{errors.discussion}</StyledError>
+          ) : null}
+        </StyledErrorWrapper>
       </StyledFormRow>
 
       <StyledButtonGroup>
@@ -131,6 +181,8 @@ const CreateDiscussionForm = withFormik({
     season: '',
     discussion: ''
   }),
+
+  validationSchema: CreateGarmentSchema,
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     const { createGarment, navigation } = props;
@@ -194,7 +246,7 @@ const StyledForm = styled.View`
 const StyledFormRow = styled.View`
   position: relative;
   z-index: 1;
-  margin: 10px 0;
+  margin: 15px 0;
 `;
 
 const StyledTextArea = styled.TextInput`
@@ -210,6 +262,16 @@ const StyledButtonGroup = styled.View`
   justify-content: center;
   align-items: center;
   width: 100%;
+`;
+
+const StyledError = styled.Text`
+  color: red;
+`;
+
+const StyledErrorWrapper = styled.View`
+  position: absolute;
+  bottom: -20px;
+  left: 15px;
 `;
 
 const mapStateToProps = ({ user, brands }) => {
