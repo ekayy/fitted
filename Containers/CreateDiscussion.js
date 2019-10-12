@@ -132,12 +132,14 @@ const CreateDiscussionForm = withFormik({
     discussion: ''
   }),
 
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: async (values, { props, setSubmitting }) => {
     const { createGarment, navigation } = props;
 
-    createGarment(values);
+    const garmentData = await createGarment(values);
 
-    // navigation.navigate('GarmentDetail', response);
+    /* TODO create discussion comment */
+
+    navigation.navigate('GarmentDetail', garmentData);
   },
 
   displayName: 'CreateDiscussionForm'
@@ -154,7 +156,7 @@ class CreateDiscussion extends Component {
   }
 
   render() {
-    const { brands, createGarment } = this.props;
+    const { brands, createGarment, navigation } = this.props;
 
     return (
       <StyledContainer>
@@ -164,7 +166,11 @@ class CreateDiscussion extends Component {
         </StyledIntroduction>
         <StyledIntroduction>Get started below!</StyledIntroduction>
 
-        <CreateDiscussionForm brands={brands} createGarment={createGarment} />
+        <CreateDiscussionForm
+          brands={brands}
+          createGarment={createGarment}
+          navigation={navigation}
+        />
       </StyledContainer>
     );
   }
