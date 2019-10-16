@@ -5,12 +5,13 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { Colors } from '../Themes';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
-import { login } from '../Redux/UserRedux';
+import { fetchBrands } from '../Redux/BrandsRedux';
+import { login, favoriteGarment } from '../Redux/UserRedux';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Ionicons } from '@expo/vector-icons';
 
 import SearchFilter from '../Components/Search/SearchFilter';
-import GarmentsFilterList from '../Components/GarmentsFilterList';
+import SearchList from '../Components/SearchList';
 
 class Search extends Component {
   static navigationOptions = {
@@ -56,6 +57,8 @@ class Search extends Component {
         }
       );
     });
+
+    this.props.fetchBrands();
 
     // this.setState({ refreshing: true, results: [] });
     // // Get garments from redux store
@@ -215,7 +218,7 @@ class Search extends Component {
         <SearchBar
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.inputContainer}
-          cancelButtonProps={{ color: '#fff' }}
+          cancelButtonProps={{ color: '#000' }}
           round
           lightTheme
           placeholder="Search"
@@ -251,7 +254,12 @@ class Search extends Component {
           >
             <StyledDropdownButtonContainer>
               <DropdownButtonText>SELECT</DropdownButtonText>
-              <Ionicons name="ios-arrow-down" size={25} color="#fff" />
+              <Ionicons
+                name="ios-arrow-down"
+                size={25}
+                color="#fff"
+                style={{ marginLeft: 60 }}
+              />
             </StyledDropdownButtonContainer>
           </ModalDropdown>
           <VerticalDivider />
@@ -270,9 +278,10 @@ class Search extends Component {
           ref={instance => {
             this.child = instance;
           }}
+          brands={this.props.brands}
         />
 
-        <GarmentsFilterList
+        <SearchList
           data={results}
           navigation={this.props.navigation}
           numCol={2}
@@ -280,6 +289,9 @@ class Search extends Component {
           onRefresh={this.handleRefresh}
           refreshing={refreshing}
           loading={loading}
+          brands={this.props.brands}
+          user={this.props.user}
+          favoriteGarment={this.props.favoriteGarment}
         />
       </View>
     );
@@ -308,6 +320,7 @@ const StyledFilterBarContainer = styled.View`
   align-items: center;
   padding: 5px 0;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #fff;
 `;
 const FilterButton = styled.TouchableOpacity`
   min-width: 30%;
@@ -324,10 +337,11 @@ const DropdownButtonText = styled.Text`
 `;
 const StyledDropdownButtonContainer = styled.View`
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
   min-width: 144px;
   min-height: 28px;
+  padding: 6px;
 `;
 
 const styles = {
@@ -365,12 +379,11 @@ const styles = {
     backgroundColor: Colors.darkFade
   },
   searchBarContainer: {
-    backgroundColor: '#000',
-    paddingBottom: 10,
-    paddingTop: 10
+    backgroundColor: '#fff',
+    paddingVertical: 10
   },
   inputContainer: {
-    backgroundColor: '#fff'
+    backgroundColor: '#f3f3f3'
   },
   dropdownButton: {
     backgroundColor: '#000',
@@ -384,7 +397,9 @@ const styles = {
     fontSize: 14,
     color: '#fff',
     minWidth: 144,
-    textAlign: 'center'
+    minHeight: 28,
+    paddingVertical: 6,
+    alignItems: 'center'
   },
   dropdownTextHighlight: {
     color: '#fff'
@@ -394,11 +409,13 @@ const styles = {
 const mapStateToProps = state => {
   return {
     garments: state.garments.items,
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    brands: state.brands.items,
+    user: state.user
   };
 };
 
 export default connect(
   mapStateToProps,
-  { login, fetchGarments }
+  { login, fetchGarments, fetchBrands, favoriteGarment }
 )(Search);

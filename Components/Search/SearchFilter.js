@@ -9,6 +9,8 @@ import SectionTitle from '../Search/SectionTitle';
 const SearchFilter = forwardRef((props, ref) => {
   const [checked, setChecked] = useState({});
 
+  const { brands } = props;
+
   function selectItem(item) {
     setChecked({ [item.id]: !checked[item.id] });
 
@@ -65,7 +67,7 @@ const SearchFilter = forwardRef((props, ref) => {
         <StyledHeaderScroll>
           <StyledHeaderContainer>
             <CancelButton onPress={props.onClose}>Cancel</CancelButton>
-            <SearchButton>Search</SearchButton>
+            <SearchButton onPress={props.onClose}>Search</SearchButton>
           </StyledHeaderContainer>
 
           <View>
@@ -74,7 +76,7 @@ const SearchFilter = forwardRef((props, ref) => {
             {renderItems(categories)}
             <SectionTitle text="brands" />
             <Divider />
-            {renderItems(brands)}
+            {renderItems(brands.map(brand => brand))}
           </View>
         </StyledHeaderScroll>
       </StyledHeader>
@@ -97,7 +99,8 @@ const StyledHeaderScroll = styled.ScrollView`
 `;
 
 const StyledHeaderContainer = styled.View`
-  background-color: #000;
+  background-color: #fff;
+  border-bottom-width: 0.2px;
   height: 10%;
   flex-direction: row;
   align-items: flex-end;
@@ -106,13 +109,13 @@ const StyledHeaderContainer = styled.View`
 
 const CancelButton = styled.Text`
   text-transform: uppercase;
-  color: #fff;
+  color: #000;
   padding: 10px;
 `;
 
 const SearchButton = styled.Text`
   text-transform: uppercase;
-  color: #fff;
+  color: #000;
   padding: 10px;
 `;
 
@@ -134,45 +137,22 @@ const styles = {
   }
 };
 
-const brands = [
-  {
-    name: '3sixteen',
-    id: 1
-  },
-  {
-    name: 'Carhatt WIP',
-    id: 2
-  },
-  {
-    name: 'Fear of God',
-    id: 3
-  },
-  {
-    name: 'John Elliot',
-    id: 4
-  },
-  {
-    name: 'Reigning Champ',
-    id: 5
-  }
-];
-
 const categories = [
   {
     name: 'Tops',
-    id: 6
+    id: 20
   },
   {
     name: 'Bottoms',
-    id: 7
+    id: 21
   },
   {
     name: 'Shoes',
-    id: 8
+    id: 22
   },
   {
     name: 'Other',
-    id: 9
+    id: 23
   }
 ];
 
