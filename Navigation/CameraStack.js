@@ -8,10 +8,6 @@ import AddCustomGarment from '../Containers/AddCustomGarment';
 
 const CameraStack = createStackNavigator(
   {
-    CreateDiscussion: {
-      screen: CreateDiscussion,
-      navigationOptions: { title: 'Discussion' }
-    },
     Camera: {
       screen: Camera,
       navigationOptions: { title: 'Camera', header: null }
@@ -34,7 +30,7 @@ const CameraStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'CreateDiscussion'
+    initialRouteName: 'Camera'
   }
 );
 
