@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import {
   Text,
   View,
   TouchableOpacity,
   Button,
   Image,
-  Vibration
+  Vibration,
+  Animated,
+  PanResponder
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-import { Ionicons } from '@expo/vector-icons';
-import styles from './Styles/CameraStyles';
+import { PinchGestureHandler } from 'react-native-gesture-handler';
+import { Ionicons, EvilIcons } from '@expo/vector-icons';
 
 class CameraScreen extends Component {
-  state = {
-    hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
-    image: null,
-    photoId: 1
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasCameraPermission: null,
+      type: Camera.Constants.Type.back,
+      image: null,
+      photoId: 1,
+      zoom: 0
+    };
+  }
 
   componentDidMount() {
     FileSystem.makeDirectoryAsync(
@@ -53,54 +60,72 @@ class CameraScreen extends Component {
   };
 
   renderCamera() {
-    let { image } = this.state;
+    let { image, zoom, type } = this.state;
+    const { navigate } = this.props.navigation;
 
     return (
-      <Camera
-        style={styles.container}
-        type={this.state.type}
-        ref={ref => {
-          this.camera = ref;
-        }}
-      >
-        <View style={styles.controlsContainer}>
-          <View style={styles.controls}>
-            <View style={styles.toggle}>
-              <Button
-                title="Library"
-                onPress={this.pickImage}
-                buttonStyle={styles.toggleButtons}
-                color="#fff"
-              />
-            </View>
-
-            <TouchableOpacity style={{}} onPress={this.takePicture}>
-              <Ionicons name="ios-radio-button-on" size={90} color="#fff" />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.reverse}
-              onPress={() => {
-                this.setState({
-                  type:
-                    this.state.type === Camera.Constants.Type.back
-                      ? Camera.Constants.Type.front
-                      : Camera.Constants.Type.back
-                });
-              }}
-            >
-              <Ionicons name="ios-reverse-camera" size={40} color="#fff" />
-            </TouchableOpacity>
-          </View>
-
+      <StyledContainer>
+        <StyledHeaderContainer>
           {image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 200, height: 200, backgroundColor: '#fff' }}
-            />
+            <StyledHeader>
+              <StyledHeaderText onPress={() => this.setState({ image: null })}>
+                <Text>Retake</Text>
+              </StyledHeaderText>
+
+              <StyledHeaderText
+                onPress={() => navigate('TagGarments', { image })}
+              >
+                Next
+              </StyledHeaderText>
+            </StyledHeader>
           )}
-        </View>
-      </Camera>
+        </StyledHeaderContainer>
+        <Camera
+          style={{ flex: 0.65 }}
+          type={type}
+          ref={ref => {
+            this.camera = ref;
+          }}
+        >
+          {image && (
+            <StyledImageContainer>
+              <StyledImage source={{ uri: image }} />
+            </StyledImageContainer>
+          )}
+        </Camera>
+
+        <StyledControlsContainer>
+          {!image && (
+            <StyledControls>
+              <StyledToggle>
+                <Button
+                  title="Library"
+                  onPress={this.pickImage}
+                  // buttonStyle={styles.toggleButtons}
+                  color="#fff"
+                />
+              </StyledToggle>
+
+              <TouchableOpacity onPress={this.takePicture}>
+                <Ionicons name="ios-radio-button-on" size={90} color="#fff" />
+              </TouchableOpacity>
+
+              <StyledReverseButton
+                onPress={() => {
+                  this.setState({
+                    type:
+                      type === Camera.Constants.Type.back
+                        ? Camera.Constants.Type.front
+                        : Camera.Constants.Type.back
+                  });
+                }}
+              >
+                <Ionicons name="ios-reverse-camera" size={40} color="#fff" />
+              </StyledReverseButton>
+            </StyledControls>
+          )}
+        </StyledControlsContainer>
+      </StyledContainer>
     );
   }
 
@@ -109,19 +134,17 @@ class CameraScreen extends Component {
       // let photo = await this.camera.takePictureAsync();
 
       this.camera.takePictureAsync().then(data => {
-        const image = `${FileSystem.documentDirectory}photos/Photo_${
-          this.state.photoId
-        }.jpg`;
+        const image = `${FileSystem.documentDirectory}photos/photo_${this.state.photoId}.jpg`;
 
         FileSystem.moveAsync({
           from: data.uri,
           to: image
         }).then(() => {
           this.setState({
-            photoId: this.state.photoId + 1
+            photoId: this.state.photoId + 1,
+            image
           });
           Vibration.vibrate();
-          this.props.navigation.navigate('TagGarments', { image });
         });
       });
 
@@ -137,9 +160,71 @@ class CameraScreen extends Component {
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
-      return <View style={styles.container}>{this.renderCamera()}</View>;
+      return this.renderCamera();
     }
   }
 }
+
+const StyledContainer = styled.View`
+  flex: 1;
+`;
+
+const StyledHeaderContainer = styled.View`
+  flex: 0.1;
+  background: #000;
+`;
+
+const StyledHeader = styled.View`
+  height: 100%;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const StyledHeaderText = styled.Text`
+  color: #fff;
+`;
+
+const StyledControlsContainer = styled.View`
+  flex: 0.25;
+  justify-content: flex-end;
+  background-color: rgba(0, 0, 0, 0.95);
+`;
+
+const StyledControls = styled.View`
+  flex: 1;
+  background-color: transparent;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledReverseButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 80px;
+`;
+
+const StyledToggle = styled.View`
+  position: absolute;
+  left: 60px;
+`;
+
+const StyledImageContainer = styled.View`
+  background-color: #fff;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const StyledImage = styled.Image`
+  background-color: #fff;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+`;
 
 export default CameraScreen;
