@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { AppStyles, Metrics } from '../Themes';
 import GarmentsList from '../Components/GarmentsList';
@@ -95,7 +94,12 @@ class FitDetail extends Component {
   };
 
   render() {
-    const { photo, height, weight } = this.props.navigation.state.params;
+    const {
+      photo,
+      height,
+      weight,
+      comments
+    } = this.props.navigation.state.params;
     const { profile, username } = this.state;
 
     const feet = parseInt(height / 12);
@@ -151,11 +155,29 @@ class FitDetail extends Component {
 
           <View style={AppStyles.section}>
             <View style={AppStyles.sectionTitle}>
-              <Text style={AppStyles.sectionTitleText}>Comments</Text>
+              <Text style={AppStyles.sectionTitleText}>Discussion</Text>
+            </View>
+
+            {comments.length > 0 && (
+              <CommentSingle
+                data={comments[0]}
+                renderViewComments
+                renderLeaveComment
+                viewComments={() =>
+                  navigate('CommentIndex', { comment: comments[0] })
+                }
+                leaveComment={() => {}}
+              />
+            )}
+            <View style={AppStyles.button}>
+              <Button
+                title={`See all discussion`}
+                buttonStyle={[AppStyles.buttonAltStyle]}
+                titleStyle={AppStyles.buttonAltTitleStyle}
+                onPress={() => navigate('Comments', { comments })}
+              />
             </View>
           </View>
-
-          <Text>COMMENTS COMPONENT GOES HERE</Text>
         </ScrollView>
       </View>
     );
