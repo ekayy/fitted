@@ -11,7 +11,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { Ionicons } from '@expo/vector-icons';
 
 import SearchFilter from '../Components/Search/SearchFilter';
-import GarmentsFilterList from '../Components/GarmentsFilterList';
+import SearchList from '../Components/SearchList';
 
 class Search extends Component {
   static navigationOptions = {
@@ -281,7 +281,7 @@ class Search extends Component {
           brands={this.props.brands}
         />
 
-        <GarmentsFilterList
+        <SearchList
           data={results}
           navigation={this.props.navigation}
           numCol={2}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -15,7 +14,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { connect } from 'react-redux';
 
-class GarmentsFilterList extends Component {
+class SearchList extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const {
@@ -176,4 +175,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { favoriteGarment }
-)(GarmentsFilterList);
+)(SearchList);
