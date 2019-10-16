@@ -9,7 +9,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { Badge } from 'react-native-elements';
-import { Metrics, Dimensions } from '../Themes';
+import { Metrics } from '../Themes';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { connect } from 'react-redux';

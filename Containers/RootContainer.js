@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, StatusBar, ActivityIndicator } from 'react-native';
-import { connect } from 'react-redux';
 
 import RootNav from '../Navigation/RootNav';
 

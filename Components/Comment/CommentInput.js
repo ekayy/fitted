@@ -7,7 +7,8 @@ import { EvilIcons } from '@expo/vector-icons';
 import { postComment } from '../../Redux/CommentsRedux';
 
 const CommentInput = props => {
-  const { closeModal } = props;
+  const { closeModal, data } = props;
+  const { content, downvotes, upvotes, username } = data;
 
   const { profileId } = useSelector(state => ({
     profileId: state.user.profileId
@@ -44,12 +45,7 @@ const CommentInput = props => {
               </TouchableOpacity>
             </StyledModalHeader>
 
-            <StyledText>
-              Sit excepteur culpa voluptate irure irure cupidatat sint
-              adipisicing nisi aliquip qui. Cupidatat non nostrud duis sit. Ut
-              amet ex ea officia tempor eu tempor duis pariatur in qui
-              consequat.
-            </StyledText>
+            <StyledText>{content}</StyledText>
 
             <StyledInput>
               <TextInput

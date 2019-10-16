@@ -30,10 +30,17 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     padding: Metrics.baseMargin,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border
   },
+  descriptionSectionLeft: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  descriptionSectionRight: {},
   descriptionText: {
     display: 'flex',
     justifyContent: 'center',

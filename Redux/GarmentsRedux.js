@@ -105,7 +105,7 @@ export const fetchGarments = () => async dispatch => {
   dispatch(fetchGarmentsBegin());
 
   try {
-    const res = await axios.get(`${baseURL}/garments/?limit=10000`);
+    const res = await axios.get(`${baseURL}/garments/?format=json&limit=10`);
     dispatch(fetchGarmentsSuccess(res.data.results));
   } catch (error) {
     dispatch(fetchGarmentsFailure(error));
@@ -117,16 +117,15 @@ export const createGarment = ({ brand, color, model }) => async dispatch => {
 
   try {
     const res = await axios.post(`${baseURL}/garments/`, {
-      sku: '',
-      brand: 1,
-      color: 'test',
-      model: 'Test',
+      sku: Math.floor(Math.random() * 1000000000),
+      brand_id: brand,
+      color,
+      model,
       photo: 'https://x',
       purchase_page: 'https://x'
     });
-    dispatch(createGarmentSuccess(res.data));
-
-    console.tron.log(res.data);
+    dispatch(createGarmentSuccess());
+    return res.data;
   } catch (error) {
     dispatch(createGarmentFailure(error));
   }

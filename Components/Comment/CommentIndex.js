@@ -18,6 +18,9 @@ import CommentReply from './CommentReply';
 const CommentIndex = ({ navigation }) => {
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
+  const [currentComment, setCurrentComment] = useState({});
+
+  const { comment } = navigation.state.params;
 
   useEffect(() => {
     navigation.setParams({
@@ -27,10 +30,12 @@ const CommentIndex = ({ navigation }) => {
 
   const closeModal = () => {
     setModal(false);
+    setCurrentComment({});
   };
 
-  const openModal = () => {
+  const openModal = comment => {
     setModal(true);
+    setCurrentComment(comment);
   };
 
   const handleSubmit = () => {};
@@ -39,22 +44,20 @@ const CommentIndex = ({ navigation }) => {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
         <View>
-          <CommentSingle leaveComment={openModal} />
+          <CommentSingle
+            data={comment}
+            leaveComment={() => openModal(comment)}
+          />
 
-          <CommentReply />
-          <CommentReply />
-          <CommentReply />
-          <CommentReply />
-          <CommentReply />
-          <CommentReply />
-          <CommentReply />
-          <CommentReply />
-          <CommentReply />
+          {/* {replies.map(reply => (
+            <CommentReply />
+          ))} */}
         </View>
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>
         <CommentInput
+          data={currentComment}
           commentValue={commentValue}
           onChangeComment={text => onChangeComment(text)}
           closeModal={closeModal}

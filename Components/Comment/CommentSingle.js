@@ -10,20 +10,20 @@ const CommentSingle = props => {
     renderViewComments,
     renderLeaveComment,
     viewComments,
-    leaveComment
+    leaveComment,
+    data
   } = props;
+
+  const { content, downvotes, upvotes, username } = data;
 
   return (
     <StyledCommentSingle>
-      <StyledCommentLink>username1</StyledCommentLink>
+      <StyledCommentLink>{username}</StyledCommentLink>
 
-      <StyledCommentText>
-        Irure aliquip adipisicing ullamco officia labore eu ad consequat ipsum
-        ad. Adipisicing tempor irure incididunt deserunt culpa proident aute
-        voluptate deserunt proident sit cillum.
-      </StyledCommentText>
+      <StyledCommentText>{content}</StyledCommentText>
 
       <CommentActions
+        data={data}
         renderViewComments={renderViewComments}
         renderLeaveComment={renderLeaveComment}
         viewComments={viewComments}
@@ -47,7 +47,7 @@ const StyledCommentText = styled.Text`
 
 const StyledCommentLink = styled.Text`
   margin-bottom: 10;
-  color: #00bfff;
+  /* color: #00bfff; */
 `;
 
 export default CommentSingle;

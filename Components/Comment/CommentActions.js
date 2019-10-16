@@ -10,8 +10,11 @@ const CommentActions = props => {
     renderViewComments,
     renderLeaveComment,
     viewComments,
-    leaveComment
+    leaveComment,
+    data
   } = props;
+
+  const { content, downvotes, upvotes, username } = data;
 
   const { commentId, profileId } = useSelector(
     state => ({
@@ -47,7 +50,7 @@ const CommentActions = props => {
           <FontAwesome name="caret-up" size={30} />
         </TouchableOpacity>
 
-        <StyledCommentCount>282</StyledCommentCount>
+        <StyledCommentCount>{upvotes - downvotes}</StyledCommentCount>
 
         <TouchableOpacity onPress={handleDownvote}>
           <FontAwesome name="caret-down" size={30} />

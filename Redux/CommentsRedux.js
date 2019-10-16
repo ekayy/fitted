@@ -17,6 +17,10 @@ const POST_COMMENT_BEGIN = 'POST_COMMENT_BEGIN';
 const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
 const POST_COMMENT_FAILURE = 'POST_COMMENT_FAILURE';
 
+const POST_REPLY_BEGIN = 'POST_REPLY_BEGIN';
+const POST_REPLY_SUCCESS = 'POST_REPLY_SUCCESS';
+const POST_REPLY_FAILURE = 'POST_REPLY_FAILURE';
+
 export const INITIAL_STATE = {
   items: [],
   loading: false,
@@ -112,6 +116,29 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         content: null
       };
 
+    case POST_REPLY_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        content: null
+      };
+
+    case POST_REPLY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        content: action.payload.content
+      };
+
+    case POST_REPLY_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        content: null
+      };
+
     default:
       return state;
   }
@@ -184,6 +211,24 @@ export const postCommentFailure = error => ({
   }
 });
 
+export const postReplyBegin = () => ({
+  type: POST_REPLY_BEGIN
+});
+
+export const postReplySuccess = content => ({
+  type: POST_REPLY_SUCCESS,
+  payload: {
+    content
+  }
+});
+
+export const postReplyFailure = error => ({
+  type: POST_REPLY_FAILURE,
+  payload: {
+    error
+  }
+});
+
 // side effects, only as applicable
 // e.g. thunks, epics, etc
 export function fetchComments(id) {
@@ -240,5 +285,24 @@ export const postComment = ({
     dispatch(postCommentSuccess(res.data));
   } catch (error) {
     dispatch(postCommentFailure(error));
+  }
+};
+
+export const postReply = ({
+  commentId,
+  profileId,
+  content
+}) => async dispatch => {
+  dispatch(postReplyBegin());
+
+  try {
+    const res = await axios.post(`${baseURL}/replies/`, {
+      comment: commentId,
+      profile: profileId,
+      content
+    });
+    dispatch(postReplySuccess(res.data));
+  } catch (error) {
+    dispatch(postReplyFailure(error));
   }
 };

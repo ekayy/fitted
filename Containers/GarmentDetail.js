@@ -12,6 +12,7 @@ import FavoriteButton from '../Components/FavoriteButton';
 import CommentSingle from '../Components/Comment/CommentSingle';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
+import { fetchBrands } from '../Redux/BrandsRedux';
 import { Ionicons } from '@expo/vector-icons';
 
 import axios from 'axios';
@@ -29,6 +30,7 @@ class GarmentDetail extends Component {
 
   componentDidMount() {
     this.fetchFits();
+    this.props.fetchBrands();
     this.getFavoriteState();
   }
 
@@ -119,12 +121,15 @@ class GarmentDetail extends Component {
       sku,
       brand,
       model,
-      photo
+      photo,
+      comments
     } = this.props.navigation.state.params;
     const currentGarment = this.props.navigation.state.params;
     const { navigate } = this.props.navigation;
 
     const { refreshing, count, fits } = this.state;
+
+    const brandName = this.props.brands[brand - 1].name;
 
     return (
       <ScrollView style={styles.container}>
@@ -141,10 +146,16 @@ class GarmentDetail extends Component {
         </View>
 
         <View style={styles.descriptionSection}>
-          <Avatar size="small" rounded activeOpacity={0.7} />
-          <View style={styles.descriptionText}>
-            <Text style={styles.label}>{brand}</Text>
-            <Text>{model}</Text>
+          <View style={styles.descriptionSectionLeft}>
+            <Avatar size="small" rounded activeOpacity={0.7} />
+            <View style={styles.descriptionText}>
+              <Text style={styles.label}>{brandName}</Text>
+              <Text>{model}</Text>
+            </View>
+          </View>
+
+          <View style={styles.descriptionSectionRight}>
+            <Text>802 adds to closet</Text>
           </View>
         </View>
 
@@ -219,14 +230,16 @@ class GarmentDetail extends Component {
             inactiveSlideOpacity={1}
           />
 
-          <View style={AppStyles.button}>
-            <Button
-              title={`See all ${count} photos`}
-              buttonStyle={[AppStyles.buttonAltStyle]}
-              titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigate('Fits', { fits, currentGarment })}
-            />
-          </View>
+          {count > 0 && (
+            <View style={AppStyles.button}>
+              <Button
+                title={`See all ${count} photos`}
+                buttonStyle={[AppStyles.buttonAltStyle]}
+                titleStyle={AppStyles.buttonAltTitleStyle}
+                onPress={() => navigate('Fits', { fits, currentGarment })}
+              />
+            </View>
+          )}
         </View>
 
         <View style={AppStyles.section}>
@@ -234,14 +247,23 @@ class GarmentDetail extends Component {
             <Text style={AppStyles.sectionTitleText}>Discussion</Text>
           </View>
 
-          <CommentSingle viewComments={() => navigate('CommentIndex')} />
-
+          {comments.length > 0 && (
+            <CommentSingle
+              data={comments[0]}
+              renderViewComments
+              renderLeaveComment
+              viewComments={() =>
+                navigate('CommentIndex', { comment: comments[0] })
+              }
+              leaveComment={() => {}}
+            />
+          )}
           <View style={AppStyles.button}>
             <Button
-              title="See all 2,900 comments"
+              title={`See all discussion`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigate('Comments')}
+              onPress={() => navigate('Comments', { comments })}
             />
           </View>
         </View>
@@ -250,11 +272,11 @@ class GarmentDetail extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
-  return { user };
+const mapStateToProps = ({ user, brands }) => {
+  return { user, brands: brands.items };
 };
 
 export default connect(
   mapStateToProps,
-  { favoriteGarment, tagGarmentToFit, clearCreatedFit }
+  { fetchBrands, favoriteGarment, tagGarmentToFit, clearCreatedFit }
 )(GarmentDetail);

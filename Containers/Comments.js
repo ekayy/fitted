@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { fetchComments } from '../Redux/CommentsRedux';
 import {
   KeyboardAvoidingView,
   Text,
@@ -11,8 +9,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Input } from 'react-native-elements';
-import { AppStyles, Metrics } from '../Themes';
-import { Formik, ErrorMessage } from 'formik';
+import { AppStyles } from '../Themes';
 import CommentSingle from '../Components/Comment/CommentSingle';
 import CommentInput from '../Components/Comment/CommentInput';
 
@@ -20,20 +17,9 @@ const Comments = ({ navigation }) => {
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
+  const [currentComment, setCurrentComment] = useState({});
 
-  // const { comments, loading, error } = useSelector(
-  //   state => ({
-  //     comments: state.comments.items,
-  //     loading: state.comments.loading,
-  //     error: state.comments.error
-  //   }),
-  //   shallowEqual
-  // );
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(fetchComments());
-  // }, []);
+  const { comments } = navigation.state.params;
 
   useEffect(() => {
     navigation.setParams({
@@ -43,10 +29,12 @@ const Comments = ({ navigation }) => {
 
   const closeModal = () => {
     setModal(false);
+    setCurrentComment({});
   };
 
-  const openModal = () => {
+  const openModal = comment => {
     setModal(true);
+    setCurrentComment(comment);
   };
 
   const handleSubmit = () => {};
@@ -67,38 +55,35 @@ const Comments = ({ navigation }) => {
           <View style={AppStyles.section}>
             <View style={AppStyles.sectionTitle}>
               <Text style={AppStyles.sectionTitleText}>Discussion</Text>
-              <Text>Showing 1-10 of 987 comments</Text>
+              <Text>
+                {`Showing 1-${comments.length < 10 ? comments.length : 10} of ${
+                  comments.length
+                } comments`}
+              </Text>
             </View>
           </View>
         </View>
 
         <View>
-          <CommentSingle
-            renderViewComments
-            renderLeaveComment
-            viewComments={() => navigation.navigate('CommentIndex')}
-            leaveComment={openModal}
-          />
-          <CommentSingle
-            renderViewComments
-            renderLeaveComment
-            leaveComment={openModal}
-          />
-          <CommentSingle
-            renderViewComments
-            renderLeaveComment
-            leaveComment={openModal}
-          />
-          <CommentSingle
-            renderViewComments
-            renderLeaveComment
-            leaveComment={openModal}
-          />
+          {comments.map(comment => (
+            <CommentSingle
+              // key={comment.}
+              data={comment}
+              renderViewComments
+              renderLeaveComment
+              // TODO: request to replies
+              viewComments={() =>
+                navigation.navigate('CommentIndex', { comment })
+              }
+              leaveComment={() => openModal(comment)}
+            />
+          ))}
         </View>
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>
         <CommentInput
+          data={currentComment}
           commentValue={commentValue}
           onChangeComment={text => onChangeComment(text)}
           closeModal={closeModal}
@@ -116,13 +101,6 @@ Comments.navigationOptions = ({ navigation }) => ({
     </StyledHeaderButton>
   )
 });
-
-const StyledInputToggle = styled.View`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 20px;
-`;
 
 const StyledHeaderButton = styled.TouchableOpacity`
   margin-right: 20px;
