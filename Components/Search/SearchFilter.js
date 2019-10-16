@@ -67,7 +67,7 @@ const SearchFilter = forwardRef((props, ref) => {
         <StyledHeaderScroll>
           <StyledHeaderContainer>
             <CancelButton onPress={props.onClose}>Cancel</CancelButton>
-            <SearchButton>Search</SearchButton>
+            <SearchButton onPress={props.onClose}>Search</SearchButton>
           </StyledHeaderContainer>
 
           <View>
@@ -140,19 +140,19 @@ const styles = {
 const categories = [
   {
     name: 'Tops',
-    id: 6
+    id: 20
   },
   {
     name: 'Bottoms',
-    id: 7
+    id: 21
   },
   {
     name: 'Shoes',
-    id: 8
+    id: 22
   },
   {
     name: 'Other',
-    id: 9
+    id: 23
   }
 ];
 

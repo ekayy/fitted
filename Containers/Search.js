@@ -6,7 +6,7 @@ import { Colors } from '../Themes';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
-import { login } from '../Redux/UserRedux';
+import { login, favoriteGarment } from '../Redux/UserRedux';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -290,6 +290,8 @@ class Search extends Component {
           refreshing={refreshing}
           loading={loading}
           brands={this.props.brands}
+          user={this.props.user}
+          favoriteGarment={this.props.favoriteGarment}
         />
       </View>
     );
@@ -408,11 +410,12 @@ const mapStateToProps = state => {
   return {
     garments: state.garments.items,
     isLoggedIn: state.user.isLoggedIn,
-    brands: state.brands.items
+    brands: state.brands.items,
+    user: state.user
   };
 };
 
 export default connect(
   mapStateToProps,
-  { login, fetchGarments, fetchBrands }
+  { login, fetchGarments, fetchBrands, favoriteGarment }
 )(Search);

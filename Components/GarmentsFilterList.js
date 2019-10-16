@@ -12,15 +12,10 @@ import {
 import { Badge } from 'react-native-elements';
 import { Metrics, Dimensions } from '../Themes';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-import { profiles } from '../data.json';
+import { favoriteGarment } from '../Redux/UserRedux';
+import { connect } from 'react-redux';
 
 class GarmentsFilterList extends Component {
-  constructor() {
-    super();
-    this.state = { toggleBookMark: false };
-  }
-
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const {
@@ -31,7 +26,10 @@ class GarmentsFilterList extends Component {
       brands
     } = this.props;
     const { id, color, model, sku, brand, photo } = item;
-    const bookmark = this.state.toggleBookmark
+
+    const bookmark = this.props.favoriteGarments.some(
+      garmentId => garmentId === id
+    )
       ? 'bookmark'
       : 'bookmark-outline';
 
@@ -70,11 +68,7 @@ class GarmentsFilterList extends Component {
             </GarmentItemInfo>
           </GarmentItemImageContainer>
         </GarmentItem>
-        <GarmentBookmark
-          onPress={() =>
-            this.setState({ toggleBookmark: !this.state.toggleBookmark })
-          }
-        >
+        <GarmentBookmark onPress={() => this.favoriteGarment(id)}>
           <MaterialCommunityIcons
             name={bookmark}
             size={32}
@@ -84,6 +78,10 @@ class GarmentsFilterList extends Component {
       </GarmentItemContainer>
     );
   }
+
+  favoriteGarment = async garmentId => {
+    await this.props.favoriteGarment(garmentId, this.props.user);
+  };
 
   renderFooter = () => {
     const { loading } = this.props;
@@ -169,4 +167,13 @@ const styles = {
   }
 };
 
-export default GarmentsFilterList;
+const mapStateToProps = state => {
+  return {
+    favoriteGarments: state.user.favoriteGarments
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { favoriteGarment }
+)(GarmentsFilterList);
