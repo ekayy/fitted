@@ -95,9 +95,8 @@ class FitDetail extends Component {
   };
 
   render() {
-    const { photo } = this.props.navigation.state.params;
+    const { photo, height, weight } = this.props.navigation.state.params;
     const { profile, username } = this.state;
-    const { height, weight } = profile;
 
     const feet = parseInt(height / 12);
     const inches = height % 12;

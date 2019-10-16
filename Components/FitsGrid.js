@@ -16,8 +16,21 @@ import { Metrics } from '../Themes';
 class FitsGrid extends Component {
   renderFit(item) {
     const { navigate } = this.props.navigation;
-    const { profile, description, style, photo, likes, garments } = item;
+    const {
+      profile,
+      description,
+      style,
+      photo,
+      likes,
+      garments,
+      height,
+      weight
+    } = item;
     const { numCol } = this.props;
+
+    const feetFromInches = Math.floor(height / 12);
+    const inchesRemainder = height % 12;
+    const imperialHeight = `${feetFromInches}' ${inchesRemainder}"`;
 
     return numCol == 2 ? (
       <TouchableOpacity onPress={() => navigate('FitDetail', item)}>
@@ -25,7 +38,7 @@ class FitsGrid extends Component {
           <Image style={styles.image} source={{ uri: photo }} />
           <View style={styles.label}>
             <Text style={styles.labelText}>
-              H: 5'10" &#11825; W: 150 lbs &#11825; Size M
+              H: {imperialHeight} &#11825; W: {weight} lbs &#11825; Size M
             </Text>
           </View>
         </View>
