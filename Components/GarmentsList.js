@@ -26,7 +26,10 @@ class GarmentsList extends Component {
           </View>
         </View>
 
-        <TouchableOpacity style={AppStyles.sectionSubtitle} onPress={() => {}}>
+        <TouchableOpacity
+          style={AppStyles.sectionSubtitle}
+          onPress={() => navigate('GarmentDetail', item)}
+        >
           <View style={styles.button}>
             <Text style={styles.buttonText}>Explore Item</Text>
           </View>

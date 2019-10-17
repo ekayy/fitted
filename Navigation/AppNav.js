@@ -1,12 +1,13 @@
-import React from "react";
-import { createBottomTabNavigator } from "react-navigation";
+import React from 'react';
+import { createBottomTabNavigator } from 'react-navigation';
 // import BrandStack from './BrandStack';
-import SearchStack from "./SearchStack";
-import CameraStack from "./CameraStack";
-import ProfileStack from "./ProfileStack";
-
-import styles from "./Styles/NavigationStyles";
-import { Ionicons } from "@expo/vector-icons";
+import SearchStack from './SearchStack';
+import CreateDiscussionStack from './CreateDiscussionStack';
+import CameraStack from './CameraStack';
+import ProfileStack from './ProfileStack';
+import ActivityStack from './ActivityStack';
+import { Ionicons, Feather } from '@expo/vector-icons';
+import { Alert } from 'react-native';
 
 const AppNav = createBottomTabNavigator(
   {
@@ -23,28 +24,63 @@ const AppNav = createBottomTabNavigator(
     Search: {
       screen: SearchStack,
       navigationOptions: {
-        title: "Search",
-        tabBarLabel: "Search",
+        title: 'Search',
+        tabBarLabel: 'Search',
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-shirt" size={26} color={tintColor} />
         )
       }
     },
-    CameraStack: {
-      screen: CameraStack,
+    CreateDiscussionStack: {
+      screen: CreateDiscussionStack,
       navigationOptions: {
-        title: "Camera",
-        tabBarLabel: "Camera",
+        title: 'CreateDiscussions',
+        tabBarLabel: 'Add',
         tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-camera" size={26} color={tintColor} />
+          <Ionicons name="ios-add" size={26} color={tintColor} />
+        ),
+        tabBarOnPress: ({ navigation, defaultHandler }) => {
+          Alert.alert(
+            '',
+            null,
+            [
+              {
+                text: 'Start a new discussion',
+                onPress: () => {
+                  defaultHandler();
+                }
+              },
+              {
+                text: 'Upload a new fit photo',
+                onPress: () => {
+                  navigation.navigate('Camera');
+                }
+              },
+              {
+                text: 'Cancel',
+                style: 'cancel'
+              }
+            ],
+            { cancelable: false }
+          );
+        }
+      }
+    },
+    ActivityStack: {
+      screen: ActivityStack,
+      navigationOptions: {
+        title: 'Activity',
+        tabBarLabel: 'Activity',
+        tabBarIcon: ({ tintColor }) => (
+          <Feather name="activity" size={26} color={tintColor} />
         )
       }
     },
     ProfileStack: {
       screen: ProfileStack,
       navigationOptions: {
-        title: "Profile",
-        tabBarLabel: "Profile",
+        title: 'Profile',
+        tabBarLabel: 'Profile',
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-person" size={26} color={tintColor} />
         )
@@ -52,12 +88,13 @@ const AppNav = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "Search",
+    initialRouteName: 'Search',
     tabBarOptions: {
-      activeTintColor: "#e91e63",
+      activeTintColor: '#e91e63',
       showLabel: false,
       showIcon: true
-    }
+    },
+    mode: 'modal'
   }
 );
 
