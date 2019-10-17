@@ -20,7 +20,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'wesleylulee',
+      username: 'eric',
       password: 'password',
       loading: false
     };

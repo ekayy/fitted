@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
   KeyboardAvoidingView,
   Text,
   View,
   ScrollView,
-  Modal,
-  TouchableOpacity
+  Modal
 } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import { Input } from 'react-native-elements';
 import { AppStyles } from '../Themes';
 import CommentSingle from '../Components/Comment/CommentSingle';
 import CommentInput from '../Components/Comment/CommentInput';
 
 const Comments = ({ navigation }) => {
+  const { id } = navigation.state.params;
+
+  const { garments } = useSelector(state => ({
+    garments: state.garments.items
+  }));
+
+  const { comments } = garments.find(garment => garment.id === id);
+
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
-
-  const { comments } = navigation.state.params;
+  const [searchedComments, setSearchedComments] = useState(comments);
 
   useEffect(() => {
     navigation.setParams({
@@ -37,19 +45,36 @@ const Comments = ({ navigation }) => {
     setCurrentComment(comment);
   };
 
-  const handleSubmit = () => {};
+  // const handleSubmit = searchValue => {
+  // };
+
+  const searchComments = searchValue => {
+    onChangeSearch(searchValue);
+
+    const searchedComments = comments.filter(result =>
+      searchValue.length > 0
+        ? result.content.toLowerCase().includes(searchValue)
+        : comments
+    );
+
+    setSearchedComments(searchedComments);
+  };
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
       <ScrollView>
         <View>
-          <Input
+          <SearchBar
+            containerStyle={styles.searchBarContainer}
+            inputContainerStyle={styles.inputContainer}
+            cancelButtonProps={{ color: '#000' }}
+            round
+            lightTheme
             placeholder="Search a question"
-            keyboardType="twitter" // keyboard with no return button
-            autoFocus={false}
+            onChangeText={searchComments}
+            autoCapitalize="none"
+            platform="ios"
             value={searchValue}
-            onChangeText={text => onChangeSearch(text)}
-            onSubmitEditing={handleSubmit}
           />
 
           <View style={AppStyles.section}>
@@ -65,7 +90,7 @@ const Comments = ({ navigation }) => {
         </View>
 
         <View>
-          {comments.map(comment => (
+          {searchedComments.map(comment => (
             <CommentSingle
               // key={comment.}
               data={comment}
@@ -105,5 +130,15 @@ Comments.navigationOptions = ({ navigation }) => ({
 const StyledHeaderButton = styled.TouchableOpacity`
   margin-right: 20px;
 `;
+
+const styles = {
+  searchBarContainer: {
+    backgroundColor: '#fff',
+    paddingVertical: 10
+  },
+  inputContainer: {
+    backgroundColor: '#f3f3f3'
+  }
+};
 
 export default Comments;
