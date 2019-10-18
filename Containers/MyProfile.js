@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { View, Dimensions, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { favoriteGarment } from '../Redux/UserRedux';
-import axios from 'axios';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import ProfileHeader from '../Components/ProfileHeader';
 import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
-import { baseURL } from '../Config';
 import { withNavigationFocus } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { favoriteGarment, fetchProfile } from '../Redux/UserRedux';
 import styles from './Styles/MyProfileStyles';
+
+import { baseURL } from '../Config';
+import axios from 'axios';
 
 class MyProfile extends Component {
   state = {
@@ -21,7 +22,6 @@ class MyProfile extends Component {
       { key: 'fits', title: 'Favorite Fits', icon: 'tshirt-crew' },
       { key: 'myfits', title: 'My Fits', icon: 'tshirt-v-outline' }
     ],
-    loading: false,
     refreshing: false,
     favoriteFits: [],
     favoriteGarments: [],
@@ -30,6 +30,7 @@ class MyProfile extends Component {
   };
 
   componentDidMount() {
+    this.props.fetchProfile(this.props.profileId);
     this.fetchFavoriteGarments();
     this.fetchFavoriteFits();
     this.fetchMyFits();
@@ -48,7 +49,7 @@ class MyProfile extends Component {
       });
     }
 
-    if (previousProps.favoriteFits != this.props.favoriteFits) {
+    if (previousProps.myFits != this.props.myFits) {
       this.setState({ refreshing: true, myFits: [] }, () => {
         this.fetchMyFits();
       });
@@ -56,13 +57,15 @@ class MyProfile extends Component {
   }
 
   fetchFavoriteGarments = async () => {
+    const { favoriteGarments } = this.props;
+
     this.setState({
       error: null,
       refreshing: true
     });
 
     await Promise.all(
-      this.props.favoriteGarments.map(async garmentId => {
+      favoriteGarments.map(async garmentId => {
         const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
         try {
@@ -79,52 +82,48 @@ class MyProfile extends Component {
 
     this.setState({
       error: null,
-      loading: false,
       refreshing: false
     });
   };
 
   fetchFavoriteFits = async () => {
+    const { favoriteFits } = this.props;
+
     this.setState({
       error: null,
       refreshing: true
     });
 
-    await Promise.all(
-      this.props.favoriteFits.map(async fitId => {
-        const response = await axios.get(`${baseURL}/fits/${fitId}`);
-
-        try {
-          this.setState({
-            favoriteFits: [...this.state.favoriteFits, response.data]
-          });
-        } catch (error) {
-          this.setState({
-            error
-          });
-        }
-      })
+    const res = await axios.get(
+      `${baseURL}/fits/?ids=${favoriteFits.toString()}`
     );
-
-    this.setState({
-      error: null,
-      refreshing: false
-    });
-  };
-
-  fetchMyFits = async () => {
-    const { profileId } = this.props.user;
-
-    this.setState({
-      error: null,
-      refreshing: true
-    });
-
-    const response = await axios.get(`${baseURL}/profiles/${profileId}/fits`);
 
     try {
       this.setState({
-        myFits: response.data,
+        favoriteFits: res.data.results,
+        error: null,
+        refreshing: false
+      });
+    } catch (error) {
+      this.setState({
+        error
+      });
+    }
+  };
+
+  fetchMyFits = async () => {
+    const { profileId } = this.props;
+
+    this.setState({
+      error: null,
+      refreshing: true
+    });
+
+    const res = await axios.get(`${baseURL}/profiles/${profileId}/fits`);
+
+    try {
+      this.setState({
+        myFits: res.data,
         error: null,
         refreshing: false
       });
@@ -164,7 +163,7 @@ class MyProfile extends Component {
 
   // Remove garment from closet
   unfavoriteGarment = id => {
-    const { user, favoriteGarment } = this.props;
+    const { user } = this.props;
 
     favoriteGarment(id, user);
   };
@@ -216,19 +215,17 @@ class MyProfile extends Component {
 
   _renderScene = ({ route }) => {
     const {
+      editingCloset,
+      refreshing,
       favoriteGarments,
       favoriteFits,
-      myFits,
-      loading,
-      page,
-      refreshing,
-      editingCloset
+      myFits
     } = this.state;
 
     switch (route.key) {
       case 'garments':
         return (
-          <ScrollView style={{ flex: 1, paddingHorizontal: 10 }}>
+          <View>
             <View style={styles.closet}>
               <Text>Closet</Text>
               <Button
@@ -246,11 +243,10 @@ class MyProfile extends Component {
               handleLoadMore={this.handleLoadMore}
               onRefresh={this.handleGarmentRefresh}
               refreshing={refreshing}
-              loading={loading}
               editingCloset={editingCloset}
               unfavoriteGarment={this.unfavoriteGarment}
             />
-          </ScrollView>
+          </View>
         );
       case 'fits':
         return (
@@ -261,7 +257,6 @@ class MyProfile extends Component {
             handleLoadMore={this.handleLoadMore}
             onRefresh={this.handleFitRefresh}
             refreshing={refreshing}
-            loading={loading}
           />
         );
       case 'myfits':
@@ -272,9 +267,9 @@ class MyProfile extends Component {
             handleLoadMore={this.handleLoadMore}
             onRefresh={this.handleMyFitRefresh}
             refreshing={refreshing}
-            loading={loading}
           />
         );
+
       default:
         return null;
     }
@@ -285,11 +280,15 @@ const mapStateToProps = state => {
   return {
     favoriteGarments: state.user.favoriteGarments,
     favoriteFits: state.user.favoriteFits,
-    user: state.user
+    user: state.user,
+    profileId: state.user.profileId
   };
 };
 
 export default connect(
   mapStateToProps,
-  { favoriteGarment }
+  {
+    favoriteGarment,
+    fetchProfile
+  }
 )(withNavigationFocus(MyProfile));

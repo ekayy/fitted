@@ -51,18 +51,18 @@ class Fits extends Component {
 
   render() {
     const { refreshing, loading } = this.state;
-    const { fits } = this.props.navigation.state.params;
+    const { results } = this.props.navigation.state.params;
 
     return (
       <ScrollView style={styles.container}>
         <FitsGrid
-          data={fits}
+          data={results}
           navigation={this.props.navigation}
           handleLoadMore={() => {}}
           onRefresh={() => {}}
           refreshing={refreshing}
           loading={loading}
-          numCol={2}
+          numCol={3}
         />
       </ScrollView>
     );

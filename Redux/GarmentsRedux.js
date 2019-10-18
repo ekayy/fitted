@@ -10,8 +10,13 @@ const CREATE_GARMENT_BEGIN = 'CREATE_GARMENT_BEGIN';
 const CREATE_GARMENT_SUCCESS = 'CREATE_GARMENT_SUCCESS';
 const CREATE_GARMENT_FAILURE = 'CREATE_GARMENT_FAILURE';
 
+// const FETCH_GARMENT_FITS_BEGIN = 'FETCH_GARMENT_FITS_BEGIN';
+// const FETCH_GARMENT_FITS_SUCCESS = 'FETCH_GARMENT_FITS_SUCCESS';
+// const FETCH_GARMENT_FITS_FAILURE = 'FETCH_GARMENT_FITS_FAILURE';
+
 export const INITIAL_STATE = {
   items: [],
+  // garmentFits: [],
   loading: false,
   error: null
 };
@@ -32,7 +37,6 @@ export default function garments(state = INITIAL_STATE, action = {}) {
         // items: [...state.items, ...action.payload.garments]
         items: [...action.payload.garments]
       };
-
     case FETCH_GARMENTS_FAILURE:
       return {
         ...state,
@@ -53,13 +57,33 @@ export default function garments(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null
       };
-
     case CREATE_GARMENT_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload.error
       };
+
+    // case FETCH_GARMENT_FITS_BEGIN:
+    //   return {
+    //     ...state,
+    //     loading: true,
+    //     error: null
+    //   };
+    // case FETCH_GARMENT_FITS_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false
+    //     // garmentFits: action.payload.garmentFits
+    //   };
+    // case FETCH_GARMENT_FITS_FAILURE:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error: action.payload.error
+    //     // garmentFits
+    //   };
+
     default:
       return state;
   }
@@ -76,7 +100,6 @@ export const fetchGarmentsSuccess = garments => ({
     garments
   }
 });
-
 export const fetchGarmentsFailure = error => ({
   type: FETCH_GARMENTS_FAILURE,
   payload: {
@@ -87,11 +110,9 @@ export const fetchGarmentsFailure = error => ({
 export const createGarmentBegin = () => ({
   type: CREATE_GARMENT_BEGIN
 });
-
 export const createGarmentSuccess = () => ({
   type: CREATE_GARMENT_SUCCESS
 });
-
 export const createGarmentFailure = error => ({
   type: CREATE_GARMENT_FAILURE,
   payload: {
@@ -99,13 +120,30 @@ export const createGarmentFailure = error => ({
   }
 });
 
+// export const fetchGarmentFitsBegin = () => ({
+//   type: FETCH_GARMENT_FITS_BEGIN
+// });
+// export const fetchGarmentFitsSuccess = garmentFits => ({
+//   type: FETCH_GARMENT_FITS_SUCCESS,
+//   payload: {
+//     garmentFits
+//   }
+// });
+// export const fetchGarmentFitsFailure = error => ({
+//   type: FETCH_GARMENT_FITS_FAILURE,
+//   payload: {
+//     error
+//   }
+// });
+
 // side effects, only as applicable
 // e.g. thunks, epics, etc
 export const fetchGarments = () => async dispatch => {
   dispatch(fetchGarmentsBegin());
 
   try {
-    const res = await axios.get(`${baseURL}/garments/?format=json&limit=10`);
+    const res = await axios.get(`${baseURL}/garments/?limit=1000`);
+
     dispatch(fetchGarmentsSuccess(res.data.results));
   } catch (error) {
     dispatch(fetchGarmentsFailure(error));
@@ -130,3 +168,15 @@ export const createGarment = ({ brand, color, model }) => async dispatch => {
     dispatch(createGarmentFailure(error));
   }
 };
+
+// export const fetchGarmentFits = id => async dispatch => {
+//   dispatch(fetchGarmentFitsBegin());
+
+//   try {
+//     const res = await axios.get(`${baseURL}/fits/?garment=${id}&limit=100/`);
+
+//     dispatch(fetchGarmentFitsSuccess(res.data));
+//   } catch (error) {
+//     dispatch(fetchGarmentFitsFailure(error));
+//   }
+// };

@@ -30,7 +30,8 @@ export default StyleSheet.create({
   closet: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 20
+    paddingVertical: 20,
+    paddingHorizontal: 10
   },
   editButtonStyle: {
     marginLeft: 10,

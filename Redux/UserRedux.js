@@ -15,6 +15,18 @@ const FAVORITE_REQUEST = 'FAVORITE_REQUEST';
 const FAVORITE_SUCCESS = 'FAVORITE_SUCCESS';
 const FAVORITE_FAILURE = 'FAVORITE_FAILURE';
 
+// const FETCH_MY_FITS_BEGIN = 'FETCH_MY_FITS_BEGIN';
+// const FETCH_MY_FITS_SUCCESS = 'FETCH_MY_FITS_SUCCESS';
+// const FETCH_MY_FITS_FAILURE = 'FETCH_MY_FITS_FAILURE';
+
+// const FETCH_FAVORITE_GARMENTS_BEGIN = 'FETCH_FAVORITE_GARMENTS_BEGIN';
+// const FETCH_FAVORITE_GARMENTS_SUCCESS = 'FETCH_FAVORITE_GARMENTS_SUCCESS';
+// const FETCH_FAVORITE_GARMENTS_FAILURE = 'FETCH_FAVORITE_GARMENTS_FAILURE';
+
+// const FETCH_FAVORITE_FITS_BEGIN = 'FETCH_FAVORITE_FITS_BEGIN';
+// const FETCH_FAVORITE_FITS_SUCCESS = 'FETCH_FAVORITE_FITS_SUCCESS';
+// const FETCH_FAVORITE_FITS_FAILURE = 'FETCH_FAVORITE_FITS_FAILURE';
+
 export const INITIAL_STATE = {
   loading: false,
   error: null,
@@ -23,6 +35,9 @@ export const INITIAL_STATE = {
   profile: null,
   favoriteGarments: [],
   favoriteFits: [],
+  // myFits: [],
+  // myFavoriteGarments: [],
+  // myFavoriteFits: [],
   height: null,
   weight: null,
   isLoggedIn: false
@@ -106,6 +121,66 @@ export default function(state = INITIAL_STATE, action = {}) {
         error: action.payload.error
       };
 
+    // case FETCH_MY_FITS_BEGIN:
+    //   return {
+    //     ...state,
+    //     loading: true,
+    //     error: null
+    //   };
+    // case FETCH_MY_FITS_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     myFits: action.payload.myFits
+    //   };
+    // case FETCH_MY_FITS_FAILURE:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error: action.payload.error,
+    //     items
+    //   };
+
+    // case FETCH_FAVORITE_GARMENTS_BEGIN:
+    //   return {
+    //     ...state,
+    //     loading: true,
+    //     error: null
+    //   };
+    // case FETCH_FAVORITE_GARMENTS_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     myFavoriteGarments: action.payload.myFavoriteGarments
+    //   };
+    // case FETCH_FAVORITE_GARMENTS_FAILURE:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error: action.payload.error,
+    //     myFavoriteGarments
+    //   };
+
+    // case FETCH_FAVORITE_FITS_BEGIN:
+    //   return {
+    //     ...state,
+    //     loading: true,
+    //     error: null
+    //   };
+    // case FETCH_FAVORITE_FITS_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     myFavoriteFits: action.payload.myFavoriteFits
+    //   };
+    // case FETCH_FAVORITE_FITS_FAILURE:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error: action.payload.error,
+    //     myFavoriteFits
+    //   };
+
     default:
       return state;
   }
@@ -115,17 +190,14 @@ export default function(state = INITIAL_STATE, action = {}) {
 export const loginRequest = () => ({
   type: LOGIN_REQUEST
 });
-
 export const loginSuccess = ({ token, profile_id }) => ({
   type: LOGIN_SUCCESS,
   payload: { token, profile_id }
 });
-
 export const loginFailure = error => ({
   type: LOGIN_FAILURE,
   payload: { error }
 });
-
 export const logout = () => ({
   type: LOGOUT
 });
@@ -133,7 +205,6 @@ export const logout = () => ({
 export const profileRequest = () => ({
   type: PROFILE_REQUEST
 });
-
 export const profileSuccess = ({
   user,
   favorite_garments,
@@ -144,7 +215,6 @@ export const profileSuccess = ({
   type: PROFILE_SUCCESS,
   payload: { user, favorite_garments, favorite_fits, height, weight }
 });
-
 export const profileFailure = error => ({
   type: PROFILE_FAILURE,
   payload: { error }
@@ -154,15 +224,49 @@ export const favoriteFailure = error => ({
   type: FAVORITE_FAILURE,
   payload: { error }
 });
-
 export const favoriteRequest = () => ({
   type: FAVORITE_REQUEST
 });
-
 export const favoriteSuccess = ({ favorite_garments, favorite_fits }) => ({
   type: FAVORITE_SUCCESS,
   payload: { favorite_garments, favorite_fits }
 });
+
+// export const fetchMyFitsBegin = () => ({
+//   type: FETCH_MY_FITS_BEGIN
+// });
+// export const fetchMyFitsSuccess = myFits => ({
+//   type: FETCH_MY_FITS_SUCCESS,
+//   payload: { myFits }
+// });
+// export const fetchMyFitsFailure = error => ({
+//   type: FETCH_MY_FITS_FAILURE,
+//   payload: { error }
+// });
+
+// export const fetchFavoriteGarmentsBegin = () => ({
+//   type: FETCH_FAVORITE_GARMENTS_BEGIN
+// });
+// export const fetchFavoriteGarmentsSuccess = myFavoriteGarments => ({
+//   type: FETCH_FAVORITE_GARMENTS_SUCCESS,
+//   payload: { myFavoriteGarments }
+// });
+// export const fetchFavoriteGarmentsFailure = error => ({
+//   type: FETCH_FAVORITE_GARMENTS_FAILURE,
+//   payload: { error }
+// });
+
+// export const fetchFavoriteFitsBegin = () => ({
+//   type: FETCH_FAVORITE_FITS_BEGIN
+// });
+// export const fetchFavoriteFitsSuccess = myFavoriteFits => ({
+//   type: FETCH_FAVORITE_FITS_SUCCESS,
+//   payload: { myFavoriteFits }
+// });
+// export const fetchFavoriteFitsFailure = error => ({
+//   type: FETCH_FAVORITE_FITS_FAILURE,
+//   payload: { error }
+// });
 
 // Asynchronous actions
 // login to app
@@ -268,6 +372,42 @@ export const favoriteFit = (id, userParams) => async dispatch => {
     dispatch(favoriteFailure(error));
   }
 };
+
+// export const fetchMyFits = profileId => async dispatch => {
+//   dispatch(fetchMyFitsBegin());
+
+//   try {
+//     const res = await axios.get(`${baseURL}/profiles/${profileId}/fits/`);
+//     dispatch(fetchMyFitsSuccess(res.data));
+//   } catch (error) {
+//     dispatch(fetchMyFitsFailure(error));
+//   }
+// };
+
+// export const fetchFavoriteGarments = garmentId => async dispatch => {
+//   dispatch(fetchFavoriteGarmentsBegin());
+
+//   try {
+//     const res = await axios.get(`${baseURL}/garments/${garmentId}/`);
+//     dispatch(fetchFavoriteGarmentsSuccess(res.data));
+//   } catch (error) {
+//     dispatch(fetchFavoriteGarmentsFailure(error));
+//   }
+// };
+
+// export const fetchFavoriteFits = favoriteFitIds => async dispatch => {
+//   dispatch(fetchFavoriteFitsBegin());
+
+//   try {
+//     const res = await axios.get(
+//       `${baseURL}/fits/?ids=${favoriteFitIds.toString()}`
+//     );
+
+//     dispatch(fetchFavoriteFitsSuccess(res.data.results));
+//   } catch (error) {
+//     dispatch(fetchFavoriteFitsFailure(error));
+//   }
+// };
 
 // Selectors
 // Is the current user logged in?

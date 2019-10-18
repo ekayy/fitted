@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  FlatList,
-  Dimensions
-} from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from 'react-native-elements';
 import styles from './Styles/ProfileHeaderStyles';
@@ -17,8 +7,8 @@ import styles from './Styles/ProfileHeaderStyles';
 class ProfileHeader extends Component {
   render() {
     const { navigate } = this.props.navigation;
-    const { first_name, last_name, username } = this.props.user.profile;
-    const { height, weight } = this.props.user;
+    const { height, weight, profile } = this.props.user;
+    const { username, first_name, last_name } = profile;
 
     const feetFromInches = Math.floor(height / 12);
     const inchesRemainder = height % 12;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
@@ -15,14 +14,14 @@ import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
 import { Ionicons } from '@expo/vector-icons';
 
-import axios from 'axios';
 import { baseURL } from '../Config';
+import axios from 'axios';
 
 class GarmentDetail extends Component {
   state = {
     error: null,
     loading: true,
-    fits: [],
+    garmentFits: [],
     toggled: false,
     refreshing: false,
     count: null
@@ -30,7 +29,6 @@ class GarmentDetail extends Component {
 
   componentDidMount() {
     this.fetchFits();
-    this.props.fetchBrands();
     this.getFavoriteState();
   }
 
@@ -41,15 +39,17 @@ class GarmentDetail extends Component {
       `${baseURL}/fits/?garment=${id}&limit=100`
     );
 
+    // const response = await this.props.fetchGarmentFits(id);
+
     try {
       this.setState({
-        fits: response.data.results,
+        garmentFits: response.data.results,
         error: null,
         loading: false,
         count: response.data.count
       });
     } catch (error) {
-      console.log(error);
+      console.tron.log(error);
     }
   };
 
@@ -82,6 +82,7 @@ class GarmentDetail extends Component {
 
   _renderCarouselItem = ({ item }) => {
     const { photo } = item;
+
     const { navigate } = this.props.navigation;
     const styles = {
       gridItem: {
@@ -89,8 +90,8 @@ class GarmentDetail extends Component {
         backgroundColor: '#333'
       },
       image: {
-        width: undefined,
-        height: 150
+        width: '100%',
+        height: '100%'
       }
     };
 
@@ -99,7 +100,7 @@ class GarmentDetail extends Component {
         style={styles.gridItem}
         onPress={() => navigate('FitDetail', item)}
       >
-        <Image style={styles.item} source={{ uri: photo }} />
+        <Image style={styles.image} source={{ uri: photo }} />
       </TouchableOpacity>
     );
   };
@@ -127,7 +128,7 @@ class GarmentDetail extends Component {
     const currentGarment = this.props.navigation.state.params;
     const { navigate } = this.props.navigation;
 
-    const { refreshing, count, fits } = this.state;
+    const { refreshing, count, garmentFits } = this.state;
 
     const brandName = this.props.brands[brand - 1].name;
 
@@ -141,7 +142,7 @@ class GarmentDetail extends Component {
               onPress={this.favoriteGarment}
               toggled={this.state.toggled}
             />
-            <Text>{this.state.fits.photo}</Text>
+            {/* <Text>{this.state.fits.photo}</Text> */}
           </View>
         </View>
 
@@ -222,7 +223,7 @@ class GarmentDetail extends Component {
             ref={c => {
               this._carousel = c;
             }}
-            data={this.state.fits.slice(0, 10)}
+            data={garmentFits.slice(0, 10)}
             renderItem={this._renderCarouselItem}
             sliderWidth={Metrics.screenWidth - 20}
             itemWidth={(Metrics.screenWidth - 20) / 3}
@@ -236,7 +237,9 @@ class GarmentDetail extends Component {
                 title={`See all ${count} photos`}
                 buttonStyle={[AppStyles.buttonAltStyle]}
                 titleStyle={AppStyles.buttonAltTitleStyle}
-                onPress={() => navigate('Fits', { fits, currentGarment })}
+                onPress={() =>
+                  navigate('Fits', { garmentFits, currentGarment })
+                }
               />
             </View>
           )}
@@ -263,7 +266,9 @@ class GarmentDetail extends Component {
               title={`See all discussion`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigate('Comments', { comments })}
+              onPress={() =>
+                navigate('Comments', { currentGarment, contentType: 'garment' })
+              }
             />
           </View>
         </View>
@@ -278,5 +283,12 @@ const mapStateToProps = ({ user, brands }) => {
 
 export default connect(
   mapStateToProps,
-  { fetchBrands, favoriteGarment, tagGarmentToFit, clearCreatedFit }
+
+  {
+    fetchBrands,
+    favoriteGarment,
+    tagGarmentToFit,
+    clearCreatedFit
+    // fetchGarmentFits
+  }
 )(GarmentDetail);
