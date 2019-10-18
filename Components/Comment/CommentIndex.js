@@ -20,7 +20,7 @@ const CommentIndex = ({ navigation }) => {
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
 
-  const { comment } = navigation.state.params;
+  const { comment, contentType } = navigation.state.params;
 
   useEffect(() => {
     navigation.setParams({
@@ -62,6 +62,7 @@ const CommentIndex = ({ navigation }) => {
           onChangeComment={text => onChangeComment(text)}
           closeModal={closeModal}
           openModal={openModal}
+          contentType={contentType}
         />
       </Modal>
     </KeyboardAvoidingView>

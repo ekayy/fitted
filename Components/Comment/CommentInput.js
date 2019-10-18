@@ -16,15 +16,17 @@ const CommentInput = props => {
 
   const dispatch = useDispatch();
 
-  const onSubmit = ({ content }) => {
+  const onSubmit = async ({ content }) => {
     const data = {
-      contentType: 'fit',
+      contentType,
       objectId: 1,
       profileId,
       content
     };
 
-    dispatch(postComment(data));
+    await dispatch(postComment(data));
+
+    closeModal();
   };
 
   return (

@@ -18,7 +18,7 @@ const CommentActions = props => {
 
   const { commentId, profileId } = useSelector(
     state => ({
-      commentId: 1,
+      commentId: 8,
       profileId: state.user.profileId
     }),
     shallowEqual

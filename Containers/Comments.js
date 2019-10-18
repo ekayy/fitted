@@ -9,19 +9,20 @@ import {
   Modal
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import { Input } from 'react-native-elements';
 import { AppStyles } from '../Themes';
 import CommentSingle from '../Components/Comment/CommentSingle';
 import CommentInput from '../Components/Comment/CommentInput';
 
 const Comments = ({ navigation }) => {
-  const { id } = navigation.state.params;
+  const { currentGarment, contentType } = navigation.state.params;
 
   const { garments } = useSelector(state => ({
     garments: state.garments.items
   }));
 
-  const { comments } = garments.find(garment => garment.id === id);
+  const { comments } = garments.find(
+    garment => garment.id === currentGarment.id
+  );
 
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
@@ -81,9 +82,9 @@ const Comments = ({ navigation }) => {
             <View style={AppStyles.sectionTitle}>
               <Text style={AppStyles.sectionTitleText}>Discussion</Text>
               <Text>
-                {`Showing 1-${comments.length < 10 ? comments.length : 10} of ${
-                  comments.length
-                } comments`}
+                {`Showing 1-${
+                  searchedComments.length < 10 ? searchedComments.length : 10
+                } of ${searchedComments.length} comments`}
               </Text>
             </View>
           </View>
@@ -92,13 +93,13 @@ const Comments = ({ navigation }) => {
         <View>
           {searchedComments.map(comment => (
             <CommentSingle
-              // key={comment.}
+              key={comment.content}
               data={comment}
               renderViewComments
               renderLeaveComment
               // TODO: request to replies
               viewComments={() =>
-                navigation.navigate('CommentIndex', { comment })
+                navigation.navigate('CommentIndex', { comment, contentType })
               }
               leaveComment={() => openModal(comment)}
             />
@@ -113,6 +114,7 @@ const Comments = ({ navigation }) => {
           onChangeComment={text => onChangeComment(text)}
           closeModal={closeModal}
           openModal={openModal}
+          contentType={contentType}
         />
       </Modal>
     </KeyboardAvoidingView>
