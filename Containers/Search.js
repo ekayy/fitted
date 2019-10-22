@@ -30,7 +30,8 @@ class Search extends Component {
       loading: false,
       refreshing: false,
       limit: 9999,
-      showFilters: false
+      showFilters: false,
+      brandIds: []
     };
   }
 
@@ -87,16 +88,16 @@ class Search extends Component {
   // };
 
   handleChange = searchTerm => {
-    const searchedResults = this.state.garments.filter(result => {
-      return searchTerm
-        ? result.model.toLowerCase().includes(searchTerm)
-        : this.state.garments;
-    });
+    const { brandIds } = this.state;
 
-    const filteredResults = this.state.brand
-      ? searchedResults.filter(result => {
-          return result.brand === this.state.brand.id;
-        })
+    const searchedResults = this.state.garments.filter(result =>
+      searchTerm
+        ? result.model.toLowerCase().includes(searchTerm)
+        : this.state.garments
+    );
+
+    const filteredResults = brandIds.length
+      ? searchedResults.filter(result => brandIds.includes(result.brand))
       : searchedResults;
 
     let slicedResults = filteredResults.slice(0, 10);
@@ -141,18 +142,19 @@ class Search extends Component {
     const { searchTerm } = this.state;
 
     this.setState({
-      results: []
+      results: [],
+      brandIds
     });
 
-    const searchedResults = this.state.garments.filter(result => {
-      return searchTerm
+    const searchedResults = this.state.garments.filter(result =>
+      searchTerm
         ? result.model.toLowerCase().includes(searchTerm)
-        : this.state.garments;
-    });
+        : this.state.garments
+    );
 
-    const filteredResults = searchedResults.filter(result => {
-      return brandIds.includes(result.brand);
-    });
+    const filteredResults = searchedResults.filter(result =>
+      brandIds.includes(result.brand)
+    );
 
     let slicedResults = filteredResults.slice(0, 10);
     let remainingResults = filteredResults.slice(10);
@@ -230,22 +232,22 @@ class Search extends Component {
           brands={this.props.brands}
         />
 
-        {/* {searchTerm ? ( */}
-        <SearchList
-          data={results}
-          navigation={this.props.navigation}
-          numCol={2}
-          handleLoadMore={this.handleLoadMore}
-          onRefresh={this.handleRefresh}
-          refreshing={refreshing}
-          loading={loading}
-          brands={this.props.brands}
-          user={this.props.user}
-          favoriteGarment={this.props.favoriteGarment}
-        />
-        {/*) : (
-         <Text>This is the home screen</Text>
-        )} */}
+        {searchTerm ? (
+          <SearchList
+            data={results}
+            navigation={this.props.navigation}
+            numCol={2}
+            handleLoadMore={this.handleLoadMore}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
+            loading={loading}
+            brands={this.props.brands}
+            user={this.props.user}
+            favoriteGarment={this.props.favoriteGarment}
+          />
+        ) : (
+          <Text>This is the home screen</Text>
+        )}
       </View>
     );
   }
