@@ -59,33 +59,7 @@ class Search extends Component {
     });
 
     this.props.fetchBrands();
-
-    // this.setState({ refreshing: true, results: [] });
-    // // Get garments from redux store
-    // this.props.fetchGarments().then(data => {
-    //   let garments = data.payload.garments;
-    //   this.setState({
-    //     garments: garments,
-    //     results: garments.slice(0, 10),
-    //     remainingResults: garments.slice(10),
-    //     refreshing: false
-    //   });
-    // });
   }
-
-  // fetchGarments = async limit => {
-  //   const response = await axios.get(`${baseURL}/garments/?limit=${limit}`);
-  //
-  //   try {
-  //     this.setState({
-  //       garments: [...this.state.garments, ...response.data.results],
-  //       error: null,
-  //       loading: false
-  //     });
-  //   } catch (error) {
-  //     console.tron.log(error);
-  //   }
-  // };
 
   handleChange = searchTerm => {
     const { brandIds } = this.state;
