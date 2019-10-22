@@ -29,7 +29,8 @@ const styles = {
     padding: 5,
     margin: 0,
     backgroundColor: '#fff',
-    width: '100%'
+    width: '100%',
+    borderWidth: 0
   },
   inputStyle: {
     margin: 0
