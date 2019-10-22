@@ -1,45 +1,29 @@
-import React, { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
-import { ListItem, CheckBox, Divider } from 'react-native-elements';
-import { Ionicons } from '@expo/vector-icons';
+import { View } from 'react-native';
+import CheckBox from '../Forms/Checkbox';
+import { ListItem, Divider } from 'react-native-elements';
 import SectionTitle from '../Search/SectionTitle';
 
-const SearchFilter = forwardRef((props, ref) => {
-  const [checked, setChecked] = useState({});
+const SearchFilter = props => {
+  const [checked, setChecked] = useState([]);
 
-  const { brands } = props;
+  const selectItem = item => {
+    checked.includes(item.id)
+      ? setChecked(checked.filter(id => id !== item.id))
+      : setChecked([...checked, item.id]);
+  };
 
-  function selectItem(item) {
-    setChecked({ [item.id]: !checked[item.id] });
-
-    if (checked) {
-      props.applyFilters(item);
-    } else {
-      props.applyFilters('');
-    }
-  }
-
-  function renderItems(items) {
+  const renderItems = items => {
     return items.map(item => (
       <View key={item.name}>
         <ListItem
           title={
             <CheckBox
-              right
-              iconRight
+              key={item.name}
               title={item.name}
-              onPress={() => selectItem(item)}
-              uncheckedIcon={<Ionicons name="ios-radio-button-off" size={25} />}
-              checkedIcon={
-                <Ionicons name="ios-checkmark-circle-outline" size={25} />
-              }
-              containerStyle={styles.checkboxContainer}
-              wrapperStyle={styles.checkboxContent}
-              textStyle={styles.checkBoxText}
-              checkedColor="rgb(74, 144, 226)"
-              checked={checked[item.id]}
+              checked={checked.includes(item.id)}
+              handlePress={() => selectItem(item)}
             />
           }
           containerStyle={styles.listItemContainer}
@@ -47,14 +31,15 @@ const SearchFilter = forwardRef((props, ref) => {
         <Divider />
       </View>
     ));
-  }
+  };
+
+  const onSearch = () => {
+    props.applyFilters(checked);
+    props.onClose();
+  };
 
   if (!props.showFilters) {
     return null;
-  }
-
-  function clearFilters() {
-    setChecked({});
   }
 
   return (
@@ -67,7 +52,7 @@ const SearchFilter = forwardRef((props, ref) => {
         <StyledHeaderScroll>
           <StyledHeaderContainer>
             <CancelButton onPress={props.onClose}>Cancel</CancelButton>
-            <SearchButton onPress={props.onClose}>Search</SearchButton>
+            <SearchButton onPress={onSearch}>Search</SearchButton>
           </StyledHeaderContainer>
 
           <View>
@@ -76,13 +61,13 @@ const SearchFilter = forwardRef((props, ref) => {
             {renderItems(categories)}
             <SectionTitle text="brands" />
             <Divider />
-            {renderItems(brands.map(brand => brand))}
+            {renderItems(props.brands)}
           </View>
         </StyledHeaderScroll>
       </StyledHeader>
     </StyledModal>
   );
-});
+};
 
 const StyledModal = styled.Modal`
   flex: 1;
@@ -120,20 +105,9 @@ const SearchButton = styled.Text`
 `;
 
 const styles = {
-  checkboxContainer: {
-    backgroundColor: '#fff',
-    borderColor: '#fff',
-    padding: 0
-  },
-  checkboxContent: {
-    marginLeft: 10,
-    marginRight: 20
-  },
-  checkBoxText: {
-    flex: 1
-  },
   listItemContainer: {
-    padding: 0
+    padding: 0,
+    paddingRight: 20
   }
 };
 

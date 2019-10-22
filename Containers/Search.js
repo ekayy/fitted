@@ -30,8 +30,7 @@ class Search extends Component {
       loading: false,
       refreshing: false,
       limit: 9999,
-      showFilters: false,
-      brand: ''
+      showFilters: false
     };
   }
 
@@ -111,15 +110,15 @@ class Search extends Component {
   };
 
   handleRefresh = () => {
-    // this.setState({ refreshing: true, results: [] }, async () => {
-    //   await this.fetchGarments(this.state.limit);
-    //
-    //   this.setState({
-    //     refreshing: false,
-    //     results: [...this.state.garments.slice(0, 10)],
-    //     remainingResults: [...this.state.garments.slice(10)]
-    //   });
-    // });
+    this.setState({ refreshing: true, results: [] }, async () => {
+      await this.props.fetchGarments();
+
+      this.setState({
+        refreshing: false,
+        results: [...this.state.garments.slice(0, 10)],
+        remainingResults: [...this.state.garments.slice(10)]
+      });
+    });
   };
 
   // do nothing because the entire page is loaded
@@ -137,13 +136,12 @@ class Search extends Component {
     });
   };
 
-  // Search filters
-  applyFilters = brand => {
+  // Search filters: e.g. [1,3,5]
+  applyFilters = brandIds => {
     const { searchTerm } = this.state;
 
     this.setState({
-      results: [],
-      brand: brand
+      results: []
     });
 
     const searchedResults = this.state.garments.filter(result => {
@@ -153,7 +151,7 @@ class Search extends Component {
     });
 
     const filteredResults = searchedResults.filter(result => {
-      return result.brand === brand.id;
+      return brandIds.includes(result.brand);
     });
 
     let slicedResults = filteredResults.slice(0, 10);
@@ -169,38 +167,6 @@ class Search extends Component {
   // Toggle search filters overlay
   toggleFilters = () => {
     this.setState({ showFilters: !this.state.showFilters });
-  };
-
-  // Show currently active brand filter
-  renderActiveFilter = () => {
-    if (!this.state.brand.name) {
-      return null;
-    }
-
-    return (
-      <TouchableOpacity
-        style={[styles.filter, styles.activeFilter]}
-        onPress={this.removeFilter}
-      >
-        <View>
-          <Text style={styles.filterText}>{this.state.brand.name} x</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  removeFilter = () => {
-    this.setState(
-      {
-        results: [],
-        brand: ''
-      },
-      () => {
-        this.handleChange(this.state.searchTerm);
-      }
-    );
-
-    // this.child.clearFilters();
   };
 
   render() {
@@ -227,20 +193,6 @@ class Search extends Component {
           platform="ios"
           value={searchTerm}
         />
-
-        {/* <View style={styles.filterWrapper}>
-          <View style={styles.filterContainer}>
-            <TouchableOpacity
-              style={styles.filter}
-              onPress={this.toggleFilters}
-            >
-              <View>
-                <Text style={styles.filterText}>Filters</Text>
-              </View>
-            </TouchableOpacity>
-            {this.renderActiveFilter()}
-          </View>
-        </View> */}
 
         <StyledFilterBarContainer>
           <ModalDropdown
@@ -275,12 +227,10 @@ class Search extends Component {
           showFilters={showFilters}
           onClose={this.toggleFilters}
           applyFilters={this.applyFilters}
-          ref={instance => {
-            this.child = instance;
-          }}
           brands={this.props.brands}
         />
 
+        {/* {searchTerm ? ( */}
         <SearchList
           data={results}
           navigation={this.props.navigation}
@@ -293,6 +243,9 @@ class Search extends Component {
           user={this.props.user}
           favoriteGarment={this.props.favoriteGarment}
         />
+        {/*) : (
+         <Text>This is the home screen</Text>
+        )} */}
       </View>
     );
   }
