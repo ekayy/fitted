@@ -33,7 +33,13 @@ const SearchFilter = props => {
     ));
   };
 
-  const onSearch = () => {
+  const onClear = () => {
+    setChecked([]);
+    props.applyFilters([]);
+    props.onClose();
+  };
+
+  const onFilter = () => {
     props.applyFilters(checked);
     props.onClose();
   };
@@ -51,8 +57,8 @@ const SearchFilter = props => {
       <StyledHeader>
         <StyledHeaderScroll>
           <StyledHeaderContainer>
-            <CancelButton onPress={props.onClose}>Cancel</CancelButton>
-            <SearchButton onPress={onSearch}>Search</SearchButton>
+            <CancelButton onPress={onClear}>Clear</CancelButton>
+            <SearchButton onPress={onFilter}>Filter</SearchButton>
           </StyledHeaderContainer>
 
           <View>

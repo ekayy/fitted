@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { SearchBar, ListItem } from 'react-native-elements';
-import { Colors } from '../Themes';
+import { Text } from 'react-native';
+import { SearchBar, ListItem, Badge } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
@@ -150,11 +149,11 @@ class Search extends Component {
       loading,
       refreshing,
       showFilters,
-      brand
+      brandIds
     } = this.state;
 
     return (
-      <View style={styles.container}>
+      <StyledContainer>
         <SearchBar
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.inputContainer}
@@ -169,16 +168,27 @@ class Search extends Component {
         />
 
         <StyledFilterBarContainer>
-          <DropDown
-            options={['MOST RECENT', 'MOST POPULAR']}
-            defaultValue="SELECT"
-          />
+          <StyledFilterBar>
+            <DropDown
+              options={['MOST RECENT', 'MOST POPULAR']}
+              defaultValue="SELECT"
+            />
+          </StyledFilterBar>
+
           <VerticalDivider />
-          <FilterButton onPress={this.toggleFilters}>
-            <View>
-              <FilterText>FILTER</FilterText>
-            </View>
-          </FilterButton>
+
+          <StyledFilterBar>
+            <StyledFilterButton onPress={this.toggleFilters}>
+              <StyledFilterText>FILTER</StyledFilterText>
+              {brandIds.length > 0 && (
+                <Badge
+                  status="error"
+                  value={brandIds.length}
+                  containerStyle={styles.badgeStyle}
+                />
+              )}
+            </StyledFilterButton>
+          </StyledFilterBar>
         </StyledFilterBarContainer>
 
         <SearchFilter
@@ -205,7 +215,7 @@ class Search extends Component {
         ) : (
           <Text>This is the home screen</Text>
         )}
-      </View>
+      </StyledContainer>
     );
   }
 
@@ -225,19 +235,29 @@ class Search extends Component {
   };
 }
 
+const StyledContainer = styled.View`
+  flex: 1;
+  background-color: #f3f3f3;
+  margin-top: 30px;
+`;
 const StyledFilterBarContainer = styled.View`
-  height: 6%;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  padding: 5px 0;
+  padding: 10px 0;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: #fff;
 `;
-const FilterButton = styled.TouchableOpacity`
-  min-width: 30%;
+const StyledFilterBar = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
-const FilterText = styled.Text`
+const StyledFilterButton = styled.TouchableOpacity`
+  flex: 1;
+  justify-content: center;
+`;
+const StyledFilterText = styled.Text`
   text-align: center;
 `;
 const VerticalDivider = styled.View`
@@ -246,46 +266,9 @@ const VerticalDivider = styled.View`
 `;
 
 const styles = {
-  container: {
-    flex: 1,
-    // paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3',
-    marginTop: 30
-  },
-
-  filterWrapper: {
-    alignSelf: 'flex-start',
-    position: 'relative',
-    zIndex: 10
-  },
-  filterContainer: {
-    position: 'absolute',
-    flex: 1,
-    flexDirection: 'row',
-    marginHorizontal: 5
-  },
-  filter: {
-    alignSelf: 'flex-start',
-    marginTop: 5,
-    marginHorizontal: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    backgroundColor: Colors.dark,
-    borderRadius: 3
-  },
-  filterText: {
-    color: '#fff'
-  },
-  activeFilter: {
-    backgroundColor: Colors.darkFade
-  },
-  searchBarContainer: {
-    backgroundColor: '#fff',
-    paddingVertical: 10
-  },
-  inputContainer: {
-    backgroundColor: '#f3f3f3'
-  }
+  searchBarContainer: { backgroundColor: '#fff', paddingVertical: 10 },
+  inputContainer: { backgroundColor: '#f3f3f3' },
+  badgeStyle: { position: 'absolute', top: 0, right: -20 }
 };
 
 const mapStateToProps = state => {
