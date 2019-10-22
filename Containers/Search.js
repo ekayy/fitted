@@ -7,11 +7,9 @@ import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
 import { login, favoriteGarment } from '../Redux/UserRedux';
-import ModalDropdown from 'react-native-modal-dropdown';
-import { Ionicons } from '@expo/vector-icons';
-
 import SearchFilter from '../Components/Search/SearchFilter';
 import SearchList from '../Components/SearchList';
+import DropDown from '../Components/DropDown';
 
 class Search extends Component {
   static navigationOptions = {
@@ -171,25 +169,10 @@ class Search extends Component {
         />
 
         <StyledFilterBarContainer>
-          <ModalDropdown
-            defaultValue={'SELECT'}
+          <DropDown
             options={['MOST RECENT', 'MOST POPULAR']}
-            style={styles.dropdownButton}
-            dropdownStyle={styles.dropdown}
-            dropdownTextStyle={styles.dropdownText}
-            dropdownTextHighlightStyle={styles.dropdownTextHighlight}
-            // onSelect={(idx, value) => }
-          >
-            <StyledDropdownButtonContainer>
-              <DropdownButtonText>SELECT</DropdownButtonText>
-              <Ionicons
-                name="ios-arrow-down"
-                size={25}
-                color="#fff"
-                style={{ marginLeft: 60 }}
-              />
-            </StyledDropdownButtonContainer>
-          </ModalDropdown>
+            defaultValue="SELECT"
+          />
           <VerticalDivider />
           <FilterButton onPress={this.toggleFilters}>
             <View>
@@ -261,17 +244,6 @@ const VerticalDivider = styled.View`
   border-left-width: 1;
   align-self: stretch;
 `;
-const DropdownButtonText = styled.Text`
-  color: #fff;
-`;
-const StyledDropdownButtonContainer = styled.View`
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  min-width: 144px;
-  min-height: 28px;
-  padding: 6px;
-`;
 
 const styles = {
   container: {
@@ -313,25 +285,6 @@ const styles = {
   },
   inputContainer: {
     backgroundColor: '#f3f3f3'
-  },
-  dropdownButton: {
-    backgroundColor: '#000',
-    borderRadius: 4
-  },
-  dropdown: {
-    height: 'auto'
-  },
-  dropdownText: {
-    backgroundColor: '#000',
-    fontSize: 14,
-    color: '#fff',
-    minWidth: 144,
-    minHeight: 28,
-    paddingVertical: 6,
-    alignItems: 'center'
-  },
-  dropdownTextHighlight: {
-    color: '#fff'
   }
 };
 
