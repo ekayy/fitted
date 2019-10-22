@@ -1,4 +1,5 @@
 import React, { useState, Component } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Button from '../Components/Forms/Button';
@@ -62,8 +63,14 @@ const Form = props => {
 
   const [checked, setChecked] = useState({});
 
+  // const selectItem = item => {
+  //   setChecked({ ...checked, [item.id]: !checked[item.id] });
+  // };
+
   const selectItem = item => {
-    setChecked({ ...checked, [item.id]: !checked[item.id] });
+    checked.includes(item.id)
+      ? setChecked(checked.filter(id => id !== item.id))
+      : setChecked([...checked, item.id]);
   };
 
   return (
@@ -212,24 +219,25 @@ class CreateDiscussion extends Component {
 
     return (
       <StyledContainer>
-        <StyledIntroduction>
-          Have a garment specific question? Or simply want to share a review of
-          your thoughts for a specific garment?
-        </StyledIntroduction>
-        <StyledIntroduction>Get started below!</StyledIntroduction>
+        <KeyboardAvoidingView behavior="position" enabled>
+          <StyledIntroduction>
+            Have a garment specific question? Or simply want to share a review
+            of your thoughts for a specific garment?
+          </StyledIntroduction>
+          <StyledIntroduction>Get started below!</StyledIntroduction>
 
-        <CreateDiscussionForm
-          brands={brands}
-          createGarment={createGarment}
-          navigation={navigation}
-        />
+          <CreateDiscussionForm
+            brands={brands}
+            createGarment={createGarment}
+            navigation={navigation}
+          />
+        </KeyboardAvoidingView>
       </StyledContainer>
     );
   }
 }
 
 const StyledContainer = styled.ScrollView`
-  flex: 1;
   padding: 20px;
   background-color: #f3f3f3;
 `;
@@ -257,7 +265,7 @@ const StyledTextArea = styled.TextInput`
 
 const StyledButtonGroup = styled.View`
   position: relative;
-  margin: 10px 0 40px 0;
+  margin: 10px 0 100px 0;
   flex-direction: row;
   justify-content: center;
   align-items: center;
