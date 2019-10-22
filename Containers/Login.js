@@ -20,8 +20,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'eric',
-      password: 'password',
+      username: 'fittedsf',
+      password: 'original',
       loading: false
     };
     this.isAttempting = false;
