@@ -41,7 +41,7 @@ const AppNav = createBottomTabNavigator(
         ),
         tabBarOnPress: ({ navigation, defaultHandler }) => {
           Alert.alert(
-            '',
+            'Discuss Garment / Upload Fit',
             null,
             [
               {
