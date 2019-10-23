@@ -61,9 +61,9 @@ class SearchList extends Component {
               />
             )}
             <GarmentItemInfo>
-              <Text>{item.model}</Text>
+              <Text>{model}</Text>
               <Text>{brandName}</Text>
-              <Text>{item.color}</Text>
+              <Text>{color}</Text>
             </GarmentItemInfo>
           </GarmentItemImageContainer>
         </GarmentItem>
