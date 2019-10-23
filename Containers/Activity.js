@@ -50,16 +50,18 @@ class Activity extends Component {
                 onPress={() => this.props.unfavoriteGarment(id)}
               />
             )}
-            <GarmentDiscussion>
-              <IsResponse>Responded to a discussion post:</IsResponse>
-              <GarmentDiscussionText>
-                <PostMessage>{model}</PostMessage>
-                <PostDate>{date} hours ago</PostDate>
-              </GarmentDiscussionText>
-            </GarmentDiscussion>
           </GarmentItemImageContainer>
-          <GarmentDiscussionButton />
+          <GarmentDiscussion>
+            <IsResponse>Responded to a discussion post:</IsResponse>
+            <GarmentDiscussionText>
+              <PostMessage>{model}</PostMessage>
+              <PostDate>{date} hours ago</PostDate>
+            </GarmentDiscussionText>
+          </GarmentDiscussion>
         </GarmentItem>
+        <GarmentDiscussionButton>
+          <ButtonText>Following</ButtonText>
+        </GarmentDiscussionButton>
       </GarmentItemContainer>
     );
   }
@@ -89,7 +91,6 @@ class Activity extends Component {
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           ListFooterComponent={this.renderFooter}
-          style={{ flex: 1 }}
         />
         {/* <StyledActivityBar>
           <StyledDiscussionButton></StyledDiscussionButton>
@@ -102,15 +103,17 @@ class Activity extends Component {
 
 const GarmentItemContainer = styled.View`
   border-top-width: 0.2px;
+  display: flex;
+  flex-direction: row;
 `;
 
 const GarmentItem = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
+  width: 70%;
 `;
 
 const GarmentItemImageContainer = styled.View`
-  width: 70%;
   flex-direction: row;
   align-items: center;
 `;
@@ -118,7 +121,7 @@ const GarmentItemImageContainer = styled.View`
 const GarmentDiscussion = styled.View`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const GarmentDiscussionText = styled.View`
@@ -144,8 +147,16 @@ const PostDate = styled.Text`
 
 const GarmentDiscussionButton = styled.TouchableOpacity`
   background-color: #000;
-  width: 30%;
-  min-height: 30px;
+  width: 25%;
+  margin: 15px 0;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ButtonText = styled.Text`
+  color: #fff;
 `;
 
 const styles = {
