@@ -9,6 +9,7 @@ import { login, favoriteGarment } from '../Redux/UserRedux';
 import SearchFilter from '../Components/Search/SearchFilter';
 import SearchList from '../Components/SearchList';
 import DropDown from '../Components/DropDown';
+import Home from '../Components/Home';
 
 class Search extends Component {
   static navigationOptions = {
@@ -157,6 +158,7 @@ class Search extends Component {
         <SearchBar
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.inputContainer}
+          inputStyle={styles.input}
           cancelButtonProps={{ color: '#000' }}
           round
           lightTheme
@@ -214,7 +216,10 @@ class Search extends Component {
             favoriteGarment={this.props.favoriteGarment}
           />
         ) : (
-          <Text>This is the home screen</Text>
+          <Home
+            results={this.state.garments}
+            navigation={this.props.navigation}
+          />
         )}
       </StyledContainer>
     );
@@ -266,8 +271,9 @@ const VerticalDivider = styled.View`
 `;
 
 const styles = {
-  searchBarContainer: { backgroundColor: '#fff', paddingVertical: 10 },
-  inputContainer: { backgroundColor: '#f3f3f3' },
+  searchBarContainer: { backgroundColor: 'rgb(0,0,0)', paddingVertical: 10 },
+  inputContainer: { backgroundColor: 'rgb(255,255,255)' },
+  input: { backgroundColor: 'rgb(255,255,255)' },
   badgeStyle: { position: 'absolute', top: 0, right: -20 }
 };
 
