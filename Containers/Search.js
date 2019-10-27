@@ -166,30 +166,31 @@ class Search extends Component {
           platform="ios"
           value={searchTerm}
         />
+        {searchTerm ? (
+          <StyledFilterBarContainer>
+            <StyledFilterBar>
+              <DropDown
+                options={['MOST RECENT', 'MOST POPULAR']}
+                defaultValue="SELECT"
+              />
+            </StyledFilterBar>
 
-        <StyledFilterBarContainer>
-          <StyledFilterBar>
-            <DropDown
-              options={['MOST RECENT', 'MOST POPULAR']}
-              defaultValue="SELECT"
-            />
-          </StyledFilterBar>
+            <VerticalDivider />
 
-          <VerticalDivider />
-
-          <StyledFilterBar>
-            <StyledFilterButton onPress={this.toggleFilters}>
-              <StyledFilterText>FILTER</StyledFilterText>
-              {brandIds.length > 0 && (
-                <Badge
-                  status="error"
-                  value={brandIds.length}
-                  containerStyle={styles.badgeStyle}
-                />
-              )}
-            </StyledFilterButton>
-          </StyledFilterBar>
-        </StyledFilterBarContainer>
+            <StyledFilterBar>
+              <StyledFilterButton onPress={this.toggleFilters}>
+                <StyledFilterText>FILTER</StyledFilterText>
+                {brandIds.length > 0 && (
+                  <Badge
+                    status="error"
+                    value={brandIds.length}
+                    containerStyle={styles.badgeStyle}
+                  />
+                )}
+              </StyledFilterButton>
+            </StyledFilterBar>
+          </StyledFilterBarContainer>
+        ) : null}
 
         <SearchFilter
           navigation={this.props.navigation}
@@ -238,7 +239,6 @@ class Search extends Component {
 const StyledContainer = styled.View`
   flex: 1;
   background-color: #f3f3f3;
-  margin-top: 30px;
 `;
 const StyledFilterBarContainer = styled.View`
   flex-direction: row;
