@@ -14,12 +14,9 @@ class Home extends Component {
       remainingResults: [],
       error: null,
       loading: false,
-      refreshing: false,
-      brand: ''
+      refreshing: false
     };
   }
-
-  componentDidMount() {}
 
   handleRefresh = () => {};
 
@@ -39,12 +36,12 @@ class Home extends Component {
 
   render() {
     const { loading, refreshing } = this.state;
-    const { garments, brands } = this.props;
+    const { brands, brandTable } = this.props;
 
     return (
       <View style={styles.container}>
         <BrandGrid
-          garments={garments}
+          brandTable={brandTable}
           brands={brands}
           navigation={this.props.navigation}
           numCol={2}

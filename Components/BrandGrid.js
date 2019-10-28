@@ -14,7 +14,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 class BrandGrid extends Component {
   renderBrand(item) {
-    const { garments, style, refreshing } = this.props;
+    const { brandTable, style, refreshing } = this.props;
     return (
       <View style={styles.brandContainer}>
         <View style={styles.brandheader}>
@@ -31,7 +31,7 @@ class BrandGrid extends Component {
         </View>
         <FlatList
           style={style}
-          data={garments.slice(0, 9)}
+          data={brandTable[item.name].slice(0, 10)}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
           renderItem={({ item }) => this.renderGarment(item)}
@@ -123,8 +123,7 @@ class BrandGrid extends Component {
   };
 
   render() {
-    const { style, garments, brands, refreshing } = this.props;
-
+    const { style, brandTable, brands, refreshing } = this.props;
     return (
       <FlatList
         style={style}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Text } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { SearchBar, ListItem, Badge } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
@@ -29,7 +29,8 @@ class Search extends Component {
       refreshing: false,
       limit: 9999,
       showFilters: false,
-      brandIds: []
+      brandIds: [],
+      brandTable: {}
     };
   }
 
@@ -41,12 +42,14 @@ class Search extends Component {
 
     this.setState({ refreshing: true, results: [] }, async () => {
       // Get garments from redux store
+      await this.props.fetchBrands();
       await this.props.fetchGarments();
       this.setState(
         {
           garments
         },
-        () => {
+        async () => {
+          await this.createBrandTable();
           this.setState({
             refreshing: false,
             results: [...this.state.garments.slice(0, 10)],
@@ -55,8 +58,18 @@ class Search extends Component {
         }
       );
     });
+  }
 
-    this.props.fetchBrands();
+  // sort all garments into their respective brand
+  createBrandTable() {
+    const { brands } = this.props;
+    const { brandTable, garments } = this.state;
+    brands.forEach(brand => {
+      brandTable[brand.name] = [];
+    });
+    garments.forEach(garment => {
+      brandTable[garment.brand_name].push(garment);
+    });
   }
 
   handleChange = searchTerm => {
@@ -151,7 +164,7 @@ class Search extends Component {
       refreshing,
       showFilters,
       brandIds,
-      garments
+      brandTable
     } = this.state;
 
     return (
@@ -216,12 +229,16 @@ class Search extends Component {
             user={this.props.user}
             favoriteGarment={this.props.favoriteGarment}
           />
-        ) : (
+        ) : Object.keys(brandTable).length > 0 ? (
           <Home
-            garments={garments}
+            brandTable={brandTable}
             brands={this.props.brands}
             navigation={this.props.navigation}
           />
+        ) : (
+          <View>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
         )}
       </StyledContainer>
     );

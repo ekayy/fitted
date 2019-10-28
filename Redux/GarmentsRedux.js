@@ -142,7 +142,7 @@ export const fetchGarments = () => async dispatch => {
   dispatch(fetchGarmentsBegin());
 
   try {
-    const res = await axios.get(`${baseURL}/garments/?limit=100`);
+    const res = await axios.get(`${baseURL}/garments/?limit=2000`);
 
     dispatch(fetchGarmentsSuccess(res.data.results));
   } catch (error) {
