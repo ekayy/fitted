@@ -10,33 +10,16 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      searchTerm: '',
-      garments: [],
       results: [],
       remainingResults: [],
       error: null,
       loading: false,
       refreshing: false,
-      limit: 9999,
-      showFilters: false,
       brand: ''
     };
   }
 
-  componentDidMount() {
-    // const { garments } = this.props;
-    // this.setState({ refreshing: true, results: [] });
-    // // Get garments from redux store
-    // this.props.fetchGarmentsTest().then(data => {
-    //   let garments = data.payload.garments;
-    //   this.setState({
-    //     garments: garments,
-    //     results: garments.slice(0, 10),
-    //     remainingResults: garments.slice(10),
-    //     refreshing: false
-    //   });
-    // });
-  }
+  componentDidMount() {}
 
   handleRefresh = () => {};
 
@@ -55,12 +38,14 @@ class Home extends Component {
   };
 
   render() {
-    const { loading, refreshing, garments } = this.state;
+    const { loading, refreshing } = this.state;
+    const { garments, brands } = this.props;
 
     return (
       <View style={styles.container}>
         <BrandGrid
-          data={this.props.results}
+          garments={garments}
+          brands={brands}
           navigation={this.props.navigation}
           numCol={2}
           handleLoadMore={this.handleLoadMore}

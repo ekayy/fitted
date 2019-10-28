@@ -9,11 +9,46 @@ import {
 } from 'react-native';
 import { Badge } from 'react-native-elements';
 import { Metrics } from '../Themes';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 class BrandGrid extends Component {
+  renderBrand(item) {
+    const { garments, style, refreshing } = this.props;
+    return (
+      <View style={styles.brandContainer}>
+        <View style={styles.brandheader}>
+          <Text style={styles.brandLabel}>{item.name.toUpperCase()}</Text>
+          <TouchableOpacity style={styles.seeAll}>
+            <Text>See All</Text>
+            <Ionicons
+              name="md-arrow-dropright"
+              size={30}
+              color="rgb(74,74,74)"
+              style={{ marginLeft: 8 }}
+            />
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          style={style}
+          data={garments.slice(0, 9)}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={true}
+          renderItem={({ item }) => this.renderGarment(item)}
+          onRefresh={() => this.props.onRefresh()}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={0}
+          refreshing={refreshing}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          ListFooterComponent={this.renderFooter}
+        />
+      </View>
+    );
+  }
   renderGarment(item) {
     const { navigate } = this.props.navigation;
-    const { numCol, grid, editingCloset, unfavoriteGarment } = this.props;
+    const { editingCloset, unfavoriteGarment } = this.props;
     const { id, color, model, sku, brand, photo } = item;
 
     let formattedModel = model
@@ -29,7 +64,7 @@ class BrandGrid extends Component {
         'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
     }
 
-    return numCol == 2 ? (
+    return (
       <TouchableOpacity
         style={styles.gridItem}
         key={id}
@@ -42,23 +77,19 @@ class BrandGrid extends Component {
               value="X"
               status="error"
               containerStyle={{ top: 0, right: 0, position: 'absolute' }}
-              onPress={() => this.props.unfavoriteGarment(id)}
+              onPress={() => unfavoriteGarment(id)}
             />
           )}
         </View>
         <Text style={styles.text}>{formattedModel}</Text>
-      </TouchableOpacity>
-    ) : (
-      <TouchableOpacity
-        style={styles.gridItem}
-        key={id}
-        onPress={() => navigate('GarmentDetail', item)}
-      >
-        <View
-          style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}
-        >
-          <Image style={styles.image} source={{ uri: photo }} />
-        </View>
+        <TouchableOpacity style={styles.bookmarkContainer}>
+          <Text style={{ color: 'rgb(74, 144, 226)' }}>Bookmark for later</Text>
+          <MaterialCommunityIcons
+            name={'bookmark-outline'}
+            size={16}
+            color="rgb(74, 144, 226)"
+          />
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   }
@@ -92,15 +123,15 @@ class BrandGrid extends Component {
   };
 
   render() {
-    const { style, data, refreshing } = this.props;
+    const { style, garments, brands, refreshing } = this.props;
 
     return (
       <FlatList
         style={style}
-        data={data}
+        data={brands}
         keyExtractor={(item, index) => index.toString()}
-        numColumns={3}
-        renderItem={({ item }) => this.renderGarment(item)}
+        numColumns={1}
+        renderItem={({ item }) => this.renderBrand(item)}
         onRefresh={() => this.props.onRefresh()}
         onEndReached={this.handleLoadMore}
         onEndReachedThreshold={0}
@@ -138,6 +169,26 @@ const styles = {
     paddingVertical: 8,
     fontSize: 17,
     color: 'rgb(255,255,255)'
+  },
+  brandheader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    marginTop: 8
+  },
+  brandLabel: {
+    fontSize: 18,
+    fontWeight: '500'
+  },
+  seeAll: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    color: 'rgb(74,74,74)'
+  },
+  bookmarkContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    textAlign: 'center'
   },
   imageContainer: {
     flex: 1,

@@ -150,7 +150,8 @@ class Search extends Component {
       loading,
       refreshing,
       showFilters,
-      brandIds
+      brandIds,
+      garments
     } = this.state;
 
     return (
@@ -217,7 +218,8 @@ class Search extends Component {
           />
         ) : (
           <Home
-            results={this.state.garments}
+            garments={garments}
+            brands={this.props.brands}
             navigation={this.props.navigation}
           />
         )}
