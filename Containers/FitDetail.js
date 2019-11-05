@@ -9,6 +9,7 @@ import axios from 'axios';
 import { baseURL } from '../Config';
 import { favoriteFit } from '../Redux/UserRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
+import CommentSingle from '../Components/Comment/CommentSingle';
 
 class FitDetail extends Component {
   state = {

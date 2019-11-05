@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
-import { SearchBar, ListItem } from 'react-native-elements';
-import { Colors } from '../Themes';
+import styled from 'styled-components';
+import { Text } from 'react-native';
+import { SearchBar, ListItem, Badge } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
@@ -9,6 +9,7 @@ import { login, favoriteGarment } from '../Redux/UserRedux';
 import SearchFilter from '../Components/Search/SearchFilter';
 import SearchList from '../Components/SearchList';
 import DropDown from '../Components/DropDown';
+import GarmentsGrid from '../Components/GarmentsGrid';
 
 class Search extends Component {
   static navigationOptions = {
@@ -38,17 +39,24 @@ class Search extends Component {
     }
     const { garments } = this.props;
 
-    this.setState({ refreshing: true, results: [] });
-    // Get garments from redux store
-    this.props.fetchGarments().then(data => {
-      let garments = data.payload.garments;
-      this.setState({
-        garments: garments,
-        results: garments.slice(0, 10),
-        remainingResults: garments.slice(10),
-        refreshing: false
-      });
+    this.setState({ refreshing: true, results: [] }, async () => {
+      // Get garments from redux store
+      await this.props.fetchGarments();
+      this.setState(
+        {
+          garments
+        },
+        () => {
+          this.setState({
+            refreshing: false,
+            results: [...this.state.garments.slice(0, 10)],
+            remainingResults: [...this.state.garments.slice(10)]
+          });
+        }
+      );
     });
+
+    this.props.fetchBrands();
   }
 
   handleChange = searchTerm => {
@@ -142,7 +150,7 @@ class Search extends Component {
       loading,
       refreshing,
       showFilters,
-      brand,
+      brandIds,
       garments
     } = this.state;
 
@@ -154,49 +162,72 @@ class Search extends Component {
           cancelButtonProps={{ color: '#000' }}
           round
           lightTheme
+          placeholder="Search"
           onChangeText={this.handleChange}
           autoCapitalize="none"
           platform="ios"
           value={searchTerm}
-          containerStyle={{ backgroundColor: 'rgb(0,0,0)' }}
-          inputStyle={{ backgroundColor: 'rgb(255,255,255)' }}
-          inputContainerStyle={{ backgroundColor: 'rgb(255,255,255)' }}
         />
-        {/*<View style={styles.filterWrapper}>
-          <View style={styles.filterContainer}>
-            <TouchableOpacity
-              style={styles.filter}
-              onPress={this.toggleFilters}
-            >
-              <View>
-                <Text style={styles.filterText}>Filters</Text>
-              </View>
-            </TouchableOpacity>
 
-            {this.renderActiveFilter()}
+        {searchTerm ? (
+          <View>
+            <SearchList
+              data={results}
+              navigation={this.props.navigation}
+              numCol={2}
+              handleLoadMore={this.handleLoadMore}
+              onRefresh={this.handleRefresh}
+              refreshing={refreshing}
+              loading={loading}
+              brands={this.props.brands}
+              user={this.props.user}
+              favoriteGarment={this.props.favoriteGarment}
+            />
+
+            <StyledFilterBarContainer>
+              <StyledFilterBar>
+                <DropDown
+                  options={['MOST RECENT', 'MOST POPULAR']}
+                  defaultValue="SELECT"
+                />
+              </StyledFilterBar>
+
+              <VerticalDivider />
+
+              <StyledFilterBar>
+                <StyledFilterButton onPress={this.toggleFilters}>
+                  <StyledFilterText>FILTER</StyledFilterText>
+                  {brandIds.length > 0 && (
+                    <Badge
+                      status="error"
+                      value={brandIds.length}
+                      containerStyle={styles.badgeStyle}
+                    />
+                  )}
+                </StyledFilterButton>
+              </StyledFilterBar>
+            </StyledFilterBarContainer>
+
+            <SearchFilter
+              navigation={this.props.navigation}
+              showFilters={showFilters}
+              onClose={this.toggleFilters}
+              applyFilters={this.applyFilters}
+              brands={this.props.brands}
+            />
           </View>
-        </View>*/}
-
-        {/*<SearchFilter
-          navigation={this.props.navigation}
-          showFilters={showFilters}
-          onClose={this.toggleFilters}
-          applyFilters={this.applyFilters}
-          ref={instance => {
-            this.child = instance;
-          }}
-        />*/}
-
-        <GarmentsGrid
-          data={garments}
-          navigation={this.props.navigation}
-          numCol={2}
-          handleLoadMore={this.handleLoadMore}
-          onRefresh={this.handleRefresh}
-          refreshing={refreshing}
-          loading={loading}
-        />
-      </View>
+        ) : (
+          <GarmentsGrid
+            data={garments}
+            navigation={this.props.navigation}
+            numCol={2}
+            handleLoadMore={this.handleLoadMore}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
+            loading={loading}
+          />
+        )}
+      </StyledContainer>
     );
   }
 
@@ -247,36 +278,9 @@ const VerticalDivider = styled.View`
 `;
 
 const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: '#f3f3f3'
-  },
-  filterWrapper: {
-    alignSelf: 'flex-start',
-    position: 'relative',
-    zIndex: 10
-  },
-  filterContainer: {
-    position: 'absolute',
-    flex: 1,
-    flexDirection: 'row',
-    marginHorizontal: 5
-  },
-  filter: {
-    alignSelf: 'flex-start',
-    marginTop: 5,
-    marginHorizontal: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    backgroundColor: Colors.dark,
-    borderRadius: 3
-  },
-  filterText: {
-    color: '#fff'
-  },
-  activeFilter: {
-    backgroundColor: Colors.darkFade
-  }
+  searchBarContainer: { backgroundColor: '#fff', paddingVertical: 10 },
+  inputContainer: { backgroundColor: '#f3f3f3' },
+  badgeStyle: { position: 'absolute', top: 0, right: -20 }
 };
 
 const mapStateToProps = state => {
