@@ -273,7 +273,11 @@ const VerticalDivider = styled.View`
 `;
 
 const styles = {
-  searchBarContainer: { backgroundColor: 'rgb(0,0,0)', paddingVertical: 10 },
+  searchBarContainer: {
+    // backgroundColor: 'rgb(0,0,0)',
+    paddingVertical: 10,
+    marginTop: 25
+  },
   inputContainer: { backgroundColor: 'rgb(255,255,255)' },
   input: { backgroundColor: 'rgb(255,255,255)' },
   badgeStyle: { position: 'absolute', top: 0, right: -20 }
