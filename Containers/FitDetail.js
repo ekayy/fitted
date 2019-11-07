@@ -9,7 +9,7 @@ import axios from 'axios';
 import { baseURL } from '../Config';
 import { favoriteFit } from '../Redux/UserRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
-import CommentSingle from '../Components/Comment/CommentSingle';
+import CommentList from '../Components/Comment/CommentList';
 
 class FitDetail extends Component {
   state = {
@@ -160,14 +160,13 @@ class FitDetail extends Component {
             </View>
 
             {comments.length > 0 && (
-              <CommentSingle
-                data={comments[0]}
+              <CommentList
+                {...this.props}
+                data={comments.slice(0, 1)}
                 renderViewComments
                 renderLeaveComment
-                viewComments={() =>
-                  navigate('CommentIndex', { comment: comments[0] })
-                }
-                leaveComment={() => {}}
+                numReplies={1}
+                contentType="fit"
               />
             )}
             <View style={AppStyles.button}>
