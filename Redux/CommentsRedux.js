@@ -44,7 +44,6 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         // items: [...state.items, ...action.payload.garments]
         items: [...action.payload.comments]
       };
-
     case FETCH_COMMENTS_FAILURE:
       return {
         ...state,
@@ -53,7 +52,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         items
       };
 
-    case DOWNVOTE_COMMENT_BEGIN:
+    case UPVOTE_COMMENT_BEGIN:
       return {
         ...state,
         loading: true
@@ -148,14 +147,12 @@ export default function comments(state = INITIAL_STATE, action = {}) {
 export const fetchCommentsBegin = () => ({
   type: FETCH_COMMENTS_BEGIN
 });
-
 export const fetchCommentsSuccess = comments => ({
   type: FETCH_COMMENTS_SUCCESS,
   payload: {
     comments
   }
 });
-
 export const fetchCommentsFailure = error => ({
   type: FETCH_COMMENTS_FAILURE,
   payload: {
@@ -163,14 +160,16 @@ export const fetchCommentsFailure = error => ({
   }
 });
 
+export const storeComments = () => ({
+  type: STORE_COMMENTS
+});
+
 export const upvoteCommentBegin = () => ({
   type: UPVOTE_COMMENT_BEGIN
 });
-
 export const upvoteCommentSuccess = () => ({
   type: UPVOTE_COMMENT_SUCCESS
 });
-
 export const upvoteCommentFailure = error => ({
   type: UPVOTE_COMMENT_FAILURE,
   payload: {
@@ -181,11 +180,9 @@ export const upvoteCommentFailure = error => ({
 export const downvoteCommentBegin = () => ({
   type: DOWNVOTE_COMMENT_BEGIN
 });
-
 export const downvoteCommentSuccess = () => ({
   type: DOWNVOTE_COMMENT_SUCCESS
 });
-
 export const downvoteCommentFailure = error => ({
   type: DOWNVOTE_COMMENT_FAILURE,
   payload: {
@@ -196,14 +193,12 @@ export const downvoteCommentFailure = error => ({
 export const postCommentBegin = () => ({
   type: POST_COMMENT_BEGIN
 });
-
 export const postCommentSuccess = content => ({
   type: POST_COMMENT_SUCCESS,
   payload: {
     content
   }
 });
-
 export const postCommentFailure = error => ({
   type: POST_COMMENT_FAILURE,
   payload: {
@@ -214,14 +209,12 @@ export const postCommentFailure = error => ({
 export const postReplyBegin = () => ({
   type: POST_REPLY_BEGIN
 });
-
 export const postReplySuccess = content => ({
   type: POST_REPLY_SUCCESS,
   payload: {
     content
   }
 });
-
 export const postReplyFailure = error => ({
   type: POST_REPLY_FAILURE,
   payload: {
