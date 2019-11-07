@@ -12,6 +12,7 @@ import CommentList from '../Components/Comment/CommentList';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
+import { fetchComments } from '../Redux/CommentsRedux';
 import { Ionicons } from '@expo/vector-icons';
 
 import { baseURL } from '../Config';
@@ -28,8 +29,11 @@ class GarmentDetail extends Component {
   };
 
   componentDidMount() {
+    const { id } = this.props.navigation.state.params;
+
     this.fetchFits();
     this.getFavoriteState();
+    this.props.fetchComments(id, 'garments');
   }
 
   fetchFits = async () => {
@@ -250,7 +254,7 @@ class GarmentDetail extends Component {
           {comments.length > 0 && (
             <CommentList
               {...this.props}
-              data={comments.slice(0, 1)}
+              data={comments.slice(0, 3)}
               renderViewComments
               renderLeaveComment
               numReplies={1}
@@ -263,9 +267,7 @@ class GarmentDetail extends Component {
               title={`See all discussion`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() =>
-                navigate('Comments', { id, contentType: 'garment' })
-              }
+              onPress={() => navigate('Comments')}
             />
           </View>
         </View>
@@ -280,12 +282,11 @@ const mapStateToProps = ({ user, brands }) => {
 
 export default connect(
   mapStateToProps,
-
   {
     fetchBrands,
     favoriteGarment,
     tagGarmentToFit,
-    clearCreatedFit
-    // fetchGarmentFits
+    clearCreatedFit,
+    fetchComments
   }
 )(GarmentDetail);

@@ -41,7 +41,6 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        // items: [...state.items, ...action.payload.garments]
         items: [...action.payload.comments]
       };
     case FETCH_COMMENTS_FAILURE:
@@ -160,10 +159,6 @@ export const fetchCommentsFailure = error => ({
   }
 });
 
-export const storeComments = () => ({
-  type: STORE_COMMENTS
-});
-
 export const upvoteCommentBegin = () => ({
   type: UPVOTE_COMMENT_BEGIN
 });
@@ -224,15 +219,17 @@ export const postReplyFailure = error => ({
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function fetchComments(id) {
-  return dispatch => {
-    dispatch(fetchCommentsBegin());
-    return axios
-      .get(`${baseURL}/comments/${id}/`)
-      .then(response => dispatch(fetchCommentsSuccess(response.data.results)))
-      .catch(error => dispatch(fetchCommentsFailure(error)));
-  };
-}
+export const fetchComments = (id, contentType) => async dispatch => {
+  dispatch(fetchCommentsBegin());
+
+  try {
+    const res = await axios.get(`${baseURL}/${contentType}/${id}/`);
+
+    dispatch(fetchCommentsSuccess(res.data.comments));
+  } catch (error) {
+    dispatch(fetchCommentsFailure(error));
+  }
+};
 
 export const upvoteComment = (id, profileId) => async dispatch => {
   dispatch(upvoteCommentBegin());
