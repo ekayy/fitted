@@ -16,15 +16,13 @@ import CommentInput from '../Components/Comment/CommentInput';
 import DropDown from '../Components/DropDown';
 
 const Comments = props => {
-  const { currentGarment, contentType } = props.navigation.state.params;
+  const { id, contentType } = props.navigation.state.params;
 
   const { garments } = useSelector(state => ({
     garments: state.garments.items
   }));
 
-  const { comments } = garments.find(
-    garment => garment.id === currentGarment.id
-  );
+  const { comments } = garments.find(garment => garment.id === id);
 
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
@@ -50,8 +48,7 @@ const Comments = props => {
     setCurrentComment(comment);
   };
 
-  // const handleSubmit = searchValue => {
-  // };
+  const handleSubmit = searchValue => {};
 
   const searchComments = searchValue => {
     onChangeSearch(searchValue);
@@ -129,7 +126,7 @@ const Comments = props => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
-          id={currentGarment.id}
+          objectId={id}
         />
       </Modal>
 

@@ -4,11 +4,11 @@ import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, ErrorMessage } from 'formik';
 import { EvilIcons } from '@expo/vector-icons';
-import { postComment } from '../../Redux/CommentsRedux';
+import { postComment, postReply } from '../../Redux/CommentsRedux';
 
 const CommentInput = props => {
-  const { closeModal, data, contentType, objectId } = props;
-  const { content, downvotes, upvotes, username } = data;
+  const { closeModal, data, contentType, objectId, isReplyInput } = props;
+  const { content, downvotes, upvotes, username, id } = data;
 
   const { profileId } = useSelector(state => ({
     profileId: state.user.profileId
@@ -17,14 +17,24 @@ const CommentInput = props => {
   const dispatch = useDispatch();
 
   const onSubmit = async ({ content }) => {
-    const data = {
-      contentType,
-      objectId,
-      profileId,
-      content
-    };
+    if (isReplyInput) {
+      const data = {
+        commentId: id,
+        profileId,
+        content
+      };
 
-    await dispatch(postComment(data));
+      await dispatch(postReply(data));
+    } else {
+      const data = {
+        contentType,
+        objectId,
+        profileId,
+        content
+      };
+
+      await dispatch(postComment(data));
+    }
 
     closeModal();
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { View, Text, FlatList, Modal } from 'react-native';
 
@@ -22,6 +22,12 @@ const CommentList = props => {
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
+
+  // useEffect(() => {
+  //   props.navigation.setParams({
+  //     openModal
+  //   });
+  // }, []);
 
   const closeModal = () => {
     setModal(false);
@@ -79,6 +85,7 @@ const CommentList = props => {
           openModal={openModal}
           contentType={contentType}
           objectId={id}
+          isReplyInput
         />
       </Modal>
     </View>

@@ -125,7 +125,6 @@ class GarmentDetail extends Component {
       photo,
       comments
     } = this.props.navigation.state.params;
-    const currentGarment = this.props.navigation.state.params;
     const { navigate } = this.props.navigation;
 
     const { refreshing, count, garmentFits } = this.state;
@@ -237,9 +236,7 @@ class GarmentDetail extends Component {
                 title={`See all ${count} photos`}
                 buttonStyle={[AppStyles.buttonAltStyle]}
                 titleStyle={AppStyles.buttonAltTitleStyle}
-                onPress={() =>
-                  navigate('Fits', { garmentFits, currentGarment })
-                }
+                onPress={() => navigate('Fits', { garmentFits, id })}
               />
             </View>
           )}
@@ -267,7 +264,7 @@ class GarmentDetail extends Component {
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
               onPress={() =>
-                navigate('Comments', { currentGarment, contentType: 'garment' })
+                navigate('Comments', { id, contentType: 'garment' })
               }
             />
           </View>
