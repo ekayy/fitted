@@ -11,9 +11,8 @@ import {
 
 import { Formik, ErrorMessage } from 'formik';
 
-import CommentSingle from './CommentSingle';
+import CommentList from './CommentList';
 import CommentInput from './CommentInput';
-import CommentReply from './CommentReply';
 
 const CommentIndex = ({ navigation }) => {
   const [commentValue, onChangeComment] = useState('');
@@ -43,16 +42,12 @@ const CommentIndex = ({ navigation }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
-        <View>
-          <CommentSingle
-            data={comment}
-            leaveComment={() => openModal(comment)}
-          />
-
-          {/* {replies.map(reply => (
-            <CommentReply />
-          ))} */}
-        </View>
+        <CommentList
+          {...props}
+          data={comment}
+          numReplies={9999}
+          contentType={commentType}
+        />
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>

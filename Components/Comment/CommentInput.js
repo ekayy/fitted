@@ -7,7 +7,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { postComment } from '../../Redux/CommentsRedux';
 
 const CommentInput = props => {
-  const { closeModal, data } = props;
+  const { closeModal, data, contentType, objectId } = props;
   const { content, downvotes, upvotes, username } = data;
 
   const { profileId } = useSelector(state => ({
@@ -19,7 +19,7 @@ const CommentInput = props => {
   const onSubmit = async ({ content }) => {
     const data = {
       contentType,
-      objectId: 1,
+      objectId,
       profileId,
       content
     };

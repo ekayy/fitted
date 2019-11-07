@@ -8,7 +8,7 @@ import { AppStyles, Metrics } from '../Themes';
 import styles from './Styles/GarmentDetailStyles';
 
 import FavoriteButton from '../Components/FavoriteButton';
-import CommentSingle from '../Components/Comment/CommentSingle';
+import CommentList from '../Components/Comment/CommentList';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
@@ -251,16 +251,16 @@ class GarmentDetail extends Component {
           </View>
 
           {comments.length > 0 && (
-            <CommentSingle
-              data={comments[0]}
+            <CommentList
+              {...this.props}
+              data={comments.slice(0, 1)}
               renderViewComments
               renderLeaveComment
-              viewComments={() =>
-                navigate('CommentIndex', { comment: comments[0] })
-              }
-              leaveComment={() => {}}
+              numReplies={1}
+              contentType="garment"
             />
           )}
+
           <View style={AppStyles.button}>
             <Button
               title={`See all discussion`}

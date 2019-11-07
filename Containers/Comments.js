@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { AppStyles } from '../Themes';
-import CommentSingle from '../Components/Comment/CommentSingle';
+import CommentList from '../Components/Comment/CommentList';
 import CommentInput from '../Components/Comment/CommentInput';
 import DropDown from '../Components/DropDown';
 
-const Comments = ({ navigation }) => {
-  const { currentGarment, contentType } = navigation.state.params;
+const Comments = props => {
+  const { currentGarment, contentType } = props.navigation.state.params;
 
   const { garments } = useSelector(state => ({
     garments: state.garments.items
@@ -35,7 +35,7 @@ const Comments = ({ navigation }) => {
   const [showFilters, setShowFilter] = useState(false);
 
   useEffect(() => {
-    navigation.setParams({
+    props.navigation.setParams({
       openModal
     });
   }, []);
@@ -111,21 +111,14 @@ const Comments = ({ navigation }) => {
           </View>
         </View>
 
-        <View>
-          {searchedComments.map(comment => (
-            <CommentSingle
-              key={comment.content}
-              data={comment}
-              renderViewComments
-              renderLeaveComment
-              // TODO: request to replies
-              viewComments={() =>
-                navigation.navigate('CommentIndex', { comment, contentType })
-              }
-              leaveComment={() => openModal(comment)}
-            />
-          ))}
-        </View>
+        <CommentList
+          {...props}
+          data={searchedComments}
+          renderViewComments
+          renderLeaveComment
+          numReplies={1}
+          contentType={contentType}
+        />
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>
@@ -136,6 +129,7 @@ const Comments = ({ navigation }) => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
+          id={currentGarment.id}
         />
       </Modal>
 
