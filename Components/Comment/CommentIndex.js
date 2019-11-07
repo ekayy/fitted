@@ -14,15 +14,15 @@ import { Formik, ErrorMessage } from 'formik';
 import CommentList from './CommentList';
 import CommentInput from './CommentInput';
 
-const CommentIndex = ({ navigation }) => {
+const CommentIndex = props => {
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
 
-  const { comment, contentType } = navigation.state.params;
+  const { comment, contentType } = props.navigation.state.params;
 
   useEffect(() => {
-    navigation.setParams({
+    props.navigation.setParams({
       openModal
     });
   }, []);
@@ -46,7 +46,7 @@ const CommentIndex = ({ navigation }) => {
           {...props}
           data={comment}
           numReplies={9999}
-          contentType={commentType}
+          contentType={contentType}
         />
       </ScrollView>
 
