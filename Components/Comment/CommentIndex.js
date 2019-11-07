@@ -23,7 +23,7 @@ const CommentIndex = props => {
 
   useEffect(() => {
     props.navigation.setParams({
-      openModal
+      openModal: () => openModal(comment)
     });
   }, []);
 
@@ -37,14 +37,12 @@ const CommentIndex = props => {
     setCurrentComment(comment);
   };
 
-  const handleSubmit = () => {};
-
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
         <CommentList
           {...props}
-          data={comment}
+          data={[comment]}
           numReplies={9999}
           contentType={contentType}
         />
@@ -58,6 +56,7 @@ const CommentIndex = props => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
+          isReplyInput
         />
       </Modal>
     </KeyboardAvoidingView>

@@ -55,7 +55,7 @@ const CommentList = props => {
             renderLeaveComment={renderLeaveComment}
             viewComments={() =>
               navigation.navigate('CommentIndex', {
-                comment: [item],
+                comment: item,
                 contentType
               })
             }
