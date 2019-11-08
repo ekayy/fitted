@@ -18,11 +18,7 @@ import DropDown from '../Components/DropDown';
 const Comments = props => {
   const { id, contentType } = props.navigation.state.params;
 
-  const { garments } = useSelector(state => ({
-    garments: state.garments.items
-  }));
-
-  const { comments } = garments.find(garment => garment.id === id);
+  const comments = useSelector(state => state.comments.items);
 
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
@@ -38,6 +34,10 @@ const Comments = props => {
     });
   }, []);
 
+  useEffect(() => {
+    searchComments(searchValue);
+  }, [comments]);
+
   const closeModal = () => {
     setModal(false);
     setCurrentComment({});
@@ -47,8 +47,6 @@ const Comments = props => {
     setModal(true);
     setCurrentComment(comment);
   };
-
-  const handleSubmit = searchValue => {};
 
   const searchComments = searchValue => {
     onChangeSearch(searchValue);
@@ -114,7 +112,6 @@ const Comments = props => {
           renderViewComments
           renderLeaveComment
           numReplies={1}
-          contentType={contentType}
         />
       </ScrollView>
 

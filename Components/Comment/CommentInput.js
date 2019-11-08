@@ -1,10 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Formik, ErrorMessage } from 'formik';
 import { EvilIcons } from '@expo/vector-icons';
 import { postComment, postReply } from '../../Redux/CommentsRedux';
+import * as Yup from 'yup';
+
+const CommentInputSchema = Yup.object().shape({
+  content: Yup.string()
+    .min(50, 'Too Short!')
+    .max(500, 'Too Long!')
+    .required('Required')
+});
 
 const CommentInput = props => {
   const { closeModal, data, contentType, objectId, isReplyInput } = props;
@@ -43,10 +51,18 @@ const CommentInput = props => {
     <StyledModal>
       <Formik
         initialValues={{ content: '' }}
+        validationSchema={CommentInputSchema}
         onSubmit={values => onSubmit(values)}
       >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <View>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched
+        }) => (
+          <View style={{ flex: 1 }}>
             <StyledModalHeader>
               <TouchableOpacity onPress={closeModal}>
                 <EvilIcons name="close" size={25} />
@@ -73,6 +89,12 @@ const CommentInput = props => {
                 onChangeText={handleChange('content')}
               />
             </StyledInput>
+
+            <StyledErrorWrapper>
+              {errors.content && touched.content ? (
+                <StyledError>{errors.content}</StyledError>
+              ) : null}
+            </StyledErrorWrapper>
           </View>
         )}
       </Formik>
@@ -98,6 +120,18 @@ const StyledText = styled.Text`
 
 const StyledInput = styled.View`
   /* padding: 40px; */
+`;
+
+const StyledError = styled.Text`
+  color: red;
+`;
+
+const StyledErrorWrapper = styled.View`
+  position: absolute;
+  width: 100%;
+  bottom: 50px;
+  padding: 20px;
+  border: 1px solid red;
 `;
 
 export default CommentInput;

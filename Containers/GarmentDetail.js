@@ -267,7 +267,9 @@ class GarmentDetail extends Component {
               title={`See all discussion`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigate('Comments')}
+              onPress={() =>
+                navigate('Comments', { id, contentType: 'garment' })
+              }
             />
           </View>
         </View>
@@ -276,8 +278,8 @@ class GarmentDetail extends Component {
   }
 }
 
-const mapStateToProps = ({ user, brands }) => {
-  return { user, brands: brands.items };
+const mapStateToProps = ({ user, brands, comments }) => {
+  return { user, brands: brands.items, comments: comments.items };
 };
 
 export default connect(
