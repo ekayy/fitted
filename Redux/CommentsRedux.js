@@ -47,8 +47,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
-        items
+        error: action.payload.error
       };
 
     case UPVOTE_COMMENT_BEGIN:
@@ -61,7 +60,8 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        error: null
+        error: null,
+        items: [...state.items]
       };
 
     case UPVOTE_COMMENT_FAILURE:
@@ -81,7 +81,8 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        error: null
+        error: null,
+        items: [...state.items]
       };
 
     case DOWNVOTE_COMMENT_FAILURE:
@@ -94,8 +95,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
     case POST_COMMENT_BEGIN:
       return {
         ...state,
-        loading: true,
-        content: null
+        loading: true
       };
 
     case POST_COMMENT_SUCCESS:
@@ -103,22 +103,20 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        content: action.payload.content
+        items: [...state.items, action.payload.comment]
       };
 
     case POST_COMMENT_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
-        content: null
+        error: action.payload.error
       };
 
     case POST_REPLY_BEGIN:
       return {
         ...state,
-        loading: true,
-        content: null
+        loading: true
       };
 
     case POST_REPLY_SUCCESS:
@@ -126,15 +124,14 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        content: action.payload.content
+        items: [...state.items, action.payload.reply]
       };
 
     case POST_REPLY_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
-        content: null
+        error: action.payload.error
       };
 
     default:
@@ -162,8 +159,11 @@ export const fetchCommentsFailure = error => ({
 export const upvoteCommentBegin = () => ({
   type: UPVOTE_COMMENT_BEGIN
 });
-export const upvoteCommentSuccess = () => ({
-  type: UPVOTE_COMMENT_SUCCESS
+export const upvoteCommentSuccess = comment => ({
+  type: UPVOTE_COMMENT_SUCCESS,
+  payload: {
+    comment
+  }
 });
 export const upvoteCommentFailure = error => ({
   type: UPVOTE_COMMENT_FAILURE,
@@ -175,8 +175,11 @@ export const upvoteCommentFailure = error => ({
 export const downvoteCommentBegin = () => ({
   type: DOWNVOTE_COMMENT_BEGIN
 });
-export const downvoteCommentSuccess = () => ({
-  type: DOWNVOTE_COMMENT_SUCCESS
+export const downvoteCommentSuccess = comment => ({
+  type: DOWNVOTE_COMMENT_SUCCESS,
+  payload: {
+    comment
+  }
 });
 export const downvoteCommentFailure = error => ({
   type: DOWNVOTE_COMMENT_FAILURE,
@@ -188,10 +191,10 @@ export const downvoteCommentFailure = error => ({
 export const postCommentBegin = () => ({
   type: POST_COMMENT_BEGIN
 });
-export const postCommentSuccess = content => ({
+export const postCommentSuccess = comment => ({
   type: POST_COMMENT_SUCCESS,
   payload: {
-    content
+    comment
   }
 });
 export const postCommentFailure = error => ({
@@ -204,10 +207,10 @@ export const postCommentFailure = error => ({
 export const postReplyBegin = () => ({
   type: POST_REPLY_BEGIN
 });
-export const postReplySuccess = content => ({
+export const postReplySuccess = reply => ({
   type: POST_REPLY_SUCCESS,
   payload: {
-    content
+    reply
   }
 });
 export const postReplyFailure = error => ({
