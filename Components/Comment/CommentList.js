@@ -17,17 +17,11 @@ const CommentList = props => {
   } = props;
 
   // Pass correct garment or fit id
-  const { id } = navigation.state.params;
+  // const { id } = navigation.state.params;
 
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
-
-  // useEffect(() => {
-  //   props.navigation.setParams({
-  //     openModal
-  //   });
-  // }, []);
 
   const closeModal = () => {
     setModal(false);
@@ -59,11 +53,16 @@ const CommentList = props => {
                 contentType
               })
             }
-            leaveComment={() => openModal(item)}
+            leaveComment={() =>
+              navigation.navigate('CommentIndex', {
+                comment: item,
+                contentType
+              })
+            }
           />
         </StyledCommentSingle>
 
-        <CommentReplies data={replies.slice(0, numReplies)} />
+        {replies && <CommentReplies data={replies.slice(0, numReplies)} />}
       </StyledCommentList>
     );
   };
@@ -84,7 +83,7 @@ const CommentList = props => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
-          objectId={id}
+          // objectId={id}
           isReplyInput
         />
       </Modal>
