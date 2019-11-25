@@ -13,13 +13,32 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 class BrandGrid extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showAll: false,
+      currentBrand: ''
+    };
+  }
+
+  setSeeAllBrand(brand) {
+    this.setState({
+      showAll: true,
+      currentBrand: brand
+    });
+  }
+
   renderBrand(item) {
     const { garments, style, refreshing } = this.props;
     return (
       <View style={styles.brandContainer}>
         <View style={styles.brandheader}>
           <Text style={styles.brandLabel}>{item.name.toUpperCase()}</Text>
-          <TouchableOpacity style={styles.seeAll}>
+          <TouchableOpacity
+            onPress={() => this.setSeeAllBrand(item.name)}
+            style={styles.seeAll}
+          >
             <Text>See All</Text>
             <Ionicons
               name="md-arrow-dropright"
@@ -46,6 +65,7 @@ class BrandGrid extends Component {
       </View>
     );
   }
+
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { editingCloset, unfavoriteGarment } = this.props;
@@ -124,23 +144,30 @@ class BrandGrid extends Component {
 
   render() {
     const { style, garments, brands, refreshing } = this.props;
+    const { showAll } = this.state;
 
     return (
-      <FlatList
-        style={style}
-        data={brands}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={1}
-        renderItem={({ item }) => this.renderBrand(item)}
-        onRefresh={() => this.props.onRefresh()}
-        onEndReached={this.handleLoadMore}
-        onEndReachedThreshold={0}
-        refreshing={refreshing}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        ListHeaderComponent={this.renderHeader}
-        ListFooterComponent={this.renderFooter}
-      />
+      <View>
+        {showAll ? (
+          <Text>{this.state.currentBrand}</Text>
+        ) : (
+          <FlatList
+            style={style}
+            data={brands}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={1}
+            renderItem={({ item }) => this.renderBrand(item)}
+            onRefresh={() => this.props.onRefresh()}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={0}
+            refreshing={refreshing}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            ListHeaderComponent={this.renderHeader}
+            ListFooterComponent={this.renderFooter}
+          />
+        )}
+      </View>
     );
   }
 }
