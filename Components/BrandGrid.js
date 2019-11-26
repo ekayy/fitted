@@ -30,7 +30,7 @@ class BrandGrid extends Component {
   }
 
   renderBrand(item) {
-    const { garments, style, refreshing } = this.props;
+    const { brandTable, style, refreshing } = this.props;
     return (
       <View style={styles.brandContainer}>
         <View style={styles.brandheader}>
@@ -50,7 +50,7 @@ class BrandGrid extends Component {
         </View>
         <FlatList
           style={style}
-          data={garments.slice(0, 9)}
+          data={brandTable[item.name].slice(0, 10)}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
           renderItem={({ item }) => this.renderGarment(item)}
@@ -63,6 +63,54 @@ class BrandGrid extends Component {
           ListFooterComponent={this.renderFooter}
         />
       </View>
+    );
+  }
+
+  renderShowAll(item) {
+    const { navigate } = this.props.navigation;
+    const { editingCloset, unfavoriteGarment } = this.props;
+    const { id, color, model, sku, brand, photo } = item;
+
+    let formattedModel = model
+      .split(' ')
+      .map(word => word.charAt(0) + word.toLowerCase().slice(1))
+      .join(' ');
+
+    // if not valid photo, add a stock image
+    if (photo.length > 10) {
+      photoUrl = photo;
+    } else {
+      photoUrl =
+        'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
+    }
+
+    return (
+      <TouchableOpacity
+        style={styles.gridItem}
+        key={id}
+        onPress={() => navigate('GarmentDetail', item)}
+      >
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={{ uri: photoUrl }} />
+          {editingCloset && (
+            <Badge
+              value="X"
+              status="error"
+              containerStyle={{ top: 0, right: 0, position: 'absolute' }}
+              onPress={() => unfavoriteGarment(id)}
+            />
+          )}
+        </View>
+        <Text style={styles.text}>{formattedModel}</Text>
+        <TouchableOpacity style={styles.bookmarkContainer}>
+          <Text style={{ color: 'rgb(74, 144, 226)' }}>Bookmark for later</Text>
+          <MaterialCommunityIcons
+            name={'bookmark-outline'}
+            size={16}
+            color="rgb(74, 144, 226)"
+          />
+        </TouchableOpacity>
+      </TouchableOpacity>
     );
   }
 
@@ -127,6 +175,18 @@ class BrandGrid extends Component {
     return header_View;
   };
 
+  renderShowAllHeader = () => {
+    let header_View = (
+      <View style={styles.welcomeContainer}>
+        <View style={styles.welcomeText}>
+          <Text style={styles.welcomeTitle}>{this.state.currentBrand}</Text>
+        </View>
+      </View>
+    );
+
+    return header_View;
+  };
+
   renderFooter = () => {
     const { loading } = this.props;
 
@@ -143,13 +203,27 @@ class BrandGrid extends Component {
   };
 
   render() {
-    const { style, garments, brands, refreshing } = this.props;
-    const { showAll } = this.state;
-
+    const { style, brands, refreshing, brandTable } = this.props;
+    const { showAll, currentBrand } = this.state;
     return (
       <View>
         {showAll ? (
-          <Text>{this.state.currentBrand}</Text>
+          <FlatList
+            style={style}
+            data={brandTable[currentBrand]}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={2}
+            key={showAll}
+            renderItem={({ item }) => this.renderShowAll(item)}
+            onRefresh={() => this.props.onRefresh()}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={0}
+            refreshing={refreshing}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            ListHeaderComponent={this.renderShowAllHeader}
+            ListFooterComponent={this.renderFooter}
+          />
         ) : (
           <FlatList
             style={style}
@@ -158,6 +232,7 @@ class BrandGrid extends Component {
             numColumns={1}
             renderItem={({ item }) => this.renderBrand(item)}
             onRefresh={() => this.props.onRefresh()}
+            key={showAll}
             onEndReached={this.handleLoadMore}
             onEndReachedThreshold={0}
             refreshing={refreshing}
