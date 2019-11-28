@@ -22,14 +22,14 @@ class BrandGrid extends Component {
     };
   }
 
-  setSeeAllBrand(brand) {
+  setSeeAllBrand = brand => {
     this.setState({
       showAll: true,
       currentBrand: brand
     });
-  }
+  };
 
-  renderBrand(item) {
+  renderBrand = item => {
     const { brandTable, style, refreshing } = this.props;
     return (
       <View style={styles.brandContainer}>
@@ -64,9 +64,9 @@ class BrandGrid extends Component {
         />
       </View>
     );
-  }
+  };
 
-  renderShowAll(item) {
+  renderShowAll = item => {
     const { navigate } = this.props.navigation;
     const { editingCloset, unfavoriteGarment } = this.props;
     const { id, color, model, sku, brand, photo } = item;
@@ -112,9 +112,9 @@ class BrandGrid extends Component {
         </TouchableOpacity>
       </TouchableOpacity>
     );
-  }
+  };
 
-  renderGarment(item) {
+  renderGarment = item => {
     const { navigate } = this.props.navigation;
     const { editingCloset, unfavoriteGarment } = this.props;
     const { id, color, model, sku, brand, photo } = item;
@@ -160,7 +160,7 @@ class BrandGrid extends Component {
         </TouchableOpacity>
       </TouchableOpacity>
     );
-  }
+  };
 
   renderHeader = () => {
     let header_View = (
@@ -177,8 +177,8 @@ class BrandGrid extends Component {
 
   renderShowAllHeader = () => {
     let header_View = (
-      <View style={styles.welcomeContainer}>
-        <View style={styles.welcomeText}>
+      <View style={styles.showAllContainer}>
+        <View style={styles.showAllText}>
           <Text style={styles.welcomeTitle}>{this.state.currentBrand}</Text>
         </View>
       </View>
@@ -202,28 +202,51 @@ class BrandGrid extends Component {
     return this.props.handleLoadMore();
   };
 
+  goBack = () => {
+    this.setState({
+      showAll: false
+    });
+  };
+
   render() {
     const { style, brands, refreshing, brandTable } = this.props;
     const { showAll, currentBrand } = this.state;
     return (
       <View>
         {showAll ? (
-          <FlatList
-            style={style}
-            data={brandTable[currentBrand]}
-            keyExtractor={(item, index) => index.toString()}
-            numColumns={2}
-            key={showAll}
-            renderItem={({ item }) => this.renderShowAll(item)}
-            onRefresh={() => this.props.onRefresh()}
-            onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={0}
-            refreshing={refreshing}
-            initialNumToRender={10}
-            maxToRenderPerBatch={10}
-            ListHeaderComponent={this.renderShowAllHeader}
-            ListFooterComponent={this.renderFooter}
-          />
+          <View>
+            <View style={styles.backButtonContainer}>
+              <TouchableOpacity
+                onPress={() => this.goBack()}
+                style={styles.backButton}
+              >
+                <Ionicons
+                  name="ios-arrow-round-back"
+                  size={30}
+                  color="#FFFFFF"
+                  style={{ marginHorizontal: 12 }}
+                />
+                <Text style={{ fontSize: 18, color: '#FFFFFF' }}>Back</Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              columnWrapperStyle={styles.row}
+              style={style}
+              data={brandTable[currentBrand]}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={2}
+              key={showAll}
+              renderItem={({ item }) => this.renderShowAll(item)}
+              onRefresh={() => this.props.onRefresh()}
+              onEndReached={this.handleLoadMore}
+              onEndReachedThreshold={0}
+              refreshing={refreshing}
+              initialNumToRender={10}
+              maxToRenderPerBatch={10}
+              ListHeaderComponent={this.renderShowAllHeader}
+              ListFooterComponent={this.renderFooter}
+            />
+          </View>
         ) : (
           <FlatList
             style={style}
@@ -251,15 +274,24 @@ const styles = {
   gridItem: {
     alignItems: 'center',
     marginBottom: 40,
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    width: 136
   },
   welcomeContainer: {
     alignItems: 'center',
     backgroundColor: 'rgb(0,0,0.8)',
     height: 160
   },
+  showAllContainer: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(0,0,0.8)',
+    height: 100
+  },
   welcomeText: {
     paddingTop: 32
+  },
+  showAllText: {
+    paddingTop: 20
   },
   welcomeTitle: {
     textAlign: 'center',
@@ -299,12 +331,24 @@ const styles = {
     position: 'relative'
   },
   image: {
-    width: undefined,
+    width: 136,
     height: 136
   },
   text: {
     maxWidth: '80%',
     textAlign: 'center'
+  },
+  row: {
+    flex: 1,
+    justifyContent: 'space-around'
+  },
+  backButtonContainer: {
+    backgroundColor: 'rgb(0,0,0.8)'
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 5
   }
 };
 
