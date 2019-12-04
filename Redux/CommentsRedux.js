@@ -238,9 +238,7 @@ export const upvoteComment = (id, profileId) => async dispatch => {
   dispatch(upvoteCommentBegin());
 
   try {
-    const res = await axios.put(
-      `${baseURL}/comments/${id}/upvote/profile/${profileId}/`
-    );
+    const res = await axios.put(`${baseURL}/comments/${id}/upvote/profile/${profileId}/`);
     dispatch(upvoteCommentSuccess(res.data));
   } catch (error) {
     dispatch(upvoteCommentFailure(error));
@@ -251,21 +249,14 @@ export const downvoteComment = (id, profileId) => async dispatch => {
   dispatch(downvoteCommentBegin());
 
   try {
-    const res = await axios.put(
-      `${baseURL}/comments/${id}/downvote/profile/${profileId}/`
-    );
+    const res = await axios.put(`${baseURL}/comments/${id}/downvote/profile/${profileId}/`);
     dispatch(downvoteCommentSuccess(res.data));
   } catch (error) {
     dispatch(downvoteCommentFailure(error));
   }
 };
 
-export const postComment = ({
-  contentType,
-  objectId,
-  profileId,
-  content
-}) => async dispatch => {
+export const postComment = ({ contentType, objectId, profileId, content }) => async dispatch => {
   dispatch(postCommentBegin());
 
   try {
@@ -275,17 +266,17 @@ export const postComment = ({
       profile: profileId,
       content
     });
+
+    const { downvotes, upvotes, replies, username, created_date } = res.data;
+
     dispatch(postCommentSuccess(res.data));
+    return res.data;
   } catch (error) {
     dispatch(postCommentFailure(error));
   }
 };
 
-export const postReply = ({
-  commentId,
-  profileId,
-  content
-}) => async dispatch => {
+export const postReply = ({ commentId, profileId, content }) => async dispatch => {
   dispatch(postReplyBegin());
 
   try {
@@ -295,6 +286,7 @@ export const postReply = ({
       content
     });
     dispatch(postReplySuccess(res.data));
+    return res.data;
   } catch (error) {
     dispatch(postReplyFailure(error));
   }

@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import {
-  KeyboardAvoidingView,
-  Text,
-  View,
-  ScrollView,
-  Modal,
-  Picker
-} from 'react-native';
+import { KeyboardAvoidingView, Text, View, ScrollView, Modal, Picker } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { AppStyles } from '../Themes';
 import CommentList from '../Components/Comment/CommentList';
 import CommentInput from '../Components/Comment/CommentInput';
 import DropDown from '../Components/DropDown';
+import { withNavigationFocus } from 'react-navigation';
+import { fetchComments } from '../Redux/CommentsRedux';
 
 const Comments = props => {
-  const { id, contentType } = props.navigation.state.params;
-
+  const { isFocused } = props;
+  const { objectId, contentType } = props.navigation.state.params;
   const comments = useSelector(state => state.comments.items);
 
   const [searchValue, onChangeSearch] = useState('');
@@ -29,14 +24,21 @@ const Comments = props => {
   const [showFilters, setShowFilter] = useState(false);
 
   useEffect(() => {
+    // open search input
     props.navigation.setParams({
       openModal
     });
   }, []);
 
   useEffect(() => {
+    // controlled search form input
     searchComments(searchValue);
   }, [comments]);
+
+  useEffect(() => {
+    // update comment store on tab change if changed
+    fetchComments(objectId, contentType);
+  }, [isFocused]);
 
   const closeModal = () => {
     setModal(false);
@@ -52,9 +54,7 @@ const Comments = props => {
     onChangeSearch(searchValue);
 
     const searchedComments = comments.filter(result =>
-      searchValue.length > 0
-        ? result.content.toLowerCase().includes(searchValue)
-        : comments
+      searchValue.length > 0 ? result.content.toLowerCase().includes(searchValue) : comments
     );
 
     setSearchedComments(searchedComments);
@@ -79,10 +79,7 @@ const Comments = props => {
 
           <StyledFilterBarContainer>
             <StyledFilterBar>
-              <DropDown
-                options={['MOST RECENT', 'MOST POPULAR']}
-                defaultValue="SELECT"
-              />
+              <DropDown options={['MOST RECENT', 'MOST POPULAR']} defaultValue="SELECT" />
             </StyledFilterBar>
 
             <VerticalDivider />
@@ -98,9 +95,9 @@ const Comments = props => {
             <View style={AppStyles.sectionTitle}>
               <Text style={AppStyles.sectionTitleText}>Discussion</Text>
               <Text>
-                {`Showing 1-${
-                  searchedComments.length < 10 ? searchedComments.length : 10
-                } of ${searchedComments.length} comments`}
+                {`Showing 1-${searchedComments.length < 10 ? searchedComments.length : 10} of ${
+                  searchedComments.length
+                } comments`}
               </Text>
             </View>
           </View>
@@ -111,6 +108,8 @@ const Comments = props => {
           data={searchedComments}
           renderViewComments
           renderLeaveComment
+          objectId={objectId}
+          contentType={contentType}
           numReplies={1}
         />
       </ScrollView>
@@ -123,16 +122,14 @@ const Comments = props => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
-          objectId={id}
+          objectId={objectId}
         />
       </Modal>
 
       {showFilters && (
         <StyledPickerContainer>
           <StyledPickerHeader>
-            <StyledPickerDone onPress={() => setShowFilter(false)}>
-              Done
-            </StyledPickerDone>
+            <StyledPickerDone onPress={() => setShowFilter(false)}>Done</StyledPickerDone>
           </StyledPickerHeader>
           <StyledPicker
             selectedValue={tag}
@@ -214,4 +211,4 @@ const styles = {
   }
 };
 
-export default Comments;
+export default withNavigationFocus(Comments);
