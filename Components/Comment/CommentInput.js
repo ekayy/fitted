@@ -5,11 +5,13 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Formik, ErrorMessage } from 'formik';
 import { EvilIcons } from '@expo/vector-icons';
 import { postComment, postReply } from '../../Redux/CommentsRedux';
+import { syncGarmentComments, syncGarmentCommentReplies } from '../../Redux/GarmentsRedux';
+import { syncFitComments } from '../../Redux/FitsRedux';
 import * as Yup from 'yup';
 
 const CommentInputSchema = Yup.object().shape({
   content: Yup.string()
-    .min(50, 'Too Short!')
+    .min(5, 'Too Short!')
     .max(500, 'Too Long!')
     .required('Required')
 });
@@ -22,6 +24,8 @@ const CommentInput = props => {
     profileId: state.user.profileId
   }));
 
+  console.tron.log('input', props.objectId);
+
   const dispatch = useDispatch();
 
   const onSubmit = async ({ content }) => {
@@ -32,7 +36,8 @@ const CommentInput = props => {
         content
       };
 
-      await dispatch(postReply(data));
+      const reply = await dispatch(postReply(data));
+      if (contentType === 'garment') await dispatch(syncGarmentCommentReplies(reply, objectId));
     } else {
       const data = {
         contentType,
@@ -41,7 +46,10 @@ const CommentInput = props => {
         content
       };
 
-      await dispatch(postComment(data));
+      const comment = await dispatch(postComment(data));
+      // Update garments redux state
+      if (contentType === 'garment') await dispatch(syncGarmentComments(comment));
+      // if (contentType === 'fit') await dispatch(syncFitComments(res));
     }
 
     closeModal();
@@ -54,14 +62,7 @@ const CommentInput = props => {
         validationSchema={CommentInputSchema}
         onSubmit={values => onSubmit(values)}
       >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched
-        }) => (
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View style={{ flex: 1 }}>
             <StyledModalHeader>
               <TouchableOpacity onPress={closeModal}>
@@ -124,14 +125,15 @@ const StyledInput = styled.View`
 
 const StyledError = styled.Text`
   color: red;
+  padding: 10px 20px;
+  border: 1px solid red;
+  width: 100%;
 `;
 
 const StyledErrorWrapper = styled.View`
   position: absolute;
-  width: 100%;
+
   bottom: 50px;
-  padding: 20px;
-  border: 1px solid red;
 `;
 
 export default CommentInput;

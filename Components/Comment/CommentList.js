@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { View, Text, FlatList, Modal } from 'react-native';
+import { View, FlatList, Modal } from 'react-native';
 
 import CommentActions from './CommentActions';
 import CommentReplies from './CommentReplies';
@@ -13,15 +13,15 @@ const CommentList = props => {
     renderLeaveComment,
     numReplies,
     navigation,
-    contentType
+    contentType,
+    objectId
   } = props;
-
-  // Pass correct garment or fit id
-  // const { id } = navigation.state.params;
 
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
+
+  console.tron.log('list', props.objectId);
 
   const closeModal = () => {
     setModal(false);
@@ -50,13 +50,15 @@ const CommentList = props => {
             viewComments={() =>
               navigation.navigate('CommentIndex', {
                 comment: item,
-                contentType
+                contentType,
+                objectId
               })
             }
             leaveComment={() =>
               navigation.navigate('CommentIndex', {
                 comment: item,
-                contentType
+                contentType,
+                objectId
               })
             }
           />
@@ -83,7 +85,7 @@ const CommentList = props => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
-          // objectId={id}
+          objectId={objectId}
           isReplyInput
         />
       </Modal>

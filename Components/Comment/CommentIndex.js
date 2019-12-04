@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import {
-  KeyboardAvoidingView,
-  Text,
-  View,
-  ScrollView,
-  Modal,
-  TouchableOpacity
-} from 'react-native';
+import { KeyboardAvoidingView, Text, ScrollView, Modal } from 'react-native';
 
-import { Formik, ErrorMessage } from 'formik';
-
-import CommentList from './CommentList';
 import CommentInput from './CommentInput';
+import CommentReplies from './CommentReplies';
+import CommentActions from './CommentActions';
 
 const CommentIndex = props => {
+  const { comment, contentType, objectId } = props.navigation.state.params;
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
 
-  const { comment, contentType } = props.navigation.state.params;
+  // need to rerender, need to pass down correct state? maybe not through navigation params?
+  const { id, content, downvotes, upvotes, username, replies } = comment;
 
   useEffect(() => {
     props.navigation.setParams({
@@ -40,12 +35,26 @@ const CommentIndex = props => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
-        <CommentList
-          {...props}
-          data={[comment]}
-          numReplies={9999}
-          contentType={contentType}
-        />
+        <StyledCommentList>
+          <StyledCommentSingle>
+            <StyledCommentLink>{username}</StyledCommentLink>
+
+            <StyledCommentText>{content}</StyledCommentText>
+          </StyledCommentSingle>
+
+          <CommentActions
+            data={comment}
+            leaveComment={() =>
+              navigation.navigate('CommentIndex', {
+                comment,
+                contentType,
+                objectId
+              })
+            }
+          />
+
+          {replies && <CommentReplies data={replies} />}
+        </StyledCommentList>
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>
@@ -56,6 +65,7 @@ const CommentIndex = props => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
+          objectId={objectId}
           isReplyInput
         />
       </Modal>
@@ -73,6 +83,22 @@ CommentIndex.navigationOptions = ({ navigation }) => ({
 
 const StyledHeaderButton = styled.TouchableOpacity`
   margin-right: 20px;
+`;
+
+const StyledCommentList = styled.View`
+  padding: 15px 20px 0 20px;
+`;
+
+const StyledCommentSingle = styled.View`
+  margin-bottom: 10px;
+`;
+
+const StyledCommentText = styled.Text`
+  line-height: 20;
+`;
+
+const StyledCommentLink = styled.Text`
+  margin-bottom: 10px;
 `;
 
 export default CommentIndex;
