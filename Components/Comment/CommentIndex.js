@@ -1,30 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import {
-  KeyboardAvoidingView,
-  Text,
-  View,
-  ScrollView,
-  Modal,
-  TouchableOpacity
-} from 'react-native';
+import { KeyboardAvoidingView, Text, ScrollView, Modal } from 'react-native';
 
-import { Formik, ErrorMessage } from 'formik';
-
-import CommentSingle from './CommentSingle';
 import CommentInput from './CommentInput';
-import CommentReply from './CommentReply';
+import CommentReplies from './CommentReplies';
+import CommentActions from './CommentActions';
+import { fetchComments } from '../../Redux/CommentsRedux';
+import { withNavigationFocus, NavigationActions } from 'react-navigation';
 
-const CommentIndex = ({ navigation }) => {
+const CommentIndex = props => {
+  let { comment, contentType, objectId } = props.navigation.state.params;
+  const { id, content, downvotes, upvotes, username, replies } = comment;
+
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
 
-  const { comment, contentType } = navigation.state.params;
-
   useEffect(() => {
-    navigation.setParams({
-      openModal
+    props.navigation.setParams({
+      openModal: () => openModal(comment)
     });
   }, []);
 
@@ -38,21 +33,29 @@ const CommentIndex = ({ navigation }) => {
     setCurrentComment(comment);
   };
 
-  const handleSubmit = () => {};
-
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
-        <View>
-          <CommentSingle
+        <StyledCommentList>
+          <StyledCommentSingle>
+            <StyledCommentLink>{username}</StyledCommentLink>
+
+            <StyledCommentText>{content}</StyledCommentText>
+          </StyledCommentSingle>
+
+          <CommentActions
             data={comment}
-            leaveComment={() => openModal(comment)}
+            leaveComment={() =>
+              navigation.navigate('CommentIndex', {
+                comment,
+                contentType,
+                objectId
+              })
+            }
           />
 
-          {/* {replies.map(reply => (
-            <CommentReply />
-          ))} */}
-        </View>
+          {replies && <CommentReplies data={replies} />}
+        </StyledCommentList>
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>
@@ -63,6 +66,8 @@ const CommentIndex = ({ navigation }) => {
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
+          objectId={objectId}
+          isReplyInput
         />
       </Modal>
     </KeyboardAvoidingView>
@@ -81,4 +86,20 @@ const StyledHeaderButton = styled.TouchableOpacity`
   margin-right: 20px;
 `;
 
-export default CommentIndex;
+const StyledCommentList = styled.View`
+  padding: 15px 20px 0 20px;
+`;
+
+const StyledCommentSingle = styled.View`
+  margin-bottom: 10px;
+`;
+
+const StyledCommentText = styled.Text`
+  line-height: 20;
+`;
+
+const StyledCommentLink = styled.Text`
+  margin-bottom: 10px;
+`;
+
+export default withNavigationFocus(CommentIndex);

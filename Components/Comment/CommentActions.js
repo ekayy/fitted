@@ -14,15 +14,12 @@ const CommentActions = props => {
     data
   } = props;
 
-  const { content, downvotes, upvotes, username } = data;
+  const { content, downvotes, upvotes, username, id } = data;
 
-  const { commentId, profileId } = useSelector(
-    state => ({
-      commentId: 8,
-      profileId: state.user.profileId
-    }),
-    shallowEqual
-  );
+  const { commentId, profileId } = useSelector(state => ({
+    commentId: id,
+    profileId: state.user.profileId
+  }));
 
   const dispatch = useDispatch();
 
@@ -84,7 +81,6 @@ const StyledLink = styled.Text`
 const StyledCommentVotes = styled.View`
   flex-direction: row;
   align-items: center;
-  /* justify-content: flex-end; */
 `;
 
 const StyledCommentCount = styled.Text`

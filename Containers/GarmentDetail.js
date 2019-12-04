@@ -8,10 +8,11 @@ import { AppStyles, Metrics } from '../Themes';
 import styles from './Styles/GarmentDetailStyles';
 
 import FavoriteButton from '../Components/FavoriteButton';
-import CommentSingle from '../Components/Comment/CommentSingle';
+import CommentList from '../Components/Comment/CommentList';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
+import { fetchComments } from '../Redux/CommentsRedux';
 import { Ionicons } from '@expo/vector-icons';
 
 import { baseURL } from '../Config';
@@ -28,16 +29,17 @@ class GarmentDetail extends Component {
   };
 
   componentDidMount() {
+    const { id } = this.props.navigation.state.params;
+
     this.fetchFits();
     this.getFavoriteState();
+    this.props.fetchComments(id, 'garments');
   }
 
   fetchFits = async () => {
     const { id } = this.props.navigation.state.params;
 
-    const response = await axios.get(
-      `${baseURL}/fits/?garment=${id}&limit=100`
-    );
+    const response = await axios.get(`${baseURL}/fits/?garment=${id}&limit=100`);
 
     // const response = await this.props.fetchGarmentFits(id);
 
@@ -96,10 +98,7 @@ class GarmentDetail extends Component {
     };
 
     return (
-      <TouchableOpacity
-        style={styles.gridItem}
-        onPress={() => navigate('FitDetail', item)}
-      >
+      <TouchableOpacity style={styles.gridItem} onPress={() => navigate('FitDetail', item)}>
         <Image style={styles.image} source={{ uri: photo }} />
       </TouchableOpacity>
     );
@@ -116,16 +115,7 @@ class GarmentDetail extends Component {
   };
 
   render() {
-    const {
-      id,
-      color,
-      sku,
-      brand,
-      model,
-      photo,
-      comments
-    } = this.props.navigation.state.params;
-    const currentGarment = this.props.navigation.state.params;
+    const { id, color, sku, brand, model, photo, comments } = this.props.navigation.state.params;
     const { navigate } = this.props.navigation;
 
     const { refreshing, count, garmentFits } = this.state;
@@ -138,10 +128,7 @@ class GarmentDetail extends Component {
           <Image style={styles.image} source={{ uri: photo }} />
 
           <View style={styles.favorite}>
-            <FavoriteButton
-              onPress={this.favoriteGarment}
-              toggled={this.state.toggled}
-            />
+            <FavoriteButton onPress={this.favoriteGarment} toggled={this.state.toggled} />
             {/* <Text>{this.state.fits.photo}</Text> */}
           </View>
         </View>
@@ -166,37 +153,21 @@ class GarmentDetail extends Component {
             <Text>{color}</Text>
           </View>
           <View style={styles.colorSwatches}>
-            <Avatar
-              size="small"
-              rounded
-              activeOpacity={0.7}
-              containerStyle={styles.swatch}
-            />
-            <Avatar
-              size="small"
-              rounded
-              activeOpacity={0.7}
-              containerStyle={styles.swatch}
-            />
+            <Avatar size="small" rounded activeOpacity={0.7} containerStyle={styles.swatch} />
+            <Avatar size="small" rounded activeOpacity={0.7} containerStyle={styles.swatch} />
           </View>
         </View>
 
         <View style={styles.buttonSection}>
           <Button
             title="Add to favorites"
-            buttonStyle={[
-              AppStyles.buttonAltStyle,
-              { width: Metrics.screenWidth / 2 - 20 }
-            ]}
+            buttonStyle={[AppStyles.buttonAltStyle, { width: Metrics.screenWidth / 2 - 20 }]}
             titleStyle={{ color: '#000', fontSize: 13 }}
           />
           <Button
             title="View website"
             onPress={this.handleOpenWithWebBrowser}
-            buttonStyle={[
-              AppStyles.buttonDefaultStyle,
-              { width: Metrics.screenWidth / 2 - 20 }
-            ]}
+            buttonStyle={[AppStyles.buttonDefaultStyle, { width: Metrics.screenWidth / 2 - 20 }]}
             titleStyle={{ fontSize: 13 }}
           />
         </View>
@@ -206,15 +177,8 @@ class GarmentDetail extends Component {
             <Text style={AppStyles.sectionTitleText}>Photos</Text>
           </View>
 
-          <TouchableOpacity
-            style={AppStyles.sectionSubtitle}
-            onPress={this.addPhotoToFit}
-          >
-            <Ionicons
-              name="ios-camera"
-              size={25}
-              style={{ marginRight: 10, color: '#aaa' }}
-            />
+          <TouchableOpacity style={AppStyles.sectionSubtitle} onPress={this.addPhotoToFit}>
+            <Ionicons name="ios-camera" size={25} style={{ marginRight: 10, color: '#aaa' }} />
             <Text>Add a photo</Text>
           </TouchableOpacity>
 
@@ -237,9 +201,7 @@ class GarmentDetail extends Component {
                 title={`See all ${count} photos`}
                 buttonStyle={[AppStyles.buttonAltStyle]}
                 titleStyle={AppStyles.buttonAltTitleStyle}
-                onPress={() =>
-                  navigate('Fits', { garmentFits, currentGarment })
-                }
+                onPress={() => navigate('Fits', { garmentFits, id })}
               />
             </View>
           )}
@@ -251,24 +213,23 @@ class GarmentDetail extends Component {
           </View>
 
           {comments.length > 0 && (
-            <CommentSingle
-              data={comments[0]}
+            <CommentList
+              {...this.props}
+              data={comments.slice(0, 3)}
               renderViewComments
               renderLeaveComment
-              viewComments={() =>
-                navigate('CommentIndex', { comment: comments[0] })
-              }
-              leaveComment={() => {}}
+              numReplies={1}
+              contentType="garment"
+              objectId={id}
             />
           )}
+
           <View style={AppStyles.button}>
             <Button
               title={`See all discussion`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() =>
-                navigate('Comments', { currentGarment, contentType: 'garment' })
-              }
+              onPress={() => navigate('Comments', { objectId: id, contentType: 'garment' })}
             />
           </View>
         </View>
@@ -277,18 +238,14 @@ class GarmentDetail extends Component {
   }
 }
 
-const mapStateToProps = ({ user, brands }) => {
-  return { user, brands: brands.items };
+const mapStateToProps = ({ user, brands, comments }) => {
+  return { user, brands: brands.items, comments: comments.items };
 };
 
-export default connect(
-  mapStateToProps,
-
-  {
-    fetchBrands,
-    favoriteGarment,
-    tagGarmentToFit,
-    clearCreatedFit
-    // fetchGarmentFits
-  }
-)(GarmentDetail);
+export default connect(mapStateToProps, {
+  fetchBrands,
+  favoriteGarment,
+  tagGarmentToFit,
+  clearCreatedFit,
+  fetchComments
+})(GarmentDetail);

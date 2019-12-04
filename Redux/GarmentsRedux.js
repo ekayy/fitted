@@ -10,13 +10,15 @@ const CREATE_GARMENT_BEGIN = 'CREATE_GARMENT_BEGIN';
 const CREATE_GARMENT_SUCCESS = 'CREATE_GARMENT_SUCCESS';
 const CREATE_GARMENT_FAILURE = 'CREATE_GARMENT_FAILURE';
 
+const SYNC_GARMENT_COMMENTS = 'SYNC_GARMENT_COMMENTS';
+const SYNC_GARMENT_COMMENT_REPLIES = 'SYNC_GARMENT_COMMENT_REPLIES';
+
 // const FETCH_GARMENT_FITS_BEGIN = 'FETCH_GARMENT_FITS_BEGIN';
 // const FETCH_GARMENT_FITS_SUCCESS = 'FETCH_GARMENT_FITS_SUCCESS';
 // const FETCH_GARMENT_FITS_FAILURE = 'FETCH_GARMENT_FITS_FAILURE';
 
 export const INITIAL_STATE = {
   items: [],
-  // garmentFits: [],
   loading: false,
   error: null
 };
@@ -63,6 +65,46 @@ export default function garments(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: action.payload.error
       };
+
+    case SYNC_GARMENT_COMMENTS: {
+      const { comment } = action.payload;
+      const items = state.items.map(garment => {
+        if (garment.id === comment.object_id) {
+          return { ...garment, comments: [...garment.comments, comment] };
+        } else {
+          return garment;
+        }
+      });
+
+      return {
+        ...state,
+        items
+      };
+    }
+
+    case SYNC_GARMENT_COMMENT_REPLIES: {
+      const { reply, objectId } = action.payload;
+      const items = state.items.map(garment => {
+        if (garment.id === objectId) {
+          const comments = garment.comments.map(comment => {
+            if (comment.id === reply.comment) {
+              return { ...comment, replies: [...comment.replies, reply] };
+            } else {
+              return comment;
+            }
+          });
+
+          return { ...garment, comments };
+        } else {
+          return garment;
+        }
+      });
+
+      return {
+        ...state,
+        items
+      };
+    }
 
     // case FETCH_GARMENT_FITS_BEGIN:
     //   return {
@@ -117,6 +159,20 @@ export const createGarmentFailure = error => ({
   type: CREATE_GARMENT_FAILURE,
   payload: {
     error
+  }
+});
+
+export const syncGarmentComments = comment => ({
+  type: SYNC_GARMENT_COMMENTS,
+  payload: {
+    comment
+  }
+});
+export const syncGarmentCommentReplies = (reply, objectId) => ({
+  type: SYNC_GARMENT_COMMENT_REPLIES,
+  payload: {
+    reply,
+    objectId
   }
 });
 
