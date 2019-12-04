@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Platform } from 'react-native';
 import { SearchBar, ListItem, Badge } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchGarments } from '../Redux/GarmentsRedux';
@@ -10,6 +10,7 @@ import SearchFilter from '../Components/Search/SearchFilter';
 import SearchList from '../Components/SearchList';
 import DropDown from '../Components/DropDown';
 import Home from '../Components/Home';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class Search extends Component {
   static navigationOptions = {
@@ -290,7 +291,11 @@ const VerticalDivider = styled.View`
 `;
 
 const styles = {
-  searchBarContainer: { backgroundColor: 'rgb(0,0,0)', paddingVertical: 10 },
+  searchBarContainer: {
+    backgroundColor: 'rgb(0,0,0)',
+    paddingVertical: 10,
+    marginTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0
+  },
   inputContainer: { backgroundColor: 'rgb(255,255,255)' },
   input: { backgroundColor: 'rgb(255,255,255)' },
   badgeStyle: { position: 'absolute', top: 0, right: -20 }
@@ -305,7 +310,9 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { login, fetchGarments, fetchBrands, favoriteGarment }
-)(Search);
+export default connect(mapStateToProps, {
+  login,
+  fetchGarments,
+  fetchBrands,
+  favoriteGarment
+})(Search);
