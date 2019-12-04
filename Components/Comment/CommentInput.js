@@ -17,16 +17,12 @@ const CommentInputSchema = Yup.object().shape({
 });
 
 const CommentInput = props => {
-  const { closeModal, data, contentType, objectId, isReplyInput } = props;
-  const { content, downvotes, upvotes, username, id } = data;
-
+  const dispatch = useDispatch();
   const { profileId } = useSelector(state => ({
     profileId: state.user.profileId
   }));
-
-  console.tron.log('input', props.objectId);
-
-  const dispatch = useDispatch();
+  const { closeModal, data, contentType, objectId, isReplyInput } = props;
+  const { content, downvotes, upvotes, username, id } = data;
 
   const onSubmit = async ({ content }) => {
     if (isReplyInput) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { KeyboardAvoidingView, Text, ScrollView, Modal } from 'react-native';
@@ -6,15 +6,16 @@ import { KeyboardAvoidingView, Text, ScrollView, Modal } from 'react-native';
 import CommentInput from './CommentInput';
 import CommentReplies from './CommentReplies';
 import CommentActions from './CommentActions';
+import { fetchComments } from '../../Redux/CommentsRedux';
+import { withNavigationFocus, NavigationActions } from 'react-navigation';
 
 const CommentIndex = props => {
-  const { comment, contentType, objectId } = props.navigation.state.params;
+  let { comment, contentType, objectId } = props.navigation.state.params;
+  const { id, content, downvotes, upvotes, username, replies } = comment;
+
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
-
-  // need to rerender, need to pass down correct state? maybe not through navigation params?
-  const { id, content, downvotes, upvotes, username, replies } = comment;
 
   useEffect(() => {
     props.navigation.setParams({
@@ -101,4 +102,4 @@ const StyledCommentLink = styled.Text`
   margin-bottom: 10px;
 `;
 
-export default CommentIndex;
+export default withNavigationFocus(CommentIndex);

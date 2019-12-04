@@ -119,13 +119,23 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         loading: true
       };
 
-    case POST_REPLY_SUCCESS:
+    case POST_REPLY_SUCCESS: {
+      const { reply } = action.payload;
+
+      const items = state.items.map(item => {
+        if (item.id === reply.comment) {
+          return { ...item, replies: [...item.replies, reply] };
+        } else {
+          return item;
+        }
+      });
       return {
         ...state,
         loading: false,
         error: null,
-        items: [...state.items, action.payload.reply]
+        items
       };
+    }
 
     case POST_REPLY_FAILURE:
       return {
@@ -266,8 +276,6 @@ export const postComment = ({ contentType, objectId, profileId, content }) => as
       profile: profileId,
       content
     });
-
-    const { downvotes, upvotes, replies, username, created_date } = res.data;
 
     dispatch(postCommentSuccess(res.data));
     return res.data;

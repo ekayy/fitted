@@ -21,8 +21,6 @@ const CommentList = props => {
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
 
-  console.tron.log('list', props.objectId);
-
   const closeModal = () => {
     setModal(false);
     setCurrentComment({});
