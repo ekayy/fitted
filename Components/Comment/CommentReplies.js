@@ -18,7 +18,7 @@ const CommentReplies = props => {
 
         <CommentActions
           data={item}
-          viewComments={() => navigation.navigate('CommentIndex', { comment, contentType })}
+          viewComments={() => navigation.navigate('CommentSingle', { comment, contentType })}
           leaveComment={() => openModal(comment)}
         />
       </StyledCommentReplies>

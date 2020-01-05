@@ -7,9 +7,9 @@ import CommentInput from './CommentInput';
 import CommentReplies from './CommentReplies';
 import CommentActions from './CommentActions';
 import { fetchComments } from '../../Redux/CommentsRedux';
-import { withNavigationFocus, NavigationActions } from 'react-navigation';
+import { withNavigationFocus } from 'react-navigation';
 
-const CommentIndex = props => {
+const CommentSingle = props => {
   let { comment, contentType, objectId } = props.navigation.state.params;
   const { id, content, downvotes, upvotes, username, replies } = comment;
 
@@ -18,6 +18,8 @@ const CommentIndex = props => {
   const [currentComment, setCurrentComment] = useState({});
 
   useEffect(() => {
+    setCurrentComment(comment);
+
     props.navigation.setParams({
       openModal: () => openModal(comment)
     });
@@ -39,21 +41,10 @@ const CommentIndex = props => {
         <StyledCommentList>
           <StyledCommentSingle>
             <StyledCommentLink>{username}</StyledCommentLink>
-
             <StyledCommentText>{content}</StyledCommentText>
           </StyledCommentSingle>
 
-          <CommentActions
-            data={comment}
-            leaveComment={() =>
-              navigation.navigate('CommentIndex', {
-                comment,
-                contentType,
-                objectId
-              })
-            }
-          />
-
+          <CommentActions data={comment} />
           {replies && <CommentReplies data={replies} />}
         </StyledCommentList>
       </ScrollView>
@@ -74,7 +65,7 @@ const CommentIndex = props => {
   );
 };
 
-CommentIndex.navigationOptions = ({ navigation }) => ({
+CommentSingle.navigationOptions = ({ navigation }) => ({
   headerRight: (
     <StyledHeaderButton onPress={navigation.getParam('openModal')}>
       <Text>Leave Reply</Text>
@@ -102,4 +93,4 @@ const StyledCommentLink = styled.Text`
   margin-bottom: 10px;
 `;
 
-export default withNavigationFocus(CommentIndex);
+export default withNavigationFocus(CommentSingle);
