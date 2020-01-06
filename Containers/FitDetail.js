@@ -30,7 +30,13 @@ class FitDetail extends Component {
     this.setState({ toggled: false });
     this.getFavoriteState();
     this.fetchProfile();
-    this.props.fetchComments(id, 'fits');
+    this.willFocus = this.props.navigation.addListener('willFocus', () => {
+      this.props.fetchComments(id, 'fits');
+    });
+  }
+
+  componentWillUnmount() {
+    this.willFocus.remove();
   }
 
   fetchGarments = async () => {
@@ -171,7 +177,13 @@ class FitDetail extends Component {
                 title={`See all discussion`}
                 buttonStyle={[AppStyles.buttonAltStyle]}
                 titleStyle={AppStyles.buttonAltTitleStyle}
-                onPress={() => navigate('Comments', { objectId: id, contentType: 'fit' })}
+                onPress={() =>
+                  navigate('Comments', {
+                    objectId: id,
+                    contentType: 'fit',
+                    onGoBack: () => console.tron.log('test')
+                  })
+                }
               />
             </View>
           </View>
