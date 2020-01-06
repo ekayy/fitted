@@ -33,6 +33,7 @@ class GarmentDetail extends Component {
 
     this.fetchFits();
     this.getFavoriteState();
+    this.props.fetchComments(id, 'garments');
   }
 
   fetchFits = async () => {
@@ -222,7 +223,6 @@ class GarmentDetail extends Component {
               objectId={id}
             />
           )}
-
           <View style={AppStyles.button}>
             <Button
               title={`See all discussion`}

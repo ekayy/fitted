@@ -9,6 +9,7 @@ import axios from 'axios';
 import { baseURL } from '../Config';
 import { favoriteFit } from '../Redux/UserRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
+import { fetchComments } from '../Redux/CommentsRedux';
 import CommentList from '../Components/Comment/CommentList';
 
 class FitDetail extends Component {
@@ -22,11 +23,14 @@ class FitDetail extends Component {
   };
 
   componentDidMount() {
+    const { id } = this.props.navigation.state.params;
+
     this.props.fetchBrands();
     this.fetchGarments();
     this.setState({ toggled: false });
     this.getFavoriteState();
     this.fetchProfile();
+    this.props.fetchComments(id, 'fits');
   }
 
   fetchGarments = async () => {
@@ -95,12 +99,8 @@ class FitDetail extends Component {
   };
 
   render() {
-    const {
-      photo,
-      height,
-      weight,
-      comments
-    } = this.props.navigation.state.params;
+    const { navigate } = this.props.navigation;
+    const { id, photo, height, weight, comments } = this.props.navigation.state.params;
     const { profile, username } = this.state;
 
     const feet = parseInt(height / 12);
@@ -117,16 +117,15 @@ class FitDetail extends Component {
                 large
                 rounded
                 source={{
-                  uri:
-                    'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
+                  uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
                 }}
                 activeOpacity={0.7}
                 style={styles.profileImage}
               />
               <View>
                 <Text style={styles.profileText}>
-                  {username.toUpperCase()} &#11825; Height: {convertedHeight}{' '}
-                  &#11825; Weight: {weight} lbs
+                  {username.toUpperCase()} &#11825; Height: {convertedHeight} &#11825; Weight:{' '}
+                  {weight} lbs
                 </Text>
               </View>
             </TouchableOpacity>
@@ -134,10 +133,7 @@ class FitDetail extends Component {
             <Image style={styles.image} source={{ uri: photo }} />
 
             <View style={styles.favorite}>
-              <FavoriteButton
-                onPress={this.favoriteFit}
-                toggled={this.state.toggled}
-              />
+              <FavoriteButton onPress={this.favoriteFit} toggled={this.state.toggled} />
               <Text>{this.state.garments.photo}</Text>
             </View>
           </View>
@@ -162,11 +158,12 @@ class FitDetail extends Component {
             {comments.length > 0 && (
               <CommentList
                 {...this.props}
-                data={comments.slice(0, 1)}
+                data={comments.slice(0, 3)}
                 renderViewComments
                 renderLeaveComment
                 numReplies={1}
                 contentType="fit"
+                objectId={id}
               />
             )}
             <View style={AppStyles.button}>
@@ -174,7 +171,7 @@ class FitDetail extends Component {
                 title={`See all discussion`}
                 buttonStyle={[AppStyles.buttonAltStyle]}
                 titleStyle={AppStyles.buttonAltTitleStyle}
-                onPress={() => navigate('Comments', { comments })}
+                onPress={() => navigate('Comments', { objectId: id, contentType: 'fit' })}
               />
             </View>
           </View>
@@ -226,11 +223,9 @@ const styles = {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    brands: state.brands.items
+    brands: state.brands.items,
+    commments: state.comments.items
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { favoriteFit, fetchBrands }
-)(FitDetail);
+export default connect(mapStateToProps, { favoriteFit, fetchBrands, fetchComments })(FitDetail);

@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 
 const CommentInputSchema = Yup.object().shape({
   content: Yup.string()
-    .min(5, 'Too Short!')
+    .min(3, 'Too Short!')
     .max(500, 'Too Long!')
     .required('Required')
 });
@@ -31,6 +31,8 @@ const CommentInput = props => {
         profileId,
         content
       };
+
+      console.tron.log(data);
 
       const reply = await dispatch(postReply(data));
       // if (contentType === 'garment') await dispatch(syncGarmentCommentReplies(reply, objectId));
