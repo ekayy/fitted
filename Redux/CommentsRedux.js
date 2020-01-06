@@ -13,6 +13,13 @@ const DOWNVOTE_COMMENT_BEGIN = 'DOWNVOTE_COMMENT_BEGIN';
 const DOWNVOTE_COMMENT_SUCCESS = 'DOWNVOTE_COMMENT_SUCCESS';
 const DOWNVOTE_COMMENT_FAILURE = 'DOWNVOTE_COMMENT_FAILURE';
 
+const UPVOTE_REPLY_BEGIN = 'UPVOTE_REPLY_BEGIN';
+const UPVOTE_REPLY_SUCCESS = 'UPVOTE_REPLY_SUCCESS';
+const UPVOTE_REPLY_FAILURE = 'UPVOTE_REPLY_FAILURE';
+const DOWNVOTE_REPLY_BEGIN = 'DOWNVOTE_REPLY_BEGIN';
+const DOWNVOTE_REPLY_SUCCESS = 'DOWNVOTE_REPLY_SUCCESS';
+const DOWNVOTE_REPLY_FAILURE = 'DOWNVOTE_REPLY_FAILURE';
+
 const POST_COMMENT_BEGIN = 'POST_COMMENT_BEGIN';
 const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
 const POST_COMMENT_FAILURE = 'POST_COMMENT_FAILURE';
@@ -108,6 +115,70 @@ export default function comments(state = INITIAL_STATE, action = {}) {
     }
 
     case DOWNVOTE_COMMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
+      };
+
+    case UPVOTE_REPLY_BEGIN:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case UPVOTE_REPLY_SUCCESS: {
+      const { reply } = action.payload;
+
+      const items = state.items.map(item => {
+        if (item.id === reply.comment) {
+          return { ...item, replies: [...item.replies, reply] };
+        } else {
+          return item;
+        }
+      });
+
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        items
+      };
+    }
+
+    case UPVOTE_REPLY_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
+      };
+
+    case DOWNVOTE_REPLY_BEGIN:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case DOWNVOTE_REPLY_SUCCESS: {
+      const { reply } = action.payload;
+
+      const items = state.items.map(item => {
+        if (item.id === reply.comment) {
+          return { ...item, replies: [...item.replies, reply] };
+        } else {
+          return item;
+        }
+      });
+
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        items
+      };
+    }
+
+    case DOWNVOTE_REPLY_FAILURE:
       return {
         ...state,
         loading: false,
@@ -220,6 +291,38 @@ export const downvoteCommentFailure = error => ({
   }
 });
 
+export const upvoteReplyBegin = () => ({
+  type: UPVOTE_REPLY_BEGIN
+});
+export const upvoteReplySuccess = reply => ({
+  type: UPVOTE_REPLY_SUCCESS,
+  payload: {
+    reply
+  }
+});
+export const upvoteReplyFailure = error => ({
+  type: UPVOTE_REPLY_FAILURE,
+  payload: {
+    error
+  }
+});
+
+export const downvoteReplyBegin = () => ({
+  type: DOWNVOTE_REPLY_BEGIN
+});
+export const downvoteReplySuccess = reply => ({
+  type: DOWNVOTE_REPLY_SUCCESS,
+  payload: {
+    reply
+  }
+});
+export const downvoteReplyFailure = error => ({
+  type: DOWNVOTE_REPLY_FAILURE,
+  payload: {
+    error
+  }
+});
+
 export const postCommentBegin = () => ({
   type: POST_COMMENT_BEGIN
 });
@@ -285,6 +388,28 @@ export const downvoteComment = (id, profileId) => async dispatch => {
     dispatch(downvoteCommentSuccess(res.data));
   } catch (error) {
     dispatch(downvoteCommentFailure(error));
+  }
+};
+
+export const upvoteReply = (id, profileId) => async dispatch => {
+  dispatch(upvoteReplyBegin());
+
+  try {
+    const res = await axios.put(`${baseURL}/replies/${id}/upvote/profile/${profileId}/`);
+    dispatch(upvoteReplySuccess(res.data));
+  } catch (error) {
+    dispatch(upvoteReplyFailure(error));
+  }
+};
+
+export const downvoteReply = (id, profileId) => async dispatch => {
+  dispatch(downvoteReplyBegin());
+
+  try {
+    const res = await axios.put(`${baseURL}/replies/${id}/downvote/profile/${profileId}/`);
+    dispatch(downvoteReplySuccess(res.data));
+  } catch (error) {
+    dispatch(downvoteReplyFailure(error));
   }
 };
 
