@@ -46,15 +46,15 @@ const CommentList = props => {
             renderViewComments={renderViewComments}
             renderLeaveComment={renderLeaveComment}
             viewComments={() =>
-              navigation.navigate('CommentIndex', {
-                comment: item,
+              navigation.navigate('CommentSingle', {
+                id,
                 contentType,
                 objectId
               })
             }
             leaveComment={() =>
-              navigation.navigate('CommentIndex', {
-                comment: item,
+              navigation.navigate('CommentSingle', {
+                id,
                 contentType,
                 objectId
               })

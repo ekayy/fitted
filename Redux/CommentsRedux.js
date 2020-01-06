@@ -56,13 +56,24 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         loading: true
       };
 
-    case UPVOTE_COMMENT_SUCCESS:
+    case UPVOTE_COMMENT_SUCCESS: {
+      const { id, upvotes } = action.payload.comment;
+
+      const items = state.items.map(item => {
+        if (item.id === id) {
+          return { ...item, upvotes };
+        } else {
+          return item;
+        }
+      });
+
       return {
         ...state,
         loading: false,
         error: null,
-        items: [...state.items]
+        items
       };
+    }
 
     case UPVOTE_COMMENT_FAILURE:
       return {
@@ -77,13 +88,24 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         loading: true
       };
 
-    case DOWNVOTE_COMMENT_SUCCESS:
+    case DOWNVOTE_COMMENT_SUCCESS: {
+      const { id, downvotes } = action.payload.comment;
+
+      const items = state.items.map(item => {
+        if (item.id === id) {
+          return { ...item, downvotes };
+        } else {
+          return item;
+        }
+      });
+
       return {
         ...state,
         loading: false,
         error: null,
-        items: [...state.items]
+        items
       };
+    }
 
     case DOWNVOTE_COMMENT_FAILURE:
       return {

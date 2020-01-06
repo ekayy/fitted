@@ -33,7 +33,14 @@ class GarmentDetail extends Component {
 
     this.fetchFits();
     this.getFavoriteState();
-    this.props.fetchComments(id, 'garments');
+
+    this.willFocus = this.props.navigation.addListener('willFocus', () => {
+      this.props.fetchComments(id, 'garments');
+    });
+  }
+
+  componentWillUnmount() {
+    this.willFocus.remove();
   }
 
   fetchFits = async () => {
@@ -223,13 +230,18 @@ class GarmentDetail extends Component {
               objectId={id}
             />
           )}
-
           <View style={AppStyles.button}>
             <Button
               title={`See all discussion`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigate('Comments', { objectId: id, contentType: 'garment' })}
+              onPress={() =>
+                navigate('Comments', {
+                  objectId: id,
+                  contentType: 'garment',
+                  onGoBack: () => console.tron.log('test')
+                })
+              }
             />
           </View>
         </View>

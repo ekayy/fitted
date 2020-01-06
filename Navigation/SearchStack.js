@@ -6,7 +6,7 @@ import FitDetail from '../Containers/FitDetail';
 import Profile from '../Containers/Profile';
 import Fits from '../Containers/Fits';
 import Comments from '../Containers/Comments';
-import CommentIndex from '../Components/Comment/CommentIndex';
+import CommentSingle from '../Components/Comment/CommentSingle';
 
 const SearchStack = createStackNavigator(
   {
@@ -38,8 +38,8 @@ const SearchStack = createStackNavigator(
     Comments: {
       screen: Comments
     },
-    CommentIndex: {
-      screen: CommentIndex
+    CommentSingle: {
+      screen: CommentSingle
     },
     Profile: {
       screen: Profile,

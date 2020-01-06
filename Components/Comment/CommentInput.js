@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 
 const CommentInputSchema = Yup.object().shape({
   content: Yup.string()
-    .min(5, 'Too Short!')
+    .min(3, 'Too Short!')
     .max(500, 'Too Long!')
     .required('Required')
 });
@@ -32,8 +32,10 @@ const CommentInput = props => {
         content
       };
 
+      console.tron.log(data);
+
       const reply = await dispatch(postReply(data));
-      if (contentType === 'garment') await dispatch(syncGarmentCommentReplies(reply, objectId));
+      // if (contentType === 'garment') await dispatch(syncGarmentCommentReplies(reply, objectId));
     } else {
       const data = {
         contentType,
@@ -44,7 +46,7 @@ const CommentInput = props => {
 
       const comment = await dispatch(postComment(data));
       // Update garments redux state
-      if (contentType === 'garment') await dispatch(syncGarmentComments(comment));
+      // if (contentType === 'garment') await dispatch(syncGarmentComments(comment));
       // if (contentType === 'fit') await dispatch(syncFitComments(res));
     }
 

@@ -4,14 +4,13 @@ import styled from 'styled-components';
 import { KeyboardAvoidingView, Text, ScrollView, Modal } from 'react-native';
 
 import CommentInput from './CommentInput';
-import CommentReplies from './CommentReplies';
-import CommentActions from './CommentActions';
-import { fetchComments } from '../../Redux/CommentsRedux';
-import { withNavigationFocus, NavigationActions } from 'react-navigation';
+import CommentList from './CommentList';
+import { withNavigationFocus } from 'react-navigation';
 
-const CommentIndex = props => {
-  let { comment, contentType, objectId } = props.navigation.state.params;
-  const { id, content, downvotes, upvotes, username, replies } = comment;
+const CommentSingle = props => {
+  let { id, contentType, objectId } = props.navigation.state.params;
+  const comments = useSelector(state => state.comments.items);
+  const comment = comments.filter(comment => comment.id === id);
 
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
@@ -19,7 +18,7 @@ const CommentIndex = props => {
 
   useEffect(() => {
     props.navigation.setParams({
-      openModal: () => openModal(comment)
+      openModal: () => openModal(comment[0])
     });
   }, []);
 
@@ -36,26 +35,13 @@ const CommentIndex = props => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
-        <StyledCommentList>
-          <StyledCommentSingle>
-            <StyledCommentLink>{username}</StyledCommentLink>
-
-            <StyledCommentText>{content}</StyledCommentText>
-          </StyledCommentSingle>
-
-          <CommentActions
-            data={comment}
-            leaveComment={() =>
-              navigation.navigate('CommentIndex', {
-                comment,
-                contentType,
-                objectId
-              })
-            }
-          />
-
-          {replies && <CommentReplies data={replies} />}
-        </StyledCommentList>
+        <CommentList
+          {...props}
+          data={comment}
+          objectId={objectId}
+          contentType={contentType}
+          numReplies={1000}
+        />
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>
@@ -74,7 +60,7 @@ const CommentIndex = props => {
   );
 };
 
-CommentIndex.navigationOptions = ({ navigation }) => ({
+CommentSingle.navigationOptions = ({ navigation }) => ({
   headerRight: (
     <StyledHeaderButton onPress={navigation.getParam('openModal')}>
       <Text>Leave Reply</Text>
@@ -102,4 +88,4 @@ const StyledCommentLink = styled.Text`
   margin-bottom: 10px;
 `;
 
-export default withNavigationFocus(CommentIndex);
+export default withNavigationFocus(CommentSingle);
