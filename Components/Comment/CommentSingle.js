@@ -4,24 +4,21 @@ import styled from 'styled-components';
 import { KeyboardAvoidingView, Text, ScrollView, Modal } from 'react-native';
 
 import CommentInput from './CommentInput';
-import CommentReplies from './CommentReplies';
-import CommentActions from './CommentActions';
-import { fetchComments } from '../../Redux/CommentsRedux';
+import CommentList from './CommentList';
 import { withNavigationFocus } from 'react-navigation';
 
 const CommentSingle = props => {
-  let { comment, contentType, objectId } = props.navigation.state.params;
-  const { id, content, downvotes, upvotes, username, replies } = comment;
+  let { id, contentType, objectId } = props.navigation.state.params;
+  const comments = useSelector(state => state.comments.items);
+  const comment = comments.filter(comment => comment.id === id);
 
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
   const [currentComment, setCurrentComment] = useState({});
 
   useEffect(() => {
-    setCurrentComment(comment);
-
     props.navigation.setParams({
-      openModal: () => openModal(comment)
+      openModal: () => openModal(comment[0])
     });
   }, []);
 
@@ -38,15 +35,13 @@ const CommentSingle = props => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
       <ScrollView>
-        <StyledCommentList>
-          <StyledCommentSingle>
-            <StyledCommentLink>{username}</StyledCommentLink>
-            <StyledCommentText>{content}</StyledCommentText>
-          </StyledCommentSingle>
-
-          <CommentActions data={comment} />
-          {replies && <CommentReplies data={replies} />}
-        </StyledCommentList>
+        <CommentList
+          {...props}
+          data={comment}
+          objectId={objectId}
+          contentType={contentType}
+          numReplies={1000}
+        />
       </ScrollView>
 
       <Modal animationType="slide" transparent={false} visible={showModal}>

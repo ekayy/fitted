@@ -33,7 +33,6 @@ class GarmentDetail extends Component {
 
     this.fetchFits();
     this.getFavoriteState();
-    this.props.fetchComments(id, 'garments');
   }
 
   fetchFits = async () => {

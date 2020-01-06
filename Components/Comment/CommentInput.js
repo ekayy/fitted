@@ -33,7 +33,7 @@ const CommentInput = props => {
       };
 
       const reply = await dispatch(postReply(data));
-      if (contentType === 'garment') await dispatch(syncGarmentCommentReplies(reply, objectId));
+      // if (contentType === 'garment') await dispatch(syncGarmentCommentReplies(reply, objectId));
     } else {
       const data = {
         contentType,
@@ -44,7 +44,7 @@ const CommentInput = props => {
 
       const comment = await dispatch(postComment(data));
       // Update garments redux state
-      if (contentType === 'garment') await dispatch(syncGarmentComments(comment));
+      // if (contentType === 'garment') await dispatch(syncGarmentComments(comment));
       // if (contentType === 'fit') await dispatch(syncFitComments(res));
     }
 
