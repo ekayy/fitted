@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { upvoteComment, downvoteComment } from '../../Redux/CommentsRedux';
+import {
+  upvoteComment,
+  downvoteComment,
+  upvoteReply,
+  downvoteReply
+} from '../../Redux/CommentsRedux';
 
 const CommentActions = props => {
   const {
@@ -11,7 +16,8 @@ const CommentActions = props => {
     renderLeaveComment,
     viewComments,
     leaveComment,
-    data
+    data,
+    isReply
   } = props;
 
   const { content, downvotes, upvotes, username, id } = data;
@@ -24,22 +30,22 @@ const CommentActions = props => {
   const dispatch = useDispatch();
 
   const handleUpvote = () => {
-    dispatch(upvoteComment(commentId, profileId));
+    isReply
+      ? dispatch(upvoteReply(commentId, profileId))
+      : dispatch(upvoteComment(commentId, profileId));
   };
 
   const handleDownvote = () => {
-    dispatch(downvoteComment(commentId, profileId));
+    isReply
+      ? dispatch(downvoteReply(commentId, profileId))
+      : dispatch(downvoteComment(commentId, profileId));
   };
 
   return (
     <StyledCommentActions>
       <StyledCommentLinks>
-        {renderViewComments && (
-          <StyledLink onPress={viewComments}>View all comments</StyledLink>
-        )}
-        {renderLeaveComment && (
-          <StyledLink onPress={leaveComment}>Leave a reply</StyledLink>
-        )}
+        {renderViewComments && <StyledLink onPress={viewComments}>View all comments</StyledLink>}
+        {renderLeaveComment && <StyledLink onPress={leaveComment}>Leave a reply</StyledLink>}
       </StyledCommentLinks>
 
       <StyledCommentVotes>
@@ -60,8 +66,7 @@ const CommentActions = props => {
 const StyledCommentActions = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: ${props =>
-    props.renderLinks ? 'space-between' : 'flex-end'};
+  justify-content: ${props => (props.renderLinks ? 'space-between' : 'flex-end')};
 `;
 
 const StyledCommentLinks = styled.View`

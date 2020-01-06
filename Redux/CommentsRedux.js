@@ -191,13 +191,14 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         loading: true
       };
 
-    case POST_COMMENT_SUCCESS:
+    case POST_COMMENT_SUCCESS: {
       return {
         ...state,
         loading: false,
         error: null,
-        items: [...state.items, action.payload.comment]
+        items: [...state.items, { ...action.payload.comment, replies: [] }]
       };
+    }
 
     case POST_COMMENT_FAILURE:
       return {
