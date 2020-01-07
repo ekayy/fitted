@@ -12,7 +12,7 @@ const CommentReplies = props => {
 
     return (
       <StyledCommentReplies>
-        <StyledCommentLink>{username}</StyledCommentLink>
+        <StyledCommentText>{username}</StyledCommentText>
 
         <StyledCommentText>{content}</StyledCommentText>
 

@@ -49,14 +49,16 @@ const CommentList = props => {
               navigation.navigate('CommentSingle', {
                 id,
                 contentType,
-                objectId
+                objectId,
+                openModalOnStart: false
               })
             }
             leaveComment={() =>
               navigation.navigate('CommentSingle', {
                 id,
                 contentType,
-                objectId
+                objectId,
+                openModalOnStart: true
               })
             }
           />

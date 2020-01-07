@@ -128,13 +128,21 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       };
 
     case UPVOTE_REPLY_SUCCESS: {
-      const { reply } = action.payload;
+      const { replyResponse } = action.payload;
 
-      const items = state.items.map(item => {
-        if (item.id === reply.comment) {
-          return { ...item, replies: [...item.replies, reply] };
+      const items = state.items.map(comment => {
+        if (comment.id === reply.comment) {
+          const replies = comment.replies.map(reply => {
+            if (reply.id === replyResponse.id) {
+              return { ...reply };
+            } else {
+              return reply;
+            }
+          });
+
+          return { ...comment, replies };
         } else {
-          return item;
+          return comment;
         }
       });
 
@@ -295,10 +303,10 @@ export const downvoteCommentFailure = error => ({
 export const upvoteReplyBegin = () => ({
   type: UPVOTE_REPLY_BEGIN
 });
-export const upvoteReplySuccess = reply => ({
+export const upvoteReplySuccess = replyResponse => ({
   type: UPVOTE_REPLY_SUCCESS,
   payload: {
-    reply
+    replyResponse
   }
 });
 export const upvoteReplyFailure = error => ({
@@ -311,10 +319,10 @@ export const upvoteReplyFailure = error => ({
 export const downvoteReplyBegin = () => ({
   type: DOWNVOTE_REPLY_BEGIN
 });
-export const downvoteReplySuccess = reply => ({
+export const downvoteReplySuccess = replyResponse => ({
   type: DOWNVOTE_REPLY_SUCCESS,
   payload: {
-    reply
+    replyResponse
   }
 });
 export const downvoteReplyFailure = error => ({

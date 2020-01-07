@@ -8,7 +8,7 @@ import CommentList from './CommentList';
 import { withNavigationFocus } from 'react-navigation';
 
 const CommentSingle = props => {
-  let { id, contentType, objectId } = props.navigation.state.params;
+  let { id, contentType, objectId, openModalOnStart } = props.navigation.state.params;
   const comments = useSelector(state => state.comments.items);
   const comment = comments.filter(comment => comment.id === id);
 
@@ -20,6 +20,8 @@ const CommentSingle = props => {
     props.navigation.setParams({
       openModal: () => openModal(comment[0])
     });
+
+    if (openModalOnStart) openModal(comment[0]);
   }, []);
 
   const closeModal = () => {
