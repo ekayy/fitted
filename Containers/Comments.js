@@ -8,12 +8,14 @@ import CommentList from '../Components/Comment/CommentList';
 import CommentInput from '../Components/Comment/CommentInput';
 import DropDown from '../Components/DropDown';
 import { withNavigationFocus } from 'react-navigation';
-import { fetchComments } from '../Redux/CommentsRedux';
+import { fetchComments, selectRecentComments, selectPopularComments } from '../Redux/CommentsRedux';
 
 const Comments = props => {
   const { isFocused } = props;
   const { objectId, contentType } = props.navigation.state.params;
-  const comments = useSelector(state => state.comments.items);
+  // const comments = useSelector(state => state.comments.items);
+  const comments = useSelector(state => selectRecentComments(state));
+  const commentsByMostPopular = useSelector(state => selectPopularComments(state));
 
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
@@ -60,6 +62,17 @@ const Comments = props => {
     setSearchedComments(searchedComments);
   };
 
+  const filterComments = (index, value) => {
+    switch (value) {
+      case 'Most Recent':
+        return console.tron.log('recent');
+      case 'Most Popular':
+        return console.tron.log('popular');
+      default:
+        return;
+    }
+  };
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
       <ScrollView style={{ flex: 1 }}>
@@ -79,7 +92,11 @@ const Comments = props => {
 
           <StyledFilterBarContainer>
             <StyledFilterBar>
-              <DropDown options={['MOST RECENT', 'MOST POPULAR']} defaultValue="SELECT" />
+              <DropDown
+                options={['Most Recent', 'Most Popular']}
+                // defaultValue="Select"
+                onSelect={filterComments}
+              />
             </StyledFilterBar>
 
             <VerticalDivider />
