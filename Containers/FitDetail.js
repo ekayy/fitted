@@ -105,8 +105,9 @@ class FitDetail extends Component {
   };
 
   render() {
+    const { comments } = this.props;
     const { navigate } = this.props.navigation;
-    const { id, photo, height, weight, comments } = this.props.navigation.state.params;
+    const { id, photo, height, weight } = this.props.navigation.state.params;
     const { profile, username } = this.state;
 
     const feet = parseInt(height / 12);
@@ -180,8 +181,7 @@ class FitDetail extends Component {
                 onPress={() =>
                   navigate('Comments', {
                     objectId: id,
-                    contentType: 'fit',
-                    onGoBack: () => console.tron.log('test')
+                    contentType: 'fit'
                   })
                 }
               />

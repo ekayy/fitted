@@ -4,26 +4,22 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { Ionicons } from '@expo/vector-icons';
 
 const DropDown = props => {
-  const { options, defaultValue } = props;
+  const { options, defaultValue, onSelect } = props;
 
   return (
     <ModalDropdown
       options={options}
       style={styles.dropdownButton}
+      defaultValue={defaultValue}
       dropdownStyle={styles.dropdown}
       dropdownTextStyle={styles.dropdownText}
-      dropdownTextHighlightStyle={styles.dropdownTextHighlight}
-      // onSelect={(idx, value) => }
+      // dropdownTextHighlightStyle={styles.dropdownTextHighlight}
+      onSelect={onSelect}
     >
-      <StyledDropdownButtonContainer>
+      {/* <StyledDropdownButtonContainer>
         <DropdownButtonText>{defaultValue}</DropdownButtonText>
-        <Ionicons
-          name="ios-arrow-down"
-          size={25}
-          color="#fff"
-          style={{ marginLeft: 60 }}
-        />
-      </StyledDropdownButtonContainer>
+        <Ionicons name="ios-arrow-down" size={25} color="#fff" style={{ marginLeft: 60 }} />
+      </StyledDropdownButtonContainer> */}
     </ModalDropdown>
   );
 };
@@ -46,10 +42,9 @@ const styles = {
     borderRadius: 4
   },
   dropdown: {
-    height: 'auto'
+    height: 20
   },
   dropdownText: {
-    backgroundColor: '#000',
     fontSize: 14,
     color: '#fff',
     minWidth: 144,

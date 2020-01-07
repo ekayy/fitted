@@ -42,8 +42,6 @@ class Fits extends Component {
 
     this.setState({ error: null });
 
-    console.tron.log(currentGarment);
-
     await clearCreatedFit();
     await tagGarmentToFit(currentGarment);
     navigate('Camera');
@@ -79,7 +77,4 @@ const mapStateToProps = state => {
   return {};
 };
 
-export default connect(
-  mapStateToProps,
-  { tagGarmentToFit, clearCreatedFit }
-)(Fits);
+export default connect(mapStateToProps, { tagGarmentToFit, clearCreatedFit })(Fits);

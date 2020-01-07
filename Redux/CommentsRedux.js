@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
+import { createSelector } from 'reselect';
 
 // Actions
 const FETCH_COMMENTS_BEGIN = 'FETCH_COMMENTS_BEGIN';
@@ -372,7 +373,12 @@ export const fetchComments = (id, contentType) => async dispatch => {
   try {
     const res = await axios.get(`${baseURL}/${contentType}/${id}/`);
 
-    dispatch(fetchCommentsSuccess(res.data.comments));
+    // sort by newest comments
+    const sortedComments = res.data.comments.sort(
+      (a, b) => new Date(b.created_date) - new Date(a.created_date)
+    );
+
+    dispatch(fetchCommentsSuccess(sortedComments));
   } catch (error) {
     dispatch(fetchCommentsFailure(error));
   }
@@ -455,3 +461,14 @@ export const postReply = ({ commentId, profileId, content }) => async dispatch =
     dispatch(postReplyFailure(error));
   }
 };
+
+/* Selectors */
+export const selectRecentComments = createSelector(
+  state => state.comments.items,
+  comments => comments.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
+);
+
+export const selectPopularComments = createSelector(
+  state => state.comments.items,
+  comments => comments.sort((a, b) => new Date(a.created_date) - new Date(b.created_date))
+);

@@ -122,7 +122,8 @@ class GarmentDetail extends Component {
   };
 
   render() {
-    const { id, color, sku, brand, model, photo, comments } = this.props.navigation.state.params;
+    const { comments } = this.props;
+    const { id, color, sku, brand, model, photo } = this.props.navigation.state.params;
     const { navigate } = this.props.navigation;
 
     const { refreshing, count, garmentFits } = this.state;
@@ -238,8 +239,7 @@ class GarmentDetail extends Component {
               onPress={() =>
                 navigate('Comments', {
                   objectId: id,
-                  contentType: 'garment',
-                  onGoBack: () => console.tron.log('test')
+                  contentType: 'garment'
                 })
               }
             />
