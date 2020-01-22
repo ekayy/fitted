@@ -9,11 +9,12 @@ const DropDown = props => {
   return (
     <ModalDropdown
       options={options}
-      style={styles.dropdownButton}
       defaultValue={defaultValue}
-      dropdownStyle={styles.dropdown}
-      dropdownTextStyle={styles.dropdownText}
-      // dropdownTextHighlightStyle={styles.dropdownTextHighlight}
+      style={styles.dropdownButtonStyle}
+      textStyle={styles.textStyle}
+      dropdownStyle={styles.dropdownStyle}
+      dropdownTextStyle={styles.dropdownTextStyle}
+      dropdownTextHighlightStyle={styles.dropdownTextHighlightStyle}
       onSelect={onSelect}
     >
       {/* <StyledDropdownButtonContainer>
@@ -34,25 +35,35 @@ const StyledDropdownButtonContainer = styled.View`
   min-width: 144px;
   min-height: 28px;
   padding: 6px;
+  background-color: #000;
 `;
 
 const styles = {
-  dropdownButton: {
+  dropdownButtonStyle: {
     backgroundColor: '#000',
-    borderRadius: 4
+    // borderRadius: 4,
+    color: '#fff',
+    width: 120
   },
-  dropdown: {
-    height: 20
+  dropdownStyle: {
+    height: 56,
+    width: 120
   },
-  dropdownText: {
+  textStyle: {
+    color: '#fff',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    fontSize: 14
+  },
+  dropdownTextStyle: {
     fontSize: 14,
     color: '#fff',
-    minWidth: 144,
-    minHeight: 28,
+    backgroundColor: '#000',
+    alignItems: 'center',
     paddingVertical: 6,
-    alignItems: 'center'
+    paddingHorizontal: 12
   },
-  dropdownTextHighlight: {
+  dropdownTextHighlightStyle: {
     color: '#fff'
   }
 };

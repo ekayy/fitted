@@ -13,10 +13,12 @@ import { fetchComments, selectRecentComments, selectPopularComments } from '../R
 const Comments = props => {
   const { isFocused } = props;
   const { objectId, contentType } = props.navigation.state.params;
-  // const comments = useSelector(state => state.comments.items);
-  const comments = useSelector(state => selectRecentComments(state));
-  const commentsByMostPopular = useSelector(state => selectPopularComments(state));
+  const comments = useSelector(state => state.comments.items);
+  // const commentsByMostRecent = useSelector(selectRecentComments);
+  // const commentsByMostPopular = useSelector(selectPopularComments);
 
+  // const [comments, setComments] = useState(commentsByMostRecent);
+  const [sortValue, setSort] = useState('Most Recent');
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
@@ -33,14 +35,14 @@ const Comments = props => {
   }, []);
 
   useEffect(() => {
-    // controlled search form input
-    searchComments(searchValue);
-  }, [comments]);
-
-  useEffect(() => {
-    // update comment store on tab change if changed
+    // update comment store on tab focus if changed
     fetchComments(objectId, contentType);
   }, [isFocused]);
+
+  useEffect(() => {
+    // On prop change, recalculate searchedComments state
+    searchComments(searchValue);
+  }, [comments, sortValue]);
 
   const closeModal = () => {
     setModal(false);
@@ -55,22 +57,21 @@ const Comments = props => {
   const searchComments = searchValue => {
     onChangeSearch(searchValue);
 
-    const searchedComments = comments.filter(result =>
-      searchValue.length > 0 ? result.content.toLowerCase().includes(searchValue) : comments
-    );
+    const sortedComments =
+      sortValue === 'Most Popular'
+        ? comments.sort((a, b) => new Date(a.created_date) - new Date(b.created_date))
+        : comments.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+
+    const searchedComments =
+      searchValue.length > 0
+        ? sortedComments.filter(result => result.content.toLowerCase().includes(searchValue))
+        : sortedComments;
 
     setSearchedComments(searchedComments);
   };
 
-  const filterComments = (index, value) => {
-    switch (value) {
-      case 'Most Recent':
-        return console.tron.log('recent');
-      case 'Most Popular':
-        return console.tron.log('popular');
-      default:
-        return;
-    }
+  const sortComments = (index, value) => {
+    setSort(value);
   };
 
   return (
@@ -94,8 +95,8 @@ const Comments = props => {
             <StyledFilterBar>
               <DropDown
                 options={['Most Recent', 'Most Popular']}
-                // defaultValue="Select"
-                onSelect={filterComments}
+                defaultValue="Select"
+                onSelect={sortComments}
               />
             </StyledFilterBar>
 

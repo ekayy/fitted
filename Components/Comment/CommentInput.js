@@ -32,8 +32,6 @@ const CommentInput = props => {
         content
       };
 
-      console.tron.log(data);
-
       const reply = await dispatch(postReply(data));
       // if (contentType === 'garment') await dispatch(syncGarmentCommentReplies(reply, objectId));
     } else {
