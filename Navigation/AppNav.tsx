@@ -33,7 +33,6 @@ const AppNav = () => {
         component={CreateDiscussionStack}
         options={{
           tabBarIcon: ({ color }) => <Ionicons name="ios-add" size={26} color={color} />,
-          // tabBarOnPress: () => { console.log('what')},
           // tabBarOnPress: ({ navigation, defaultHandler }) => {
           //   Alert.alert(
           //     'Discuss Garment / Upload Fit',

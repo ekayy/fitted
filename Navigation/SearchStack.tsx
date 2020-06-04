@@ -32,19 +32,19 @@ const SearchStack = () => {
       <Stack.Screen
         name="Fit Detail"
         component={FitDetail}
-        options={({ navigation }) => ({ title: navigation.state.params.username })}
+        options={({ route }) => ({ title: route.params['username'] })}
       />
       <Stack.Screen
         name="Fits"
         component={Fits}
-        options={({ navigation }) => ({ title: navigation.state.params.model })}
+        options={({ route }) => ({ title: route.params['model'] })}
       />
       <Stack.Screen name="Comments" component={Comments} />
       <Stack.Screen name="Comment Single" component={CommentSingle} />
       <Stack.Screen
         name="Profile"
         component={Profile}
-        options={({ navigation }) => ({ title: navigation.state.params.username })}
+        options={({ route }) => ({ title: route.params['username'] })}
       />
     </Stack.Navigator>
   );
