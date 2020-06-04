@@ -1,20 +1,15 @@
-import React, { Component } from 'react';
-import { View, StatusBar, ActivityIndicator } from 'react-native';
-
+import React from 'react';
+import { View } from 'react-native';
 import RootNav from '../Navigation/RootNav';
-
-// Styles
 import styles from './Styles/RootContainerStyles';
 
-class RootContainer extends Component {
-  render() {
-    return (
-      <View style={styles.applicationView}>
-        <RootNav />
-      </View>
-    );
-  }
-}
+const RootContainer: React.FC = () => {
+  return (
+    <View style={styles.applicationView}>
+      <RootNav />
+    </View>
+  );
+};
 
 // <RootNav
 //   persistenceKey={'NavigationState'}
