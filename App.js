@@ -2,7 +2,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import createStore from './Redux';
-import './Config/ReactotronConfig';
 import RootContainer from './Containers/RootContainer';
 
 if (__DEV__) {
@@ -27,4 +26,13 @@ const App = () => {
   );
 };
 
-export default App;
+const SHOW_STORYBOOK = false;
+
+let RootComponent = App;
+if (__DEV__ && SHOW_STORYBOOK) {
+  // Only include Storybook if we're in dev mode
+  const StorybookUIRoot = require('./storybook').default;
+  RootComponent = StorybookUIRoot;
+}
+
+export default RootComponent;
