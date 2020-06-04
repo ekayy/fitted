@@ -11,7 +11,21 @@ import SearchGarments from '../Containers/SearchGarments';
 import SelectSizing from '../Containers/SelectSizing';
 import AddCustomGarment from '../Containers/AddCustomGarment';
 
-const Stack = createStackNavigator();
+export type CreateDiscussionStackParamList = {
+  Camera: undefined;
+  'Tag Garments': undefined;
+  'Search Garments': undefined;
+  'Select Sizing': undefined;
+  'Add Custom Garment': undefined;
+  'Create Discussion': undefined;
+  'Garment Detail': { title: string };
+  'Fit Detail': { title: string };
+  Fits: { title: string };
+  Comments: undefined;
+  'Comment Single': undefined;
+};
+
+const Stack = createStackNavigator<CreateDiscussionStackParamList>();
 
 const CreateDiscussionStack = () => {
   return (
@@ -25,17 +39,17 @@ const CreateDiscussionStack = () => {
       <Stack.Screen
         name="Garment Detail"
         component={GarmentDetail}
-        options={({ navigation }) => ({ title: navigation.state.params.model })}
+        options={({ route }) => ({ title: route.params['model'] })}
       />
       <Stack.Screen
         name="Fit Detail"
         component={FitDetail}
-        options={({ navigation }) => ({ title: navigation.state.params.username })}
+        options={({ route }) => ({ title: route.params['username'] })}
       />
       <Stack.Screen
         name="Fits"
         component={Fits}
-        options={({ navigation }) => ({ title: navigation.state.params.model })}
+        options={({ route }) => ({ title: route.params['model'] })}
       />
       <Stack.Screen name="Comments" component={Comments} />
       <Stack.Screen name="Comment Single" component={CommentSingle} />

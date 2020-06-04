@@ -5,7 +5,14 @@ import ProfileSettings from '../Components/ProfileSettings';
 import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 
-const Stack = createStackNavigator();
+export type ProfileStackParamList = {
+  Profile: undefined;
+  'Profile Settings': undefined;
+  'Garment Detail': { title: string };
+  'Fit Detail': { title: string };
+};
+
+const Stack = createStackNavigator<ProfileStackParamList>();
 
 const ProfileStack = () => {
   return (
@@ -15,12 +22,12 @@ const ProfileStack = () => {
       <Stack.Screen
         name="Garment Detail"
         component={GarmentDetail}
-        options={({ navigation }) => ({ title: navigation.state.params.model })}
+        options={({ route }) => ({ title: route.params['model'] })}
       />
       <Stack.Screen
         name="Fit Detail"
         component={FitDetail}
-        options={({ navigation }) => ({ title: navigation.state.params.username })}
+        options={({ route }) => ({ title: route.params['username'] })}
       />
     </Stack.Navigator>
   );

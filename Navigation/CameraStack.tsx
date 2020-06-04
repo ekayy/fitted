@@ -6,7 +6,15 @@ import SearchGarments from '../Containers/SearchGarments';
 import SelectSizing from '../Containers/SelectSizing';
 import AddCustomGarment from '../Containers/AddCustomGarment';
 
-const Stack = createStackNavigator();
+export type CameraStackParamList = {
+  Camera: undefined;
+  'Tag Garments': undefined;
+  'Search Garments': undefined;
+  'Select Sizing': undefined;
+  'Add Custom Garment': undefined;
+};
+
+const Stack = createStackNavigator<CameraStackParamList>();
 
 const CameraStack = () => {
   return (

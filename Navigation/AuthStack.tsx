@@ -25,8 +25,6 @@ const AuthStack = () => {
         headerStyle: styles.header,
         headerTintColor: 'rgb(245,245,246)',
         headerTitleStyle: styles.title,
-        // title: 'LOGIN',
-        // headerLeft: null,
       }}
     >
       <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />

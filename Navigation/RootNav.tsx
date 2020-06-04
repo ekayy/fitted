@@ -19,7 +19,6 @@ import AuthStack from './AuthStack';
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type RootParamList = {
-  AuthLoading: undefined;
   AuthStack: undefined;
   App: undefined;
 };
