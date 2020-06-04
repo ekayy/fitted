@@ -19,7 +19,7 @@ class FitDetail extends Component {
     garments: [],
     toggled: false,
     profile: '',
-    username: ''
+    username: '',
   };
 
   componentDidMount() {
@@ -49,12 +49,12 @@ class FitDetail extends Component {
         this.setState({
           garments: [...this.state.garments, response.data],
           error: null,
-          loading: false
+          loading: false,
         });
       } catch (error) {
         this.setState({
           error,
-          loading: false
+          loading: false,
         });
       }
     });
@@ -68,11 +68,11 @@ class FitDetail extends Component {
     try {
       this.setState({
         profile: response.data,
-        username: response.data.user.username
+        username: response.data.user.username,
       });
     } catch (error) {
       this.setState({
-        error
+        error,
       });
     }
   };
@@ -124,7 +124,7 @@ class FitDetail extends Component {
                 large
                 rounded
                 source={{
-                  uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
+                  uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
                 }}
                 activeOpacity={0.7}
                 style={styles.profileImage}
@@ -162,7 +162,7 @@ class FitDetail extends Component {
               <Text style={AppStyles.sectionTitleText}>Discussion</Text>
             </View>
 
-            {comments.length > 0 && (
+            {/* {comments.length > 0 && (
               <CommentList
                 {...this.props}
                 data={comments.slice(0, 3)}
@@ -172,18 +172,18 @@ class FitDetail extends Component {
                 contentType="fit"
                 objectId={id}
               />
-            )}
+            )} */}
             <View style={AppStyles.button}>
               <Button
                 title={`See all discussion`}
                 buttonStyle={[AppStyles.buttonAltStyle]}
                 titleStyle={AppStyles.buttonAltTitleStyle}
-                onPress={() =>
-                  navigate('Comments', {
-                    objectId: id,
-                    contentType: 'fit'
-                  })
-                }
+                // onPress={() =>
+                //   navigate('Comments', {
+                //     objectId: id,
+                //     contentType: 'fit',
+                //   })
+                // }
               />
             </View>
           </View>
@@ -197,46 +197,46 @@ const styles = {
   container: {
     flex: 1,
     flexDirection: 'row',
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
   image: {
     width: Metrics.screenWidth,
-    minHeight: 400
+    minHeight: 400,
   },
   favorite: {
     position: 'absolute',
     bottom: Metrics.doubleBaseMargin,
-    right: Metrics.doubleBaseMargin
+    right: Metrics.doubleBaseMargin,
   },
   gridItem: {
     flex: 1,
     width: Metrics.screenWidth / 3,
     height: 200,
-    backgroundColor: '#333'
+    backgroundColor: '#333',
   },
   image2: {
     width: undefined,
-    height: 200
+    height: 200,
   },
 
   profile: {
     alignItems: 'center',
     flexDirection: 'row',
-    marginVertical: 20
+    marginVertical: 20,
   },
   profileImage: {
-    marginLeft: 30
+    marginLeft: 30,
   },
   profileText: {
-    marginLeft: 30
-  }
+    marginLeft: 30,
+  },
 };
 
 const mapStateToProps = state => {
   return {
     user: state.user,
     brands: state.brands.items,
-    commments: state.comments.items
+    commments: state.comments.items,
   };
 };
 
