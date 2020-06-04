@@ -1,25 +1,14 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  TextInput
-} from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { connect } from 'react-redux';
-import {
-  removeGarmentFromFit,
-  createFit,
-  clearCreatedFit
-} from '../Redux/FitsRedux';
+import { removeGarmentFromFit, createFit, clearCreatedFit } from '../Redux/FitsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
 import styles from './Styles/TagGarmentsStyles';
 import { AppStyles } from '../Themes';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from '@react-navigation/native';
 
 class TagGarments extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -29,12 +18,12 @@ class TagGarments extends Component {
         <TouchableOpacity
           onPress={navigation.getParam('searchGarments')}
           style={{
-            marginRight: 20
+            marginRight: 20,
           }}
         >
           <Ionicons name="ios-add" size={40} color="#000" />
         </TouchableOpacity>
-      )
+      ),
     };
   };
 
@@ -42,12 +31,12 @@ class TagGarments extends Component {
     description: null,
     error: null,
     loading: false,
-    refreshing: false
+    refreshing: false,
   };
 
   componentDidMount() {
     this.props.navigation.setParams({
-      searchGarments: this._searchGarments
+      searchGarments: this._searchGarments,
     });
 
     this.props.fetchBrands();
@@ -61,15 +50,10 @@ class TagGarments extends Component {
   shareFit = async () => {
     const { navigate, dispatch } = this.props.navigation;
     const { image } = this.props.navigation.state.params;
-    const {
-      taggedGarments,
-      profileId,
-      createFit,
-      clearCreatedFit
-    } = this.props;
+    const { taggedGarments, profileId, createFit, clearCreatedFit } = this.props;
     const { description } = this.state;
 
-    const garmentIds = taggedGarments.map(item => item.id);
+    const garmentIds = taggedGarments.map((item) => item.id);
 
     // post fit to api
     // TODO: to remove required like to allow post with no initial likes
@@ -80,7 +64,7 @@ class TagGarments extends Component {
         photo: image,
         likes: [1],
         garments: garmentIds,
-        description
+        description,
       });
 
       this.setState({ description: null });
@@ -88,7 +72,7 @@ class TagGarments extends Component {
       // reset navigation to Camera route on successful fit creation
       const resetAction = StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Camera' })]
+        actions: [NavigationActions.navigate({ routeName: 'Camera' })],
       });
       dispatch(resetAction);
 
@@ -99,7 +83,7 @@ class TagGarments extends Component {
       clearCreatedFit();
     } else {
       this.setState({
-        error: 'You must tag a garment to this fit'
+        error: 'You must tag a garment to this fit',
       });
     }
   };
@@ -121,7 +105,7 @@ class TagGarments extends Component {
                 multiline={true}
                 numberOfLines={4}
                 placeholder="Describe your fit here!"
-                onChangeText={description => this.setState({ description })}
+                onChangeText={(description) => this.setState({ description })}
                 value={this.state.description}
                 style={styles.textArea}
               />
@@ -209,7 +193,7 @@ class TagGarments extends Component {
       <View style={styles.rowBack}>
         <TouchableOpacity
           style={styles.rightBtn}
-          onPress={_ => this.props.removeGarmentFromFit(id)}
+          onPress={(_) => this.props.removeGarmentFromFit(id)}
         >
           <Text style={styles.rightBtnText}>Delete</Text>
         </TouchableOpacity>
@@ -227,21 +211,18 @@ class TagGarments extends Component {
   };
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     taggedGarments: state.fits.taggedGarments,
     createdFit: state.fits.createdFit,
     profileId: state.user.profileId,
-    brands: state.brands.items
+    brands: state.brands.items,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    removeGarmentFromFit,
-    createFit,
-    clearCreatedFit,
-    fetchBrands
-  }
-)(TagGarments);
+export default connect(mapStateToProps, {
+  removeGarmentFromFit,
+  createFit,
+  clearCreatedFit,
+  fetchBrands,
+})(TagGarments);

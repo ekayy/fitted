@@ -14,7 +14,7 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class Search extends Component {
   static navigationOptions = {
-    title: 'Search'
+    title: 'Search',
   };
 
   constructor(props) {
@@ -31,7 +31,7 @@ class Search extends Component {
       limit: 9999,
       showFilters: false,
       brandIds: [],
-      brandTable: {}
+      brandTable: {},
     };
   }
 
@@ -47,16 +47,16 @@ class Search extends Component {
       await this.props.fetchGarments();
       this.setState(
         {
-          garments
+          garments,
         },
         async () => {
           await this.createBrandTable();
           this.setState({
             refreshing: false,
             results: [...this.state.garments.slice(0, 10)],
-            remainingResults: [...this.state.garments.slice(10)]
+            remainingResults: [...this.state.garments.slice(10)],
           });
-        }
+        },
       );
     });
   }
@@ -65,25 +65,23 @@ class Search extends Component {
   createBrandTable() {
     const { brands } = this.props;
     const { brandTable, garments } = this.state;
-    brands.forEach(brand => {
+    brands.forEach((brand) => {
       brandTable[brand.name] = [];
     });
-    garments.forEach(garment => {
+    garments.forEach((garment) => {
       brandTable[garment.brand_name].push(garment);
     });
   }
 
-  handleChange = searchTerm => {
+  handleChange = (searchTerm) => {
     const { brandIds } = this.state;
 
-    const searchedResults = this.state.garments.filter(result =>
-      searchTerm
-        ? result.model.toLowerCase().includes(searchTerm)
-        : this.state.garments
+    const searchedResults = this.state.garments.filter((result) =>
+      searchTerm ? result.model.toLowerCase().includes(searchTerm) : this.state.garments,
     );
 
     const filteredResults = brandIds.length
-      ? searchedResults.filter(result => brandIds.includes(result.brand))
+      ? searchedResults.filter((result) => brandIds.includes(result.brand))
       : searchedResults;
 
     let slicedResults = filteredResults.slice(0, 10);
@@ -92,7 +90,7 @@ class Search extends Component {
     this.setState({
       searchTerm,
       remainingResults: remainingResults,
-      results: slicedResults
+      results: slicedResults,
     });
   };
 
@@ -103,7 +101,7 @@ class Search extends Component {
       this.setState({
         refreshing: false,
         results: [...this.state.garments.slice(0, 10)],
-        remainingResults: [...this.state.garments.slice(10)]
+        remainingResults: [...this.state.garments.slice(10)],
       });
     });
   };
@@ -113,34 +111,30 @@ class Search extends Component {
     const { remainingResults, results } = this.state;
 
     this.setState({
-      loading: true
+      loading: true,
     });
 
     this.setState({
       remainingResults: remainingResults.slice(10),
       results: [...results, ...remainingResults.slice(0, 10)],
-      loading: false
+      loading: false,
     });
   };
 
   // Search filters: e.g. [1,3,5]
-  applyFilters = brandIds => {
+  applyFilters = (brandIds) => {
     const { searchTerm } = this.state;
 
     this.setState({
       results: [],
-      brandIds
+      brandIds,
     });
 
-    const searchedResults = this.state.garments.filter(result =>
-      searchTerm
-        ? result.model.toLowerCase().includes(searchTerm)
-        : this.state.garments
+    const searchedResults = this.state.garments.filter((result) =>
+      searchTerm ? result.model.toLowerCase().includes(searchTerm) : this.state.garments,
     );
 
-    const filteredResults = searchedResults.filter(result =>
-      brandIds.includes(result.brand)
-    );
+    const filteredResults = searchedResults.filter((result) => brandIds.includes(result.brand));
 
     let slicedResults = filteredResults.slice(0, 10);
     let remainingResults = filteredResults.slice(10);
@@ -148,7 +142,7 @@ class Search extends Component {
     this.setState({
       searchTerm,
       remainingResults: remainingResults,
-      results: slicedResults
+      results: slicedResults,
     });
   };
 
@@ -165,7 +159,7 @@ class Search extends Component {
       refreshing,
       showFilters,
       brandIds,
-      brandTable
+      brandTable,
     } = this.state;
 
     return (
@@ -186,10 +180,7 @@ class Search extends Component {
         {searchTerm ? (
           <StyledFilterBarContainer>
             <StyledFilterBar>
-              <DropDown
-                options={['MOST RECENT', 'MOST POPULAR']}
-                defaultValue="SELECT"
-              />
+              <DropDown options={['MOST RECENT', 'MOST POPULAR']} defaultValue="SELECT" />
             </StyledFilterBar>
 
             <VerticalDivider />
@@ -294,19 +285,19 @@ const styles = {
   searchBarContainer: {
     backgroundColor: 'rgb(0,0,0)',
     paddingVertical: 10,
-    marginTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0
+    marginTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
   },
   inputContainer: { backgroundColor: 'rgb(255,255,255)' },
   input: { backgroundColor: 'rgb(255,255,255)' },
-  badgeStyle: { position: 'absolute', top: 0, right: -20 }
+  badgeStyle: { position: 'absolute', top: 0, right: -20 },
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     garments: state.garments.items,
     isLoggedIn: state.user.isLoggedIn,
     brands: state.brands.items,
-    user: state.user
+    user: state.user,
   };
 };
 
@@ -314,5 +305,5 @@ export default connect(mapStateToProps, {
   login,
   fetchGarments,
   fetchBrands,
-  favoriteGarment
+  favoriteGarment,
 })(Search);

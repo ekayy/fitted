@@ -6,7 +6,6 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import ProfileHeader from '../Components/ProfileHeader';
 import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
-import { withNavigationFocus } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { favoriteGarment, fetchProfile } from '../Redux/UserRedux';
 import styles from './Styles/MyProfileStyles';
@@ -20,13 +19,13 @@ class MyProfile extends Component {
     routes: [
       { key: 'garments', title: 'Closet', icon: 'hanger' },
       { key: 'fits', title: 'Favorite Fits', icon: 'tshirt-crew' },
-      { key: 'myfits', title: 'My Fits', icon: 'tshirt-v-outline' }
+      { key: 'myfits', title: 'My Fits', icon: 'tshirt-v-outline' },
     ],
     refreshing: false,
     favoriteFits: [],
     favoriteGarments: [],
     myFits: [],
-    editingCloset: false
+    editingCloset: false,
   };
 
   componentDidMount() {
@@ -61,28 +60,28 @@ class MyProfile extends Component {
 
     this.setState({
       error: null,
-      refreshing: true
+      refreshing: true,
     });
 
     await Promise.all(
-      favoriteGarments.map(async garmentId => {
+      favoriteGarments.map(async (garmentId) => {
         const response = await axios.get(`${baseURL}/garments/${garmentId}`);
 
         try {
           this.setState({
-            favoriteGarments: [...this.state.favoriteGarments, response.data]
+            favoriteGarments: [...this.state.favoriteGarments, response.data],
           });
         } catch (error) {
           this.setState({
-            error
+            error,
           });
         }
-      })
+      }),
     );
 
     this.setState({
       error: null,
-      refreshing: false
+      refreshing: false,
     });
   };
 
@@ -91,22 +90,20 @@ class MyProfile extends Component {
 
     this.setState({
       error: null,
-      refreshing: true
+      refreshing: true,
     });
 
-    const res = await axios.get(
-      `${baseURL}/fits/?ids=${favoriteFits.toString()}`
-    );
+    const res = await axios.get(`${baseURL}/fits/?ids=${favoriteFits.toString()}`);
 
     try {
       this.setState({
         favoriteFits: res.data.results,
         error: null,
-        refreshing: false
+        refreshing: false,
       });
     } catch (error) {
       this.setState({
-        error
+        error,
       });
     }
   };
@@ -116,7 +113,7 @@ class MyProfile extends Component {
 
     this.setState({
       error: null,
-      refreshing: true
+      refreshing: true,
     });
 
     const res = await axios.get(`${baseURL}/profiles/${profileId}/fits`);
@@ -125,11 +122,11 @@ class MyProfile extends Component {
       this.setState({
         myFits: res.data,
         error: null,
-        refreshing: false
+        refreshing: false,
       });
     } catch (error) {
       this.setState({
-        error
+        error,
       });
     }
   };
@@ -157,12 +154,12 @@ class MyProfile extends Component {
   // show button to remove garments from closet
   editCloset = () => {
     this.setState({
-      editingCloset: !this.state.editingCloset
+      editingCloset: !this.state.editingCloset,
     });
   };
 
   // Remove garment from closet
-  unfavoriteGarment = id => {
+  unfavoriteGarment = (id) => {
     const { user } = this.props;
 
     favoriteGarment(id, user);
@@ -176,15 +173,12 @@ class MyProfile extends Component {
   render() {
     const initialLayout = {
       height: 0,
-      width: Dimensions.get('window').width
+      width: Dimensions.get('window').width,
     };
 
     return (
       <View style={styles.container}>
-        <ProfileHeader
-          navigation={this.props.navigation}
-          user={this.props.user}
-        />
+        <ProfileHeader navigation={this.props.navigation} user={this.props.user} />
 
         <View style={styles.tabContainer}>
           <TabView
@@ -200,9 +194,9 @@ class MyProfile extends Component {
     );
   }
 
-  _handleIndexChange = index => this.setState({ index });
+  _handleIndexChange = (index) => this.setState({ index });
 
-  _renderTabBar = props => (
+  _renderTabBar = (props) => (
     <TabBar
       {...props}
       indicatorStyle={styles.indicatorStyle}
@@ -214,13 +208,7 @@ class MyProfile extends Component {
   );
 
   _renderScene = ({ route }) => {
-    const {
-      editingCloset,
-      refreshing,
-      favoriteGarments,
-      favoriteFits,
-      myFits
-    } = this.state;
+    const { editingCloset, refreshing, favoriteGarments, favoriteFits, myFits } = this.state;
 
     switch (route.key) {
       case 'garments':
@@ -276,19 +264,16 @@ class MyProfile extends Component {
   };
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     favoriteGarments: state.user.favoriteGarments,
     favoriteFits: state.user.favoriteFits,
     user: state.user,
-    profileId: state.user.profileId
+    profileId: state.user.profileId,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    favoriteGarment,
-    fetchProfile
-  }
-)(withNavigationFocus(MyProfile));
+export default connect(mapStateToProps, {
+  favoriteGarment,
+  fetchProfile,
+})(MyProfile);

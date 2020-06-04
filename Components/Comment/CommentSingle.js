@@ -5,12 +5,11 @@ import { KeyboardAvoidingView, Text, ScrollView, Modal } from 'react-native';
 
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';
-import { withNavigationFocus } from 'react-navigation';
 
-const CommentSingle = props => {
+const CommentSingle = (props) => {
   let { id, contentType, objectId, openModalOnStart } = props.navigation.state.params;
-  const comments = useSelector(state => state.comments.items);
-  const comment = comments.filter(comment => comment.id === id);
+  const comments = useSelector((state) => state.comments.items);
+  const comment = comments.filter((comment) => comment.id === id);
 
   const [commentValue, onChangeComment] = useState('');
   const [showModal, setModal] = useState(false);
@@ -18,7 +17,7 @@ const CommentSingle = props => {
 
   useEffect(() => {
     props.navigation.setParams({
-      openModal: () => openModal(comment[0])
+      openModal: () => openModal(comment[0]),
     });
 
     if (openModalOnStart) openModal(comment[0]);
@@ -29,7 +28,7 @@ const CommentSingle = props => {
     setCurrentComment({});
   };
 
-  const openModal = comment => {
+  const openModal = (comment) => {
     setModal(true);
     setCurrentComment(comment);
   };
@@ -50,7 +49,7 @@ const CommentSingle = props => {
         <CommentInput
           data={currentComment}
           commentValue={commentValue}
-          onChangeComment={text => onChangeComment(text)}
+          onChangeComment={(text) => onChangeComment(text)}
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
@@ -67,7 +66,7 @@ CommentSingle.navigationOptions = ({ navigation }) => ({
     <StyledHeaderButton onPress={navigation.getParam('openModal')}>
       <Text>Leave Reply</Text>
     </StyledHeaderButton>
-  )
+  ),
 });
 
 const StyledHeaderButton = styled.TouchableOpacity`
@@ -90,4 +89,4 @@ const StyledCommentLink = styled.Text`
   margin-bottom: 10px;
 `;
 
-export default withNavigationFocus(CommentSingle);
+export default CommentSingle;

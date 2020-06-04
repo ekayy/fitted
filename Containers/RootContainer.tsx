@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import RootNav from '../Navigation/RootNav';
+import { RootNav } from '../Navigation/RootNav';
 import styles from './Styles/RootContainerStyles';
 
 const RootContainer: React.FC = () => {

@@ -7,15 +7,14 @@ import { AppStyles } from '../Themes';
 import CommentList from '../Components/Comment/CommentList';
 import CommentInput from '../Components/Comment/CommentInput';
 import DropDown from '../Components/DropDown';
-import { withNavigationFocus } from 'react-navigation';
 import { fetchComments, selectRecentComments, selectPopularComments } from '../Redux/CommentsRedux';
 
-const Comments = props => {
+const Comments = (props) => {
   const { isFocused } = props;
   const { objectId, contentType } = props.navigation.state.params;
   // const comments = useSelector(state => state.comments.items);
-  const comments = useSelector(state => selectRecentComments(state));
-  const commentsByMostPopular = useSelector(state => selectPopularComments(state));
+  const comments = useSelector((state) => selectRecentComments(state));
+  const commentsByMostPopular = useSelector((state) => selectPopularComments(state));
 
   const [searchValue, onChangeSearch] = useState('');
   const [commentValue, onChangeComment] = useState('');
@@ -28,7 +27,7 @@ const Comments = props => {
   useEffect(() => {
     // open search input
     props.navigation.setParams({
-      openModal
+      openModal,
     });
   }, []);
 
@@ -47,16 +46,16 @@ const Comments = props => {
     setCurrentComment({});
   };
 
-  const openModal = comment => {
+  const openModal = (comment) => {
     setModal(true);
     setCurrentComment(comment);
   };
 
-  const searchComments = searchValue => {
+  const searchComments = (searchValue) => {
     onChangeSearch(searchValue);
 
-    const searchedComments = comments.filter(result =>
-      searchValue.length > 0 ? result.content.toLowerCase().includes(searchValue) : comments
+    const searchedComments = comments.filter((result) =>
+      searchValue.length > 0 ? result.content.toLowerCase().includes(searchValue) : comments,
     );
 
     setSearchedComments(searchedComments);
@@ -135,7 +134,7 @@ const Comments = props => {
         <CommentInput
           data={currentComment}
           commentValue={commentValue}
-          onChangeComment={text => onChangeComment(text)}
+          onChangeComment={(text) => onChangeComment(text)}
           closeModal={closeModal}
           openModal={openModal}
           contentType={contentType}
@@ -170,7 +169,7 @@ Comments.navigationOptions = ({ navigation }) => ({
     <StyledHeaderButton onPress={navigation.getParam('openModal')}>
       <Text>Post New Comment</Text>
     </StyledHeaderButton>
-  )
+  ),
 });
 
 const StyledHeaderButton = styled.TouchableOpacity`
@@ -221,11 +220,11 @@ const StyledPicker = styled.Picker``;
 const styles = {
   searchBarContainer: {
     backgroundColor: '#fff',
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   inputContainer: {
-    backgroundColor: '#f3f3f3'
-  }
+    backgroundColor: '#f3f3f3',
+  },
 };
 
-export default withNavigationFocus(Comments);
+export default Comments;
