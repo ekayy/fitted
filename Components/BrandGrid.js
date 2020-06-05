@@ -238,7 +238,7 @@ class BrandGrid extends Component {
             refreshing={refreshing}
             initialNumToRender={10}
             maxToRenderPerBatch={10}
-            ListHeaderComponent={this.renderHeader}
+            // ListHeaderComponent={this.renderHeader}
             ListFooterComponent={this.renderFooter}
           />
         )}

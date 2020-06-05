@@ -26,14 +26,14 @@ export default function brands(state = INITIAL_STATE, action: BrandActionTypes) 
       return {
         ...state,
         loading: false,
-        items: action.payload.items,
+        items: action.payload,
       };
 
     case FETCH_BRANDS_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
+        error: action.payload,
       };
     default:
       return state;
@@ -45,14 +45,14 @@ export const fetchBrandsBegin = (): BrandActionTypes => ({
   type: FETCH_BRANDS_BEGIN,
 });
 
-export const fetchBrandsSuccess = ({ items }: BrandState): BrandActionTypes => ({
+export const fetchBrandsSuccess = (brands: BrandState): BrandActionTypes => ({
   type: FETCH_BRANDS_SUCCESS,
-  payload: { items },
+  payload: brands,
 });
 
-export const fetchBrandsFailure = ({ error }: BrandState): BrandActionTypes => ({
+export const fetchBrandsFailure = (error: BrandState): BrandActionTypes => ({
   type: FETCH_BRANDS_FAILURE,
-  payload: { error },
+  payload: error,
 });
 
 // side effects, only as applicable
