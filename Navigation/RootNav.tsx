@@ -9,6 +9,7 @@ import { NavigationContainer, NavigationContainerRef } from '@react-navigation/n
 import { createStackNavigator } from '@react-navigation/stack';
 import AppNav from './AppNav';
 import AuthStack from './AuthStack';
+import { useTypedSelector } from '../types';
 
 /**i()uasdf
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -26,6 +27,8 @@ export type RootParamList = {
 const Stack = createStackNavigator<RootParamList>();
 
 const RootStack = () => {
+  const { isLoggedIn } = useTypedSelector((state) => state.user);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -33,8 +36,11 @@ const RootStack = () => {
         gestureEnabled: true,
       }}
     >
-      <Stack.Screen name="AuthStack" component={AuthStack} />
-      <Stack.Screen name="App" component={AppNav} />
+      {isLoggedIn ? (
+        <Stack.Screen name="App" component={AppNav} />
+      ) : (
+        <Stack.Screen name="AuthStack" component={AuthStack} />
+      )}
     </Stack.Navigator>
   );
 };

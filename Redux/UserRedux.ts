@@ -1,56 +1,42 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
+import { UserActionTypes, UserState, AppThunk } from '../types';
 
 // Actions
-const LOGIN_REQUEST = 'LOGIN_REQUEST';
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-const LOGIN_FAILURE = 'LOGIN_FAILURE';
-const LOGOUT = 'LOGOUT';
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT = 'LOGOUT';
 
-const PROFILE_REQUEST = 'PROFILE_REQUEST';
-const PROFILE_SUCCESS = 'PROFILE_SUCCESS';
-const PROFILE_FAILURE = 'PROFILE_FAILURE';
+export const PROFILE_REQUEST = 'PROFILE_REQUEST';
+export const PROFILE_SUCCESS = 'PROFILE_SUCCESS';
+export const PROFILE_FAILURE = 'PROFILE_FAILURE';
 
-const FAVORITE_REQUEST = 'FAVORITE_REQUEST';
-const FAVORITE_SUCCESS = 'FAVORITE_SUCCESS';
-const FAVORITE_FAILURE = 'FAVORITE_FAILURE';
-
-// const FETCH_MY_FITS_BEGIN = 'FETCH_MY_FITS_BEGIN';
-// const FETCH_MY_FITS_SUCCESS = 'FETCH_MY_FITS_SUCCESS';
-// const FETCH_MY_FITS_FAILURE = 'FETCH_MY_FITS_FAILURE';
-
-// const FETCH_FAVORITE_GARMENTS_BEGIN = 'FETCH_FAVORITE_GARMENTS_BEGIN';
-// const FETCH_FAVORITE_GARMENTS_SUCCESS = 'FETCH_FAVORITE_GARMENTS_SUCCESS';
-// const FETCH_FAVORITE_GARMENTS_FAILURE = 'FETCH_FAVORITE_GARMENTS_FAILURE';
-
-// const FETCH_FAVORITE_FITS_BEGIN = 'FETCH_FAVORITE_FITS_BEGIN';
-// const FETCH_FAVORITE_FITS_SUCCESS = 'FETCH_FAVORITE_FITS_SUCCESS';
-// const FETCH_FAVORITE_FITS_FAILURE = 'FETCH_FAVORITE_FITS_FAILURE';
+export const FAVORITE_REQUEST = 'FAVORITE_REQUEST';
+export const FAVORITE_SUCCESS = 'FAVORITE_SUCCESS';
+export const FAVORITE_FAILURE = 'FAVORITE_FAILURE';
 
 export const INITIAL_STATE = {
   loading: false,
   error: null,
   token: null,
   profileId: null,
-  profile: null,
+  user: null,
   favoriteGarments: [],
   favoriteFits: [],
-  // myFits: [],
-  // myFavoriteGarments: [],
-  // myFavoriteFits: [],
   height: null,
   weight: null,
-  isLoggedIn: false
+  isLoggedIn: false,
 };
 
 // Reducer
-export default function(state = INITIAL_STATE, action = {}) {
+export default function (state = INITIAL_STATE, action: UserActionTypes) {
   switch (action.type) {
     case LOGIN_REQUEST:
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case LOGIN_SUCCESS:
       return {
@@ -58,16 +44,16 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null,
         token: action.payload.token,
-        profileId: action.payload.profile_id,
-        isLoggedIn: true
+        profileId: action.payload.profileId,
+        isLoggedIn: true,
       };
     case LOGIN_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
+        error: action.payload,
         token: null,
-        profileId: null
+        profileId: null,
       };
 
     case LOGOUT:
@@ -76,35 +62,35 @@ export default function(state = INITIAL_STATE, action = {}) {
     case PROFILE_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case PROFILE_SUCCESS:
       return {
         ...state,
         loading: false,
-        error: null,
-        profile: action.payload.user,
-        favoriteGarments: action.payload.favorite_garments,
-        favoriteFits: action.payload.favorite_fits,
+        // error: null,
+        user: action.payload.user,
+        favoriteGarments: action.payload.favoriteGarments,
+        favoriteFits: action.payload.favoriteFits,
         height: action.payload.height,
-        weight: action.payload.weight
+        weight: action.payload.weight,
       };
     case PROFILE_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
-        profile: null,
+        // error: action.payload.error,
+        user: null,
         favoriteGarments: [],
         favoriteFits: [],
         height: null,
-        weight: null
+        weight: null,
       };
 
     case FAVORITE_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case FAVORITE_SUCCESS:
       return {
@@ -112,13 +98,13 @@ export default function(state = INITIAL_STATE, action = {}) {
         loading: false,
         error: null,
         favoriteGarments: [...action.payload.favorite_garments],
-        favoriteFits: [...action.payload.favorite_fits]
+        favoriteFits: [...action.payload.favorite_fits],
       };
     case FAVORITE_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     // case FETCH_MY_FITS_BEGIN:
@@ -187,49 +173,52 @@ export default function(state = INITIAL_STATE, action = {}) {
 }
 
 // Action Creators
-export const loginRequest = () => ({
-  type: LOGIN_REQUEST
+export const loginRequest = (): UserActionTypes => ({
+  type: LOGIN_REQUEST,
 });
-export const loginSuccess = ({ token, profile_id }) => ({
+export const loginSuccess = ({ token, profileId }: UserState): UserActionTypes => ({
   type: LOGIN_SUCCESS,
-  payload: { token, profile_id }
+  payload: { token, profileId },
 });
-export const loginFailure = error => ({
+export const loginFailure = (error: UserState): UserActionTypes => ({
   type: LOGIN_FAILURE,
-  payload: { error }
+  payload: error,
 });
-export const logout = () => ({
-  type: LOGOUT
+export const logout = (): UserActionTypes => ({
+  type: LOGOUT,
 });
 
-export const profileRequest = () => ({
-  type: PROFILE_REQUEST
+export const profileRequest = (): UserActionTypes => ({
+  type: PROFILE_REQUEST,
 });
 export const profileSuccess = ({
   user,
-  favorite_garments,
-  favorite_fits,
+  favoriteGarments,
+  favoriteFits,
   height,
-  weight
-}) => ({
+  weight,
+}: UserState): UserActionTypes => ({
   type: PROFILE_SUCCESS,
-  payload: { user, favorite_garments, favorite_fits, height, weight }
+  payload: { user, favoriteGarments, favoriteFits, height, weight },
 });
-export const profileFailure = error => ({
+export const profileFailure = ({ error }: UserState): UserActionTypes => ({
   type: PROFILE_FAILURE,
-  payload: { error }
+  payload: { error },
 });
 
-export const favoriteFailure = error => ({
+export const favoriteFailure = ({ error }: UserState): UserActionTypes => ({
   type: FAVORITE_FAILURE,
-  payload: { error }
+  payload: { error },
 });
-export const favoriteRequest = () => ({
-  type: FAVORITE_REQUEST
+export const favoriteRequest = (): UserActionTypes => ({
+  type: FAVORITE_REQUEST,
 });
-export const favoriteSuccess = ({ favorite_garments, favorite_fits }) => ({
+export const favoriteSuccess = ({
+  favoriteGarments,
+  favoriteFits,
+}: UserState): UserActionTypes => ({
   type: FAVORITE_SUCCESS,
-  payload: { favorite_garments, favorite_fits }
+  payload: { favoriteGarments, favoriteFits },
 });
 
 // export const fetchMyFitsBegin = () => ({
@@ -270,38 +259,48 @@ export const favoriteSuccess = ({ favorite_garments, favorite_fits }) => ({
 
 // Asynchronous actions
 // login to app
-export const login = (username, password) => async dispatch => {
+export const login = (username, password): AppThunk => async (dispatch) => {
   dispatch(loginRequest());
 
   try {
-    const res = await axios.post(`${baseURL}/user/get_auth_token/`, {
+    const response = await axios.post(`${baseURL}/user/get_auth_token/`, {
       username,
-      password
+      password,
     });
 
-    dispatch(loginSuccess(res.data));
-  } catch (error) {
-    dispatch(loginFailure(error.response.data));
+    // resolve python and js naming differences
+    const { token, profile_id: profileId } = response.data;
 
-    throw new Error(400);
+    dispatch(loginSuccess({ token, profileId }));
+  } catch (error) {
+    dispatch(loginFailure(error.response.data['non_field_errors'][0]));
   }
 };
 
 // fetch current profile
-export const fetchProfile = profileId => async dispatch => {
+export const fetchProfile = (profileId: number): AppThunk => async (dispatch) => {
   dispatch(profileRequest());
 
   try {
-    const res = await axios.get(`${baseURL}/profiles/${profileId}/`);
+    const response = await axios.get(`${baseURL}/profiles/${profileId}/`);
 
-    dispatch(profileSuccess(res.data));
+    // resolve python and js naming differences
+    const {
+      user,
+      favorite_garments: favoriteGarments,
+      favorite_fits: favoriteFits,
+      height,
+      weight,
+    } = response.data;
+
+    dispatch(profileSuccess({ user, favoriteGarments, favoriteFits, height, weight }));
   } catch (error) {
     dispatch(profileFailure(error));
   }
 };
 
 // favorite or unfavorite
-export const favoriteGarment = (id, userParams) => async dispatch => {
+export const favoriteGarment = (id, userParams): AppThunk => async (dispatch) => {
   const { token, profileId, favoriteGarments } = userParams;
   let favorites = [];
 
@@ -309,9 +308,7 @@ export const favoriteGarment = (id, userParams) => async dispatch => {
 
   if (favoriteGarments.includes(id)) {
     // Unfavoriting
-    let filteredGarments = favoriteGarments.filter(
-      garmentId => garmentId !== id
-    );
+    let filteredGarments = favoriteGarments.filter((garmentId) => garmentId !== id);
 
     favorites = [...filteredGarments];
   } else {
@@ -323,13 +320,13 @@ export const favoriteGarment = (id, userParams) => async dispatch => {
     const res = await axios.patch(
       `${baseURL}/profiles/${profileId}/`,
       {
-        favorite_garments: favorites
+        favorite_garments: favorites,
       },
       {
         headers: {
-          Authorization: `Token ${token}`
-        }
-      }
+          Authorization: `Token ${token}`,
+        },
+      },
     );
 
     dispatch(favoriteSuccess(res.data));
@@ -338,7 +335,7 @@ export const favoriteGarment = (id, userParams) => async dispatch => {
   }
 };
 
-export const favoriteFit = (id, userParams) => async dispatch => {
+export const favoriteFit = (id, userParams): AppThunk => async (dispatch) => {
   const { token, profileId, favoriteFits } = userParams;
   let favorites = [];
 
@@ -346,7 +343,7 @@ export const favoriteFit = (id, userParams) => async dispatch => {
 
   if (favoriteFits.includes(id)) {
     // Unfavoriting
-    let filteredFits = favoriteFits.filter(fitId => fitId !== id);
+    let filteredFits = favoriteFits.filter((fitId) => fitId !== id);
 
     favorites = [...filteredFits];
   } else {
@@ -358,13 +355,13 @@ export const favoriteFit = (id, userParams) => async dispatch => {
     const res = await axios.patch(
       `${baseURL}/profiles/${profileId}/`,
       {
-        favorite_fits: favorites
+        favorite_fits: favorites,
       },
       {
         headers: {
-          Authorization: `Token ${token}`
-        }
-      }
+          Authorization: `Token ${token}`,
+        },
+      },
     );
 
     dispatch(favoriteSuccess(res.data));

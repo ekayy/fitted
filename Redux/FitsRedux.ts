@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { Fit, FitState, FitActionTypes, AppThunk } from './types';
+import { Fit, FitState, FitActionTypes, AppThunk } from '../types';
 
 // Actions
 export const CREATE_FIT_BEGIN = 'CREATE_FIT_BEGIN';

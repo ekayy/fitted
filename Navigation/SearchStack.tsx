@@ -8,14 +8,14 @@ import Fits from '../Containers/Fits';
 import Comments from '../Containers/Comments';
 import CommentSingle from '../Components/Comment/CommentSingle';
 
-import { Garment } from '../types';
+import { Garment, Fit } from '../types';
 import Camera from '../Containers/Camera';
 
 export type SearchStackParamList = {
   Search: undefined;
   'Garment Detail': Garment;
   'Fit Detail': { title: string } | undefined;
-  Fits: { title: string } | undefined;
+  Fits: { fits: Fit; garmentId: number };
   Comments: undefined;
   'Comment Single': undefined;
   Profile: { title: string } | undefined;

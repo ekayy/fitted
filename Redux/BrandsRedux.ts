@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { BrandState, BrandActionTypes, AppThunk } from './types';
+import { BrandState, BrandActionTypes, AppThunk } from '../types';
 
 // Actions
 export const FETCH_BRANDS_BEGIN = 'FETCH_BRANDS_BEGIN';
@@ -26,14 +26,14 @@ export default function brands(state = INITIAL_STATE, action: BrandActionTypes) 
       return {
         ...state,
         loading: false,
-        items: action.payload,
+        items: action.payload.items,
       };
 
     case FETCH_BRANDS_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.error,
       };
     default:
       return state;
@@ -45,14 +45,14 @@ export const fetchBrandsBegin = (): BrandActionTypes => ({
   type: FETCH_BRANDS_BEGIN,
 });
 
-export const fetchBrandsSuccess = (brands: BrandState): BrandActionTypes => ({
+export const fetchBrandsSuccess = ({ items }: BrandState): BrandActionTypes => ({
   type: FETCH_BRANDS_SUCCESS,
-  payload: brands,
+  payload: { items },
 });
 
-export const fetchBrandsFailure = (error: BrandState): BrandActionTypes => ({
+export const fetchBrandsFailure = ({ error }: BrandState): BrandActionTypes => ({
   type: FETCH_BRANDS_FAILURE,
-  payload: error,
+  payload: { error },
 });
 
 // side effects, only as applicable
