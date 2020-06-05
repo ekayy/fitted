@@ -75,7 +75,7 @@ export default function (state = INITIAL_STATE, action: UserActionTypes) {
         ...state,
         loading: false,
         error: null,
-        username: action.payload.username,
+        user: action.payload.user,
         favoriteGarments: action.payload.favoriteGarments,
         favoriteFits: action.payload.favoriteFits,
         height: action.payload.height,
