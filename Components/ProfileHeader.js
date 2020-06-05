@@ -60,12 +60,6 @@ class ProfileHeader extends Component {
             <Text style={styles.descriptionText}>Weight</Text>
             <Text style={styles.descriptionText}>{weight} lbs</Text>
           </View>
-          <View style={styles.descriptionItem}>
-            <Text style={styles.descriptionText}>Followers</Text>
-          </View>
-          <View style={styles.descriptionItem}>
-            <Text style={styles.descriptionText}>Following</Text>
-          </View>
         </View>
       </ImageBackground>
     );
