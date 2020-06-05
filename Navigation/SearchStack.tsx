@@ -8,7 +8,8 @@ import Fits from '../Containers/Fits';
 import Comments from '../Containers/Comments';
 import CommentSingle from '../Components/Comment/CommentSingle';
 
-import { Garment } from '../Redux/types';
+import { Garment } from '../types';
+import Camera from '../Containers/Camera';
 
 export type SearchStackParamList = {
   Search: undefined;
@@ -18,6 +19,7 @@ export type SearchStackParamList = {
   Comments: undefined;
   'Comment Single': undefined;
   Profile: { title: string } | undefined;
+  Camera: undefined;
 };
 
 const Stack = createStackNavigator<SearchStackParamList>();
@@ -48,6 +50,7 @@ const SearchStack = () => {
         component={Profile}
         options={({ route }) => ({ title: route.params!['username'] })}
       />
+      <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

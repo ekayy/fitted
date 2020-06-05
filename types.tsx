@@ -1,8 +1,13 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SearchStackParamList } from './Navigation/SearchStack';
+import { ProfileStackParamList } from './Navigation/ProfileStack';
 
-import { FETCH_BRANDS_BEGIN, FETCH_BRANDS_SUCCESS, FETCH_BRANDS_FAILURE } from './BrandsRedux';
+import {
+  FETCH_BRANDS_BEGIN,
+  FETCH_BRANDS_SUCCESS,
+  FETCH_BRANDS_FAILURE,
+} from './Redux/BrandsRedux';
 import {
   CREATE_FIT_BEGIN,
   CREATE_FIT_SUCCESS,
@@ -13,11 +18,11 @@ import {
   FETCH_FITS_BEGIN,
   FETCH_FITS_SUCCESS,
   FETCH_FITS_FAILURE,
-} from './FitsRedux';
+} from './Redux/FitsRedux';
 
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
-import { RootState } from './';
+import { RootState } from './Redux';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 
 type GarmentDetailRouteProp = RouteProp<SearchStackParamList, 'Garment Detail'>;
@@ -26,6 +31,14 @@ type GarmentDetailNavigationProp = StackNavigationProp<SearchStackParamList, 'Ga
 export type GarmentDetailProps = {
   route: GarmentDetailRouteProp;
   navigation: GarmentDetailNavigationProp;
+};
+
+type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
+type ProfileNavigationProp = StackNavigationProp<ProfileStackParamList, 'Profile'>;
+
+export type ProfileProps = {
+  route: ProfileRouteProp;
+  navigation: ProfileNavigationProp;
 };
 
 // https://redux.js.org/recipes/usage-with-typescript

@@ -4,9 +4,10 @@ import MyProfile from '../Containers/MyProfile';
 import ProfileSettings from '../Components/ProfileSettings';
 import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
+import { Profile } from '../types';
 
 export type ProfileStackParamList = {
-  Profile: undefined;
+  Profile: Profile;
   'Profile Settings': undefined;
   'Garment Detail': { title: string };
   'Fit Detail': { title: string };

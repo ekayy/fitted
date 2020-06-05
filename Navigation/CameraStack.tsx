@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import CreateDiscussion from '../Containers/CreateDiscussion';
+// import CreateDiscussion from '../Containers/CreateDiscussion';
 import Camera from '../Containers/Camera';
 import TagGarments from '../Containers/TagGarments';
 import SearchGarments from '../Containers/SearchGarments';
