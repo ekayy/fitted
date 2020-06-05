@@ -1,16 +1,15 @@
-import React, { useEffect, createRef } from 'react';
+import React, { useEffect, createRef, useRef } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import { fbAppId } from '../Config';
 import { login, fetchProfile, loginClearError } from '../Redux/UserRedux';
+import { LoginProps, useTypedSelector } from '../types';
 import * as Facebook from 'expo-facebook';
+import { fbAppId } from '../Config';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { MyTextInput } from '../Components/Forms/MyTextInput';
-
+import axios from 'axios';
 import styles from './Styles/LoginStyles';
-import { LoginProps, useTypedSelector } from '../types';
 
 interface LoginFormValues {
   username: string;
@@ -19,8 +18,11 @@ interface LoginFormValues {
 
 const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
   const dispatch = useDispatch();
+
+  // for focusing on next input
   const passwordInputRef = createRef<MyTextInput>();
 
+  // Load UserRedux
   const { profileId, error, loading, isLoggedIn } = useTypedSelector((state) => state.user);
 
   const initialValues: LoginFormValues = {
@@ -28,11 +30,19 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
     password: 'original',
   };
 
+  // for preventing hook running on initial load
+  const initialRender = useRef(true);
+
   // fetch profile if successful login
   useEffect(() => {
-    dispatch(fetchProfile(profileId));
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      dispatch(fetchProfile(profileId));
+    }
   }, [isLoggedIn]);
 
+  // TODO: fix facebook login flow
   const loginFb = async () => {
     try {
       await Facebook.initializeAsync(fbAppId);
