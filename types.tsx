@@ -30,6 +30,7 @@ import {
   FAVORITE_REQUEST,
   FAVORITE_SUCCESS,
   FAVORITE_FAILURE,
+  LOGIN_CLEAR_ERROR,
 } from './Redux/UserRedux';
 
 import { ThunkAction } from 'redux-thunk';
@@ -146,7 +147,6 @@ export interface UserState {
 
 export interface Profile {
   username: string;
-  password: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -267,6 +267,9 @@ interface LoginFailureAction {
 interface LogoutAction {
   type: typeof LOGOUT;
 }
+interface LoginClearErrorAction {
+  type: typeof LOGIN_CLEAR_ERROR;
+}
 
 interface ProfileRequestAction {
   type: typeof PROFILE_REQUEST;
@@ -297,6 +300,7 @@ export type UserActionTypes =
   | LoginSuccessAction
   | LoginFailureAction
   | LogoutAction
+  | LoginClearErrorAction
   | ProfileRequestAction
   | ProfileSuccessAction
   | ProfileFailureAction

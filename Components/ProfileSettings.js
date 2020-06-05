@@ -1,14 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { View, ScrollView } from "react-native";
-import { ListItem } from "react-native-elements";
-import { logout } from "../Redux/UserRedux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { View, ScrollView } from 'react-native';
+import { ListItem } from 'react-native-elements';
+import { logout } from '../Redux/UserRedux';
 
 class ProfileSettings extends Component {
   signOutAsync = async () => {
     this.props.logout();
-
-    this.props.navigation.navigate("Auth");
   };
 
   render() {
@@ -19,26 +17,26 @@ class ProfileSettings extends Component {
         <ListItem
           chevron
           title="Edit profile"
-          leftIcon={{ name: "ios-create", type: "ionicon" }}
+          leftIcon={{ name: 'ios-create', type: 'ionicon' }}
           onPress={() => {
-            navigate("ProfileSettingsEdit");
+            navigate('Profile Settings Edit');
           }}
         />
         <ListItem
           chevron
           title="Change password"
-          leftIcon={{ name: "ios-lock", type: "ionicon" }}
+          leftIcon={{ name: 'ios-lock', type: 'ionicon' }}
           onPress={() => {}}
         />
         <ListItem
           chevron
           title="Change email address"
-          leftIcon={{ name: "ios-mail", type: "ionicon" }}
+          leftIcon={{ name: 'ios-mail', type: 'ionicon' }}
           onPress={() => {}}
         />
         <ListItem
           title="Log out"
-          leftIcon={{ name: "ios-log-out", type: "ionicon" }}
+          leftIcon={{ name: 'ios-log-out', type: 'ionicon' }}
           onPress={this.signOutAsync}
         />
       </View>
@@ -46,7 +44,4 @@ class ProfileSettings extends Component {
   }
 }
 
-export default connect(
-  null,
-  { logout }
-)(ProfileSettings);
+export default connect(null, { logout })(ProfileSettings);

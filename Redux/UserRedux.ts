@@ -7,6 +7,7 @@ export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
+export const LOGIN_CLEAR_ERROR = 'LOGIN_CLEAR_ERROR';
 
 export const PROFILE_REQUEST = 'PROFILE_REQUEST';
 export const PROFILE_SUCCESS = 'PROFILE_SUCCESS';
@@ -17,16 +18,16 @@ export const FAVORITE_SUCCESS = 'FAVORITE_SUCCESS';
 export const FAVORITE_FAILURE = 'FAVORITE_FAILURE';
 
 export const INITIAL_STATE = {
-  loading: false,
   error: null,
-  token: null,
-  profileId: null,
-  user: null,
-  favoriteGarments: [],
   favoriteFits: [],
+  favoriteGarments: [],
   height: null,
-  weight: null,
   isLoggedIn: false,
+  loading: false,
+  profileId: null,
+  token: null,
+  user: null /* user's profile */,
+  weight: null,
 };
 
 // Reducer
@@ -55,9 +56,14 @@ export default function (state = INITIAL_STATE, action: UserActionTypes) {
         token: null,
         profileId: null,
       };
-
     case LOGOUT:
       return INITIAL_STATE;
+    case LOGIN_CLEAR_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
 
     case PROFILE_REQUEST:
       return {
@@ -68,8 +74,8 @@ export default function (state = INITIAL_STATE, action: UserActionTypes) {
       return {
         ...state,
         loading: false,
-        // error: null,
-        user: action.payload.user,
+        error: null,
+        username: action.payload.username,
         favoriteGarments: action.payload.favoriteGarments,
         favoriteFits: action.payload.favoriteFits,
         height: action.payload.height,
@@ -79,8 +85,8 @@ export default function (state = INITIAL_STATE, action: UserActionTypes) {
       return {
         ...state,
         loading: false,
-        // error: action.payload.error,
-        user: null,
+        error: action.payload.error,
+        username: null,
         favoriteGarments: [],
         favoriteFits: [],
         height: null,
@@ -186,6 +192,9 @@ export const loginFailure = (error: UserState): UserActionTypes => ({
 });
 export const logout = (): UserActionTypes => ({
   type: LOGOUT,
+});
+export const loginClearError = (): UserActionTypes => ({
+  type: LOGIN_CLEAR_ERROR,
 });
 
 export const profileRequest = (): UserActionTypes => ({
@@ -408,4 +417,4 @@ export const favoriteFit = (id, userParams): AppThunk => async (dispatch) => {
 
 // Selectors
 // Is the current user logged in?
-// export const isLoggedIn = loginState => loginState.username !== null;
+export const isLoggedIn = (loginState) => loginState.username !== null;

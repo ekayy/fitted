@@ -7,8 +7,7 @@ import styles from './Styles/ProfileHeaderStyles';
 class ProfileHeader extends Component {
   render() {
     const { navigate } = this.props.navigation;
-    const { height, weight, profile } = this.props.user;
-    const { username, first_name, last_name } = profile;
+    const { height, weight, user } = this.props.user;
 
     const feetFromInches = Math.floor(height / 12);
     const inchesRemainder = height % 12;
@@ -18,21 +17,18 @@ class ProfileHeader extends Component {
       <ImageBackground
         source={{
           uri:
-            'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&h=350'
+            'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&h=350',
         }}
         style={styles.backgroundImage}
       >
-        <TouchableOpacity
-          onPress={() => navigate('ProfileSettings')}
-          style={styles.settingsIcon}
-        >
+        <TouchableOpacity onPress={() => navigate('Profile Settings')} style={styles.settingsIcon}>
           <View>
             <Ionicons
               name="ios-settings"
               size={20}
               color="#fff"
               style={{
-                backgroundColor: 'transparent'
+                backgroundColor: 'transparent',
               }}
             />
           </View>
@@ -52,7 +48,7 @@ class ProfileHeader extends Component {
           <Text style={styles.headerText}>
             {first_name} {last_name}
           </Text>*/}
-          <Text style={styles.headerText}>@{username}</Text>
+          <Text style={styles.headerText}>@{user && user['username']}</Text>
         </View>
 
         <View style={styles.descriptionContainer}>
