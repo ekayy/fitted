@@ -8,14 +8,16 @@ import Fits from '../Containers/Fits';
 import Comments from '../Containers/Comments';
 import CommentSingle from '../Components/Comment/CommentSingle';
 
+import { Garment } from '../Redux/types';
+
 export type SearchStackParamList = {
   Search: undefined;
-  'Garment Detail': { title: string } | undefined;
+  'Garment Detail': Garment;
   'Fit Detail': { title: string } | undefined;
   Fits: { title: string } | undefined;
   Comments: undefined;
   'Comment Single': undefined;
-  Profile: undefined;
+  Profile: { title: string } | undefined;
 };
 
 const Stack = createStackNavigator<SearchStackParamList>();
@@ -27,24 +29,24 @@ const SearchStack = () => {
       <Stack.Screen
         name="Garment Detail"
         component={GarmentDetail}
-        options={({ route }) => ({ title: route.params['model'] })}
+        options={({ route }) => ({ title: route.params!['model'] })}
       />
       <Stack.Screen
         name="Fit Detail"
         component={FitDetail}
-        options={({ route }) => ({ title: route.params['username'] })}
+        options={({ route }) => ({ title: route.params!['username'] })}
       />
       <Stack.Screen
         name="Fits"
         component={Fits}
-        options={({ route }) => ({ title: route.params['model'] })}
+        options={({ route }) => ({ title: route.params!['model'] })}
       />
       <Stack.Screen name="Comments" component={Comments} />
       <Stack.Screen name="Comment Single" component={CommentSingle} />
       <Stack.Screen
         name="Profile"
         component={Profile}
-        options={({ route }) => ({ title: route.params['username'] })}
+        options={({ route }) => ({ title: route.params!['username'] })}
       />
     </Stack.Navigator>
   );

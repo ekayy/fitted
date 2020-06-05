@@ -1,39 +1,39 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
+import { BrandState, BrandActionTypes, AppThunk } from './types';
 
 // Actions
-const FETCH_BRANDS_BEGIN = 'FETCH_BRANDS_BEGIN';
-const FETCH_BRANDS_SUCCESS = 'FETCH_BRANDS_SUCCESS';
-const FETCH_BRANDS_FAILURE = 'FETCH_BRANDS_FAILURE';
+export const FETCH_BRANDS_BEGIN = 'FETCH_BRANDS_BEGIN';
+export const FETCH_BRANDS_SUCCESS = 'FETCH_BRANDS_SUCCESS';
+export const FETCH_BRANDS_FAILURE = 'FETCH_BRANDS_FAILURE';
 
 export const INITIAL_STATE = {
   items: [],
   loading: false,
-  error: null
+  error: null,
 };
 
 // Reducer
-export default function brands(state = INITIAL_STATE, action = {}) {
+export default function brands(state = INITIAL_STATE, action: BrandActionTypes) {
   switch (action.type) {
     case FETCH_BRANDS_BEGIN:
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case FETCH_BRANDS_SUCCESS:
       return {
         ...state,
         loading: false,
-        items: action.payload.brands
+        items: action.payload,
       };
 
     case FETCH_BRANDS_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
-        items
+        error: action.payload,
       };
     default:
       return state;
@@ -41,23 +41,23 @@ export default function brands(state = INITIAL_STATE, action = {}) {
 }
 
 // Action Creators
-export const fetchBrandsBegin = () => ({
-  type: FETCH_BRANDS_BEGIN
+export const fetchBrandsBegin = (): BrandActionTypes => ({
+  type: FETCH_BRANDS_BEGIN,
 });
 
-export const fetchBrandsSuccess = brands => ({
+export const fetchBrandsSuccess = (brands: BrandState): BrandActionTypes => ({
   type: FETCH_BRANDS_SUCCESS,
-  payload: { brands }
+  payload: brands,
 });
 
-export const fetchBrandsFailure = error => ({
+export const fetchBrandsFailure = (error: BrandState): BrandActionTypes => ({
   type: FETCH_BRANDS_FAILURE,
-  payload: { error }
+  payload: error,
 });
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export const fetchBrands = () => async dispatch => {
+export const fetchBrands = (): AppThunk => async (dispatch) => {
   dispatch(fetchBrandsBegin());
 
   try {

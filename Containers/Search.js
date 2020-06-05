@@ -65,6 +65,7 @@ class Search extends Component {
   createBrandTable() {
     const { brands } = this.props;
     const { brandTable, garments } = this.state;
+
     brands.forEach((brand) => {
       brandTable[brand.name] = [];
     });

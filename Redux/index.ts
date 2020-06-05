@@ -14,7 +14,7 @@ import brands from './BrandsRedux';
 // const storage = createSecureStore();
 const persistConfig = {
   key: 'root',
-  storage
+  storage,
 };
 
 /* ------------- Assemble The Reducers ------------- */
@@ -23,8 +23,10 @@ const rootReducer = combineReducers({
   garments,
   fits,
   comments,
-  brands
+  brands,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
