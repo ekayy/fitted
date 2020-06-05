@@ -19,11 +19,24 @@ import {
   FETCH_FITS_SUCCESS,
   FETCH_FITS_FAILURE,
 } from './Redux/FitsRedux';
+import {
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT,
+  PROFILE_REQUEST,
+  PROFILE_SUCCESS,
+  PROFILE_FAILURE,
+  FAVORITE_REQUEST,
+  FAVORITE_SUCCESS,
+  FAVORITE_FAILURE,
+} from './Redux/UserRedux';
 
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 import { RootState } from './Redux';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
+import { AuthParamList } from './Navigation/AuthStack';
 
 type GarmentDetailRouteProp = RouteProp<SearchStackParamList, 'Garment Detail'>;
 type GarmentDetailNavigationProp = StackNavigationProp<SearchStackParamList, 'Garment Detail'>;
@@ -33,12 +46,28 @@ export type GarmentDetailProps = {
   navigation: GarmentDetailNavigationProp;
 };
 
+type FitsRouteProp = RouteProp<SearchStackParamList, 'Fits'>;
+type FitsNavigationProp = StackNavigationProp<SearchStackParamList, 'Fits'>;
+
+export type FitsProps = {
+  route: FitsRouteProp;
+  navigation: FitsNavigationProp;
+};
+
 type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
 type ProfileNavigationProp = StackNavigationProp<ProfileStackParamList, 'Profile'>;
 
 export type ProfileProps = {
   route: ProfileRouteProp;
   navigation: ProfileNavigationProp;
+};
+
+type LoginRouteProp = RouteProp<AuthParamList, 'Login'>;
+type LoginNavigationProp = StackNavigationProp<AuthParamList, 'Login'>;
+
+export type LoginProps = {
+  route: LoginRouteProp;
+  navigation: LoginNavigationProp;
 };
 
 // https://redux.js.org/recipes/usage-with-typescript
@@ -56,6 +85,12 @@ export interface Brand {
   name: string;
 }
 
+export interface BrandState {
+  error?: string;
+  loading?: boolean;
+  items?: Brand[];
+}
+
 export interface Garment {
   id: number;
   color: string;
@@ -66,6 +101,12 @@ export interface Garment {
   photo: string;
   purchase_page: string;
   comments: Comment[];
+}
+
+export interface GarmentState {
+  items: Garment[];
+  loading: boolean;
+  error: string;
 }
 
 export interface Fit {
@@ -81,17 +122,26 @@ export interface Fit {
   weight: number;
 }
 
-export interface User {
-  error: string;
-  token: string;
-  profileId: number;
-  isLoggedIn: boolean;
-  height: number;
-  weight: number;
+export interface FitState {
+  createdFit: Boolean;
+  taggedGarments: number[];
   loading: boolean;
-  profile: Profile;
-  favoriteGarments: number[];
-  favoriteFits: number[];
+  error: string;
+  garmentId: number;
+  items: Fit[];
+}
+
+export interface UserState {
+  error?: string;
+  token?: string;
+  profileId?: number;
+  isLoggedIn?: boolean;
+  height?: number;
+  weight?: number;
+  loading?: boolean;
+  user?: Profile;
+  favoriteGarments?: number[];
+  favoriteFits?: number[];
 }
 
 export interface Profile {
@@ -111,6 +161,13 @@ export interface Comment {
   created_date: string;
 }
 
+export interface CommentState {
+  error: string;
+  loading: boolean;
+  items: Comment[];
+  content: string;
+}
+
 export interface Reply {
   id: number;
   created_date: string;
@@ -119,34 +176,6 @@ export interface Reply {
   content: string;
   upvotes: number;
   downvotes: number;
-}
-
-export interface BrandState {
-  error: string;
-  loading: boolean;
-  items: Brand[];
-}
-
-export interface CommentState {
-  error: string;
-  loading: boolean;
-  items: Comment[];
-  content: string;
-}
-
-export interface GarmentState {
-  items: Garment[];
-  loading: boolean;
-  error: string;
-}
-
-export interface FitState {
-  createdFit: Boolean;
-  taggedGarments: number[];
-  loading: boolean;
-  error: string;
-  garmentId: number;
-  items: Fit[];
 }
 
 // Action Creator Types
@@ -223,3 +252,54 @@ export type FitActionTypes =
   | FetchFitsBeginAction
   | FetchFitsSuccessAction
   | FetchFitsFailureAction;
+
+interface LoginRequestAction {
+  type: typeof LOGIN_REQUEST;
+}
+interface LoginSuccessAction {
+  type: typeof LOGIN_SUCCESS;
+  payload: UserState;
+}
+interface LoginFailureAction {
+  type: typeof LOGIN_FAILURE;
+  payload: UserState;
+}
+interface LogoutAction {
+  type: typeof LOGOUT;
+}
+
+interface ProfileRequestAction {
+  type: typeof PROFILE_REQUEST;
+}
+interface ProfileSuccessAction {
+  type: typeof PROFILE_SUCCESS;
+  payload: UserState;
+}
+interface ProfileFailureAction {
+  type: typeof PROFILE_FAILURE;
+  payload: UserState;
+}
+
+interface FavoriteRequestAction {
+  type: typeof FAVORITE_REQUEST;
+}
+interface FavoriteSuccessAction {
+  type: typeof FAVORITE_SUCCESS;
+  payload: UserState;
+}
+interface FavoriteFailureAction {
+  type: typeof FAVORITE_FAILURE;
+  payload: UserState;
+}
+
+export type UserActionTypes =
+  | LoginRequestAction
+  | LoginSuccessAction
+  | LoginFailureAction
+  | LogoutAction
+  | ProfileRequestAction
+  | ProfileSuccessAction
+  | ProfileFailureAction
+  | FavoriteRequestAction
+  | FavoriteSuccessAction
+  | FavoriteFailureAction;

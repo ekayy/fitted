@@ -1,17 +1,16 @@
 {
   "expo": {
     "name": "fitted-client",
-    "description": "This project is really great.",
+    "description": "",
     "slug": "fitted-client",
     "privacy": "public",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "facebookAppId": 311869955951444,
+    "facebookDisplayName": "fitted"
   }
 }

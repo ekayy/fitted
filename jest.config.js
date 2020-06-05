@@ -14,4 +14,5 @@ module.exports = {
     },
   },
   modulePaths: ['<rootDir>'],
+  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
 };
