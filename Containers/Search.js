@@ -230,7 +230,7 @@ class Search extends Component {
           />
         ) : (
           <View>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator style={{ marginTop: 20 }} size="large" color="#0000ff" />
           </View>
         )}
       </StyledContainer>
@@ -284,7 +284,7 @@ const VerticalDivider = styled.View`
 
 const styles = {
   searchBarContainer: {
-    backgroundColor: 'rgb(0,0,0)',
+    backgroundColor: '#f1f1f1',
     paddingVertical: 10,
     marginTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
   },
