@@ -31,6 +31,8 @@ import {
   FAVORITE_SUCCESS,
   FAVORITE_FAILURE,
   LOGIN_CLEAR_ERROR,
+  FAVORITE_ITEM,
+  UNFAVORITE_ITEM,
 } from './Redux/UserRedux';
 
 import { ThunkAction } from 'redux-thunk';
@@ -106,9 +108,9 @@ export interface Brand {
 }
 
 export interface BrandState {
-  error?: string;
-  loading?: boolean;
-  items?: Brand[];
+  error: string | null;
+  loading: boolean;
+  items: Brand[];
 }
 
 export interface Garment {
@@ -126,7 +128,8 @@ export interface Garment {
 export interface GarmentState {
   items: Garment[];
   loading: boolean;
-  error: string;
+  error: string | null;
+  fitGarments: Garment[];
 }
 
 export interface Fit {
@@ -143,25 +146,26 @@ export interface Fit {
 }
 
 export interface FitState {
-  createdFit: Boolean;
-  taggedGarments: number[];
-  loading: boolean;
-  error: string;
-  garmentId: number;
+  createdFit: boolean | null;
+  error: string | null;
+  garmentId: number | null;
   items: Fit[];
+  loading: boolean;
+  taggedGarments: number[];
 }
 
 export interface UserState {
-  error?: string;
-  token?: string;
-  profileId?: number;
-  isLoggedIn?: boolean;
-  height?: number;
-  weight?: number;
-  loading?: boolean;
-  user?: Profile;
-  favoriteGarments?: number[];
-  favoriteFits?: number[];
+  error: string | null;
+  favoriteFits: number[];
+  favoriteGarments: number[];
+  height: number | null;
+  isFavorite: boolean;
+  isLoggedIn: boolean;
+  loading: boolean;
+  profileId: number | null;
+  token: string | null;
+  user: Profile | null;
+  weight: number | null;
 }
 
 export interface Profile {
@@ -195,6 +199,18 @@ export interface Reply {
   content: string;
   upvotes: number;
   downvotes: number;
+}
+
+export interface FavoriteGarmentParams {
+  token: string;
+  profileId: number;
+  favoriteGarments: number[];
+}
+
+export interface FavoriteFitParams {
+  token: string;
+  profileId: number;
+  favoriteFits: number[];
 }
 
 // Action Creator Types
@@ -241,7 +257,7 @@ interface ClearCreatedFitAction {
 
 interface TagGarmentToFitAction {
   type: typeof TAG_GARMENT_TO_FIT;
-  payload: FitState;
+  payload: number;
 }
 
 interface RemoveGarmentFromFitAction {
@@ -289,7 +305,7 @@ interface FetchFitGarmentsBeginAction {
 }
 interface FetchFitGarmentsSuccessAction {
   type: typeof FETCH_FIT_GARMENTS_SUCCESS;
-  payload: GarmentState;
+  payload: Garment[];
 }
 interface FetchFitGarmentsFailureAction {
   type: typeof FETCH_FIT_GARMENTS_FAILURE;
@@ -323,11 +339,11 @@ interface LoginRequestAction {
 }
 interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
-  payload: UserState;
+  payload: Pick<UserState, 'token' | 'profileId'>;
 }
 interface LoginFailureAction {
   type: typeof LOGIN_FAILURE;
-  payload: UserState;
+  payload: Pick<UserState, 'error'>;
 }
 interface LogoutAction {
   type: typeof LOGOUT;
@@ -341,11 +357,11 @@ interface ProfileRequestAction {
 }
 interface ProfileSuccessAction {
   type: typeof PROFILE_SUCCESS;
-  payload: UserState;
+  payload: Pick<UserState, 'user' | 'favoriteGarments' | 'favoriteFits' | 'height' | 'weight'>;
 }
 interface ProfileFailureAction {
   type: typeof PROFILE_FAILURE;
-  payload: UserState;
+  payload: Pick<UserState, 'error'>;
 }
 
 interface FavoriteRequestAction {
@@ -353,10 +369,19 @@ interface FavoriteRequestAction {
 }
 interface FavoriteSuccessAction {
   type: typeof FAVORITE_SUCCESS;
-  payload: UserState;
+  payload: Pick<UserState, 'favoriteGarments' | 'favoriteFits'>;
 }
 interface FavoriteFailureAction {
   type: typeof FAVORITE_FAILURE;
+  payload: Pick<UserState, 'error'>;
+}
+
+interface FavoriteItemAction {
+  type: typeof FAVORITE_ITEM;
+  payload: UserState;
+}
+interface UnfavoriteItemAction {
+  type: typeof UNFAVORITE_ITEM;
   payload: UserState;
 }
 
@@ -371,4 +396,6 @@ export type UserActionTypes =
   | ProfileFailureAction
   | FavoriteRequestAction
   | FavoriteSuccessAction
-  | FavoriteFailureAction;
+  | FavoriteFailureAction
+  | FavoriteItemAction
+  | UnfavoriteItemAction;

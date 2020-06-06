@@ -24,10 +24,10 @@ const rootReducer = combineReducers({
   brands,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export default () => {
   return configureStore(persistedReducer);
 };
+
+export type RootState = ReturnType<typeof rootReducer>;

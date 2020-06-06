@@ -22,7 +22,7 @@ export const SYNC_GARMENT_COMMENT_REPLIES = 'SYNC_GARMENT_COMMENT_REPLIES';
 // const FETCH_GARMENT_FITS_SUCCESS = 'FETCH_GARMENT_FITS_SUCCESS';
 // const FETCH_GARMENT_FITS_FAILURE = 'FETCH_GARMENT_FITS_FAILURE';
 
-export const INITIAL_STATE = {
+export const INITIAL_STATE: GarmentState = {
   items: [],
   loading: false,
   error: null,
@@ -30,7 +30,7 @@ export const INITIAL_STATE = {
 };
 
 // Reducer
-export default function garments(state = INITIAL_STATE, action: GarmentActionTypes) {
+export default function garments(state = INITIAL_STATE, action: GarmentActionTypes): GarmentState {
   switch (action.type) {
     case FETCH_GARMENTS_BEGIN:
       return {
@@ -174,7 +174,7 @@ export const fetchFitGarmentsBegin = (): GarmentActionTypes => ({
   type: FETCH_FIT_GARMENTS_BEGIN,
 });
 
-export const fetchFitGarmentsSuccess = (garments: GarmentState): GarmentActionTypes => ({
+export const fetchFitGarmentsSuccess = (garments: Garment[]): GarmentActionTypes => ({
   type: FETCH_FIT_GARMENTS_SUCCESS,
   payload: garments,
 });
@@ -228,10 +228,8 @@ export const syncGarmentCommentReplies = (reply, objectId) => ({
 // e.g. thunks, epics, etc
 export const fetchGarments = (): AppThunk => async (dispatch) => {
   dispatch(fetchGarmentsBegin());
-
   try {
     const res = await axios.get(`${baseURL}/garments/?limit=5000`);
-
     dispatch(fetchGarmentsSuccess(res.data.results));
   } catch (error) {
     dispatch(fetchGarmentsFailure(error));
@@ -242,25 +240,16 @@ export const fetchFitGarments = (garments: number[]): AppThunk => async (dispatc
   dispatch(fetchFitGarmentsBegin());
 
   try {
-    const result = await Promise.all(
+    const response = await Promise.all(
       garments.map(async (garmentId) => {
         const response = await axios.get(`${baseURL}/garments/${garmentId}`);
         return response.data;
       }),
     );
-
-    dispatch(fetchFitGarmentsSuccess(result));
+    dispatch(fetchFitGarmentsSuccess(response));
   } catch (error) {
     dispatch(fetchFitGarmentsFailure(error));
   }
-
-  // try {
-  //   const res = await axios.get(`${baseURL}/garments/?limit=5000`);
-
-  //   dispatch(fetchFitGarmentsSuccess(res.data.results));
-  // } catch (error) {
-  //   dispatch(fetchFitGarmentsFailure(error));
-  // }
 };
 
 export const createGarment = ({ brand, color, model }): AppThunk => async (dispatch) => {

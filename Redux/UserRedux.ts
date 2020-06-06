@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { UserActionTypes, UserState, AppThunk } from '../types';
+import { UserActionTypes, UserState, AppThunk, FavoriteGarmentParams } from '../types';
 
 // Actions
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -17,11 +17,15 @@ export const FAVORITE_REQUEST = 'FAVORITE_REQUEST';
 export const FAVORITE_SUCCESS = 'FAVORITE_SUCCESS';
 export const FAVORITE_FAILURE = 'FAVORITE_FAILURE';
 
-export const INITIAL_STATE = {
+export const FAVORITE_ITEM = 'FAVORITE_ITEM';
+export const UNFAVORITE_ITEM = 'UNFAVORITE_ITEM';
+
+export const INITIAL_STATE: UserState = {
   error: null,
   favoriteFits: [],
   favoriteGarments: [],
   height: null,
+  isFavorite: false,
   isLoggedIn: false,
   loading: false,
   profileId: null,
@@ -31,7 +35,7 @@ export const INITIAL_STATE = {
 };
 
 // Reducer
-export default function (state = INITIAL_STATE, action: UserActionTypes) {
+export default function (state = INITIAL_STATE, action: UserActionTypes): UserState {
   switch (action.type) {
     case LOGIN_REQUEST:
       return {
@@ -52,7 +56,7 @@ export default function (state = INITIAL_STATE, action: UserActionTypes) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.error,
         token: null,
         profileId: null,
       };
@@ -86,7 +90,7 @@ export default function (state = INITIAL_STATE, action: UserActionTypes) {
         ...state,
         loading: false,
         error: action.payload.error,
-        username: null,
+        user: null,
         favoriteGarments: [],
         favoriteFits: [],
         height: null,
@@ -103,14 +107,25 @@ export default function (state = INITIAL_STATE, action: UserActionTypes) {
         ...state,
         loading: false,
         error: null,
-        favoriteGarments: [...action.payload.favorite_garments],
-        favoriteFits: [...action.payload.favorite_fits],
+        favoriteGarments: action.payload.favoriteGarments,
+        favoriteFits: action.payload.favoriteFits,
       };
     case FAVORITE_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload.error,
+      };
+
+    case FAVORITE_ITEM:
+      return {
+        ...state,
+        isFavorite: true,
+      };
+    case UNFAVORITE_ITEM:
+      return {
+        ...state,
+        isFavorite: false,
       };
 
     // case FETCH_MY_FITS_BEGIN:
@@ -186,9 +201,9 @@ export const loginSuccess = ({ token, profileId }: UserState): UserActionTypes =
   type: LOGIN_SUCCESS,
   payload: { token, profileId },
 });
-export const loginFailure = (error: UserState): UserActionTypes => ({
+export const loginFailure = ({ error }: UserState): UserActionTypes => ({
   type: LOGIN_FAILURE,
-  payload: error,
+  payload: { error },
 });
 export const logout = (): UserActionTypes => ({
   type: LOGOUT,
@@ -215,19 +230,26 @@ export const profileFailure = ({ error }: UserState): UserActionTypes => ({
   payload: { error },
 });
 
-export const favoriteFailure = ({ error }: UserState): UserActionTypes => ({
-  type: FAVORITE_FAILURE,
-  payload: { error },
-});
 export const favoriteRequest = (): UserActionTypes => ({
   type: FAVORITE_REQUEST,
 });
 export const favoriteSuccess = ({
   favoriteGarments,
   favoriteFits,
-}: UserState): UserActionTypes => ({
+}: Pick<UserState, 'favoriteGarments' | 'favoriteFits'>): UserActionTypes => ({
   type: FAVORITE_SUCCESS,
   payload: { favoriteGarments, favoriteFits },
+});
+export const favoriteFailure = ({ error }: Pick<UserState, 'error'>): UserActionTypes => ({
+  type: FAVORITE_FAILURE,
+  payload: { error },
+});
+
+export const favoriteItem = () => ({
+  type: FAVORITE_ITEM,
+});
+export const unfavoriteItem = () => ({
+  type: UNFAVORITE_ITEM,
 });
 
 // export const fetchMyFitsBegin = () => ({
@@ -276,10 +298,8 @@ export const login = (username, password): AppThunk => async (dispatch) => {
       username,
       password,
     });
-
     // resolve python and js naming differences
     const { token, profile_id: profileId } = response.data;
-
     dispatch(loginSuccess({ token, profileId }));
   } catch (error) {
     dispatch(loginFailure(error.response.data['non_field_errors'][0]));
@@ -309,71 +329,71 @@ export const fetchProfile = (profileId: number): AppThunk => async (dispatch) =>
 };
 
 // favorite or unfavorite
-export const favoriteGarment = (id, userParams): AppThunk => async (dispatch) => {
+export const favoriteGarment = (
+  id: number,
+  userParams: Pick<UserState, 'token' | 'profileId' | 'favoriteGarments'>,
+): AppThunk => async (dispatch) => {
   const { token, profileId, favoriteGarments } = userParams;
-  let favorites = [];
+  let favorites: number[] = [];
 
   dispatch(favoriteRequest());
 
   if (favoriteGarments.includes(id)) {
     // Unfavoriting
-    let filteredGarments = favoriteGarments.filter((garmentId) => garmentId !== id);
-
-    favorites = [...filteredGarments];
+    favorites = favoriteGarments.filter((garmentId) => garmentId !== id);
+    dispatch(unfavoriteItem());
   } else {
     // Favoriting, so add id
     favorites = [...favoriteGarments, id];
+    dispatch(favoriteItem());
   }
 
   try {
-    const res = await axios.patch(
+    const response = await axios.patch(
       `${baseURL}/profiles/${profileId}/`,
-      {
-        favorite_garments: favorites,
-      },
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      },
+      { favorite_garments: favorites },
+      { headers: { Authorization: `Token ${token}` } },
     );
 
-    dispatch(favoriteSuccess(res.data));
+    // resolve python and js naming
+    const { favorite_garments: favoriteGarments, favorite_fits: favoriteFits } = response.data;
+
+    dispatch(favoriteSuccess({ favoriteGarments, favoriteFits }));
   } catch (error) {
     dispatch(favoriteFailure(error));
   }
 };
 
-export const favoriteFit = (id, userParams): AppThunk => async (dispatch) => {
+export const favoriteFit = (
+  id: number,
+  userParams: Pick<UserState, 'token' | 'profileId' | 'favoriteFits'>,
+): AppThunk => async (dispatch) => {
   const { token, profileId, favoriteFits } = userParams;
-  let favorites = [];
+  let favorites: number[] = [];
 
   dispatch(favoriteRequest());
 
   if (favoriteFits.includes(id)) {
     // Unfavoriting
-    let filteredFits = favoriteFits.filter((fitId) => fitId !== id);
-
-    favorites = [...filteredFits];
+    favorites = favoriteFits.filter((garmentId) => garmentId !== id);
+    dispatch(unfavoriteItem());
   } else {
     // Favoriting, so add id
     favorites = [...favoriteFits, id];
+    dispatch(favoriteItem());
   }
 
   try {
-    const res = await axios.patch(
+    const response = await axios.patch(
       `${baseURL}/profiles/${profileId}/`,
-      {
-        favorite_fits: favorites,
-      },
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      },
+      { favorite_fits: favorites },
+      { headers: { Authorization: `Token ${token}` } },
     );
 
-    dispatch(favoriteSuccess(res.data));
+    // resolve python and js naming
+    const { favorite_garments: favoriteGarments, favorite_fits: favoriteFits } = response.data;
+
+    dispatch(favoriteSuccess({ favoriteGarments, favoriteFits }));
   } catch (error) {
     dispatch(favoriteFailure(error));
   }
@@ -417,4 +437,4 @@ export const favoriteFit = (id, userParams): AppThunk => async (dispatch) => {
 
 // Selectors
 // Is the current user logged in?
-export const isLoggedIn = (loginState) => loginState.username !== null;
+// export const isLoggedIn = (loginState) => loginState.username !== null;

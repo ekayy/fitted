@@ -13,17 +13,17 @@ export const FETCH_FITS_BEGIN = 'FETCH_FITS_BEGIN';
 export const FETCH_FITS_SUCCESS = 'FETCH_FITS_SUCCESS';
 export const FETCH_FITS_FAILURE = 'FETCH_FITS_FAILURE';
 
-export const INITIAL_STATE = {
+export const INITIAL_STATE: FitState = {
   createdFit: null,
-  garmentId: null,
-  taggedGarments: [],
-  loading: false,
   error: null,
+  garmentId: null,
   items: [],
+  loading: false,
+  taggedGarments: [],
 };
 
 // Reducer
-export default function fits(state = INITIAL_STATE, action: FitActionTypes) {
+export default function fits(state = INITIAL_STATE, action: FitActionTypes): FitState {
   switch (action.type) {
     case FETCH_FITS_BEGIN:
       return {
@@ -125,7 +125,7 @@ export const clearCreatedFit = (): FitActionTypes => ({
   type: CLEAR_CREATED_FIT,
 });
 
-export const tagGarmentToFit = (garmentId: FitState): FitActionTypes => ({
+export const tagGarmentToFit = (garmentId: number): FitActionTypes => ({
   type: TAG_GARMENT_TO_FIT,
   payload: garmentId,
 });

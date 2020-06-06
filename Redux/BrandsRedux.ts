@@ -7,14 +7,14 @@ export const FETCH_BRANDS_BEGIN = 'FETCH_BRANDS_BEGIN';
 export const FETCH_BRANDS_SUCCESS = 'FETCH_BRANDS_SUCCESS';
 export const FETCH_BRANDS_FAILURE = 'FETCH_BRANDS_FAILURE';
 
-export const INITIAL_STATE = {
+export const INITIAL_STATE: BrandState = {
   items: [],
   loading: false,
   error: null,
 };
 
 // Reducer
-export default function brands(state = INITIAL_STATE, action: BrandActionTypes) {
+export default function brands(state = INITIAL_STATE, action: BrandActionTypes): BrandState {
   switch (action.type) {
     case FETCH_BRANDS_BEGIN:
       return {
