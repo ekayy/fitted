@@ -18,8 +18,6 @@ import { useTypedSelector } from '../types';
 const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
   const { id: fitId, photo, height, weight, garments } = route.params;
 
-  console.log(garments);
-
   const feet = parseInt(height / 12);
   const inches = height % 12;
   const convertedHeight = `${feet}"${inches}'`;
