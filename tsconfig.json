@@ -13,7 +13,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "lib": ["dom", "esnext"],
+    "lib": ["dom", "esnext", "es2017"],
     "noEmit": true,
     "skipLibCheck": true,
     "esModuleInterop": true
