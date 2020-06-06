@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
 import { Button, Avatar } from 'react-native-elements';
 import Carousel from 'react-native-snap-carousel';
@@ -11,51 +11,68 @@ import FavoriteButton from '../Components/FavoriteButton';
 import CommentList from '../Components/Comment/CommentList';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { fetchFits, tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
-import { fetchBrands, fetchBrandsFailure } from '../Redux/BrandsRedux';
 import { fetchComments } from '../Redux/CommentsRedux';
 import { Ionicons } from '@expo/vector-icons';
-
-import { baseURL } from '../Config';
-import axios from 'axios';
 
 import { GarmentDetailProps } from '../types';
 import { useTypedSelector } from '../types';
 
-interface Brand {
-  category?: string[];
-  description?: string;
-  employeeNum?: string;
-  image?: string;
-  name?: string;
-  parent?: string[];
-  payRatio?: number;
-  taxRate?: number;
-  ticker?: string;
-}
-
-const GarmentDetail: React.FC = ({ route, navigation }: GarmentDetailProps) => {
+const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchFits(garmentId));
   }, []);
 
-  const { id: garmentId, color, sku, brand, model, photo, purchase_page } = route.params;
-  const { count } = useTypedSelector((state) => state.fits);
+  const {
+    id: garmentId,
+    color,
+    sku,
+    brand,
+    model,
+    photo,
+    purchase_page: purchasePage,
+  } = route.params;
+  const { items: fits } = useTypedSelector((state) => state.fits);
   const { items: brands } = useTypedSelector((state) => state.brands);
+  const user = useTypedSelector((state) => state.user);
   const brandName = brands[brand - 1]['name'];
 
+  // const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [garmentFits, setGarmentFits] = useState([]);
+  const [toggled, setToggled] = useState<boolean>(false);
+  // const [count, setCount] = useState<number>(0);
+
   const handleOpenWithWebBrowser = () => {
-    WebBrowser.openBrowserAsync(purchase_page);
+    WebBrowser.openBrowserAsync(purchasePage);
   };
 
   // photo taken will be associated with the current garment
   const addPhotoToFit = async () => {
-    const { navigate } = this.props.navigation;
-    const { clearCreatedFit, tagGarmentToFit } = this.props;
+    await dispatch(clearCreatedFit());
+    await dispatch(tagGarmentToFit(route.params));
+    navigation.navigate('Camera');
+  };
 
-    await clearCreatedFit();
-    await tagGarmentToFit(this.props.route.params);
-    navigate('Camera');
+  const _renderCarouselItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        style={styles.carouselItem}
+        onPress={() => navigation.navigate('Fit Detail', item)}
+      >
+        <Image style={styles.carouselImage} source={{ uri: item.photo }} />
+      </TouchableOpacity>
+    );
+  };
+
+  const getFavoriteState = () => {
+    const { favoriteGarments } = user;
+    favoriteGarments.includes(garmentId) ? setToggled(true) : setToggled(false);
+  };
+
+  const favoriteGarment = async () => {
+    await favoriteGarment(garmentId, user);
+    getFavoriteState();
   };
 
   return (
@@ -63,17 +80,16 @@ const GarmentDetail: React.FC = ({ route, navigation }: GarmentDetailProps) => {
       <View>
         <Image style={styles.image} source={{ uri: photo }} />
 
-        {/* <View style={styles.favorite}>
-          <FavoriteButton onPress={this.favoriteGarment} toggled={this.state.toggled} />
-          <Text>{this.state.fits.photo}</Text> 
-        </View> */}
+        <View style={styles.favorite}>
+          <FavoriteButton onPress={favoriteGarment} toggled={toggled} />
+        </View>
       </View>
 
       <View style={styles.descriptionSection}>
         <View style={styles.descriptionSectionLeft}>
           <Avatar size="small" rounded activeOpacity={0.7} />
           <View style={styles.descriptionText}>
-            <Text style={styles.label}>{brandName}</Text>
+            <Text style={styles.label}>{brandName !== null && brandName}</Text>
             <Text>{model}</Text>
           </View>
         </View>
@@ -108,40 +124,37 @@ const GarmentDetail: React.FC = ({ route, navigation }: GarmentDetailProps) => {
         />
       </View>
 
-      {/* <View style={AppStyles.section}>
+      <View style={AppStyles.section}>
         <View style={AppStyles.sectionTitle}>
           <Text style={AppStyles.sectionTitleText}>Photos</Text>
         </View>
 
-        <TouchableOpacity style={AppStyles.sectionSubtitle} onPress={this.addPhotoToFit}>
+        <TouchableOpacity style={AppStyles.sectionSubtitle} onPress={addPhotoToFit}>
           <Ionicons name="ios-camera" size={25} style={{ marginRight: 10, color: '#aaa' }} />
           <Text>Add a photo</Text>
         </TouchableOpacity>
 
         <Carousel
           activeSlideAlignment="start"
-          ref={(c) => {
-            this._carousel = c;
-          }}
-          data={garmentFits.slice(0, 10)}
-          renderItem={this._renderCarouselItem}
+          data={fits.slice(0, 10)}
+          renderItem={_renderCarouselItem}
           sliderWidth={Metrics.screenWidth - 20}
           itemWidth={(Metrics.screenWidth - 20) / 3}
           inactiveSlideScale={1}
           inactiveSlideOpacity={1}
         />
 
-        {count > 0 && (
+        {fits.count > 0 && (
           <View style={AppStyles.button}>
             <Button
-              title={`See all ${count} photos`}
+              title={`See all ${fits.count} photos`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigate('Fits', { garmentFits, id })}
+              onPress={() => navigation.navigate('Fits', { fits, garmentId })}
             />
           </View>
         )}
-      </View> */}
+      </View>
 
       {/* <View style={AppStyles.section}>
         <View style={AppStyles.sectionTitle}>
@@ -165,7 +178,7 @@ const GarmentDetail: React.FC = ({ route, navigation }: GarmentDetailProps) => {
             buttonStyle={[AppStyles.buttonAltStyle]}
             titleStyle={AppStyles.buttonAltTitleStyle}
             onPress={() =>
-              navigate('Comments', {
+              navigation.navigate('Comments', {
                 objectId: id,
                 contentType: 'garment',
               })
@@ -394,17 +407,18 @@ const GarmentDetail: React.FC = ({ route, navigation }: GarmentDetailProps) => {
   //   </ScrollView>
   // );
 };
-// }
 
-const mapStateToProps = ({ user, brands, comments }) => {
-  return { user, brands: brands.items, comments: comments.items };
-};
+// const mapStateToProps = ({ user, brands, comments }) => {
+//   return { user, brands: brands.items, comments: comments.items };
+// };
 
-export default connect(mapStateToProps, {
-  fetchFits,
-  fetchBrands,
-  favoriteGarment,
-  tagGarmentToFit,
-  clearCreatedFit,
-  fetchComments,
-})(GarmentDetail);
+// export default connect(mapStateToProps, {
+//   fetchFits,
+//   fetchBrands,
+//   favoriteGarment,
+//   tagGarmentToFit,
+//   clearCreatedFit,
+//   fetchComments,
+// })(GarmentDetail);
+
+export default GarmentDetail;

@@ -8,7 +8,7 @@ class GarmentsList extends Component {
     const { navigate } = this.props.navigation;
     const { numCol, brands } = this.props;
     const { id, color, model, sku, brand, photo } = item;
-    const brandName = brands[brand].name;
+    // const brandName = brands[brand - 1]['name'];
 
     return (
       <View style={styles.listItem}>
@@ -20,7 +20,7 @@ class GarmentsList extends Component {
           </TouchableOpacity>
 
           <View style={styles.description}>
-            <Text>{brandName}</Text>
+            {/* <Text>{brandName !== null && brandName}</Text> */}
             <Text>{model}</Text>
             <Text>{color}</Text>
           </View>
@@ -28,7 +28,7 @@ class GarmentsList extends Component {
 
         <TouchableOpacity
           style={AppStyles.sectionSubtitle}
-          onPress={() => navigate('GarmentDetail', item)}
+          onPress={() => navigate('Garment Detail', item)}
         >
           <View style={styles.button}>
             <Text style={styles.buttonText}>Explore Item</Text>
@@ -39,14 +39,16 @@ class GarmentsList extends Component {
   }
 
   render() {
-    const { data, numColumns } = this.props;
+    const { data, numColumns, ListHeaderComponent, ListFooterComponent } = this.props;
     return (
       <FlatList
         data={data}
         keyExtractor={(item, index) => index.toString()}
         numColumns={1}
         renderItem={({ item }) => this.renderGarment(item)}
-        scrollEnabled={false}
+        scrollEnabled={true}
+        ListHeaderComponent={ListHeaderComponent}
+        ListFooterComponent={ListFooterComponent}
       />
     );
   }
@@ -59,35 +61,35 @@ const styles = {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     paddingBottom: 20,
-    marginLeft: 10
+    marginLeft: 10,
   },
   imageContainer: {
     flex: 1,
     width: 120,
-    height: 120
+    height: 120,
   },
   image: {
-    height: 120
+    height: 120,
   },
   description: {
     flex: 1,
     justifyContent: 'flex-start',
-    marginLeft: 20
+    marginLeft: 20,
   },
 
   leftCol: {
     flex: 1,
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   button: {
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 6,
     backgroundColor: '#000',
-    marginRight: 10
+    marginRight: 10,
   },
-  buttonText: { color: '#fff' }
+  buttonText: { color: '#fff' },
 };
 
 export default GarmentsList;

@@ -38,6 +38,17 @@ import { Action } from 'redux';
 import { RootState } from './Redux';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import { AuthParamList } from './Navigation/AuthStack';
+import {
+  FETCH_GARMENTS_BEGIN,
+  FETCH_GARMENTS_SUCCESS,
+  FETCH_GARMENTS_FAILURE,
+  CREATE_GARMENT_BEGIN,
+  CREATE_GARMENT_SUCCESS,
+  CREATE_GARMENT_FAILURE,
+  FETCH_FIT_GARMENTS_BEGIN,
+  FETCH_FIT_GARMENTS_SUCCESS,
+  FETCH_FIT_GARMENTS_FAILURE,
+} from './Redux/GarmentsRedux';
 
 type GarmentDetailRouteProp = RouteProp<SearchStackParamList, 'Garment Detail'>;
 type GarmentDetailNavigationProp = StackNavigationProp<SearchStackParamList, 'Garment Detail'>;
@@ -45,6 +56,14 @@ type GarmentDetailNavigationProp = StackNavigationProp<SearchStackParamList, 'Ga
 export type GarmentDetailProps = {
   route: GarmentDetailRouteProp;
   navigation: GarmentDetailNavigationProp;
+};
+
+type FitDetailRouteProp = RouteProp<SearchStackParamList, 'Fit Detail'>;
+type FitDetailNavigationProp = StackNavigationProp<SearchStackParamList, 'Fit Detail'>;
+
+export type FitDetailProps = {
+  route: FitDetailRouteProp;
+  navigation: FitDetailNavigationProp;
 };
 
 type FitsRouteProp = RouteProp<SearchStackParamList, 'Fits'>;
@@ -252,6 +271,52 @@ export type FitActionTypes =
   | FetchFitsBeginAction
   | FetchFitsSuccessAction
   | FetchFitsFailureAction;
+
+interface FetchGarmentsBeginAction {
+  type: typeof FETCH_GARMENTS_BEGIN;
+}
+interface FetchGarmentsSuccessAction {
+  type: typeof FETCH_GARMENTS_SUCCESS;
+  payload: GarmentState;
+}
+interface FetchGarmentsFailureAction {
+  type: typeof FETCH_GARMENTS_FAILURE;
+  payload: GarmentState;
+}
+
+interface FetchFitGarmentsBeginAction {
+  type: typeof FETCH_FIT_GARMENTS_BEGIN;
+}
+interface FetchFitGarmentsSuccessAction {
+  type: typeof FETCH_FIT_GARMENTS_SUCCESS;
+  payload: GarmentState;
+}
+interface FetchFitGarmentsFailureAction {
+  type: typeof FETCH_FIT_GARMENTS_FAILURE;
+  payload: GarmentState;
+}
+
+interface CreateGarmentBeginAction {
+  type: typeof CREATE_GARMENT_BEGIN;
+}
+interface CreateGarmentSuccessAction {
+  type: typeof CREATE_GARMENT_SUCCESS;
+}
+interface CreateGarmentFailureAction {
+  type: typeof CREATE_GARMENT_FAILURE;
+  payload: GarmentState;
+}
+
+export type GarmentActionTypes =
+  | FetchGarmentsBeginAction
+  | FetchGarmentsSuccessAction
+  | FetchGarmentsFailureAction
+  | FetchFitGarmentsBeginAction
+  | FetchFitGarmentsSuccessAction
+  | FetchFitGarmentsFailureAction
+  | CreateGarmentBeginAction
+  | CreateGarmentSuccessAction
+  | CreateGarmentFailureAction;
 
 interface LoginRequestAction {
   type: typeof LOGIN_REQUEST;

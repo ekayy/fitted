@@ -14,7 +14,7 @@ import Camera from '../Containers/Camera';
 export type SearchStackParamList = {
   Search: undefined;
   'Garment Detail': Garment;
-  'Fit Detail': { title: string } | undefined;
+  'Fit Detail': { id: number; photo: string; height: number; weight: number; garments: number[] };
   Fits: { fits: Fit; garmentId: number };
   Comments: undefined;
   'Comment Single': undefined;
