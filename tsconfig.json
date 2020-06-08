@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "allowJs": false,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
     "experimentalDecorators": true,
-    "jsx": "react-native",
+    "jsx": "react",
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": false,
@@ -18,5 +19,5 @@
     "skipLibCheck": true,
     "esModuleInterop": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
 }
