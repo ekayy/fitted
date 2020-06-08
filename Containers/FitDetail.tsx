@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Avatar, Button } from 'react-native-elements';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+// import { Avatar, Button } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 import { AppStyles, Metrics } from '../Themes';
 import GarmentsList from '../Components/GarmentsList';
-import FavoriteButton from '../Components/FavoriteButton';
+import { FavoriteButton } from '../Components/FavoriteButton';
 
 import { favoriteFit } from '../Redux/UserRedux';
 import { fetchFitGarments } from '../Redux/GarmentsRedux';
@@ -16,56 +16,73 @@ import { FitDetailProps } from '../types';
 import { useTypedSelector } from '../types';
 
 const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
+  // Navigation params
   const { id: fitId, photo, height, weight, garments } = route.params;
-
-  const feet = parseInt(height / 12);
+  const feet = Math.floor(height / 12);
   const inches = height % 12;
   const convertedHeight = `${feet}"${inches}'`;
 
+  // Redux state
+  const { items: brands } = useTypedSelector((state) => state.brands);
+  const { fitGarments } = useTypedSelector((state) => state.garments);
+  const user = useTypedSelector((state) => state.user);
+  const { favoriteFits, user: profile } = user;
+
+
+
+  // State
+  const [toggled, setToggled] = useState<boolean>(false);
+
+  // Effects
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchBrands());
-  }, ['brands']);
-
-  useEffect(() => {
     dispatch(fetchFitGarments(garments));
+    favoriteFits.includes(fitId) ? setToggled(true) : setToggled(false);
   }, []);
 
-  const { items: brands } = useTypedSelector((state) => state.brands);
-  const { fitGarments } = useTypedSelector((state) => state.garments);
-  const { user } = useTypedSelector((state) => state.user);
+  const favorite = () => {
+    dispatch(favoriteFit(fitId, user));
+    favoriteFits.includes(fitId) ? setToggled(false) : setToggled(true);
+  };
+
+  //   const fetchProfile = async () => {
+  //   const response = await axios.get(`${baseURL}/profiles/${profileId}`);
+  //   try {
+  //     this.setState({
+  //       profile: response.data,
+  //       username: response.data.user.username,
+  //     });
+  //   } catch (error) {
+  //     this.setState({
+  //       error,
+  //     });
+  //   }
+  // };
 
   const renderHeader = () => {
     return (
       <>
         <View>
           <TouchableOpacity style={styles.profile} onPress={() => navigation.navigate('Profile')}>
-            <Avatar
+            {/* <Avatar
               rounded
-              source={{
-                uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-              }}
+              source={{ uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }}
               activeOpacity={0.7}
-              style={styles.profileImage}
-            />
+            /> */}
             <View>
               <Text style={styles.profileText}>
-                {user['username']} &#11825; Height: {convertedHeight} &#11825; Weight: {weight} lbs
+                {profile && profile['username']} &#11825; Height: {convertedHeight} &#11825; Weight:{' '}
+                {weight} lbs
               </Text>
             </View>
           </TouchableOpacity>
 
-          <Image
-            style={styles.image}
-            source={{
-              uri: photo,
-            }}
-          />
+          <Image style={styles.image} source={{ uri: photo }} />
 
-          {/* <View style={styles.favorite}>
-            <FavoriteButton onPress={this.favoriteFit} toggled={this.state.toggled} />
-            <Text>{this.state.garments.photo}</Text>
-          </View> */}
+          <View style={styles.favorite}>
+            <FavoriteButton onPress={favorite} toggled={toggled} />
+          </View>
         </View>
 
         <View style={AppStyles.section}>
@@ -112,160 +129,7 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
 //   this.willFocus.remove();
 // }
 
-// fetchGarments = async () => {
-//   const { garments } = this.props.navigation.state.params;
-
-//   const filteredGarments = garments.map(async garmentId => {
-//     const response = await axios.get(`${baseURL}/garments/${garmentId}`);
-
-//     try {
-//       this.setState({
-//         garments: [...this.state.garments, response.data],
-//         error: null,
-//         loading: false,
-//       });
-//     } catch (error) {
-//       this.setState({
-//         error,
-//         loading: false,
-//       });
-//     }
-//   });
-// };
-
-// fetchProfile = async () => {
-//   const { profileId } = this.props.user;
-
-//   const response = await axios.get(`${baseURL}/profiles/${profileId}`);
-
-//   try {
-//     this.setState({
-//       profile: response.data,
-//       username: response.data.user.username,
-//     });
-//   } catch (error) {
-//     this.setState({
-//       error,
-//     });
-//   }
-// };
-
-// getFavoriteState = () => {
-//   const { id } = this.props.navigation.state.params;
-//   const { favoriteFits } = this.props.user;
-
-//   if (favoriteFits.includes(id)) {
-//     this.setState({ toggled: true });
-//   } else {
-//     this.setState({ toggled: false });
-//   }
-// };
-
-// favoriteFit = async () => {
-//   // favoriteId
-//   const { id } = this.props.navigation.state.params;
-
-//   await this.props.favoriteFit(id, this.props.user);
-
-//   this.getFavoriteState();
-// };
-
-// handlePress = () => {
-//   const { navigate } = this.props.navigation;
-//   const { profile } = this.state;
-
-//   navigate('Profile', profile);
-// };
-
-// render() {
-//   const { comments } = this.props;
-//   const { navigate } = this.props.navigation;
-//   const { id, photo, height, weight } = this.props.navigation.state.params;
-//   const { profile, username } = this.state;
-
-//   const feet = parseInt(height / 12);
-//   const inches = height % 12;
-
-//   const convertedHeight = `${feet}"${inches}'`;
-
-//   return (
-//     <View style={styles.container}>
-//       <ScrollView>
-//         <View style={styles.header}>
-//           <TouchableOpacity style={styles.profile} onPress={this.handlePress}>
-//             <Avatar
-//               large
-//               rounded
-//               source={{
-//                 uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-//               }}
-//               activeOpacity={0.7}
-//               style={styles.profileImage}
-//             />
-//             <View>
-//               <Text style={styles.profileText}>
-//                 {username.toUpperCase()} &#11825; Height: {convertedHeight} &#11825; Weight:{' '}
-//                 {weight} lbs
-//               </Text>
-//             </View>
-//           </TouchableOpacity>
-
-//           <Image style={styles.image} source={{ uri: photo }} />
-
-//           <View style={styles.favorite}>
-//             <FavoriteButton onPress={this.favoriteFit} toggled={this.state.toggled} />
-//             <Text>{this.state.garments.photo}</Text>
-//           </View>
-//         </View>
-
-//         <View style={AppStyles.section}>
-//           <View style={AppStyles.sectionTitle}>
-//             <Text style={AppStyles.sectionTitleText}>Garments</Text>
-//           </View>
-//         </View>
-
-//         <GarmentsList
-//           data={this.state.garments}
-//           navigation={this.props.navigation}
-//           brands={this.props.brands}
-//         />
-
-//         <View style={AppStyles.section}>
-//           <View style={AppStyles.sectionTitle}>
-//             <Text style={AppStyles.sectionTitleText}>Discussion</Text>
-//           </View>
-
-//           {/* {comments.length > 0 && (
-//             <CommentList
-//               {...this.props}
-//               data={comments.slice(0, 3)}
-//               renderViewComments
-//               renderLeaveComment
-//               numReplies={1}
-//               contentType="fit"
-//               objectId={id}
-//             />
-//           )} */}
-//           <View style={AppStyles.button}>
-//             <Button
-//               title={`See all discussion`}
-//               buttonStyle={[AppStyles.buttonAltStyle]}
-//               titleStyle={AppStyles.buttonAltTitleStyle}
-//               // onPress={() =>
-//               //   navigate('Comments', {
-//               //     objectId: id,
-//               //     contentType: 'fit',
-//               //   })
-//               // }
-//             />
-//           </View>
-//         </View>
-//       </ScrollView>
-//     </View>
-//   );
-// }
-
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
@@ -302,16 +166,6 @@ const styles = {
   profileText: {
     marginLeft: 30,
   },
-};
-
-// const mapStateToProps = state => {
-//   return {
-//     user: state.user,
-//     brands: state.brands.items,
-//     commments: state.comments.items,
-//   };
-// };
-
-// export default connect(mapStateToProps, { favoriteFit, fetchBrands, fetchComments })(FitDetail);
+});
 
 export default FitDetail;

@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Badge } from 'react-native-elements';
 import { Metrics } from '../Themes';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -17,18 +10,10 @@ import { connect } from 'react-redux';
 class SearchList extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
-    const {
-      numCol,
-      grid,
-      editingCloset,
-      unfavoriteGarment,
-      brands
-    } = this.props;
+    const { numCol, grid, editingCloset, unfavoriteGarment, brands } = this.props;
     const { id, color, model, sku, brand, photo } = item;
 
-    const bookmark = this.props.favoriteGarments.some(
-      garmentId => garmentId === id
-    )
+    const bookmark = this.props.favoriteGarments.some((garmentId) => garmentId === id)
       ? 'bookmark'
       : 'bookmark-outline';
 
@@ -36,20 +21,19 @@ class SearchList extends Component {
 
     let formattedModel = model
       .split(' ')
-      .map(word => word.charAt(0) + word.toLowerCase().slice(1))
+      .map((word) => word.charAt(0) + word.toLowerCase().slice(1))
       .join(' ');
 
     // if not valid photo, add a stock image
     if (photo.length > 10) {
       photoUrl = photo;
     } else {
-      photoUrl =
-        'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
+      photoUrl = 'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
     }
 
     return (
       <GarmentItemContainer>
-        <GarmentItem key={id} onPress={() => navigate('GarmentDetail', item)}>
+        <GarmentItem key={id} onPress={() => navigate('Garment Detail', item)}>
           <GarmentItemImageContainer>
             <Image style={styles.image} source={{ uri: photoUrl }} />
             {editingCloset && (
@@ -68,17 +52,13 @@ class SearchList extends Component {
           </GarmentItemImageContainer>
         </GarmentItem>
         <GarmentBookmark onPress={() => this.favoriteGarment(id)}>
-          <MaterialCommunityIcons
-            name={bookmark}
-            size={32}
-            color="rgb(74, 144, 226)"
-          />
+          <MaterialCommunityIcons name={bookmark} size={32} color="rgb(74, 144, 226)" />
         </GarmentBookmark>
       </GarmentItemContainer>
     );
   }
 
-  favoriteGarment = async garmentId => {
+  favoriteGarment = async (garmentId) => {
     await this.props.favoriteGarment(garmentId, this.props.user);
   };
 
@@ -98,13 +78,7 @@ class SearchList extends Component {
   };
 
   render() {
-    const {
-      style,
-      data,
-      numColumns,
-      ListFooterComponent,
-      refreshing
-    } = this.props;
+    const { style, data, numColumns, ListFooterComponent, refreshing } = this.props;
 
     return (
       <FlatList
@@ -156,23 +130,20 @@ const styles = {
     flex: 1,
     width: Metrics.screenWidth / 1,
     height: 200,
-    position: 'relative'
+    position: 'relative',
   },
   image: {
     width: 60,
     height: 60,
     marginHorizontal: 10,
-    marginVertical: 2
-  }
+    marginVertical: 2,
+  },
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    favoriteGarments: state.user.favoriteGarments
+    favoriteGarments: state.user.favoriteGarments,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { favoriteGarment }
-)(SearchList);
+export default connect(mapStateToProps, { favoriteGarment })(SearchList);

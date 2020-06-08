@@ -13,7 +13,7 @@ class GarmentsList extends Component {
     return (
       <View style={styles.listItem}>
         <View style={styles.leftCol}>
-          <TouchableOpacity onPress={() => navigate('GarmentDetail', item)}>
+          <TouchableOpacity onPress={() => navigate('Garment Detail', item)}>
             <View style={styles.imageContainer}>
               <Image style={styles.image} source={{ uri: photo }} />
             </View>

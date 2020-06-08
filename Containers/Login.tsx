@@ -46,7 +46,7 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
   const loginFb = async () => {
     try {
       await Facebook.initializeAsync(fbAppId);
-      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+      const { type, token }: any = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile', 'email'],
       });
       if (type === 'success') {

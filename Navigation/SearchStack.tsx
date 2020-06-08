@@ -15,7 +15,7 @@ export type SearchStackParamList = {
   Search: undefined;
   'Garment Detail': Garment;
   'Fit Detail': { id: number; photo: string; height: number; weight: number; garments: number[] };
-  Fits: { fits: Fit; garmentId: number };
+  Fits: { fits: Fit[]; garmentId: number };
   Comments: undefined;
   'Comment Single': undefined;
   Profile: { title: string } | undefined;

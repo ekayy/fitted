@@ -1,3 +1,4 @@
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import CreateDiscussion from '../Containers/CreateDiscussion';
 import GarmentDetail from '../Containers/GarmentDetail';

@@ -7,40 +7,45 @@ import Carousel from 'react-native-snap-carousel';
 import { AppStyles, Metrics } from '../Themes';
 import styles from './Styles/GarmentDetailStyles';
 
-import FavoriteButton from '../Components/FavoriteButton';
-import CommentList from '../Components/Comment/CommentList';
+import { FavoriteButton } from '../Components/FavoriteButton';
+// import CommentList from '../Components/Comment/CommentList';
 import { favoriteGarment } from '../Redux/UserRedux';
-import { fetchFits, tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
-import { fetchComments } from '../Redux/CommentsRedux';
-import { Ionicons } from '@expo/vector-icons';
+import { fetchFits, clearCreatedFit } from '../Redux/FitsRedux';
+// import { fetchComments } from '../Redux/CommentsRedux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { GarmentDetailProps } from '../types';
 import { useTypedSelector } from '../types';
 
 const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchFits(garmentId));
-  }, []);
+  // Navigation params
+  const { id: garmentId, color, brand, model, photo, purchase_page: purchasePage } = route.params;
 
-  const {
-    id: garmentId,
-    color,
-    sku,
-    brand,
-    model,
-    photo,
-    purchase_page: purchasePage,
-  } = route.params;
+  // Redux state
   const { items: fits } = useTypedSelector((state) => state.fits);
   const { items: brands } = useTypedSelector((state) => state.brands);
   const user = useTypedSelector((state) => state.user);
+  const { favoriteGarments } = user;
   const brandName = brands[brand - 1]['name'];
+
+  // State
+  const [toggled, setToggled] = useState<boolean>(false);
+
+  // Effects
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchFits(garmentId));
+    favoriteGarments.includes(garmentId) ? setToggled(true) : setToggled(false);
+  }, []);
+
+  const favorite = () => {
+    dispatch(favoriteGarment(garmentId, user));
+    favoriteGarments.includes(garmentId) ? setToggled(false) : setToggled(true);
+  };
 
   // const [error, setError] = useState(null);
   // const [loading, setLoading] = useState<boolean>(true);
   // const [garmentFits, setGarmentFits] = useState([]);
-  const [toggled, setToggled] = useState<boolean>(false);
   // const [count, setCount] = useState<number>(0);
 
   const handleOpenWithWebBrowser = () => {
@@ -50,7 +55,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   // photo taken will be associated with the current garment
   const addPhotoToFit = async () => {
     await dispatch(clearCreatedFit());
-    await dispatch(tagGarmentToFit(route.params));
+    // await dispatch(tagGarmentToFit(route.params));
     navigation.navigate('Camera');
   };
 
@@ -65,23 +70,13 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
     );
   };
 
-  const getFavoriteState = () => {
-    const { favoriteGarments } = user;
-    favoriteGarments.includes(garmentId) ? setToggled(true) : setToggled(false);
-  };
-
-  const favoriteGarment = async () => {
-    await favoriteGarment(garmentId, user);
-    getFavoriteState();
-  };
-
   return (
     <ScrollView style={styles.container}>
       <View>
         <Image style={styles.image} source={{ uri: photo }} />
 
         <View style={styles.favorite}>
-          <FavoriteButton onPress={favoriteGarment} toggled={toggled} />
+          <FavoriteButton onPress={favorite} toggled={toggled} />
         </View>
       </View>
 
@@ -144,10 +139,10 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
           inactiveSlideOpacity={1}
         />
 
-        {fits.count > 0 && (
+        {fits.length > 0 && (
           <View style={AppStyles.button}>
             <Button
-              title={`See all ${fits.count} photos`}
+              title={`See all ${fits.length} photos`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
               onPress={() => navigation.navigate('Fits', { fits, garmentId })}

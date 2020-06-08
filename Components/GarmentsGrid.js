@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Badge } from 'react-native-elements';
 import { Metrics, Dimensions } from '../Themes';
 
@@ -21,22 +14,21 @@ class GarmentsGrid extends Component {
 
     let formattedModel = model
       .split(' ')
-      .map(word => word.charAt(0) + word.toLowerCase().slice(1))
+      .map((word) => word.charAt(0) + word.toLowerCase().slice(1))
       .join(' ');
 
     // if not valid photo, add a stock image
     if (photo.length > 10) {
       photoUrl = photo;
     } else {
-      photoUrl =
-        'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
+      photoUrl = 'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
     }
 
     return numCol == 2 ? (
       <TouchableOpacity
         style={styles.gridItem}
         key={id}
-        onPress={() => navigate('GarmentDetail', item)}
+        onPress={() => navigate('Garment Detail', item)}
       >
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: photoUrl }} />
@@ -55,11 +47,9 @@ class GarmentsGrid extends Component {
       <TouchableOpacity
         style={styles.gridItem}
         key={id}
-        onPress={() => navigate('GarmentDetail', item)}
+        onPress={() => navigate('Garment Detail', item)}
       >
-        <View
-          style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}
-        >
+        <View style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
       </TouchableOpacity>
@@ -95,13 +85,7 @@ class GarmentsGrid extends Component {
   };
 
   render() {
-    const {
-      style,
-      data,
-      numColumns,
-      ListFooterComponent,
-      refreshing
-    } = this.props;
+    const { style, data, numColumns, ListFooterComponent, refreshing } = this.props;
 
     return (
       <FlatList
@@ -127,41 +111,41 @@ const styles = {
   gridItem: {
     alignItems: 'center',
     marginBottom: 40,
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   welcomeContainer: {
     alignItems: 'center',
     backgroundColor: 'rgb(0,0,0.8)',
-    height: 160
+    height: 160,
   },
   welcomeText: {
-    paddingTop: 32
+    paddingTop: 32,
   },
   welcomeTitle: {
     textAlign: 'center',
     fontSize: 32,
-    color: 'rgb(255,255,255)'
+    color: 'rgb(255,255,255)',
   },
   welcomeSubtitle: {
     textAlign: 'center',
     paddingVertical: 8,
     fontSize: 17,
-    color: 'rgb(255,255,255)'
+    color: 'rgb(255,255,255)',
   },
   imageContainer: {
     flex: 1,
     width: 136,
     height: 136,
-    position: 'relative'
+    position: 'relative',
   },
   image: {
     width: undefined,
-    height: 136
+    height: 136,
   },
   text: {
     maxWidth: '80%',
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 };
 
 export default GarmentsGrid;

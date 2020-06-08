@@ -7,7 +7,6 @@ import { StyleSheet, Keyboard } from 'react-native';
 interface Props {
   options: string[];
   defaultValue: string;
-  onSelect?(): void;
 }
 
 const Dropdown: React.FC<Props> = ({ options, defaultValue, onSelect }) => {

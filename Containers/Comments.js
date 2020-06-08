@@ -6,7 +6,7 @@ import { SearchBar } from 'react-native-elements';
 import { AppStyles } from '../Themes';
 import CommentList from '../Components/Comment/CommentList';
 import CommentInput from '../Components/Comment/CommentInput';
-import DropDown from '../Components/DropDown';
+import Dropdown from '../Components/Dropdown';
 import { fetchComments, selectRecentComments, selectPopularComments } from '../Redux/CommentsRedux';
 
 const Comments = (props) => {
@@ -91,7 +91,7 @@ const Comments = (props) => {
 
           <StyledFilterBarContainer>
             <StyledFilterBar>
-              <DropDown
+              <Dropdown
                 options={['Most Recent', 'Most Popular']}
                 // defaultValue="Select"
                 onSelect={filterComments}
