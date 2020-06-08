@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { UserActionTypes, UserState, AppThunk, FavoriteGarmentParams } from '../types';
+import { UserActionTypes, UserState, AppThunk } from '../types';
 
 // Actions
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -197,7 +197,10 @@ export default function (state = INITIAL_STATE, action: UserActionTypes): UserSt
 export const loginRequest = (): UserActionTypes => ({
   type: LOGIN_REQUEST,
 });
-export const loginSuccess = ({ token, profileId }: UserState): UserActionTypes => ({
+export const loginSuccess = ({
+  token,
+  profileId,
+}: Pick<UserState, 'token' | 'profileId'>): UserActionTypes => ({
   type: LOGIN_SUCCESS,
   payload: { token, profileId },
 });
@@ -221,7 +224,10 @@ export const profileSuccess = ({
   favoriteFits,
   height,
   weight,
-}: UserState): UserActionTypes => ({
+}: Pick<
+  UserState,
+  'user' | 'favoriteGarments' | 'favoriteFits' | 'height' | 'weight'
+>): UserActionTypes => ({
   type: PROFILE_SUCCESS,
   payload: { user, favoriteGarments, favoriteFits, height, weight },
 });
@@ -290,7 +296,7 @@ export const unfavoriteItem = () => ({
 
 // Asynchronous actions
 // login to app
-export const login = (username, password): AppThunk => async (dispatch) => {
+export const login = (username: string, password: string): AppThunk => async (dispatch) => {
   dispatch(loginRequest());
 
   try {

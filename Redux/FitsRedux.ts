@@ -41,7 +41,7 @@ export default function fits(state = INITIAL_STATE, action: FitActionTypes): Fit
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.error,
       };
 
     case CREATE_FIT_BEGIN:
@@ -97,26 +97,26 @@ export const fetchFitsBegin = (): FitActionTypes => ({
   type: FETCH_FITS_BEGIN,
 });
 
-export const fetchFitsSuccess = (fits: FitState): FitActionTypes => ({
+export const fetchFitsSuccess = (items: Fit[]): FitActionTypes => ({
   type: FETCH_FITS_SUCCESS,
-  payload: fits,
+  payload: items,
 });
 
-export const fetchFitsFailure = (error: FitState): FitActionTypes => ({
+export const fetchFitsFailure = (error: Pick<FitState, 'error'>): FitActionTypes => ({
   type: FETCH_FITS_FAILURE,
-  payload: error,
+  payload: { error },
 });
 
 export const createFitBegin = (): FitActionTypes => ({
   type: CREATE_FIT_BEGIN,
 });
 
-export const createFitSuccess = (createdFit: FitState): FitActionTypes => ({
+export const createFitSuccess = (createdFit: Fit): FitActionTypes => ({
   type: CREATE_FIT_SUCCESS,
   payload: createdFit,
 });
 
-export const createFitFailure = (error: FitState): FitActionTypes => ({
+export const createFitFailure = (error: Pick<FitState, 'error'>): FitActionTypes => ({
   type: CREATE_FIT_FAILURE,
   payload: error,
 });

@@ -52,6 +52,14 @@ import {
   FETCH_FIT_GARMENTS_FAILURE,
 } from './Redux/GarmentsRedux';
 
+type SearchRouteProp = RouteProp<SearchStackParamList, 'Search'>;
+type SearchNavigationProp = StackNavigationProp<SearchStackParamList, 'Search'>;
+
+export type SearchProps = {
+  route: SearchRouteProp;
+  navigation: SearchNavigationProp;
+};
+
 type GarmentDetailRouteProp = RouteProp<SearchStackParamList, 'Garment Detail'>;
 type GarmentDetailNavigationProp = StackNavigationProp<SearchStackParamList, 'Garment Detail'>;
 
@@ -220,12 +228,12 @@ interface FetchBrandsBeginAction {
 
 interface FetchBrandsSuccessAction {
   type: typeof FETCH_BRANDS_SUCCESS;
-  payload: BrandState;
+  payload: Brand[];
 }
 
 interface FetchBrandsFailureAction {
   type: typeof FETCH_BRANDS_FAILURE;
-  payload: BrandState;
+  payload: Pick<BrandState, 'error'>;
 }
 
 export type BrandActionTypes =
@@ -236,19 +244,18 @@ export type BrandActionTypes =
 interface CreateFitBeginAction {
   type: typeof CREATE_FIT_BEGIN;
 }
-
 interface CreateFitBeginAction {
   type: typeof CREATE_FIT_BEGIN;
 }
 
 interface CreateFitSuccessAction {
   type: typeof CREATE_FIT_SUCCESS;
-  payload: FitState;
+  payload: Fit;
 }
 
 interface CreateFitFailureAction {
   type: typeof CREATE_FIT_FAILURE;
-  payload: FitState;
+  payload: Pick<FitState, 'error'>;
 }
 
 interface ClearCreatedFitAction {
@@ -270,11 +277,11 @@ interface FetchFitsBeginAction {
 }
 interface FetchFitsSuccessAction {
   type: typeof FETCH_FITS_SUCCESS;
-  payload: FitState;
+  payload: Fit[];
 }
 interface FetchFitsFailureAction {
   type: typeof FETCH_FITS_FAILURE;
-  payload: FitState;
+  payload: Pick<FitState, 'error'>;
 }
 
 export type FitActionTypes =
@@ -293,11 +300,11 @@ interface FetchGarmentsBeginAction {
 }
 interface FetchGarmentsSuccessAction {
   type: typeof FETCH_GARMENTS_SUCCESS;
-  payload: GarmentState;
+  payload: Garment[];
 }
 interface FetchGarmentsFailureAction {
   type: typeof FETCH_GARMENTS_FAILURE;
-  payload: GarmentState;
+  payload: Pick<GarmentState, 'error'>;
 }
 
 interface FetchFitGarmentsBeginAction {
@@ -309,7 +316,7 @@ interface FetchFitGarmentsSuccessAction {
 }
 interface FetchFitGarmentsFailureAction {
   type: typeof FETCH_FIT_GARMENTS_FAILURE;
-  payload: GarmentState;
+  payload: Pick<GarmentState, 'error'>;
 }
 
 interface CreateGarmentBeginAction {

@@ -48,7 +48,7 @@ export default function garments(state = INITIAL_STATE, action: GarmentActionTyp
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.error,
       };
 
     case FETCH_FIT_GARMENTS_BEGIN:
@@ -88,48 +88,48 @@ export default function garments(state = INITIAL_STATE, action: GarmentActionTyp
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.error,
       };
 
-    case SYNC_GARMENT_COMMENTS: {
-      const { comment } = action.payload;
-      const items = state.items.map((garment) => {
-        if (garment.id === comment.object_id) {
-          return { ...garment, comments: [...garment.comments, comment] };
-        } else {
-          return garment;
-        }
-      });
+    // case SYNC_GARMENT_COMMENTS: {
+    //   const { comment } = action.payload;
+    //   const items = state.items.map((garment) => {
+    //     if (garment.id === comment.object_id) {
+    //       return { ...garment, comments: [...garment.comments, comment] };
+    //     } else {
+    //       return garment;
+    //     }
+    //   });
 
-      return {
-        ...state,
-        items,
-      };
-    }
+    //   return {
+    //     ...state,
+    //     items,
+    //   };
+    // }
 
-    case SYNC_GARMENT_COMMENT_REPLIES: {
-      const { reply, objectId } = action.payload;
-      const items = state.items.map((garment) => {
-        if (garment.id === objectId) {
-          const comments = garment.comments.map((comment) => {
-            if (comment.id === reply.comment) {
-              return { ...comment, replies: [...comment.replies, reply] };
-            } else {
-              return comment;
-            }
-          });
+    // case SYNC_GARMENT_COMMENT_REPLIES: {
+    //   const { reply, objectId } = action.payload;
+    //   const items = state.items.map((garment) => {
+    //     if (garment.id === objectId) {
+    //       const comments = garment.comments.map((comment) => {
+    //         if (comment.id === reply.comment) {
+    //           return { ...comment, replies: [...comment.replies, reply] };
+    //         } else {
+    //           return comment;
+    //         }
+    //       });
 
-          return { ...garment, comments };
-        } else {
-          return garment;
-        }
-      });
+    //       return { ...garment, comments };
+    //     } else {
+    //       return garment;
+    //     }
+    //   });
 
-      return {
-        ...state,
-        items,
-      };
-    }
+    //   return {
+    //     ...state,
+    //     items,
+    //   };
+    // }
 
     // case FETCH_GARMENT_FITS_BEGIN:
     //   return {
@@ -161,13 +161,15 @@ export const fetchGarmentsBegin = (): GarmentActionTypes => ({
   type: FETCH_GARMENTS_BEGIN,
 });
 
-export const fetchGarmentsSuccess = (garments: GarmentState): GarmentActionTypes => ({
+export const fetchGarmentsSuccess = (items: Garment[]): GarmentActionTypes => ({
   type: FETCH_GARMENTS_SUCCESS,
-  payload: garments,
+  payload: items,
 });
-export const fetchGarmentsFailure = (error: GarmentState): GarmentActionTypes => ({
+export const fetchGarmentsFailure = ({
+  error,
+}: Pick<GarmentState, 'error'>): GarmentActionTypes => ({
   type: FETCH_GARMENTS_FAILURE,
-  payload: error,
+  payload: { error },
 });
 
 export const fetchFitGarmentsBegin = (): GarmentActionTypes => ({
@@ -178,7 +180,9 @@ export const fetchFitGarmentsSuccess = (garments: Garment[]): GarmentActionTypes
   type: FETCH_FIT_GARMENTS_SUCCESS,
   payload: garments,
 });
-export const fetchFitGarmentsFailure = (error: GarmentState): GarmentActionTypes => ({
+export const fetchFitGarmentsFailure = (
+  error: Pick<GarmentState, 'error'>,
+): GarmentActionTypes => ({
   type: FETCH_FIT_GARMENTS_FAILURE,
   payload: error,
 });
@@ -229,7 +233,7 @@ export const syncGarmentCommentReplies = (reply, objectId) => ({
 export const fetchGarments = (): AppThunk => async (dispatch) => {
   dispatch(fetchGarmentsBegin());
   try {
-    const res = await axios.get(`${baseURL}/garments/?limit=5000`);
+    const res = await axios.get(`${baseURL}/garments/?limit=1500`);
     dispatch(fetchGarmentsSuccess(res.data.results));
   } catch (error) {
     dispatch(fetchGarmentsFailure(error));
