@@ -36,29 +36,24 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
       const { id, photo, height, weight, garments } = createdFit;
 
       setDescription('');
-      // reset navigation to Camera route on successful fit creation
+
       navigation.reset({
-        index: 1,
-        routes: [
-          { name: 'Create Choice' },
-          {
-            name: 'Fit Detail',
-            params: {
-              id,
-              photo,
-              height,
-              weight,
-              garments,
-            },
-          },
-        ],
+        routes: [{ name: 'Create Choice' }],
+      });
+
+      navigation.navigate('Search', {
+        screen: 'Fit Detail',
+        params: {
+          id,
+          photo,
+          height,
+          weight,
+          garments,
+        },
       });
 
       // reset fit redux
       dispatch(clearCreatedFit());
-    } else {
-      setError('Sorry, something went wrong.');
-      setTimeout(() => setError(''), 3000);
     }
   }, [createdFit]);
 
