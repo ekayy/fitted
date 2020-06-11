@@ -11,16 +11,24 @@ import TagGarments from '../Containers/TagGarments';
 import SearchGarments from '../Containers/SearchGarments';
 import SelectSizing from '../Containers/SelectSizing';
 import AddCustomGarment from '../Containers/AddCustomGarment';
+import CreateChoice from '../Components/CreateChoice';
 
 export type CreateDiscussionStackParamList = {
   Camera: undefined;
-  'Tag Garments': undefined;
+  'Create Choice': undefined;
+  'Tag Garments': { image: string };
   'Search Garments': undefined;
   'Select Sizing': undefined;
   'Add Custom Garment': undefined;
   'Create Discussion': undefined;
   'Garment Detail': { title: string };
-  'Fit Detail': { title: string };
+  'Fit Detail': {
+    profile: number;
+    photo: string;
+    likes: number[];
+    garments: number[];
+    description: string;
+  };
   Fits: { title: string };
   Comments: undefined;
   'Comment Single': undefined;
@@ -31,6 +39,11 @@ const Stack = createStackNavigator<CreateDiscussionStackParamList>();
 const CreateDiscussionStack = () => {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="Create Choice"
+        component={CreateChoice}
+        options={() => ({ title: 'Start Discussion / Add New Fit' })}
+      />
       <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }} />
       <Stack.Screen name="Tag Garments" component={TagGarments} />
       <Stack.Screen name="Search Garments" component={SearchGarments} />

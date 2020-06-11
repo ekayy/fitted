@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { Fit, FitState, FitActionTypes, AppThunk } from '../types';
+import { Fit, FitState, FitActionTypes, AppThunk, Garment } from '../types';
 
 // Actions
 export const CREATE_FIT_BEGIN = 'CREATE_FIT_BEGIN';
@@ -76,7 +76,7 @@ export default function fits(state = INITIAL_STATE, action: FitActionTypes): Fit
     case TAG_GARMENT_TO_FIT:
       return {
         ...state,
-        taggedGarments: [...state.taggedGarments, action.payload.garmentId],
+        taggedGarments: [...state.taggedGarments, action.payload],
       };
 
     case REMOVE_GARMENT_FROM_FIT:
@@ -104,7 +104,7 @@ export const fetchFitsSuccess = (items: Fit[]): FitActionTypes => ({
 
 export const fetchFitsFailure = (error: Pick<FitState, 'error'>): FitActionTypes => ({
   type: FETCH_FITS_FAILURE,
-  payload: { error },
+  payload: error,
 });
 
 export const createFitBegin = (): FitActionTypes => ({
@@ -125,14 +125,16 @@ export const clearCreatedFit = (): FitActionTypes => ({
   type: CLEAR_CREATED_FIT,
 });
 
-export const tagGarmentToFit = (garmentId: number): FitActionTypes => ({
+export const tagGarmentToFit = (garment: Garment): FitActionTypes => ({
   type: TAG_GARMENT_TO_FIT,
-  payload: garmentId,
+  payload: garment,
 });
 
-export const removeGarmentFromFit = (garmentId: FitState): FitActionTypes => ({
+export const removeGarmentFromFit = ({
+  garmentId,
+}: Pick<FitState, 'garmentId'>): FitActionTypes => ({
   type: REMOVE_GARMENT_FROM_FIT,
-  payload: garmentId,
+  payload: { garmentId },
 });
 
 // side effects, only as applicable

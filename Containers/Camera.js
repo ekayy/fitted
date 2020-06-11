@@ -8,7 +8,7 @@ import {
   Image,
   Vibration,
   Animated,
-  PanResponder
+  PanResponder,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
@@ -25,14 +25,12 @@ class CameraScreen extends Component {
       type: Camera.Constants.Type.back,
       image: null,
       photoId: 1,
-      zoom: 0
+      zoom: 0,
     };
   }
 
   componentDidMount() {
-    FileSystem.makeDirectoryAsync(
-      FileSystem.documentDirectory + 'photos'
-    ).catch(e => {
+    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch((e) => {
       // console.log(e, 'Directory exists');
     });
   }
@@ -46,7 +44,7 @@ class CameraScreen extends Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true
+      allowsEditing: true,
       // aspect: [4, 3]
     });
 
@@ -55,7 +53,7 @@ class CameraScreen extends Component {
       // this.setState({ image: result.uri });
 
       // move on
-      this.props.navigation.navigate('TagGarments', { image });
+      this.props.navigation.navigate('Tag Garments', { image });
     }
   };
 
@@ -72,9 +70,7 @@ class CameraScreen extends Component {
                 <Text>Retake</Text>
               </StyledHeaderText>
 
-              <StyledHeaderText
-                onPress={() => navigate('TagGarments', { image })}
-              >
+              <StyledHeaderText onPress={() => navigate('Tag Garments', { image })}>
                 Next
               </StyledHeaderText>
             </StyledHeader>
@@ -83,7 +79,7 @@ class CameraScreen extends Component {
         <Camera
           style={{ flex: 0.65 }}
           type={type}
-          ref={ref => {
+          ref={(ref) => {
             this.camera = ref;
           }}
         >
@@ -116,7 +112,7 @@ class CameraScreen extends Component {
                     type:
                       type === Camera.Constants.Type.back
                         ? Camera.Constants.Type.front
-                        : Camera.Constants.Type.back
+                        : Camera.Constants.Type.back,
                   });
                 }}
               >
@@ -133,16 +129,16 @@ class CameraScreen extends Component {
     if (this.camera) {
       // let photo = await this.camera.takePictureAsync();
 
-      this.camera.takePictureAsync().then(data => {
+      this.camera.takePictureAsync().then((data) => {
         const image = `${FileSystem.documentDirectory}photos/photo_${this.state.photoId}.jpg`;
 
         FileSystem.moveAsync({
           from: data.uri,
-          to: image
+          to: image,
         }).then(() => {
           this.setState({
             photoId: this.state.photoId + 1,
-            image
+            image,
           });
           Vibration.vibrate();
         });

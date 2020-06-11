@@ -8,7 +8,7 @@ const ActivityStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
         gestureEnabled: true,
       }}
     >

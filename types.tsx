@@ -2,6 +2,11 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SearchStackParamList } from './Navigation/SearchStack';
 import { ProfileStackParamList } from './Navigation/ProfileStack';
+import { ThunkAction } from 'redux-thunk';
+import { Action } from 'redux';
+import { RootState } from './Redux';
+import { useSelector, TypedUseSelectorHook } from 'react-redux';
+import { AuthParamList } from './Navigation/AuthStack';
 
 import {
   FETCH_BRANDS_BEGIN,
@@ -34,12 +39,14 @@ import {
   FAVORITE_ITEM,
   UNFAVORITE_ITEM,
 } from './Redux/UserRedux';
-
-import { ThunkAction } from 'redux-thunk';
-import { Action } from 'redux';
-import { RootState } from './Redux';
-import { useSelector, TypedUseSelectorHook } from 'react-redux';
-import { AuthParamList } from './Navigation/AuthStack';
+import {
+  FETCH_FAVORITE_GARMENTS_BEGIN,
+  FETCH_FAVORITE_GARMENTS_SUCCESS,
+  FETCH_FAVORITE_GARMENTS_FAILURE,
+  FETCH_FAVORITE_FITS_BEGIN,
+  FETCH_FAVORITE_FITS_SUCCESS,
+  FETCH_FAVORITE_FITS_FAILURE,
+} from './Redux/ProfilesRedux';
 import {
   FETCH_GARMENTS_BEGIN,
   FETCH_GARMENTS_SUCCESS,
@@ -51,6 +58,7 @@ import {
   FETCH_FIT_GARMENTS_SUCCESS,
   FETCH_FIT_GARMENTS_FAILURE,
 } from './Redux/GarmentsRedux';
+import { CreateDiscussionStackParamList } from './Navigation/CreateDiscussionStack';
 
 type SearchRouteProp = RouteProp<SearchStackParamList, 'Search'>;
 type SearchNavigationProp = StackNavigationProp<SearchStackParamList, 'Search'>;
@@ -98,6 +106,39 @@ type LoginNavigationProp = StackNavigationProp<AuthParamList, 'Login'>;
 export type LoginProps = {
   route: LoginRouteProp;
   navigation: LoginNavigationProp;
+};
+
+type CreateChoiceRouteProp = RouteProp<CreateDiscussionStackParamList, 'Create Choice'>;
+type CreateChoiceNavigationProp = StackNavigationProp<
+  CreateDiscussionStackParamList,
+  'Create Choice'
+>;
+
+export type CreateChoiceProps = {
+  route: CreateChoiceRouteProp;
+  navigation: CreateChoiceNavigationProp;
+};
+
+type TagGarmentsRouteProp = RouteProp<CreateDiscussionStackParamList, 'Tag Garments'>;
+type TagGarmentsNavigationProp = StackNavigationProp<
+  CreateDiscussionStackParamList,
+  'Tag Garments'
+>;
+
+export type TagGarmentsProps = {
+  route: TagGarmentsRouteProp;
+  navigation: TagGarmentsNavigationProp;
+};
+
+type SearchGarmentsRouteProp = RouteProp<CreateDiscussionStackParamList, 'Search Garments'>;
+type SearchGarmentsNavigationProp = StackNavigationProp<
+  CreateDiscussionStackParamList,
+  'Search Garments'
+>;
+
+export type SearchGarmentsProps = {
+  route: SearchGarmentsRouteProp;
+  navigation: SearchGarmentsNavigationProp;
 };
 
 // https://redux.js.org/recipes/usage-with-typescript
@@ -159,7 +200,7 @@ export interface FitState {
   garmentId: number | null;
   items: Fit[];
   loading: boolean;
-  taggedGarments: number[];
+  taggedGarments: Garment[];
 }
 
 export interface UserState {
@@ -174,6 +215,13 @@ export interface UserState {
   token: string | null;
   user: Profile | null;
   weight: number | null;
+}
+
+export interface ProfileState {
+  error?: string | null;
+  loading?: boolean;
+  favoriteGarments: number[];
+  favoriteFits: number[];
 }
 
 export interface Profile {
@@ -264,12 +312,12 @@ interface ClearCreatedFitAction {
 
 interface TagGarmentToFitAction {
   type: typeof TAG_GARMENT_TO_FIT;
-  payload: number;
+  payload: Garment;
 }
 
 interface RemoveGarmentFromFitAction {
   type: typeof REMOVE_GARMENT_FROM_FIT;
-  payload: FitState;
+  payload: Pick<FitState, 'garmentId'>;
 }
 
 interface FetchFitsBeginAction {
@@ -406,3 +454,34 @@ export type UserActionTypes =
   | FavoriteFailureAction
   | FavoriteItemAction
   | UnfavoriteItemAction;
+
+interface FetchFavoriteGarmentsBeginAction {
+  type: typeof FETCH_FAVORITE_GARMENTS_BEGIN;
+}
+interface FetchFavoriteGarmentsSuccessAction {
+  type: typeof FETCH_FAVORITE_GARMENTS_SUCCESS;
+  payload: Pick<ProfileState, 'favoriteGarments'>;
+}
+interface FetchFavoriteGarmentsFailureAction {
+  type: typeof FETCH_FAVORITE_GARMENTS_FAILURE;
+  payload: Pick<ProfileState, 'error'>;
+}
+interface FetchFavoriteFitsBeginAction {
+  type: typeof FETCH_FAVORITE_FITS_BEGIN;
+}
+interface FetchFavoriteFitsSuccessAction {
+  type: typeof FETCH_FAVORITE_FITS_SUCCESS;
+  payload: Pick<ProfileState, 'favoriteFits'>;
+}
+interface FetchFavoriteFitsFailureAction {
+  type: typeof FETCH_FAVORITE_FITS_FAILURE;
+  payload: Pick<ProfileState, 'error'>;
+}
+
+export type ProfileActionTypes =
+  | FetchFavoriteGarmentsBeginAction
+  | FetchFavoriteGarmentsSuccessAction
+  | FetchFavoriteGarmentsFailureAction
+  | FetchFavoriteFitsBeginAction
+  | FetchFavoriteFitsSuccessAction
+  | FetchFavoriteFitsFailureAction;

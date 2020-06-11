@@ -9,6 +9,7 @@ import garments from './GarmentsRedux';
 import fits from './FitsRedux';
 import comments from './CommentsRedux';
 import brands from './BrandsRedux';
+import profiles from './ProfilesRedux';
 
 const persistConfig = {
   key: 'root',
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   fits,
   comments,
   brands,
+  profiles,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
