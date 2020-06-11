@@ -375,7 +375,7 @@ interface CreateGarmentSuccessAction {
 }
 interface CreateGarmentFailureAction {
   type: typeof CREATE_GARMENT_FAILURE;
-  payload: GarmentState;
+  payload: Pick<GarmentState, 'error'>;
 }
 
 export type GarmentActionTypes =

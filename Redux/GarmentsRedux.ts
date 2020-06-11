@@ -69,7 +69,7 @@ export default function garments(state = INITIAL_STATE, action: GarmentActionTyp
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.error,
       };
 
     case CREATE_GARMENT_BEGIN:
@@ -180,11 +180,11 @@ export const fetchFitGarmentsSuccess = (garments: Garment[]): GarmentActionTypes
   type: FETCH_FIT_GARMENTS_SUCCESS,
   payload: garments,
 });
-export const fetchFitGarmentsFailure = (
-  error: Pick<GarmentState, 'error'>,
-): GarmentActionTypes => ({
+export const fetchFitGarmentsFailure = ({
+  error,
+}: Pick<GarmentState, 'error'>): GarmentActionTypes => ({
   type: FETCH_FIT_GARMENTS_FAILURE,
-  payload: error,
+  payload: { error },
 });
 
 export const createGarmentBegin = (): GarmentActionTypes => ({
@@ -193,9 +193,9 @@ export const createGarmentBegin = (): GarmentActionTypes => ({
 export const createGarmentSuccess = (): GarmentActionTypes => ({
   type: CREATE_GARMENT_SUCCESS,
 });
-export const createGarmentFailure = (error: GarmentState): GarmentActionTypes => ({
+export const createGarmentFailure = ({ error }: GarmentState): GarmentActionTypes => ({
   type: CREATE_GARMENT_FAILURE,
-  payload: error,
+  payload: { error },
 });
 
 export const syncGarmentComments = (comment) => ({

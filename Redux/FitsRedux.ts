@@ -145,7 +145,7 @@ export const fetchFits = (garmentId: number): AppThunk => {
     return axios
       .get(`${baseURL}/fits/`, {
         params: {
-          garment: garmentId,
+          garments: garmentId,
         },
       })
       .then((response) => dispatch(fetchFitsSuccess(response.data.results)))
