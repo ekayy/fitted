@@ -4,47 +4,48 @@ import { Fonts, Metrics, Colors } from '../../Themes';
 export default StyleSheet.create({
   section: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border
+    borderBottomColor: Colors.border,
   },
   formRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Metrics.baseMargin,
-    backgroundColor: '#fff'
+    backgroundColor: '#eee',
   },
   product: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: Metrics.baseMargin,
-    paddingHorizontal: Metrics.doubleBaseMargin
+    paddingHorizontal: Metrics.doubleBaseMargin,
   },
   productImage: {
-    marginRight: Metrics.baseMargin
+    marginRight: Metrics.baseMargin,
   },
+  productAttributes: {},
   textInput: {
-    flex: 1
+    flex: 1,
   },
   formTitle: {
     flex: 1,
     alignSelf: 'center',
     fontSize: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   close: {
     position: 'absolute',
     top: 5,
     right: 15,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   modal: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 40,
     marginTop: 25,
-    backgroundColor: '#f3f3f3'
+    backgroundColor: '#f3f3f3',
   },
 
   rowBack: {
@@ -52,7 +53,7 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 15
+    paddingLeft: 15,
   },
 
   rightBtn: {
@@ -63,26 +64,26 @@ export default StyleSheet.create({
     top: 0,
     width: 75,
     right: 0,
-    backgroundColor: 'red'
+    backgroundColor: 'red',
   },
   rightBtnText: {
-    color: '#fff'
+    color: '#fff',
   },
 
   capturedPhotoSection: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   photo: {
     width: 150,
-    height: 150
+    height: 150,
   },
   textArea: {
     flex: 1,
     marginLeft: 20,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    backgroundColor: '#fafafa'
+    backgroundColor: '#fafafa',
   },
 
   button: {
@@ -90,7 +91,7 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     backgroundColor: 'rgb(74,144,225)',
-    marginRight: 10
+    marginRight: 10,
   },
-  buttonText: { color: '#fff' }
+  buttonText: { color: '#fff' },
 });

@@ -182,20 +182,20 @@ export interface GarmentState {
 }
 
 export interface Fit {
-  id: number;
-  created_date: string;
+  id?: number;
+  created_date?: string;
   profile: number;
   description: string;
   style?: string;
   photo: string;
-  likes: number[];
+  likes?: number[];
   garments: number[];
-  height: number;
-  weight: number;
+  height?: number;
+  weight?: number;
 }
 
 export interface FitState {
-  createdFit: boolean | null;
+  createdFit: Fit | null;
   error: string | null;
   garmentId: number | null;
   items: Fit[];

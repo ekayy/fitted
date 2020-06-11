@@ -66,13 +66,9 @@ class CameraScreen extends Component {
         <StyledHeaderContainer>
           {image && (
             <StyledHeader>
-              <StyledHeaderText onPress={() => this.setState({ image: null })}>
-                <Text>Retake</Text>
-              </StyledHeaderText>
+              <Button title="Retake" onPress={() => this.setState({ image: null })} />
 
-              <StyledHeaderText onPress={() => navigate('Tag Garments', { image })}>
-                Next
-              </StyledHeaderText>
+              <Button title="Next" onPress={() => navigate('Tag Garments', { image })} />
             </StyledHeader>
           )}
         </StyledHeaderContainer>
@@ -179,7 +175,7 @@ const StyledHeader = styled.View`
   justify-content: space-between;
 `;
 
-const StyledHeaderText = styled.Text`
+const StyledHeaderText = styled.TouchableOpacity`
   color: #fff;
 `;
 

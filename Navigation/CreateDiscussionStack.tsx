@@ -12,6 +12,7 @@ import SearchGarments from '../Containers/SearchGarments';
 import SelectSizing from '../Containers/SelectSizing';
 import AddCustomGarment from '../Containers/AddCustomGarment';
 import CreateChoice from '../Components/CreateChoice';
+import { Fit } from '../types';
 
 export type CreateDiscussionStackParamList = {
   Camera: undefined;
@@ -22,13 +23,7 @@ export type CreateDiscussionStackParamList = {
   'Add Custom Garment': undefined;
   'Create Discussion': undefined;
   'Garment Detail': { title: string };
-  'Fit Detail': {
-    profile: number;
-    photo: string;
-    likes: number[];
-    garments: number[];
-    description: string;
-  };
+  'Fit Detail': Fit;
   Fits: { title: string };
   Comments: undefined;
   'Comment Single': undefined;

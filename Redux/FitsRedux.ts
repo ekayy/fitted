@@ -55,7 +55,7 @@ export default function fits(state = INITIAL_STATE, action: FitActionTypes): Fit
       return {
         ...state,
         loading: false,
-        createdFit: action.payload.createdFit,
+        createdFit: action.payload,
       };
 
     case CLEAR_CREATED_FIT:
@@ -154,10 +154,13 @@ export const fetchFits = (garmentId: number): AppThunk => {
 };
 
 export const createFit = (fit: Fit): AppThunk => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(createFitBegin());
+    const { user } = getState();
+    const { token } = user;
+
     return axios
-      .post(`${baseURL}/fits/`, fit)
+      .post(`${baseURL}/fits/`, fit, { headers: { Authorization: `Token ${token}` } })
       .then((response) => {
         dispatch(createFitSuccess(response.data));
       })

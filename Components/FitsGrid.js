@@ -9,23 +9,14 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import { Metrics } from '../Themes';
 
 class FitsGrid extends Component {
   renderFit(item) {
     const { navigate } = this.props.navigation;
-    const {
-      profile,
-      description,
-      style,
-      photo,
-      likes,
-      garments,
-      height,
-      weight
-    } = item;
+    const { profile, description, style, photo, likes, garments, height, weight } = item;
     const { numCol } = this.props;
 
     const feetFromInches = Math.floor(height / 12);
@@ -33,7 +24,7 @@ class FitsGrid extends Component {
     const imperialHeight = `${feetFromInches}' ${inchesRemainder}"`;
 
     return numCol == 2 ? (
-      <TouchableOpacity onPress={() => navigate('FitDetail', item)}>
+      <TouchableOpacity onPress={() => navigate('Fit Detail', item)}>
         <View style={[styles.gridItem, { width: Metrics.screenWidth / 2 }]}>
           <Image style={styles.image} source={{ uri: photo }} />
           <View style={styles.label}>
@@ -44,7 +35,7 @@ class FitsGrid extends Component {
         </View>
       </TouchableOpacity>
     ) : (
-      <TouchableOpacity onPress={() => navigate('FitDetail', item)}>
+      <TouchableOpacity onPress={() => navigate('Fit Detail', item)}>
         <View style={[styles.gridItem, { width: Metrics.screenWidth / 3 }]}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
@@ -92,16 +83,16 @@ class FitsGrid extends Component {
 const styles = {
   container: {
     flex: 1,
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
   gridItem: {
     flex: 1,
     height: 250,
-    backgroundColor: '#333'
+    backgroundColor: '#333',
   },
   image: {
     width: undefined,
-    height: '100%'
+    height: '100%',
   },
 
   label: {
@@ -112,12 +103,12 @@ const styles = {
     backgroundColor: 'rgba(0,0,0,.5)',
     paddingVertical: 10,
     paddingHorizontal: 10,
-    width: '100%'
+    width: '100%',
   },
   labelText: {
     color: '#fff',
-    fontSize: 11
-  }
+    fontSize: 11,
+  },
 };
 
 export default FitsGrid;

@@ -18,6 +18,7 @@ import { useTypedSelector } from '../types';
 const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
   // Navigation params
   const { id: fitId, photo, height, weight, garments } = route.params;
+  console.log('route', route);
   const feet = Math.floor(height / 12);
   const inches = height % 12;
   const convertedHeight = `${feet}"${inches}'`;
@@ -27,8 +28,6 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
   const { fitGarments } = useTypedSelector((state) => state.garments);
   const user = useTypedSelector((state) => state.user);
   const { favoriteFits, user: profile } = user;
-
-
 
   // State
   const [toggled, setToggled] = useState<boolean>(false);
