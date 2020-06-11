@@ -12,10 +12,11 @@ import { Garment, Fit } from '../types';
 import Camera from '../Containers/Camera';
 
 export type SearchStackParamList = {
+  'Create Discussion': { screen: string };
   Search: undefined;
   'Garment Detail': Garment;
   'Fit Detail': { id: number; photo: string; height: number; weight: number; garments: number[] };
-  Fits: { fits: Fit[]; garmentId: number };
+  Fits: Garment;
   Comments: undefined;
   'Comment Single': undefined;
   Profile: { title: string } | undefined;

@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { connect } from 'react-redux';
 import Button from '../Components/Forms/Button';
 import { withFormik } from 'formik';
@@ -11,45 +11,25 @@ import Checkbox from '../Components/Forms/Checkbox';
 import * as Yup from 'yup';
 
 const CreateGarmentSchema = Yup.object().shape({
-  brand: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  type: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  color: Yup.string()
-    .min(2, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required('Required'),
-  season: Yup.string()
-    .min(2, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required('Required'),
-  discussion: Yup.string()
-    .min(3, 'Too Short!')
-    .max(200, 'Too Long!')
-    .required('Required')
+  brand: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+  type: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+  color: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required'),
+  season: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required'),
+  discussion: Yup.string().min(3, 'Too Short!').max(200, 'Too Long!').required('Required'),
 });
 
 // Mock data
 const types = [{ name: 'box logo' }, { name: 'clean' }, { name: 'ugly' }];
 const colors = [{ name: 'red' }, { name: 'black' }, { name: 'orange' }];
-const seasons = [
-  { name: 'fall' },
-  { name: 'spring' },
-  { name: 'winter' },
-  { name: 'summer' }
-];
+const seasons = [{ name: 'fall' }, { name: 'spring' }, { name: 'winter' }, { name: 'summer' }];
 const categories = [
   { id: 1, name: 'Sizing' },
   { id: 2, name: 'Care' },
   { id: 3, name: 'Styling' },
-  { id: 4, name: 'Other' }
+  { id: 4, name: 'Other' },
 ];
 
-const Form = props => {
+const Form = (props) => {
   const {
     brands,
     values,
@@ -58,7 +38,7 @@ const Form = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    setFieldValue
+    setFieldValue,
   } = props;
 
   const [checked, setChecked] = useState({});
@@ -67,9 +47,9 @@ const Form = props => {
   //   setChecked({ ...checked, [item.id]: !checked[item.id] });
   // };
 
-  const selectItem = item => {
+  const selectItem = (item) => {
     checked.includes(item.id)
-      ? setChecked(checked.filter(id => id !== item.id))
+      ? setChecked(checked.filter((id) => id !== item.id))
       : setChecked([...checked, item.id]);
   };
 
@@ -86,9 +66,7 @@ const Form = props => {
           value={values.brand}
         />
         <StyledErrorWrapper>
-          {errors.brand && touched.brand ? (
-            <StyledError>{errors.brand}</StyledError>
-          ) : null}
+          {errors.brand && touched.brand ? <StyledError>{errors.brand}</StyledError> : null}
         </StyledErrorWrapper>
       </StyledFormRow>
 
@@ -103,9 +81,7 @@ const Form = props => {
           value={values.type}
         />
         <StyledErrorWrapper>
-          {errors.type && touched.type ? (
-            <StyledError>{errors.type}</StyledError>
-          ) : null}
+          {errors.type && touched.type ? <StyledError>{errors.type}</StyledError> : null}
         </StyledErrorWrapper>
       </StyledFormRow>
 
@@ -120,9 +96,7 @@ const Form = props => {
           value={values.color}
         />
         <StyledErrorWrapper>
-          {errors.color && touched.color ? (
-            <StyledError>{errors.color}</StyledError>
-          ) : null}
+          {errors.color && touched.color ? <StyledError>{errors.color}</StyledError> : null}
         </StyledErrorWrapper>
       </StyledFormRow>
 
@@ -137,9 +111,7 @@ const Form = props => {
           value={values.season}
         />
         <StyledErrorWrapper>
-          {errors.season && touched.season ? (
-            <StyledError>{errors.season}</StyledError>
-          ) : null}
+          {errors.season && touched.season ? <StyledError>{errors.season}</StyledError> : null}
         </StyledErrorWrapper>
       </StyledFormRow>
 
@@ -186,7 +158,7 @@ const CreateDiscussionForm = withFormik({
     type: '',
     color: '',
     season: '',
-    discussion: ''
+    discussion: '',
   }),
 
   validationSchema: CreateGarmentSchema,
@@ -198,16 +170,16 @@ const CreateDiscussionForm = withFormik({
 
     /* TODO create discussion comment */
 
-    navigation.navigate('GarmentDetail', garmentData);
+    navigation.navigate('Garment Detail', garmentData);
   },
 
-  displayName: 'CreateDiscussionForm'
+  displayName: 'CreateDiscussionForm',
 })(Form);
 
 class CreateDiscussion extends Component {
   state = {
     query: '',
-    brands: []
+    brands: [],
   };
 
   componentDidMount() {
@@ -221,8 +193,8 @@ class CreateDiscussion extends Component {
       <StyledContainer>
         <KeyboardAvoidingView behavior="position" enabled>
           <StyledIntroduction>
-            Have a garment specific question? Or simply want to share a review
-            of your thoughts for a specific garment?
+            Have a garment specific question? Or simply want to share a review of your thoughts for
+            a specific garment?
           </StyledIntroduction>
           <StyledIntroduction>Get started below!</StyledIntroduction>
 
@@ -286,7 +258,4 @@ const mapStateToProps = ({ user, brands }) => {
   return { user, brands: brands.items };
 };
 
-export default connect(
-  mapStateToProps,
-  { fetchBrands, createGarment }
-)(CreateDiscussion);
+export default connect(mapStateToProps, { fetchBrands, createGarment })(CreateDiscussion);

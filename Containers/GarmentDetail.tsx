@@ -145,7 +145,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
               title={`See all ${fits.length} photos`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigation.navigate('Fits', { fits, garmentId })}
+              onPress={() => navigation.navigate('Fits', route.params)}
             />
           </View>
         )}

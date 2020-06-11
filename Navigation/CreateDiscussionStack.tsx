@@ -15,6 +15,7 @@ import CreateChoice from '../Components/CreateChoice';
 import { Fit } from '../types';
 
 export type CreateDiscussionStackParamList = {
+  Search: { screen: string; params: Partial<Fit> };
   Camera: undefined;
   'Create Choice': undefined;
   'Tag Garments': { image: string };
