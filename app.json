@@ -8,7 +8,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fitted.fitted",
+      "buildNumber": "1.0.0"
     },
     "facebookAppId": "311869955951444",
     "facebookDisplayName": "fitted"
