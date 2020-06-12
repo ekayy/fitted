@@ -204,7 +204,7 @@ export const loginSuccess = ({
   type: LOGIN_SUCCESS,
   payload: { token, profileId },
 });
-export const loginFailure = ({ error }: UserState): UserActionTypes => ({
+export const loginFailure = ({ error }: Pick<UserState, 'error'>): UserActionTypes => ({
   type: LOGIN_FAILURE,
   payload: { error },
 });
@@ -231,7 +231,7 @@ export const profileSuccess = ({
   type: PROFILE_SUCCESS,
   payload: { user, favoriteGarments, favoriteFits, height, weight },
 });
-export const profileFailure = ({ error }: UserState): UserActionTypes => ({
+export const profileFailure = ({ error }: Pick<UserState, 'error'>): UserActionTypes => ({
   type: PROFILE_FAILURE,
   payload: { error },
 });
@@ -308,7 +308,9 @@ export const login = (username: string, password: string): AppThunk => async (di
     const { token, profile_id: profileId } = response.data;
     dispatch(loginSuccess({ token, profileId }));
   } catch (error) {
-    dispatch(loginFailure(error.response.data['non_field_errors'][0]));
+    console.log('error', error);
+
+    dispatch(loginFailure({ error: error.response.data['non_field_errors'][0] }));
   }
 };
 
@@ -330,7 +332,7 @@ export const fetchProfile = (profileId: number): AppThunk => async (dispatch) =>
 
     dispatch(profileSuccess({ user, favoriteGarments, favoriteFits, height, weight }));
   } catch (error) {
-    dispatch(profileFailure(error));
+    dispatch(profileFailure({ error: null }));
   }
 };
 

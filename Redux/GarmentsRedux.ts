@@ -27,6 +27,7 @@ export const INITIAL_STATE: GarmentState = {
   loading: false,
   error: null,
   fitGarments: [],
+  createdGarment: null,
 };
 
 // Reducer
@@ -77,12 +78,14 @@ export default function garments(state = INITIAL_STATE, action: GarmentActionTyp
         ...state,
         loading: true,
         error: null,
+        createdGarment: null,
       };
     case CREATE_GARMENT_SUCCESS:
       return {
         ...state,
         loading: false,
         error: null,
+        createdGarment: action.payload,
       };
     case CREATE_GARMENT_FAILURE:
       return {
@@ -190,8 +193,9 @@ export const fetchFitGarmentsFailure = ({
 export const createGarmentBegin = (): GarmentActionTypes => ({
   type: CREATE_GARMENT_BEGIN,
 });
-export const createGarmentSuccess = (): GarmentActionTypes => ({
+export const createGarmentSuccess = (createdGarment: Garment): GarmentActionTypes => ({
   type: CREATE_GARMENT_SUCCESS,
+  payload: createdGarment,
 });
 export const createGarmentFailure = ({ error }: GarmentState): GarmentActionTypes => ({
   type: CREATE_GARMENT_FAILURE,
@@ -268,8 +272,8 @@ export const createGarment = ({ brand, color, model }): AppThunk => async (dispa
       photo: 'https://x',
       purchase_page: 'https://x',
     });
-    dispatch(createGarmentSuccess());
-    return res.data;
+    dispatch(createGarmentSuccess(res.data));
+    // return res.data;
   } catch (error) {
     dispatch(createGarmentFailure(error));
   }

@@ -190,6 +190,7 @@ export interface GarmentState {
   loading: boolean;
   error: string | null;
   fitGarments: Garment[];
+  createdGarment: Garment | null;
 }
 
 export interface Fit {
@@ -383,6 +384,7 @@ interface CreateGarmentBeginAction {
 }
 interface CreateGarmentSuccessAction {
   type: typeof CREATE_GARMENT_SUCCESS;
+  payload: Garment;
 }
 interface CreateGarmentFailureAction {
   type: typeof CREATE_GARMENT_FAILURE;
