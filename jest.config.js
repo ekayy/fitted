@@ -2,7 +2,7 @@ const { defaults: tsJestConfig } = require('ts-jest/presets');
 
 module.exports = {
   ...tsJestConfig,
-  preset: 'jest-expo',
+  preset: '@testing-library/react-native',
   transform: {
     ...tsJestConfig.transform,
   },
