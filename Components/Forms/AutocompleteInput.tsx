@@ -18,11 +18,12 @@ interface Props {
   setFieldValue(name: string, item: string): any;
   handleChange(name: string): any;
   handleBlur(name: string): any;
+  [key: string]: any;
 }
 
-export const AutocompleteInput = React.forwardRef(
+export const AutocompleteInput = React.forwardRef<TextInput, Props>(
   ({ ...props }: Props, ref: React.Ref<TextInput>) => {
-    const [field, meta] = useField({ ...props });
+    const [, meta] = useField({ ...props });
     const { handleChange, handleBlur, setFieldValue, values, data, placeholder, name } = props;
 
     // State
@@ -54,7 +55,6 @@ export const AutocompleteInput = React.forwardRef(
       <>
         <Autocomplete
           {...props}
-          {...field}
           autoCapitalize="none"
           autoCorrect={false}
           containerStyle={styles.containerStyle}
@@ -82,14 +82,15 @@ const styles = {
   containerStyle: {},
   inputContainerStyle: {
     borderWidth: 0,
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 18,
     backgroundColor: '#fff',
   },
   listContainerStyle: {},
   listStyle: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
     borderWidth: 0,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
   },
 };
 

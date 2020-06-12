@@ -10,20 +10,20 @@ interface Props {
   placeholder?: string;
   handleChange(name: string): any;
   handleBlur(name: string): any;
+  [key: string]: any;
 }
 
 export const MyTextInput = React.forwardRef(({ ...props }: Props, ref: React.Ref<TextInput>) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  const [field, meta] = useField({ ...props });
+  const [, meta] = useField({ ...props });
   const { name, multiline, handleChange, handleBlur } = props;
 
   return (
     <StyledFormRow style={multiline && { height: 100 }}>
       <StyledTextInput
         ref={ref}
-        {...field}
         {...props}
-        onChange={handleChange(name)}
+        onChangeText={handleChange(name)}
         onBlur={handleBlur(name)}
       />
 
@@ -34,7 +34,9 @@ export const MyTextInput = React.forwardRef(({ ...props }: Props, ref: React.Ref
   );
 });
 
-const StyledTextInput = styled.TextInput``;
+const StyledTextInput = styled.TextInput`
+  height: 42px;
+`;
 
 const StyledFormRow = styled.View`
   background-color: #fff;

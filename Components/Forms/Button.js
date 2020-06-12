@@ -5,7 +5,7 @@ const Button = (props) => {
   const { title, onPress, primary } = props;
 
   return (
-    <StyledTouchableOpacity primary={primary} onPress={onPress}>
+    <StyledTouchableOpacity {...props} primary={primary} onPress={onPress}>
       <StyledText>{title}</StyledText>
     </StyledTouchableOpacity>
   );
