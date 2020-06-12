@@ -34,11 +34,11 @@ export const AutocompleteInput = React.forwardRef(
     }, [values]);
 
     // comparison function
-    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
+    const comp = (a, b): boolean => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     // filter through values in autocomplete data array
-    const findQuery = (query): AutocompleteData[] =>
-      query === '' ? [] : data.filter((item) => item.name.search(query.trim()) >= 0);
+    const findQuery = (query: string): AutocompleteData[] =>
+      query === '' ? [] : data.filter((item) => item.name.search(escape(query.trim())) >= 0);
 
     // render autocomplete item
     const renderItem = ({ item }) => (
