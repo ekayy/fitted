@@ -25,12 +25,8 @@ class GarmentsGrid extends Component {
     }
 
     return numCol == 2 ? (
-      <TouchableOpacity
-        style={styles.gridItem}
-        key={id}
-        onPress={() => navigate('Garment Detail', item)}
-      >
-        <View style={styles.imageContainer}>
+      <TouchableOpacity key={id} onPress={() => navigate('Garment Detail', item)}>
+        <View style={[styles.gridItem, { width: Metrics.screenWidth / 2 }]}>
           <Image style={styles.image} source={{ uri: photoUrl }} />
           {editingCloset && (
             <Badge
@@ -44,12 +40,8 @@ class GarmentsGrid extends Component {
         <Text style={styles.text}>{formattedModel}</Text>
       </TouchableOpacity>
     ) : (
-      <TouchableOpacity
-        style={styles.gridItem}
-        key={id}
-        onPress={() => navigate('Garment Detail', item)}
-      >
-        <View style={[styles.imageContainer, { width: Metrics.screenWidth / 3 }]}>
+      <TouchableOpacity key={id} onPress={() => navigate('Garment Detail', item)}>
+        <View style={[styles.gridItem, { width: Metrics.screenWidth / 3 }]}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
       </TouchableOpacity>
@@ -85,14 +77,14 @@ class GarmentsGrid extends Component {
   };
 
   render() {
-    const { style, data, numColumns, ListFooterComponent, refreshing } = this.props;
+    const { style, data, numCol, ListFooterComponent, refreshing } = this.props;
 
     return (
       <FlatList
         style={style}
         data={data}
         keyExtractor={(item, index) => index.toString()}
-        numColumns={3}
+        numColumns={numCol}
         renderItem={({ item }) => this.renderGarment(item)}
         onRefresh={() => this.props.onRefresh()}
         onEndReached={this.handleLoadMore}
@@ -109,38 +101,12 @@ class GarmentsGrid extends Component {
 
 const styles = {
   gridItem: {
-    alignItems: 'center',
-    marginBottom: 40,
-    marginHorizontal: 20,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    backgroundColor: 'rgb(0,0,0.8)',
-    height: 160,
-  },
-  welcomeText: {
-    paddingTop: 32,
-  },
-  welcomeTitle: {
-    textAlign: 'center',
-    fontSize: 32,
-    color: 'rgb(255,255,255)',
-  },
-  welcomeSubtitle: {
-    textAlign: 'center',
-    paddingVertical: 8,
-    fontSize: 17,
-    color: 'rgb(255,255,255)',
-  },
-  imageContainer: {
     flex: 1,
-    width: 136,
-    height: 136,
-    position: 'relative',
+    height: 250,
   },
   image: {
     width: undefined,
-    height: 136,
+    height: '100%',
   },
   text: {
     maxWidth: '80%',

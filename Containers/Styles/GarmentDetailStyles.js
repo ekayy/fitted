@@ -62,6 +62,8 @@ export default StyleSheet.create({
   },
   swatch: {
     marginRight: Metrics.baseMargin,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   buttonSection: {
     display: 'flex',

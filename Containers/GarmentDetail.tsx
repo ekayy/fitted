@@ -99,10 +99,16 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
           <Text style={styles.label}>Color</Text>
           <Text>{color}</Text>
         </View>
-        <View style={styles.colorSwatches}>
-          <Avatar size="small" rounded activeOpacity={0.7} containerStyle={styles.swatch} />
-          <Avatar size="small" rounded activeOpacity={0.7} containerStyle={styles.swatch} />
-        </View>
+        {/* <View style={styles.colorSwatches}>
+         <Avatar
+            size="small"
+            rounded
+            activeOpacity={0.7}
+            containerStyle={styles.swatch}
+            overlayContainerStyle={{ backgroundColor: color.toLowerCase() }}
+          />
+        <Avatar size="small" rounded activeOpacity={0.7} containerStyle={styles.swatch} />
+        </View> */}
       </View>
 
       <View style={styles.buttonSection}>
