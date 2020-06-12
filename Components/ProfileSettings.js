@@ -19,20 +19,24 @@ class ProfileSettings extends Component {
           title="Edit profile"
           leftIcon={{ name: 'ios-create', type: 'ionicon' }}
           onPress={() => {
-            navigate('Profile Settings Edit');
+            navigate('Edit Profile');
           }}
         />
         <ListItem
           chevron
           title="Change password"
           leftIcon={{ name: 'ios-lock', type: 'ionicon' }}
-          onPress={() => {}}
+          onPress={() => {
+            navigate('Change Password');
+          }}
         />
         <ListItem
           chevron
           title="Change email address"
           leftIcon={{ name: 'ios-mail', type: 'ionicon' }}
-          onPress={() => {}}
+          onPress={() => {
+            navigate('Change Email');
+          }}
         />
         <ListItem
           title="Log out"

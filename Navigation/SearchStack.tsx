@@ -8,7 +8,7 @@ import Fits from '../Containers/Fits';
 import Comments from '../Containers/Comments';
 import CommentSingle from '../Components/Comment/CommentSingle';
 
-import { Garment, Fit } from '../types';
+import { Garment } from '../types';
 import Camera from '../Containers/Camera';
 
 export type SearchStackParamList = {
