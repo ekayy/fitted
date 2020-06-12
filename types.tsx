@@ -57,6 +57,7 @@ import {
   FETCH_FIT_GARMENTS_BEGIN,
   FETCH_FIT_GARMENTS_SUCCESS,
   FETCH_FIT_GARMENTS_FAILURE,
+  CLEAR_CREATED_GARMENT,
 } from './Redux/GarmentsRedux';
 import { CreateDiscussionStackParamList } from './Navigation/CreateDiscussionStack';
 
@@ -175,6 +176,7 @@ export interface BrandState {
 
 export interface Garment {
   id: number;
+  created_date: string;
   color: string;
   sku: string;
   brand: number;
@@ -194,16 +196,16 @@ export interface GarmentState {
 }
 
 export interface Fit {
-  id?: number;
-  created_date?: string;
+  id: number;
+  created_date: string;
   profile: number;
   description: string;
   style?: string;
   photo: string;
   likes?: number[];
   garments: number[];
-  height?: number;
-  weight?: number;
+  height: number;
+  weight: number;
 }
 
 export interface FitState {
@@ -391,6 +393,10 @@ interface CreateGarmentFailureAction {
   payload: Pick<GarmentState, 'error'>;
 }
 
+interface ClearCreatedGarmentAction {
+  type: typeof CLEAR_CREATED_GARMENT;
+}
+
 export type GarmentActionTypes =
   | FetchGarmentsBeginAction
   | FetchGarmentsSuccessAction
@@ -400,7 +406,8 @@ export type GarmentActionTypes =
   | FetchFitGarmentsFailureAction
   | CreateGarmentBeginAction
   | CreateGarmentSuccessAction
-  | CreateGarmentFailureAction;
+  | CreateGarmentFailureAction
+  | ClearCreatedGarmentAction;
 
 interface LoginRequestAction {
   type: typeof LOGIN_REQUEST;

@@ -33,8 +33,6 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
   useEffect(() => {
     // if fit created
     if (createdFit) {
-      const { id, photo, height, weight, garments } = createdFit;
-
       setDescription('');
 
       navigation.reset({
@@ -43,13 +41,7 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
 
       navigation.navigate('Search', {
         screen: 'Fit Detail',
-        params: {
-          id,
-          photo,
-          height,
-          weight,
-          garments,
-        },
+        params: createdFit,
       });
 
       // reset fit redux

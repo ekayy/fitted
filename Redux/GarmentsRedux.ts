@@ -15,6 +15,8 @@ export const FETCH_FIT_GARMENTS_BEGIN = 'FETCH_FIT_GARMENTS_BEGIN';
 export const FETCH_FIT_GARMENTS_SUCCESS = 'FETCH_FIT_GARMENTS_SUCCESS';
 export const FETCH_FIT_GARMENTS_FAILURE = 'FETCH_FIT_GARMENTS_FAILURE';
 
+export const CLEAR_CREATED_GARMENT = 'CLEAR_CREATED_GARMENT';
+
 export const SYNC_GARMENT_COMMENTS = 'SYNC_GARMENT_COMMENTS';
 export const SYNC_GARMENT_COMMENT_REPLIES = 'SYNC_GARMENT_COMMENT_REPLIES';
 
@@ -92,6 +94,13 @@ export default function garments(state = INITIAL_STATE, action: GarmentActionTyp
         ...state,
         loading: false,
         error: action.payload.error,
+      };
+
+    case CLEAR_CREATED_GARMENT:
+      return {
+        ...state,
+        loading: false,
+        createdGarment: null,
       };
 
     // case SYNC_GARMENT_COMMENTS: {
@@ -202,6 +211,10 @@ export const createGarmentFailure = ({ error }: GarmentState): GarmentActionType
   payload: { error },
 });
 
+export const clearCreatedGarment = (): GarmentActionTypes => ({
+  type: CLEAR_CREATED_GARMENT,
+});
+
 export const syncGarmentComments = (comment) => ({
   type: SYNC_GARMENT_COMMENTS,
   payload: {
@@ -273,7 +286,6 @@ export const createGarment = ({ brand, color, model }): AppThunk => async (dispa
       purchase_page: 'https://x',
     });
     dispatch(createGarmentSuccess(res.data));
-    // return res.data;
   } catch (error) {
     dispatch(createGarmentFailure(error));
   }

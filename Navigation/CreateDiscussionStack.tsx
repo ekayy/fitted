@@ -12,10 +12,10 @@ import SearchGarments from '../Containers/SearchGarments';
 import SelectSizing from '../Containers/SelectSizing';
 import AddCustomGarment from '../Containers/AddCustomGarment';
 import CreateChoice from '../Components/CreateChoice';
-import { Fit } from '../types';
+import { Fit, Garment } from '../types';
 
 export type CreateDiscussionStackParamList = {
-  Search: { screen: string; params: Partial<Fit> };
+  Search: { screen: string; params: Partial<Fit> | Partial<Garment> };
   Camera: undefined;
   'Create Choice': undefined;
   'Tag Garments': { image: string };
