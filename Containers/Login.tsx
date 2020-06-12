@@ -1,5 +1,5 @@
 import React, { useEffect, createRef, useRef } from 'react';
-import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { login, fetchProfile, loginClearError } from '../Redux/UserRedux';
 import { LoginProps, useTypedSelector } from '../types';
@@ -20,7 +20,7 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
   const dispatch = useDispatch();
 
   // for focusing on next input
-  const passwordInputRef = createRef<MyTextInput>();
+  const passwordInputRef = createRef<TextInput>();
 
   // Load UserRedux
   const { profileId, error, loading, isLoggedIn } = useTypedSelector((state) => state.user);
@@ -83,83 +83,84 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
           setTimeout(() => dispatch(loginClearError()), 2000);
         }}
       >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <>
-            <View style={styles.form}>
-              <MyTextInput
-                name="username"
-                style={!loading ? styles.textInput : styles.textInputReadonly}
-                value={values.username}
-                editable={!loading}
-                keyboardType="default"
-                returnKeyType="next"
-                autoCapitalize="none"
-                autoCorrect={false}
-                onChangeText={handleChange('username')}
-                onBlur={handleBlur('username')}
-                underlineColorAndroid="transparent"
-                onSubmitEditing={() =>
-                  passwordInputRef.current !== null && passwordInputRef.current.focus()
-                }
-                placeholder="Username or Email"
-              />
+        {(props) => {
+          const { handleSubmit, values } = props;
+          return (
+            <>
+              <View style={styles.form}>
+                <MyTextInput
+                  {...props}
+                  name="username"
+                  style={!loading ? styles.textInput : styles.textInputReadonly}
+                  value={values.username}
+                  editable={!loading}
+                  keyboardType="default"
+                  returnKeyType="next"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  underlineColorAndroid="transparent"
+                  onSubmitEditing={() =>
+                    passwordInputRef.current !== null && passwordInputRef.current.focus()
+                  }
+                  placeholder="Username or Email"
+                />
 
-              <MyTextInput
-                name="password"
-                ref={passwordInputRef}
-                style={!loading ? styles.textInput : styles.textInputReadonly}
-                value={values.password}
-                editable={!loading}
-                keyboardType="default"
-                returnKeyType="go"
-                autoCapitalize="none"
-                autoCorrect={false}
-                secureTextEntry
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                underlineColorAndroid="transparent"
-                placeholder="Password"
-              />
-            </View>
-
-            <View style={styles.loginWrapper}>
-              <View style={[styles.loginRow, { alignItems: 'center' }]}>
-                <TouchableOpacity style={styles.loginButtonWrapper} onPress={handleSubmit as any}>
-                  <View style={styles.loginButton}>
-                    <Text style={styles.loginText}>LOGIN</Text>
-                  </View>
-
-                  {error && <Text style={styles.error}>{error}</Text>}
-                </TouchableOpacity>
+                <MyTextInput
+                  {...props}
+                  name="password"
+                  ref={passwordInputRef}
+                  style={!loading ? styles.textInput : styles.textInputReadonly}
+                  value={values.password}
+                  editable={!loading}
+                  keyboardType="default"
+                  returnKeyType="go"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  secureTextEntry
+                  underlineColorAndroid="transparent"
+                  placeholder="Password"
+                />
               </View>
 
-              <View style={styles.divider}>
-                <View style={styles.hairline} />
-                <Text style={styles.or}>OR</Text>
-                <View style={styles.hairline} />
-              </View>
+              <View style={styles.loginWrapper}>
+                <View style={[styles.loginRow, { alignItems: 'center' }]}>
+                  <TouchableOpacity style={styles.loginButtonWrapper} onPress={handleSubmit as any}>
+                    <View style={styles.loginButton}>
+                      <Text style={styles.loginText}>LOGIN</Text>
+                    </View>
 
-              <View style={[styles.loginRow, { alignItems: 'center' }]}>
-                <TouchableOpacity style={styles.loginButtonWrapper} onPress={loginFb}>
-                  <View style={styles.facebookButton}>
-                    <Text style={styles.loginText}>Log In With Facebook</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                    {error && <Text style={styles.error}>{error}</Text>}
+                  </TouchableOpacity>
+                </View>
 
-              <View style={styles.loginRow}>
-                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                  <View>
-                    <Text style={styles.switchText}>
-                      Don't have an account?
-                      <Text style={styles.switchText}> Sign Up</Text>
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.divider}>
+                  <View style={styles.hairline} />
+                  <Text style={styles.or}>OR</Text>
+                  <View style={styles.hairline} />
+                </View>
+
+                <View style={[styles.loginRow, { alignItems: 'center' }]}>
+                  <TouchableOpacity style={styles.loginButtonWrapper} onPress={loginFb}>
+                    <View style={styles.facebookButton}>
+                      <Text style={styles.loginText}>Log In With Facebook</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.loginRow}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                    <View>
+                      <Text style={styles.switchText}>
+                        Don't have an account?
+                        <Text style={styles.switchText}> Sign Up</Text>
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </>
-        )}
+            </>
+          );
+        }}
       </Formik>
     </ScrollView>
   );

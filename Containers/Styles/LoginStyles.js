@@ -31,7 +31,6 @@ export default StyleSheet.create({
     paddingTop: 45,
   },
   form: {
-    backgroundColor: Colors.snow,
     margin: Metrics.baseMargin,
     borderRadius: 5,
     width: 315,

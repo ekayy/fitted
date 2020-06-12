@@ -119,6 +119,17 @@ export type CreateChoiceProps = {
   navigation: CreateChoiceNavigationProp;
 };
 
+type CreateDiscussionRouteProp = RouteProp<CreateDiscussionStackParamList, 'Create Discussion'>;
+type CreateDiscussionNavigationProp = StackNavigationProp<
+  CreateDiscussionStackParamList,
+  'Create Discussion'
+>;
+
+export type CreateDiscussionProps = {
+  route: CreateDiscussionRouteProp;
+  navigation: CreateDiscussionNavigationProp;
+};
+
 type TagGarmentsRouteProp = RouteProp<CreateDiscussionStackParamList, 'Tag Garments'>;
 type TagGarmentsNavigationProp = StackNavigationProp<
   CreateDiscussionStackParamList,

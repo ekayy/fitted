@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
-const Button = props => {
+const Button = (props) => {
   const { title, onPress, primary } = props;
 
   return (
@@ -12,8 +12,8 @@ const Button = props => {
 };
 
 const StyledTouchableOpacity = styled.TouchableOpacity`
-  background-color: ${props => (props.primary ? '#6fa6e8' : '#da4f34')};
-  border: 1px solid ${props => (props.primary ? '#6fa6e8' : '#da4f34')};
+  background-color: ${(props) => (props.primary ? '#6fa6e8' : '#da4f34')};
+  border: 1px solid ${(props) => (props.primary ? '#6fa6e8' : '#da4f34')};
   padding: 10px 0;
   flex: 1;
   justify-content: center;
