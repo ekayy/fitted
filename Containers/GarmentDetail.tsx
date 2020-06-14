@@ -8,10 +8,10 @@ import { AppStyles, Metrics } from '../Themes';
 import styles from './Styles/GarmentDetailStyles';
 
 import { FavoriteButton } from '../Components/FavoriteButton';
-// import CommentList from '../Components/Comment/CommentList';
+import CommentList from '../Components/Comment/CommentList';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { fetchFits, clearCreatedFit, tagGarmentToFit } from '../Redux/FitsRedux';
-// import { fetchComments } from '../Redux/CommentsRedux';
+import { fetchComments } from '../Redux/CommentsRedux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { GarmentDetailProps } from '../types';
@@ -19,24 +19,38 @@ import { useTypedSelector } from '../types';
 
 const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   // Navigation params
-  const { id: garmentId, color, brand, model, photo, purchase_page: purchasePage } = route.params;
+  const {
+    id: garmentId,
+    color,
+    brand,
+    model,
+    photo,
+    purchase_page: purchasePage,
+    favorited_by: favoritedBy,
+  } = route.params;
 
   // Redux state
   const { items: fits } = useTypedSelector((state) => state.fits);
   const { items: brands } = useTypedSelector((state) => state.brands);
+  const { items: comments } = useTypedSelector((state) => state.comments);
   const user = useTypedSelector((state) => state.user);
   const { favoriteGarments } = user;
   const brandName = brands[brand - 1]['name'];
 
   // State
   const [toggled, setToggled] = useState<boolean>(false);
+  const [favoriteLength, setFavoriteLength] = useState<number>(favoritedBy.length);
 
   // Effects
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchFits(garmentId));
+    dispatch(fetchComments());
     favoriteGarments.includes(garmentId) ? setToggled(true) : setToggled(false);
   }, []);
+  useEffect(() => {
+    toggled ? setFavoriteLength(favoritedBy.length + 1) : setFavoriteLength(favoritedBy.length);
+  }, [toggled]);
 
   const favorite = () => {
     dispatch(favoriteGarment(garmentId, user));
@@ -90,7 +104,9 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
         </View>
 
         <View style={styles.descriptionSectionRight}>
-          <Text>802 adds to closet</Text>
+          <Text>
+            {favoriteLength} add{favoriteLength !== 1 && 's'} to closet
+          </Text>
         </View>
       </View>
 
@@ -157,7 +173,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
         )}
       </View>
 
-      {/* <View style={AppStyles.section}>
+      <View style={AppStyles.section}>
         <View style={AppStyles.sectionTitle}>
           <Text style={AppStyles.sectionTitleText}>Discussion</Text>
         </View>
@@ -186,7 +202,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
             }
           />
         </View>
-      </View> */}
+      </View>
     </ScrollView>
   );
 };
