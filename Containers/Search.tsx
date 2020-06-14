@@ -3,46 +3,47 @@ import styled from 'styled-components/native';
 import { View, ActivityIndicator, Platform } from 'react-native';
 import { SearchBar, Badge } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
-import { fetchGarments } from '../Redux/GarmentsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
 import { favoriteGarment } from '../Redux/UserRedux';
+import { searchGarments, setBrandFilter, clearSearchFilters, x } from '../Redux/SearchRedux';
 import SearchFilter from '../Components/Search/SearchFilter';
 import SearchList from '../Components/SearchList';
 import Dropdown from '../Components/Dropdown';
 import Home from '../Components/Home';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { SearchProps, useTypedSelector, Garment } from '../types';
+import { SearchProps, useTypedSelector, Brand } from '../types';
+
+enum Sort {
+  SELECT = 'SELECT',
+  RECENT = 'MOST RECENT',
+  POPULAR = 'MOST POPULAR',
+}
+
+const sortOptions: string[] = [Sort.RECENT, Sort.POPULAR];
 
 const Search: React.FC<SearchProps> = ({ route, navigation }) => {
+  const { loading, items: searchResults, brandIds } = useTypedSelector((state) => state.search);
   const { items: garments } = useTypedSelector((state) => state.garments);
   const { items: brands } = useTypedSelector((state) => state.brands);
   const user = useTypedSelector((state) => state.user);
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [activeSort, setActiveSort] = useState<string>(Sort.SELECT);
   const [brandTable, setBrandTable] = useState<any[]>([]);
-  const [brandIds, setBrandIds] = useState<number[]>([]);
-  const [searchedGarments, setSearchedGarments] = useState<Garment[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<Garment[]>([]);
-  const [remainingResults, setRemainingResults] = useState<Garment[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [offset, setOffset] = useState<number>(0);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    setRefreshing(true);
     dispatch(fetchBrands());
     createBrandTable();
   }, []);
   useEffect(() => {
-    setRefreshing(true);
-    dispatch(fetchGarments());
-    setSearchedGarments(garments);
-  }, []);
-  useEffect(() => {
     setRefreshing(false);
-    setSearchResults([...searchedGarments.slice(0, 10)]);
-    setRemainingResults([...searchedGarments.slice(10)]);
-  }, [garments]);
+  }, [searchResults]);
+  useEffect(() => {
+    performSearch();
+  }, [activeSort]);
 
   //  sort all garments into their respective brand
   const createBrandTable = () => {
@@ -58,54 +59,49 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
     setBrandTable(brandTable);
   };
 
-  const handleChange = (searchTerm) => {
-    const searchedResults = searchedGarments.filter((result) =>
-      searchTerm ? result.model.toLowerCase().includes(searchTerm) : searchedGarments,
-    );
-
-    const filteredResults = brandIds.length
-      ? searchedResults.filter((result) => brandIds.includes(result.brand))
-      : searchedResults;
-
-    let slicedResults = filteredResults.slice(0, 10);
-    let remainingResults = filteredResults.slice(10);
-
-    setSearchTerm(searchTerm);
-    setRemainingResults(remainingResults);
-    setSearchResults(slicedResults);
+  const performSearch = () => {
+    activeSort === Sort.RECENT
+      ? dispatch(searchGarments({ searchTerm, brandIds, sortBy: '-created_date' }))
+      : dispatch(searchGarments({ searchTerm, brandIds, sortBy: '-favorited_by' }));
   };
 
+  // Sorting
+  const handleSort = (index: string, option: string) => {
+    // change dropdown text
+    setActiveSort(option);
+  };
+
+  // handle search query
+  const handleChange = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    performSearch();
+  };
+
+  // pull to refresh
   const handleRefresh = () => {
     setRefreshing(true);
-    setSearchResults([]);
-    dispatch(fetchGarments());
+    performSearch();
   };
 
   //   // do nothing because the entire page is loaded
   const handleLoadMore = () => {
-    setLoading(true);
-    setRemainingResults(remainingResults.slice(10));
-    setSearchResults([...searchResults, ...remainingResults.slice(0, 10)]);
-    setLoading(false);
+    // setOffset(offset + 10);
   };
 
-  // Search filters: e.g. [1,3,5]
-  const applyFilters = (brandIds) => {
-    setSearchResults([]);
-    setBrandIds(brandIds);
+  // check or uncheck filters
+  const selectFilter = ({ id }: Brand) => {
+    dispatch(setBrandFilter(id));
+  };
 
-    const searchedResults = searchedGarments.filter((result) =>
-      searchTerm ? result.model.toLowerCase().includes(searchTerm) : searchedGarments,
-    );
+  // clear all checked filters
+  const clearFilters = () => {
+    dispatch(clearSearchFilters());
+  };
 
-    const filteredResults = searchedResults.filter((result) => brandIds.includes(result.brand));
-
-    let slicedResults = filteredResults.slice(0, 10);
-    let remainingResults = filteredResults.slice(10);
-
-    setSearchTerm(searchTerm);
-    setRemainingResults(remainingResults);
-    setSearchResults(slicedResults);
+  // perform search based on brand id
+  const applyFilters = () => {
+    setShowFilters(false);
+    performSearch();
   };
 
   // Toggle search filters overlay
@@ -132,7 +128,12 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
       {searchTerm ? (
         <StyledFilterBarContainer>
           <StyledFilterBar>
-            <Dropdown options={['MOST RECENT', 'MOST POPULAR']} defaultValue="SELECT" />
+            <Dropdown
+              options={sortOptions}
+              defaultValue={Sort.SELECT}
+              onSelect={handleSort}
+              value={activeSort}
+            />
           </StyledFilterBar>
 
           <VerticalDivider />
@@ -151,8 +152,10 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
       <SearchFilter
         navigation={navigation}
         showFilters={showFilters}
-        onClose={toggleFilters}
         applyFilters={applyFilters}
+        clearFilters={clearFilters}
+        selectFilter={selectFilter}
+        filteredBrands={brandIds}
         brands={brands}
       />
 
@@ -160,7 +163,6 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
         <SearchList
           data={searchResults}
           navigation={navigation}
-          numCol={2}
           handleLoadMore={handleLoadMore}
           onRefresh={handleRefresh}
           refreshing={refreshing}

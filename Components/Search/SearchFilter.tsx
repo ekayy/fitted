@@ -3,27 +3,31 @@ import styled from 'styled-components/native';
 import { View } from 'react-native';
 import CheckBox from '../Forms/Checkbox';
 import { ListItem, Divider } from 'react-native-elements';
-import SectionTitle from '../Search/SectionTitle';
+import SectionTitle from './SectionTitle';
+import { Brand } from '../../types';
 
-const SearchFilter = props => {
-  const [checked, setChecked] = useState([]);
+interface Props {
+  brands: Brand[];
+  showFilters: boolean;
+  filteredBrands: number[];
+  selectFilter(id: Brand): void;
+  applyFilters(): void;
+  clearFilters(): void;
+  onClose(): void;
+}
 
-  const selectItem = item => {
-    checked.includes(item.id)
-      ? setChecked(checked.filter(id => id !== item.id))
-      : setChecked([...checked, item.id]);
-  };
+const SearchFilter: React.FC<Props> = (props) => {
+  const { brands, showFilters, clearFilters, selectFilter, applyFilters, filteredBrands } = props;
 
-  const renderItems = items => {
-    return items.map(item => (
+  const renderItems = (items) => {
+    return items.map((item) => (
       <View key={item.name}>
         <ListItem
           title={
             <CheckBox
-              key={item.name}
               title={item.name}
-              checked={checked.includes(item.id)}
-              handlePress={() => selectItem(item)}
+              checked={filteredBrands.includes(item.id)}
+              handlePress={() => selectFilter(item)}
             />
           }
           containerStyle={styles.listItemContainer}
@@ -33,41 +37,26 @@ const SearchFilter = props => {
     ));
   };
 
-  const onClear = () => {
-    setChecked([]);
-    props.applyFilters([]);
-    props.onClose();
-  };
-
-  const onFilter = () => {
-    props.applyFilters(checked);
-    props.onClose();
-  };
-
-  if (!props.showFilters) {
+  if (!showFilters) {
     return null;
   }
 
   return (
-    <StyledModal
-      animationType="slide"
-      transparent={false}
-      visible={props.showFilters}
-    >
+    <StyledModal animationType="slide" transparent={false} visible={showFilters}>
       <StyledHeader>
         <StyledHeaderScroll>
           <StyledHeaderContainer>
-            <CancelButton onPress={onClear}>Clear</CancelButton>
-            <SearchButton onPress={onFilter}>Filter</SearchButton>
+            <CancelButton onPress={clearFilters}>Clear</CancelButton>
+            <SearchButton onPress={applyFilters}>Done</SearchButton>
           </StyledHeaderContainer>
 
           <View>
-            <SectionTitle text="category" />
+            {/* <SectionTitle text="category" />
             <Divider />
-            {renderItems(categories)}
+            {renderItems(categories)} */}
             <SectionTitle text="brands" />
             <Divider />
-            {renderItems(props.brands)}
+            {renderItems(brands)}
           </View>
         </StyledHeaderScroll>
       </StyledHeader>
@@ -113,27 +102,27 @@ const SearchButton = styled.Text`
 const styles = {
   listItemContainer: {
     padding: 0,
-    paddingRight: 20
-  }
+    paddingRight: 20,
+  },
 };
 
-const categories = [
-  {
-    name: 'Tops',
-    id: 20
-  },
-  {
-    name: 'Bottoms',
-    id: 21
-  },
-  {
-    name: 'Shoes',
-    id: 22
-  },
-  {
-    name: 'Other',
-    id: 23
-  }
-];
+// const categories = [
+//   {
+//     name: 'Tops',
+//     id: 20,
+//   },
+//   {
+//     name: 'Bottoms',
+//     id: 21,
+//   },
+//   {
+//     name: 'Shoes',
+//     id: 22,
+//   },
+//   {
+//     name: 'Other',
+//     id: 23,
+//   },
+// ];
 
 export default SearchFilter;

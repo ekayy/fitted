@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
 import { GarmentActionTypes, AppThunk, GarmentState, Garment } from '../types';
+import { createSelector } from 'reselect';
 
 // Actions
 export const FETCH_GARMENTS_BEGIN = 'FETCH_GARMENTS_BEGIN';
@@ -19,10 +20,6 @@ export const CLEAR_CREATED_GARMENT = 'CLEAR_CREATED_GARMENT';
 
 export const SYNC_GARMENT_COMMENTS = 'SYNC_GARMENT_COMMENTS';
 export const SYNC_GARMENT_COMMENT_REPLIES = 'SYNC_GARMENT_COMMENT_REPLIES';
-
-// const FETCH_GARMENT_FITS_BEGIN = 'FETCH_GARMENT_FITS_BEGIN';
-// const FETCH_GARMENT_FITS_SUCCESS = 'FETCH_GARMENT_FITS_SUCCESS';
-// const FETCH_GARMENT_FITS_FAILURE = 'FETCH_GARMENT_FITS_FAILURE';
 
 export const INITIAL_STATE: GarmentState = {
   items: [],
@@ -143,26 +140,6 @@ export default function garments(state = INITIAL_STATE, action: GarmentActionTyp
     //   };
     // }
 
-    // case FETCH_GARMENT_FITS_BEGIN:
-    //   return {
-    //     ...state,
-    //     loading: true,
-    //     error: null
-    //   };
-    // case FETCH_GARMENT_FITS_SUCCESS:
-    //   return {
-    //     ...state,
-    //     loading: false
-    //     // garmentFits: action.payload.garmentFits
-    //   };
-    // case FETCH_GARMENT_FITS_FAILURE:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     error: action.payload.error
-    //     // garmentFits
-    //   };
-
     default:
       return state;
   }
@@ -215,34 +192,18 @@ export const clearCreatedGarment = (): GarmentActionTypes => ({
   type: CLEAR_CREATED_GARMENT,
 });
 
-export const syncGarmentComments = (comment) => ({
-  type: SYNC_GARMENT_COMMENTS,
-  payload: {
-    comment,
-  },
-});
-export const syncGarmentCommentReplies = (reply, objectId) => ({
-  type: SYNC_GARMENT_COMMENT_REPLIES,
-  payload: {
-    reply,
-    objectId,
-  },
-});
-
-// export const fetchGarmentFitsBegin = () => ({
-//   type: FETCH_GARMENT_FITS_BEGIN
-// });
-// export const fetchGarmentFitsSuccess = garmentFits => ({
-//   type: FETCH_GARMENT_FITS_SUCCESS,
+// export const syncGarmentComments = (comment) => ({
+//   type: SYNC_GARMENT_COMMENTS,
 //   payload: {
-//     garmentFits
-//   }
+//     comment,
+//   },
 // });
-// export const fetchGarmentFitsFailure = error => ({
-//   type: FETCH_GARMENT_FITS_FAILURE,
+// export const syncGarmentCommentReplies = (reply, objectId) => ({
+//   type: SYNC_GARMENT_COMMENT_REPLIES,
 //   payload: {
-//     error
-//   }
+//     reply,
+//     objectId,
+//   },
 // });
 
 // side effects, only as applicable
@@ -291,14 +252,13 @@ export const createGarment = ({ brand, color, model }): AppThunk => async (dispa
   }
 };
 
-// export const fetchGarmentFits = id => async dispatch => {
-//   dispatch(fetchGarmentFitsBegin());
+// Selectors
+const garmentsSelector = (state) => state.garments.items;
 
-//   try {
-//     const res = await axios.get(`${baseURL}/fits/?garment=${id}&limit=100/`);
+export const garmentsByMostRecentSelector = createSelector(garmentsSelector, (items) =>
+  items.sort((a, b) => (b.created_date - a.created_date ? 1 : -1)),
+);
 
-//     dispatch(fetchGarmentFitsSuccess(res.data));
-//   } catch (error) {
-//     dispatch(fetchGarmentFitsFailure(error));
-//   }
-// };
+export const garmentsByMostFavoritedSelector = createSelector(garmentsSelector, (items) =>
+  items.sort((a, b) => (b.favorited_by.length > a.favorited_by.length ? 1 : -1)),
+);

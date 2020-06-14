@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -6,22 +6,18 @@ import { StyleSheet, Keyboard } from 'react-native';
 
 interface Props {
   options: string[];
+  value: string;
   defaultValue: string;
+  onSelect(index: string, option: string): void;
 }
 
-const Dropdown: React.FC<Props> = ({ options, defaultValue, onSelect }) => {
-  const [value, setValue] = useState<string>();
-
-  const handleSelect = (index: string, option: string) => {
-    setValue(option);
-  };
-
+const Dropdown: React.FC<Props> = ({ options, value, defaultValue, onSelect }) => {
   return (
     <ModalDropdown
       dropdownTextHighlightStyle={styles.dropdownTextHighlight}
       dropdownStyle={styles.dropdown}
       dropdownTextStyle={styles.dropdownText}
-      onSelect={handleSelect}
+      onSelect={onSelect}
       options={options}
       style={styles.dropdownButton}
       onDropdownWillShow={Keyboard.dismiss}

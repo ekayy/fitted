@@ -85,7 +85,6 @@ class SearchList extends Component {
         style={style}
         data={data}
         keyExtractor={(item, index) => index.toString()}
-        numColumns={3}
         renderItem={({ item }) => this.renderGarment(item)}
         onRefresh={() => this.props.onRefresh()}
         onEndReached={this.handleLoadMore}

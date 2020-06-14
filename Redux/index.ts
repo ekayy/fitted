@@ -10,6 +10,7 @@ import fits from './FitsRedux';
 import comments from './CommentsRedux';
 import brands from './BrandsRedux';
 import profiles from './ProfilesRedux';
+import search from './SearchRedux';
 
 const persistConfig = {
   key: 'root',
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   comments,
   brands,
   profiles,
+  search,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
