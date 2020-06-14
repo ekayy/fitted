@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { SearchActionTypes, AppThunk, SearchState, Search } from '../types';
+import { SearchActionTypes, AppThunk, SearchState, Garment } from '../types';
 
 // Actions
 export const SEARCH_GARMENTS_BEGIN = 'SEARCH_GARMENTS_BEGIN';
@@ -33,7 +33,7 @@ export default function search(state = INITIAL_STATE, action: SearchActionTypes)
       return {
         ...state,
         loading: false,
-        items: [...action.payload],
+        items: [...action.payload.items],
       };
 
     case SEARCH_GARMENTS_FAILURE:
@@ -73,22 +73,20 @@ export default function search(state = INITIAL_STATE, action: SearchActionTypes)
 export const searchGarmentsBegin = (): SearchActionTypes => ({
   type: SEARCH_GARMENTS_BEGIN,
 });
-export const searchGarmentsSuccess = (items: Search[]): SearchActionTypes => ({
+export const searchGarmentsSuccess = (items: Garment[]): SearchActionTypes => ({
   type: SEARCH_GARMENTS_SUCCESS,
-  payload: items,
+  payload: { items },
 });
-export const searchGarmentsFailure = ({
-  error,
-}: Pick<SearchState, 'error'>): SearchActionTypes => ({
+export const searchGarmentsFailure = (error): SearchActionTypes => ({
   type: SEARCH_GARMENTS_FAILURE,
   payload: { error },
 });
 
-export const setBrandFilter = (brandId: number): SearchActionTypes => ({
+export const setBrandFilter = (brandId: number) => ({
   type: SET_BRAND_FILTER,
   payload: brandId,
 });
-export const clearSearchFilters = (): SearchActionTypes => ({
+export const clearSearchFilters = () => ({
   type: CLEAR_SEARCH_FILTERS,
 });
 

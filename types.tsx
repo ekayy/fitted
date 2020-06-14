@@ -60,6 +60,11 @@ import {
   CLEAR_CREATED_GARMENT,
 } from './Redux/GarmentsRedux';
 import { CreateDiscussionStackParamList } from './Navigation/CreateDiscussionStack';
+import {
+  SEARCH_GARMENTS_BEGIN,
+  SEARCH_GARMENTS_FAILURE,
+  SEARCH_GARMENTS_SUCCESS,
+} from './Redux/SearchRedux';
 
 type SearchRouteProp = RouteProp<SearchStackParamList, 'Search'>;
 type SearchNavigationProp = StackNavigationProp<SearchStackParamList, 'Search'>;
@@ -215,6 +220,13 @@ export interface FitState {
   items: Fit[];
   loading: boolean;
   taggedGarments: Garment[];
+}
+
+export interface SearchState {
+  items: Garment[];
+  loading: boolean;
+  error: string | null;
+  brandIds: number[];
 }
 
 export interface UserState {
@@ -505,3 +517,20 @@ export type ProfileActionTypes =
   | FetchFavoriteFitsBeginAction
   | FetchFavoriteFitsSuccessAction
   | FetchFavoriteFitsFailureAction;
+
+interface SearchGarmentsBeginAction {
+  type: typeof SEARCH_GARMENTS_BEGIN;
+}
+interface SearchGarmentsSuccessAction {
+  type: typeof SEARCH_GARMENTS_SUCCESS;
+  payload: Pick<SearchState, 'items'>;
+}
+interface SearchGarmentsFailureAction {
+  type: typeof SEARCH_GARMENTS_FAILURE;
+  payload: Pick<SearchState, 'error'>;
+}
+
+export type SearchActionTypes =
+  | SearchGarmentsBeginAction
+  | SearchGarmentsSuccessAction
+  | SearchGarmentsFailureAction;
