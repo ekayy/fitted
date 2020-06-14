@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components/native';
 import { View, ActivityIndicator, Platform } from 'react-native';
 import { SearchBar, Badge } from 'react-native-elements';
@@ -39,11 +39,18 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
     createBrandTable();
   }, []);
   useEffect(() => {
+    // for pull up to load
     setRefreshing(false);
   }, [searchResults]);
   useEffect(() => {
     performSearch();
   }, [activeSort]);
+  useEffect(() => {
+    // "simple debounce"
+    if (searchTerm.length < 3) return;
+    const timeout = setTimeout(() => performSearch(), 1000);
+    return () => clearTimeout(timeout);
+  }, [searchTerm]);
 
   //  sort all garments into their respective brand
   const createBrandTable = () => {
@@ -72,9 +79,8 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
   };
 
   // handle search query
-  const handleChange = (searchTerm) => {
-    setSearchTerm(searchTerm);
-    performSearch();
+  const handleChange = (text) => {
+    setSearchTerm(text);
   };
 
   // pull to refresh
@@ -121,6 +127,7 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
         placeholder="Search"
         onChangeText={handleChange}
         autoCapitalize="none"
+        autoCompleteType="off"
         platform="ios"
         value={searchTerm}
         blurOnSubmit={false}

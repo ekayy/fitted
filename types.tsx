@@ -64,6 +64,8 @@ import {
   SEARCH_GARMENTS_BEGIN,
   SEARCH_GARMENTS_FAILURE,
   SEARCH_GARMENTS_SUCCESS,
+  SET_BRAND_FILTER,
+  CLEAR_SEARCH_FILTERS,
 } from './Redux/SearchRedux';
 
 type SearchRouteProp = RouteProp<SearchStackParamList, 'Search'>;
@@ -530,7 +532,18 @@ interface SearchGarmentsFailureAction {
   payload: Pick<SearchState, 'error'>;
 }
 
+interface SetBrandFilterAction {
+  type: typeof SET_BRAND_FILTER;
+  payload: number;
+}
+
+interface ClearSearchFilterAction {
+  type: typeof CLEAR_SEARCH_FILTERS;
+}
+
 export type SearchActionTypes =
   | SearchGarmentsBeginAction
   | SearchGarmentsSuccessAction
-  | SearchGarmentsFailureAction;
+  | SearchGarmentsFailureAction
+  | SetBrandFilterAction
+  | ClearSearchFilterAction;

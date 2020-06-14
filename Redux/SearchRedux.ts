@@ -11,8 +11,6 @@ export const SET_BRAND_FILTER = 'SET_BRAND_FILTER';
 
 export const CLEAR_SEARCH_FILTERS = 'CLEAR_SEARCH_FILTERS';
 
-export const CLEAR = 'CLEAR';
-
 export const INITIAL_STATE: SearchState = {
   items: [],
   loading: false,
@@ -61,9 +59,6 @@ export default function search(state = INITIAL_STATE, action: SearchActionTypes)
         brandIds: [],
       };
 
-    case CLEAR:
-      return INITIAL_STATE;
-
     default:
       return state;
   }
@@ -82,28 +77,29 @@ export const searchGarmentsFailure = (error): SearchActionTypes => ({
   payload: { error },
 });
 
-export const setBrandFilter = (brandId: number) => ({
+export const setBrandFilter = (brandId: number): SearchActionTypes => ({
   type: SET_BRAND_FILTER,
   payload: brandId,
 });
-export const clearSearchFilters = () => ({
+export const clearSearchFilters = (): SearchActionTypes => ({
   type: CLEAR_SEARCH_FILTERS,
 });
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
+interface searchParams {
+  searchTerm: string;
+  brandIds: number[];
+  sortBy?: string;
+  offset?: number;
+}
 
 export const searchGarments = ({
   searchTerm,
   brandIds,
   sortBy,
   offset = 0,
-}: {
-  searchTerm: string;
-  brandIds: number[];
-  sortBy?: string;
-  offset?: number;
-}): AppThunk => async (dispatch) => {
+}: searchParams): AppThunk => async (dispatch) => {
   dispatch(searchGarmentsBegin());
   try {
     const res = await axios.get(`${baseURL}/garments/`, {
@@ -119,13 +115,3 @@ export const searchGarments = ({
     dispatch(searchGarmentsFailure(error));
   }
 };
-
-// Selectors
-// const searchSelector = (state) => state.search.items;
-
-// export const searchByMostRecentSelector = createSelector(searchSelector, (items) =>
-//   items.sort((a, b) => (b.created_date - a.created_date ? 1 : -1)),
-// );
-// export const searchByMostFavoritedSelector = createSelector(searchSelector, (items) =>
-//   items.sort((a, b) => (b.favorited_by.length < a.favorited_by.length ? 1 : -1)),
-// );
