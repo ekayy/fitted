@@ -14,7 +14,7 @@ import { fetchFits, clearCreatedFit, tagGarmentToFit } from '../Redux/FitsRedux'
 import { fetchComments } from '../Redux/CommentsRedux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { GarmentDetailProps } from '../types';
+import { GarmentDetailProps, ContentType } from '../types';
 import { useTypedSelector } from '../types';
 
 const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
@@ -32,7 +32,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   // Redux state
   const { items: fits } = useTypedSelector((state) => state.fits);
   const { items: brands } = useTypedSelector((state) => state.brands);
-  const { items: comments } = useTypedSelector((state) => state.comments);
+  // const { items: comments } = useTypedSelector((state) => state.comments);
   const user = useTypedSelector((state) => state.user);
   const { favoriteGarments } = user;
   const brandName = brands[brand - 1]['name'];
@@ -45,7 +45,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchFits(garmentId));
-    dispatch(fetchComments());
+    // dispatch(fetchComments());
     favoriteGarments.includes(garmentId) ? setToggled(true) : setToggled(false);
   }, []);
   useEffect(() => {
@@ -178,7 +178,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
           <Text style={AppStyles.sectionTitleText}>Discussion</Text>
         </View>
 
-        {comments.length > 0 && (
+        {/* {comments.length > 0 && (
           <CommentList
             {...this.props}
             data={comments.slice(0, 3)}
@@ -188,7 +188,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
             contentType="garment"
             objectId={id}
           />
-        )}
+        )} */}
         <View style={AppStyles.button}>
           <Button
             title={`See all discussion`}
@@ -196,8 +196,9 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
             titleStyle={AppStyles.buttonAltTitleStyle}
             onPress={() =>
               navigation.navigate('Comments', {
-                objectId: id,
-                contentType: 'garment',
+                objectId: garmentId,
+                contentType: ContentType.GARMENT,
+                model,
               })
             }
           />

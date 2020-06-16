@@ -29,11 +29,18 @@ const POST_REPLY_BEGIN = 'POST_REPLY_BEGIN';
 const POST_REPLY_SUCCESS = 'POST_REPLY_SUCCESS';
 const POST_REPLY_FAILURE = 'POST_REPLY_FAILURE';
 
+const LOAD_REPLIES_BEGIN = 'LOAD_REPLIES_BEGIN';
+const LOAD_REPLIES_SUCCESS = 'LOAD_REPLIES_SUCCESS';
+const LOAD_REPLIES_FAILURE = 'LOAD_REPLIES_FAILURE';
+
 export const INITIAL_STATE = {
   items: [],
+  garments: [],
+  fits: [],
   loading: false,
   error: null,
-  content: null
+  content: null,
+  replies: {},
 };
 
 // Reducer
@@ -43,31 +50,31 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case FETCH_COMMENTS_SUCCESS:
       return {
         ...state,
         loading: false,
-        items: [...action.payload.comments]
+        items: [...action.payload.comments],
       };
     case FETCH_COMMENTS_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case UPVOTE_COMMENT_BEGIN:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case UPVOTE_COMMENT_SUCCESS: {
       const { id, upvotes } = action.payload.comment;
 
-      const items = state.items.map(item => {
+      const items = state.items.map((item) => {
         if (item.id === id) {
           return { ...item, upvotes };
         } else {
@@ -79,7 +86,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        items
+        items,
       };
     }
 
@@ -87,19 +94,19 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case DOWNVOTE_COMMENT_BEGIN:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case DOWNVOTE_COMMENT_SUCCESS: {
       const { id, downvotes } = action.payload.comment;
 
-      const items = state.items.map(item => {
+      const items = state.items.map((item) => {
         if (item.id === id) {
           return { ...item, downvotes };
         } else {
@@ -111,7 +118,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        items
+        items,
       };
     }
 
@@ -119,21 +126,21 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case UPVOTE_REPLY_BEGIN:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case UPVOTE_REPLY_SUCCESS: {
       const { replyResponse } = action.payload;
 
-      const items = state.items.map(comment => {
+      const items = state.items.map((comment) => {
         if (comment.id === reply.comment) {
-          const replies = comment.replies.map(reply => {
+          const replies = comment.replies.map((reply) => {
             if (reply.id === replyResponse.id) {
               return { ...reply };
             } else {
@@ -151,7 +158,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        items
+        items,
       };
     }
 
@@ -159,19 +166,19 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case DOWNVOTE_REPLY_BEGIN:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case DOWNVOTE_REPLY_SUCCESS: {
       const { reply } = action.payload;
 
-      const items = state.items.map(item => {
+      const items = state.items.map((item) => {
         if (item.id === reply.comment) {
           return { ...item, replies: [...item.replies, reply] };
         } else {
@@ -183,7 +190,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        items
+        items,
       };
     }
 
@@ -191,41 +198,38 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case POST_COMMENT_BEGIN:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
-
     case POST_COMMENT_SUCCESS: {
       return {
         ...state,
         loading: false,
         error: null,
-        items: [...state.items, { ...action.payload.comment, replies: [] }]
+        items: [...state.items, { ...action.payload.comment, replies: [] }],
       };
     }
-
     case POST_COMMENT_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case POST_REPLY_BEGIN:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
-
     case POST_REPLY_SUCCESS: {
       const { reply } = action.payload;
 
-      const items = state.items.map(item => {
+      const items = state.items.map((item) => {
         if (item.id === reply.comment) {
           return { ...item, replies: [...item.replies, reply] };
         } else {
@@ -236,15 +240,47 @@ export default function comments(state = INITIAL_STATE, action = {}) {
         ...state,
         loading: false,
         error: null,
-        items
+        items,
       };
     }
-
     case POST_REPLY_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload.error
+        error: action.payload.error,
+      };
+
+    case LOAD_REPLIES_BEGIN:
+      return {
+        ...state,
+        loading: true,
+      };
+    case LOAD_REPLIES_SUCCESS: {
+      const { replies } = action.payload;
+      if (!replies.length) {
+        return { ...state, loading: false, error: null };
+      }
+      const commentId = replies[0]['comment'];
+
+      const items = state.items.map((item) => {
+        if (item.id === commentId) {
+          return { ...item, replies: [...item.replies, ...replies] };
+        } else {
+          return item;
+        }
+      });
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        items,
+      };
+    }
+    case LOAD_REPLIES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
 
     default:
@@ -254,128 +290,149 @@ export default function comments(state = INITIAL_STATE, action = {}) {
 
 // Action Creators
 export const fetchCommentsBegin = () => ({
-  type: FETCH_COMMENTS_BEGIN
+  type: FETCH_COMMENTS_BEGIN,
 });
-export const fetchCommentsSuccess = comments => ({
+export const fetchCommentsSuccess = (comments) => ({
   type: FETCH_COMMENTS_SUCCESS,
   payload: {
-    comments
-  }
+    comments,
+  },
 });
-export const fetchCommentsFailure = error => ({
+export const fetchCommentsFailure = (error) => ({
   type: FETCH_COMMENTS_FAILURE,
   payload: {
-    error
-  }
+    error,
+  },
 });
 
 export const upvoteCommentBegin = () => ({
-  type: UPVOTE_COMMENT_BEGIN
+  type: UPVOTE_COMMENT_BEGIN,
 });
-export const upvoteCommentSuccess = comment => ({
+export const upvoteCommentSuccess = (comment) => ({
   type: UPVOTE_COMMENT_SUCCESS,
   payload: {
-    comment
-  }
+    comment,
+  },
 });
-export const upvoteCommentFailure = error => ({
+export const upvoteCommentFailure = (error) => ({
   type: UPVOTE_COMMENT_FAILURE,
   payload: {
-    error
-  }
+    error,
+  },
 });
 
 export const downvoteCommentBegin = () => ({
-  type: DOWNVOTE_COMMENT_BEGIN
+  type: DOWNVOTE_COMMENT_BEGIN,
 });
-export const downvoteCommentSuccess = comment => ({
+export const downvoteCommentSuccess = (comment) => ({
   type: DOWNVOTE_COMMENT_SUCCESS,
   payload: {
-    comment
-  }
+    comment,
+  },
 });
-export const downvoteCommentFailure = error => ({
+export const downvoteCommentFailure = (error) => ({
   type: DOWNVOTE_COMMENT_FAILURE,
   payload: {
-    error
-  }
+    error,
+  },
 });
 
 export const upvoteReplyBegin = () => ({
-  type: UPVOTE_REPLY_BEGIN
+  type: UPVOTE_REPLY_BEGIN,
 });
-export const upvoteReplySuccess = replyResponse => ({
+export const upvoteReplySuccess = (replyResponse) => ({
   type: UPVOTE_REPLY_SUCCESS,
   payload: {
-    replyResponse
-  }
+    replyResponse,
+  },
 });
-export const upvoteReplyFailure = error => ({
+export const upvoteReplyFailure = (error) => ({
   type: UPVOTE_REPLY_FAILURE,
   payload: {
-    error
-  }
+    error,
+  },
 });
 
 export const downvoteReplyBegin = () => ({
-  type: DOWNVOTE_REPLY_BEGIN
+  type: DOWNVOTE_REPLY_BEGIN,
 });
-export const downvoteReplySuccess = replyResponse => ({
+export const downvoteReplySuccess = (replyResponse) => ({
   type: DOWNVOTE_REPLY_SUCCESS,
   payload: {
-    replyResponse
-  }
+    replyResponse,
+  },
 });
-export const downvoteReplyFailure = error => ({
+export const downvoteReplyFailure = (error) => ({
   type: DOWNVOTE_REPLY_FAILURE,
   payload: {
-    error
-  }
+    error,
+  },
 });
 
 export const postCommentBegin = () => ({
-  type: POST_COMMENT_BEGIN
+  type: POST_COMMENT_BEGIN,
 });
-export const postCommentSuccess = comment => ({
+export const postCommentSuccess = (comment) => ({
   type: POST_COMMENT_SUCCESS,
   payload: {
-    comment
-  }
+    comment,
+  },
 });
-export const postCommentFailure = error => ({
+export const postCommentFailure = (error) => ({
   type: POST_COMMENT_FAILURE,
   payload: {
-    error
-  }
+    error,
+  },
 });
 
 export const postReplyBegin = () => ({
-  type: POST_REPLY_BEGIN
+  type: POST_REPLY_BEGIN,
 });
-export const postReplySuccess = reply => ({
+export const postReplySuccess = (reply) => ({
   type: POST_REPLY_SUCCESS,
   payload: {
-    reply
-  }
+    reply,
+  },
 });
-export const postReplyFailure = error => ({
+export const postReplyFailure = (error) => ({
   type: POST_REPLY_FAILURE,
   payload: {
-    error
-  }
+    error,
+  },
+});
+
+export const loadRepliesBegin = () => ({
+  type: LOAD_REPLIES_BEGIN,
+});
+export const loadRepliesSuccess = (replies) => ({
+  type: LOAD_REPLIES_SUCCESS,
+  payload: {
+    replies,
+  },
+});
+export const loadRepliesFailure = (error) => ({
+  type: LOAD_REPLIES_FAILURE,
+  payload: {
+    error,
+  },
 });
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export const fetchComments = (id, contentType) => async dispatch => {
+export const fetchComments = (objectId, origin) => async (dispatch) => {
   dispatch(fetchCommentsBegin());
 
   try {
-    const res = await axios.get(`${baseURL}/${contentType}/${id}/`);
+    const res = await axios.get(`${baseURL}/comments/`, {
+      params: {
+        origin,
+        object_id: objectId,
+      },
+    });
 
     // sort by newest comments
-    const sortedComments = res.data.comments.sort(
-      (a, b) => new Date(b.created_date) - new Date(a.created_date)
+    const sortedComments = res.data.results.sort(
+      (a, b) => new Date(b.created_date) - new Date(a.created_date),
     );
 
     dispatch(fetchCommentsSuccess(sortedComments));
@@ -384,7 +441,7 @@ export const fetchComments = (id, contentType) => async dispatch => {
   }
 };
 
-export const upvoteComment = (id, profileId) => async dispatch => {
+export const upvoteComment = (id, profileId) => async (dispatch) => {
   dispatch(upvoteCommentBegin());
 
   try {
@@ -395,7 +452,7 @@ export const upvoteComment = (id, profileId) => async dispatch => {
   }
 };
 
-export const downvoteComment = (id, profileId) => async dispatch => {
+export const downvoteComment = (id, profileId) => async (dispatch) => {
   dispatch(downvoteCommentBegin());
 
   try {
@@ -406,7 +463,7 @@ export const downvoteComment = (id, profileId) => async dispatch => {
   }
 };
 
-export const upvoteReply = (id, profileId) => async dispatch => {
+export const upvoteReply = (id, profileId) => async (dispatch) => {
   dispatch(upvoteReplyBegin());
 
   try {
@@ -417,7 +474,7 @@ export const upvoteReply = (id, profileId) => async dispatch => {
   }
 };
 
-export const downvoteReply = (id, profileId) => async dispatch => {
+export const downvoteReply = (id, profileId) => async (dispatch) => {
   dispatch(downvoteReplyBegin());
 
   try {
@@ -428,7 +485,7 @@ export const downvoteReply = (id, profileId) => async dispatch => {
   }
 };
 
-export const postComment = ({ contentType, objectId, profileId, content }) => async dispatch => {
+export const postComment = ({ contentType, objectId, profileId, content }) => async (dispatch) => {
   dispatch(postCommentBegin());
 
   try {
@@ -436,7 +493,7 @@ export const postComment = ({ contentType, objectId, profileId, content }) => as
       content_type: contentType,
       object_id: objectId,
       profile: profileId,
-      content
+      content,
     });
 
     dispatch(postCommentSuccess(res.data));
@@ -446,29 +503,46 @@ export const postComment = ({ contentType, objectId, profileId, content }) => as
   }
 };
 
-export const postReply = ({ commentId, profileId, content }) => async dispatch => {
+export const postReply = ({ commentId, profileId, content }) => async (dispatch) => {
   dispatch(postReplyBegin());
 
   try {
     const res = await axios.post(`${baseURL}/replies/`, {
       comment: commentId,
       profile: profileId,
-      content
+      content,
     });
+
     dispatch(postReplySuccess(res.data));
-    return res.data;
   } catch (error) {
     dispatch(postReplyFailure(error));
   }
 };
 
+export const loadReplies = ({ commentId, offset = 2 }) => async (dispatch) => {
+  dispatch(loadRepliesBegin());
+
+  try {
+    const res = await axios.get(`${baseURL}/replies/`, {
+      params: {
+        comment: commentId,
+        offset,
+      },
+    });
+
+    dispatch(loadRepliesSuccess(res.data.results));
+  } catch (error) {
+    dispatch(loadRepliesFailure(error));
+  }
+};
+
 /* Selectors */
 export const selectRecentComments = createSelector(
-  state => state.comments.items,
-  comments => comments.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
+  (state) => state.comments.items,
+  (comments) => comments.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
 );
 
 export const selectPopularComments = createSelector(
-  state => state.comments.items,
-  comments => comments.sort((a, b) => new Date(a.created_date) - new Date(b.created_date))
+  (state) => state.comments.items,
+  (comments) => comments.sort((a, b) => new Date(a.created_date) - new Date(b.created_date)),
 );

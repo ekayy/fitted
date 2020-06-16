@@ -67,6 +67,18 @@ import {
   SET_BRAND_FILTER,
   CLEAR_SEARCH_FILTERS,
 } from './Redux/SearchRedux';
+import { RootParamList } from './Navigation/RootNav';
+
+export enum Sort {
+  SELECT = 'SELECT',
+  RECENT = 'MOST RECENT',
+  POPULAR = 'MOST POPULAR',
+}
+
+export enum ContentType {
+  GARMENT = 'garment',
+  FIT = 'fit',
+}
 
 type SearchRouteProp = RouteProp<SearchStackParamList, 'Search'>;
 type SearchNavigationProp = StackNavigationProp<SearchStackParamList, 'Search'>;
@@ -158,6 +170,14 @@ type SearchGarmentsNavigationProp = StackNavigationProp<
 export type SearchGarmentsProps = {
   route: SearchGarmentsRouteProp;
   navigation: SearchGarmentsNavigationProp;
+};
+
+type CommentsRouteProp = RouteProp<RootParamList, 'Comments'>;
+type CommentsNavigationProp = StackNavigationProp<RootParamList, 'Comments'>;
+
+export type CommentsProps = {
+  route: CommentsRouteProp;
+  navigation: CommentsNavigationProp;
 };
 
 // https://redux.js.org/recipes/usage-with-typescript
@@ -283,6 +303,7 @@ export interface Reply {
   content: string;
   upvotes: number;
   downvotes: number;
+  total_votes: number;
 }
 
 export interface FavoriteGarmentParams {

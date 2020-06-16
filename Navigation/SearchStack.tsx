@@ -5,10 +5,8 @@ import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 import Profile from '../Containers/Profile';
 import Fits from '../Containers/Fits';
-import Comments from '../Containers/Comments';
-import CommentSingle from '../Components/Comment/CommentSingle';
 
-import { Garment, Fit } from '../types';
+import { Garment, Fit, ContentType } from '../types';
 import Camera from '../Containers/Camera';
 
 export type SearchStackParamList = {
@@ -17,8 +15,7 @@ export type SearchStackParamList = {
   'Garment Detail': Garment;
   'Fit Detail': Fit;
   Fits: Garment;
-  Comments: undefined;
-  'Comment Single': undefined;
+  Comments: { objectId: number; contentType: ContentType; model: string };
   Profile: { title: string } | undefined;
   Camera: undefined;
 };
@@ -44,8 +41,6 @@ const SearchStack = () => {
         component={Fits}
         options={({ route }) => ({ title: route.params!['model'] })}
       />
-      <Stack.Screen name="Comments" component={Comments} />
-      <Stack.Screen name="Comment Single" component={CommentSingle} />
       <Stack.Screen
         name="Profile"
         component={Profile}

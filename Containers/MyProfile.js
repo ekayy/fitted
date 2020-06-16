@@ -35,25 +35,25 @@ class MyProfile extends Component {
     this.fetchMyFits();
   }
 
-  componentDidUpdate(previousProps) {
-    if (previousProps.favoriteGarments != this.props.favoriteGarments) {
-      this.setState({ refreshing: true, favoriteGarments: [] }, () => {
-        this.fetchFavoriteGarments();
-      });
-    }
+  // componentDidUpdate(previousProps) {
+  //   if (previousProps.favoriteGarments != this.props.favoriteGarments) {
+  //     this.setState({ refreshing: true, favoriteGarments: [] }, () => {
+  //       this.fetchFavoriteGarments();
+  //     });
+  //   }
 
-    if (previousProps.favoriteFits != this.props.favoriteFits) {
-      this.setState({ refreshing: true, favoriteFits: [] }, () => {
-        this.fetchFavoriteFits();
-      });
-    }
+  //   if (previousProps.favoriteFits != this.props.favoriteFits) {
+  //     this.setState({ refreshing: true, favoriteFits: [] }, () => {
+  //       this.fetchFavoriteFits();
+  //     });
+  //   }
 
-    if (previousProps.myFits != this.props.myFits) {
-      this.setState({ refreshing: true, myFits: [] }, () => {
-        this.fetchMyFits();
-      });
-    }
-  }
+  //   if (previousProps.myFits != this.props.myFits) {
+  //     this.setState({ refreshing: true, myFits: [] }, () => {
+  //       this.fetchMyFits();
+  //     });
+  //   }
+  // }
 
   fetchFavoriteGarments = async () => {
     const { favoriteGarments } = this.props;

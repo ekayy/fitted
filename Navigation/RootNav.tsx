@@ -9,7 +9,8 @@ import { NavigationContainer, NavigationContainerRef } from '@react-navigation/n
 import { createStackNavigator } from '@react-navigation/stack';
 import AppNav from './AppNav';
 import AuthStack from './AuthStack';
-import { useTypedSelector } from '../types';
+import { useTypedSelector, ContentType } from '../types';
+import Comments from '../Containers/Comments';
 
 /**i()uasdf
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -22,6 +23,7 @@ import { useTypedSelector } from '../types';
 export type RootParamList = {
   AuthStack: undefined;
   App: undefined;
+  Comments: { objectId: number; contentType: ContentType; model: string };
 };
 
 const Stack = createStackNavigator<RootParamList>();
@@ -32,12 +34,18 @@ const RootStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
         gestureEnabled: true,
       }}
     >
       {isLoggedIn ? (
-        <Stack.Screen name="App" component={AppNav} />
+        <>
+          <Stack.Screen name="App" component={AppNav} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="Comments"
+            component={Comments}
+            options={({ route }) => ({ headerBackTitle: 'Back' })}
+          />
+        </>
       ) : (
         <Stack.Screen name="AuthStack" component={AuthStack} />
       )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { View, ActivityIndicator, Platform } from 'react-native';
 import { SearchBar, Badge } from 'react-native-elements';
@@ -11,13 +11,7 @@ import SearchList from '../Components/SearchList';
 import Dropdown from '../Components/Dropdown';
 import Home from '../Components/Home';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { SearchProps, useTypedSelector, Brand } from '../types';
-
-enum Sort {
-  SELECT = 'SELECT',
-  RECENT = 'MOST RECENT',
-  POPULAR = 'MOST POPULAR',
-}
+import { SearchProps, useTypedSelector, Brand, Sort } from '../types';
 
 const sortOptions: string[] = [Sort.RECENT, Sort.POPULAR];
 
