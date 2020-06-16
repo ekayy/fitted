@@ -27,7 +27,6 @@ export type CreateDiscussionStackParamList = {
   'Fit Detail': Fit;
   Fits: { title: string };
   Comments: undefined;
-  'Comment Single': undefined;
 };
 
 const Stack = createStackNavigator<CreateDiscussionStackParamList>();
@@ -61,8 +60,7 @@ const CreateDiscussionStack = () => {
         component={Fits}
         options={({ route }) => ({ title: route.params['model'] })}
       />
-      <Stack.Screen name="Comments" component={Comments} />
-      <Stack.Screen name="Comment Single" component={CommentSingle} />
+      <Stack.Screen name="Comments" component={Comments} />>
     </Stack.Navigator>
   );
 };
