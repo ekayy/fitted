@@ -60,7 +60,7 @@ const CreateDiscussionStack = () => {
         component={Fits}
         options={({ route }) => ({ title: route.params['model'] })}
       />
-      <Stack.Screen name="Comments" component={Comments} />>
+      <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>
   );
 };

@@ -10,6 +10,6 @@ https://github.com/infinitered/reactotron/blob/master/docs/installing.md
 ## Running Project
 clone repo
 
-npm install
+yarn install
 
-expo start
+yarn start

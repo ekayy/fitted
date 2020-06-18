@@ -85,7 +85,7 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
 
   const renderGarment = (rowData, rowMap) => {
     const { id, brand, model, photo } = rowData.item;
-    const brandName = brands[brand].name;
+    const brandName = brands[brand - 1].name;
 
     return (
       <View style={styles.formRow} key={id}>
