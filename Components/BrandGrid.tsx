@@ -152,6 +152,11 @@ const BrandGarment: React.FC<{ item: Garment }> = ({ item, navigation }) => {
     favoriteGarments.includes(id) ? setToggled(true) : setToggled(false);
   }, []);
 
+  let formattedModel = model
+    .split(' ')
+    .map((word) => word.charAt(0) + word.toLowerCase().slice(1))
+    .join(' ');
+
   // if not valid photo, add a stock image
   const photoUrl =
     photo.length > 10
@@ -172,7 +177,7 @@ const BrandGarment: React.FC<{ item: Garment }> = ({ item, navigation }) => {
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{ uri: photoUrl }} />
       </View>
-      <Text style={styles.text}>{model.toLowerCase()}</Text>
+      <Text style={styles.text}>{model}</Text>
       <TouchableOpacity onPress={() => favorite(id)} style={styles.bookmarkContainer}>
         <Text style={{ color: 'rgb(74, 144, 226)' }}>
           {toggled ? 'Bookmarked' : 'Bookmark for later'}
