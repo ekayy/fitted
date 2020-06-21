@@ -101,7 +101,7 @@ class BrandGrid extends Component {
 
   renderGarment = (item) => {
     const { navigate } = this.props.navigation;
-    const { editingCloset, unfavoriteGarment } = this.props;
+    const { editingCloset, unfavoriteGarment, favoriteGarment, user } = this.props;
     const { id, color, model, sku, brand, photo } = item;
 
     let formattedModel = model
@@ -134,7 +134,10 @@ class BrandGrid extends Component {
           )}
         </View>
         <Text style={styles.text}>{formattedModel}</Text>
-        <TouchableOpacity style={styles.bookmarkContainer}>
+        <TouchableOpacity
+          onPress={() => favoriteGarment(id, user)}
+          style={styles.bookmarkContainer}
+        >
           <Text style={{ color: 'rgb(74, 144, 226)' }}>Bookmark for later</Text>
           <MaterialCommunityIcons name={'bookmark-outline'} size={16} color="rgb(74, 144, 226)" />
         </TouchableOpacity>

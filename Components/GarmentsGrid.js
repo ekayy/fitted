@@ -5,6 +5,7 @@ import { Badge } from 'react-native-elements';
 import { Metrics, Dimensions } from '../Themes';
 
 import { profiles } from '../data.json';
+import autoMergeLevel1 from 'redux-persist/es/stateReconciler/autoMergeLevel1';
 
 class GarmentsGrid extends Component {
   renderGarment(item) {
@@ -102,7 +103,7 @@ class GarmentsGrid extends Component {
 const styles = {
   gridItem: {
     flex: 1,
-    height: 250,
+    height: 160,
   },
   image: {
     width: undefined,
@@ -110,6 +111,8 @@ const styles = {
   },
   text: {
     maxWidth: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     textAlign: 'center',
   },
 };

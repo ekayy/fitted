@@ -213,7 +213,7 @@ class MyProfile extends Component {
     switch (route.key) {
       case 'garments':
         return (
-          <View>
+          <View style={{ flex: 1 }}>
             <View style={styles.closet}>
               <Text>Closet</Text>
               <Button
