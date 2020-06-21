@@ -15,7 +15,7 @@ import { favoriteGarment } from '../Redux/UserRedux';
 import { useDispatch } from 'react-redux';
 
 const BrandGrid: React.FC = (props) => {
-  const { brandTable, style, refreshing, loading, onRefresh, handleLoadMore } = props;
+  const { navigation, brandTable, style, refreshing, loading, onRefresh, handleLoadMore } = props;
 
   // Redux state
   const { items: brands } = useTypedSelector((state) => state.brands);
@@ -50,7 +50,7 @@ const BrandGrid: React.FC = (props) => {
           data={brandTable[item.name].slice(0, 10)}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
-          renderItem={({ item }) => <BrandGarment item={item} />}
+          renderItem={({ item }) => <BrandGarment item={item} navigation={navigation} />}
           onRefresh={() => onRefresh()}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0}
@@ -105,7 +105,7 @@ const BrandGrid: React.FC = (props) => {
             data={brandTable[currentBrand]}
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
-            renderItem={({ item }) => <BrandGarment item={item} />}
+            renderItem={({ item }) => <BrandGarment item={item} navigation={navigation} />}
             onRefresh={onRefresh}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0}
