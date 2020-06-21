@@ -208,10 +208,14 @@ export const clearCreatedGarment = (): GarmentActionTypes => ({
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export const fetchGarments = (): AppThunk => async (dispatch) => {
+export const fetchGarments = ({ brand }): AppThunk => async (dispatch) => {
   dispatch(fetchGarmentsBegin());
   try {
-    const res = await axios.get(`${baseURL}/garments/?limit=1500`);
+    const res = await axios.get(`${baseURL}/garments/?limit=1500`, {
+      params: {
+        brand,
+      },
+    });
     dispatch(fetchGarmentsSuccess(res.data.results));
   } catch (error) {
     dispatch(fetchGarmentsFailure(error));

@@ -11,7 +11,7 @@ class GarmentsGrid extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { numCol, grid, editingCloset, unfavoriteGarment } = this.props;
-    const { id, color, model, sku, brand, photo } = item;
+    const { id, color, model, sku, brand, brand_name: brandName, photo } = item;
 
     let formattedModel = model
       .split(' ')
@@ -39,6 +39,7 @@ class GarmentsGrid extends Component {
           )}
         </View>
         <Text style={styles.text}>{formattedModel}</Text>
+        <Text style={styles.text}>{brandName}</Text>
       </TouchableOpacity>
     ) : (
       <TouchableOpacity key={id} onPress={() => navigate('Garment Detail', item)}>

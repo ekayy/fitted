@@ -9,7 +9,7 @@ import { searchGarments, setBrandFilter, clearSearchFilters, x } from '../Redux/
 import SearchFilter from '../Components/Search/SearchFilter';
 import SearchList from '../Components/SearchList';
 import Dropdown from '../Components/Dropdown';
-import Home from '../Components/Home';
+import Home from './Home';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { SearchProps, useTypedSelector, Brand, Sort } from '../types';
 
@@ -173,7 +173,7 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
           favoriteGarment={favoriteGarment}
         />
       ) : Object.keys(brandTable).length > 0 ? (
-        <Home brandTable={brandTable} brands={brands} navigation={navigation} />
+        <Home brandTable={brandTable} brands={brands} navigation={navigation} user={user} />
       ) : (
         <View>
           <ActivityIndicator style={{ marginTop: 20 }} size="large" color="#0000ff" />
