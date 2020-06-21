@@ -47,7 +47,7 @@ const RootStack = () => {
           />
         </>
       ) : (
-        <Stack.Screen name="AuthStack" component={AuthStack} />
+        <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
       )}
     </Stack.Navigator>
   );
