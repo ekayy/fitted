@@ -1,53 +1,45 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   upvoteComment,
   downvoteComment,
   upvoteReply,
   downvoteReply,
 } from '../../Redux/CommentsRedux';
+import { useTypedSelector } from '../../types';
 
 const CommentList = (props) => {
   const { data, ListHeaderComponent, loadMoreReplies, leaveReply, flatListRef } = props;
 
   // Redux State
-  // const { commentId, profileId } = useSelector((state) => ({
-  //   commentId: id,
-  //   profileId: state.user.profileId,
-  // }));
-
-  // useEffect(() => {
-  //   if (flatListRef.current) {
-  //     flatListRef.current.scrollToIndex({ animated: true, index });
-  //   }
-  // }, []);
+  const { profileId } = useTypedSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
-  const handleUpvote = () => {
-    // isReply
-    //   ? dispatch(upvoteReply(commentId, profileId))
-    //   : dispatch(upvoteComment(commentId, profileId));
+  const handleUpvote = (commentId: Pick<Comment, 'id'>, isReply) => {
+    isReply
+      ? dispatch(upvoteReply(commentId, profileId))
+      : dispatch(upvoteComment(commentId, profileId));
   };
 
-  const handleDownvote = () => {
-    // isReply
-    //   ? dispatch(downvoteReply(commentId, profileId))
-    //   : dispatch(downvoteComment(commentId, profileId));
+  const handleDownvote = (commentId: Pick<Comment, 'id'>, isReply) => {
+    isReply
+      ? dispatch(downvoteReply(commentId, profileId))
+      : dispatch(downvoteComment(commentId, profileId));
   };
 
-  const renderVotes = ({ upvotes, downvotes, id }) => (
+  const renderVotes = ({ upvotes, downvotes, id }, isReply) => (
     <StyledCommentVotes>
-      <TouchableOpacity onPress={handleUpvote(id)}>
+      <TouchableOpacity onPress={() => handleUpvote(id, isReply)}>
         <FontAwesome name="caret-up" size={30} style={{ color: '#ccc' }} />
       </TouchableOpacity>
 
       <StyledCommentCount>{upvotes - downvotes}</StyledCommentCount>
 
-      <TouchableOpacity onPress={handleDownvote(id)}>
+      <TouchableOpacity onPress={() => handleDownvote(id, isReply)}>
         <FontAwesome name="caret-down" size={30} style={{ color: '#ccc' }} />
       </TouchableOpacity>
     </StyledCommentVotes>
@@ -68,7 +60,7 @@ const CommentList = (props) => {
       <StyledReply>
         <StyledCommentHead>
           <StyledCommentLink>{username}</StyledCommentLink>
-          {renderVotes(reply)}
+          {renderVotes(reply, true)}
         </StyledCommentHead>
         <StyledCommentText>{content}</StyledCommentText>
       </StyledReply>
@@ -83,7 +75,7 @@ const CommentList = (props) => {
         <StyledComment>
           <StyledCommentHead>
             <StyledCommentLink>{username}</StyledCommentLink>
-            {renderVotes(comment)}
+            {renderVotes(comment, false)}
           </StyledCommentHead>
           <StyledCommentText>{content}</StyledCommentText>
 

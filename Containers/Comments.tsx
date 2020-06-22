@@ -3,18 +3,13 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
 import {
   KeyboardAvoidingView,
-  Text,
   View,
-  ScrollView,
-  Modal,
   Picker,
   FlatList,
   Platform,
   Keyboard,
   TextInput,
 } from 'react-native';
-import { SearchBar } from 'react-native-elements';
-import { AppStyles } from '../Themes';
 import CommentList from '../Components/Comment/CommentList';
 import CommentInput from '../Components/Comment/CommentInput';
 import Dropdown from '../Components/Dropdown';
@@ -168,19 +163,6 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
           currentComment={currentComment}
         />
       </KeyboardAvoidingView>
-
-      {/* <FlatList
-          data={comments}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => renderComment(item)}
-          onRefresh={() => {}}
-          onEndReached={() => {}}
-          onEndReachedThreshold={0}
-          refreshing={false}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          // ListFooterComponent={this.renderFooter}
-        /> */}
 
       {showFilters && (
         <StyledPickerContainer>

@@ -98,8 +98,6 @@ const Activity: React.FC<ActivityProps> = ({ route, navigation }) => {
 const ActivityContainer = styled.View`
   border-top-width: 0.2px;
   flex-direction: row;
-  flex: 1;
-  width: 100%;
   padding: 10px;
 `;
 
