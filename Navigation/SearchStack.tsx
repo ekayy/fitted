@@ -5,9 +5,9 @@ import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 import Profile from '../Containers/Profile';
 import Fits from '../Containers/Fits';
+import Camera from '../Containers/Camera';
 
 import { Garment, Fit, ContentType } from '../types';
-import Camera from '../Containers/Camera';
 
 export type SearchStackParamList = {
   'Create Discussion': { screen: string };

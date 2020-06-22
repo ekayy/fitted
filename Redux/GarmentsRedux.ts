@@ -269,17 +269,25 @@ export const garmentsByMostFavoritedSelector = createSelector(garmentsSelector, 
 
 // API call
 export const fetchGarment = async (id: number) => {
-  const res = await axios.get(`${baseURL}/garments/${id}`);
+  try {
+    const res = await axios.get(`${baseURL}/garments/${id}`);
 
-  return res.data;
+    return res.data;
+  } catch (err) {
+    return err;
+  }
 };
 
 export const fetchGarmentFits = async (garmentId: number) => {
-  const res = await axios.get(`${baseURL}/fits/`, {
-    params: {
-      garments: garmentId,
-    },
-  });
+  try {
+    const res = await axios.get(`${baseURL}/fits/`, {
+      params: {
+        garments: garmentId,
+      },
+    });
 
-  return res.data.results;
+    return res.data.results;
+  } catch (err) {
+    return err;
+  }
 };

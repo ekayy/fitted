@@ -2,27 +2,14 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Metrics } from '../Themes';
 import { View, Image, FlatList, ActivityIndicator } from 'react-native';
-import { ActivityProps, useTypedSelector, Comment } from '../types';
+import { ActivityProps, useTypedSelector, Comment, Reply } from '../types';
 import { useDispatch } from 'react-redux';
 import { fetchActivity } from '../Redux/ActivityRedux';
 
-const data = [
-  {
-    id: 40,
-    model: 'How does it size?',
-    date: '4',
-  },
-  {
-    id: 41,
-    model: 'kafiltafish',
-    date: '45',
-  },
-];
-
-const Activity: React.FC<ActivityProps> = () => {
+const Activity: React.FC<ActivityProps> = ({ route, navigation }) => {
   // Redux state
   const { profileId } = useTypedSelector((state) => state.user);
-  const { comments, loading } = useTypedSelector((state) => state.activity);
+  const { items: results, loading } = useTypedSelector((state) => state.activity);
 
   // Effects
   const dispatch = useDispatch();
@@ -30,35 +17,55 @@ const Activity: React.FC<ActivityProps> = () => {
     dispatch(fetchActivity(profileId));
   }, []);
 
-  const onRefresh = () => {};
+  const onRefresh = () => {
+    dispatch(fetchActivity(profileId));
+  };
 
   const handleLoadMore = () => {};
 
-  const renderDiscussion = (item: Comment) => {
-    const { id, model, created_date: date } = item;
+  const renderDiscussion = (item: Partial<Comment> | Partial<Reply>) => {
+    const { id, created_date: createdDate, content, origin, object_id: objectId } = item;
+    const isReply = 'replies' in item;
+
+    if (!item) return null;
 
     // if not valid photo, add a stock image
     const photoUrl = 'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
+    const date = createdDate && new Date(createdDate);
+    const excerpt = content && content.split(' ').slice(0, 15).join(' ');
 
     return (
-      <GarmentItemContainer>
-        <GarmentItem key={id}>
-          <GarmentItemImageContainer>
+      <ActivityContainer>
+        <ActivityMessageContainer>
+          <ActivityImage>
             <Image style={styles.image} source={{ uri: photoUrl }} />
-          </GarmentItemImageContainer>
-          <GarmentDiscussion>
-            <IsResponse>Commented:</IsResponse>
-            <GarmentDiscussionText>
-              <PostMessage>{model}</PostMessage>
-              <PostDate>{date}</PostDate>
-            </GarmentDiscussionText>
-          </GarmentDiscussion>
-        </GarmentItem>
-        <GarmentDiscussionButton>
-          <ButtonText>View discussion</ButtonText>
-        </GarmentDiscussionButton>
-      </GarmentItemContainer>
+          </ActivityImage>
+
+          <ActivityMessage>
+            <IsResponse>{isReply ? 'You commented:' : 'You replied:'}</IsResponse>
+
+            <PostMessage>{excerpt}</PostMessage>
+            <PostDate>{date.toDateString()}</PostDate>
+          </ActivityMessage>
+        </ActivityMessageContainer>
+
+        <ActivityButtonContainer>
+          <ActivityButton onPress={() => navigateToType(origin, objectId)}>
+            <ActivityButtonText>View</ActivityButtonText>
+          </ActivityButton>
+        </ActivityButtonContainer>
+      </ActivityContainer>
     );
+  };
+
+  const navigateToType = (origin, id) => {
+    origin === 'garment'
+      ? navigation.navigate('Garment Detail', {
+          id,
+        })
+      : navigation.navigate('Fit Detail', {
+          id,
+        });
   };
 
   const renderFooter = () => {
@@ -73,7 +80,7 @@ const Activity: React.FC<ActivityProps> = () => {
   return (
     <>
       <FlatList
-        data={comments}
+        data={results}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => renderDiscussion(item)}
         onRefresh={onRefresh}
@@ -88,61 +95,59 @@ const Activity: React.FC<ActivityProps> = () => {
   );
 };
 
-const GarmentItemContainer = styled.View`
+const ActivityContainer = styled.View`
   border-top-width: 0.2px;
-  display: flex;
   flex-direction: row;
+  flex: 1;
+  width: 100%;
+  padding: 10px;
 `;
 
-const GarmentItem = styled.TouchableOpacity`
-  display: flex;
-  flex-direction: row;
-  width: 70%;
+const ActivityImage = styled.View`
+  margin-right: 20px;
 `;
 
-const GarmentItemImageContainer = styled.View`
+const ActivityMessageContainer = styled.View`
+  flex: 1;
   flex-direction: row;
   align-items: center;
+  padding: 10px;
 `;
 
-const GarmentDiscussion = styled.View`
-  display: flex;
+const ActivityMessage = styled.View`
+  flex: 1;
   flex-direction: column;
-  justify-content: center;
-`;
-
-const GarmentDiscussionText = styled.View`
-  display: flex;
-  flex-direction: row;
 `;
 
 const IsResponse = styled.Text`
-  font-weight: 200;
+  font-weight: 300;
   font-size: 10px;
+  margin-bottom: 4px;
 `;
 
 const PostMessage = styled.Text`
-  font-weight: 800;
+  font-weight: 400;
   font-size: 12px;
+  margin-bottom: 4px;
 `;
 
 const PostDate = styled.Text`
-  padding-left: 5px;
   color: #aaa;
   font-size: 12px;
 `;
 
-const GarmentDiscussionButton = styled.TouchableOpacity`
-  background-color: #000;
-  width: 25%;
-  margin: 15px 0;
-  border-radius: 5px;
-  display: flex;
+const ActivityButtonContainer = styled.View`
   align-items: center;
   justify-content: center;
 `;
 
-const ButtonText = styled.Text`
+const ActivityButton = styled.TouchableOpacity`
+  background-color: #000;
+  padding: 8px 15px;
+  border-radius: 5px;x
+`;
+
+const ActivityButtonText = styled.Text`
   color: #fff;
 `;
 

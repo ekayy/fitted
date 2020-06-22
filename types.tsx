@@ -221,6 +221,7 @@ export interface Garment {
   photo: string;
   purchase_page: string;
   comments: Comment[];
+  favorited_by: number[];
 }
 
 export interface GarmentState {
@@ -295,6 +296,8 @@ export interface Comment {
   downvotes: number;
   username: string;
   created_date: string;
+  object_id: number;
+  origin: ContentType;
 }
 
 export interface CommentState {

@@ -170,7 +170,11 @@ export const createFit = (fit: Fit): AppThunk => {
 
 // API call
 export const fetchFit = async (id) => {
-  const res = await axios.get(`${baseURL}/fits/${id}`);
+  try {
+    const res = await axios.get(`${baseURL}/fits/${id}`);
 
-  return res.data;
+    return res.data;
+  } catch (err) {
+    return err;
+  }
 };
