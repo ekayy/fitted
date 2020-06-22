@@ -20,6 +20,7 @@ import {
   loadReplies,
 } from '../Redux/CommentsRedux';
 import { CommentsProps, useTypedSelector, Sort, Comment } from '../types';
+import { SearchBar } from 'react-native-elements';
 
 const sortOptions: string[] = [Sort.RECENT, Sort.POPULAR];
 
@@ -52,7 +53,7 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    leaveReply(comment, 0);
+    comment && leaveReply(comment, 0);
   }, [comment]);
 
   useEffect(() => {
