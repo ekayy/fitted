@@ -177,7 +177,7 @@ const BrandGarment: React.FC<{ item: Garment }> = ({ item, navigation }) => {
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{ uri: photoUrl }} />
       </View>
-      <Text style={styles.text}>{model}</Text>
+      <Text style={styles.text}>{formattedModel}</Text>
       <TouchableOpacity onPress={() => favorite(id)} style={styles.bookmarkContainer}>
         <Text style={{ color: 'rgb(74, 144, 226)' }}>
           {toggled ? 'Bookmarked' : 'Bookmark for later'}

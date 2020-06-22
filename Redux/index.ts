@@ -11,6 +11,7 @@ import comments from './CommentsRedux';
 import brands from './BrandsRedux';
 import profiles from './ProfilesRedux';
 import search from './SearchRedux';
+import activity from './ActivityRedux';
 
 const persistConfig = {
   key: 'root',
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   brands,
   profiles,
   search,
+  activity,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

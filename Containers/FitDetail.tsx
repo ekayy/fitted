@@ -12,15 +12,13 @@ import { fetchBrands } from '../Redux/BrandsRedux';
 // import { fetchComments } from '../Redux/CommentsRedux';
 // import CommentList from '../Components/Comment/CommentList';
 
-import { FitDetailProps } from '../types';
+import { FitDetailProps, Fit } from '../types';
 import { useTypedSelector } from '../types';
+import { fetchFit } from '../Redux/FitsRedux';
 
 const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
   // Navigation params
-  const { id: fitId, photo, height, weight, garments } = route.params;
-  const feet = Math.floor(height / 12);
-  const inches = height % 12;
-  const convertedHeight = `${feet}"${inches}'`;
+  const { id: fitId } = route.params;
 
   // Redux state
   const { items: brands } = useTypedSelector((state) => state.brands);
@@ -29,15 +27,33 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
   const { favoriteFits, user: profile } = user;
 
   // State
+  const [convertedHeight, setConvertedHeight] = useState<string>();
   const [toggled, setToggled] = useState<boolean>(false);
+  const [fit, setFit] = useState<Partial<Fit>>({});
+  const { photo, height, weight, garments } = fit;
 
   // Effects
   const dispatch = useDispatch();
   useEffect(() => {
+    (async () => {
+      const result = await fetchFit(fitId);
+      setFit(result);
+    })();
+  }, []);
+  useEffect(() => {
     dispatch(fetchBrands());
-    dispatch(fetchFitGarments(garments));
     favoriteFits.includes(fitId) ? setToggled(true) : setToggled(false);
   }, []);
+  useEffect(() => {
+    // run once fit data fetched
+    garments && dispatch(fetchFitGarments(garments));
+
+    if (height) {
+      const feet = Math.floor(height / 12);
+      const inches = height % 12;
+      setConvertedHeight(`${feet}"${inches}'`);
+    }
+  }, [fit]);
 
   const favorite = () => {
     dispatch(favoriteFit(fitId, user));

@@ -266,3 +266,20 @@ export const garmentsByMostRecentSelector = createSelector(garmentsSelector, (it
 export const garmentsByMostFavoritedSelector = createSelector(garmentsSelector, (items) =>
   items.sort((a, b) => (b.favorited_by.length > a.favorited_by.length ? 1 : -1)),
 );
+
+// API call
+export const fetchGarment = async (id: number) => {
+  const res = await axios.get(`${baseURL}/garments/${id}`);
+
+  return res.data;
+};
+
+export const fetchGarmentFits = async (garmentId: number) => {
+  const res = await axios.get(`${baseURL}/fits/`, {
+    params: {
+      garments: garmentId,
+    },
+  });
+
+  return res.data.results;
+};

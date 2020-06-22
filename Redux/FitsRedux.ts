@@ -167,3 +167,10 @@ export const createFit = (fit: Fit): AppThunk => {
       .catch((error) => dispatch(createFitFailure(error)));
   };
 };
+
+// API call
+export const fetchFit = async (id) => {
+  const res = await axios.get(`${baseURL}/fits/${id}`);
+
+  return res.data;
+};

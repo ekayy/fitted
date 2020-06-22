@@ -68,6 +68,7 @@ import {
   CLEAR_SEARCH_FILTERS,
 } from './Redux/SearchRedux';
 import { RootParamList } from './Navigation/RootNav';
+import { ActivityParamList } from './Navigation/ActivityStack';
 
 export enum Sort {
   SELECT = 'SELECT',
@@ -178,6 +179,14 @@ type CommentsNavigationProp = StackNavigationProp<RootParamList, 'Comments'>;
 export type CommentsProps = {
   route: CommentsRouteProp;
   navigation: CommentsNavigationProp;
+};
+
+type ActivityRouteProp = RouteProp<ActivityParamList, 'Activity'>;
+type ActivityNavigationProp = StackNavigationProp<ActivityParamList, 'Activity'>;
+
+export type ActivityProps = {
+  route: ActivityRouteProp;
+  navigation: ActivityNavigationProp;
 };
 
 // https://redux.js.org/recipes/usage-with-typescript

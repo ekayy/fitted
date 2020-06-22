@@ -1,74 +1,67 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Badge } from 'react-native-elements';
+import React, { useEffect } from 'react';
+import styled from 'styled-components/native';
 import { Metrics } from '../Themes';
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  Text,
-  FlatList
-} from 'react-native';
+import { View, Image, FlatList, ActivityIndicator } from 'react-native';
+import { ActivityProps, useTypedSelector, Comment } from '../types';
+import { useDispatch } from 'react-redux';
+import { fetchActivity } from '../Redux/ActivityRedux';
 
 const data = [
   {
     id: 40,
     model: 'How does it size?',
-    date: '4'
+    date: '4',
   },
   {
     id: 41,
     model: 'kafiltafish',
-    date: '45'
-  }
+    date: '45',
+  },
 ];
 
-class Activity extends Component {
-  renderDiscussion(item) {
-    const { editingCloset, brands } = this.props;
-    const { id, color, model, sku, brand, photo, date } = item;
+const Activity: React.FC<ActivityProps> = () => {
+  // Redux state
+  const { profileId } = useTypedSelector((state) => state.user);
+  const { comments, loading } = useTypedSelector((state) => state.activity);
+
+  // Effects
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchActivity(profileId));
+  }, []);
+
+  const onRefresh = () => {};
+
+  const handleLoadMore = () => {};
+
+  const renderDiscussion = (item: Comment) => {
+    const { id, model, created_date: date } = item;
 
     // if not valid photo, add a stock image
-    // if (photo.length > 10) {
-    //   photoUrl = photo;
-    // } else {
-    photoUrl =
-      'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
-    // }
+    const photoUrl = 'https://cdn1.iconfinder.com/data/icons/fitness/500/T-shirt-512.png';
 
     return (
       <GarmentItemContainer>
         <GarmentItem key={id}>
           <GarmentItemImageContainer>
             <Image style={styles.image} source={{ uri: photoUrl }} />
-            {editingCloset && (
-              <Badge
-                value="X"
-                status="error"
-                containerStyle={{ top: 0, right: 0, position: 'absolute' }}
-                onPress={() => this.props.unfavoriteGarment(id)}
-              />
-            )}
           </GarmentItemImageContainer>
           <GarmentDiscussion>
-            <IsResponse>Responded to a discussion post:</IsResponse>
+            <IsResponse>Commented:</IsResponse>
             <GarmentDiscussionText>
               <PostMessage>{model}</PostMessage>
-              <PostDate>{date} hours ago</PostDate>
+              <PostDate>{date}</PostDate>
             </GarmentDiscussionText>
           </GarmentDiscussion>
         </GarmentItem>
         <GarmentDiscussionButton>
-          <ButtonText>Following</ButtonText>
+          <ButtonText>View discussion</ButtonText>
         </GarmentDiscussionButton>
       </GarmentItemContainer>
     );
-  }
+  };
 
-  renderFooter = () => {
-    const { loading } = this.props;
-
+  const renderFooter = () => {
     if (!loading) return null;
     return (
       <View style={styles.loading}>
@@ -77,29 +70,23 @@ class Activity extends Component {
     );
   };
 
-  render() {
-    return (
-      <StyledActivityContainer>
-        <FlatList
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => this.renderDiscussion(item)}
-          onRefresh={() => this.props.onRefresh()}
-          onEndReached={this.props.handleLoadMore}
-          onEndReachedThreshold={0}
-          refreshing={false}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          ListFooterComponent={this.renderFooter}
-        />
-        {/* <StyledActivityBar>
-          <StyledDiscussionButton></StyledDiscussionButton>
-          <StyledInspirationButton></StyledInspirationButton>
-        </StyledActivityBar> */}
-      </StyledActivityContainer>
-    );
-  }
-}
+  return (
+    <>
+      <FlatList
+        data={comments}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => renderDiscussion(item)}
+        onRefresh={onRefresh}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0}
+        refreshing={false}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        ListFooterComponent={renderFooter}
+      />
+    </>
+  );
+};
 
 const GarmentItemContainer = styled.View`
   border-top-width: 0.2px;
@@ -164,20 +151,15 @@ const styles = {
     flex: 1,
     width: Metrics.screenWidth / 1,
     height: 200,
-    position: 'relative'
+    position: 'relative',
   },
   image: {
     width: 60,
     height: 60,
     marginHorizontal: 10,
-    marginVertical: 2
-  }
+    marginVertical: 2,
+  },
 };
-
-const StyledActivityContainer = styled.ScrollView`
-  /* flex: 1; */
-  /* flex-direction: column; */
-`;
 
 // const StyledActivityBar = styled.View`
 //   height: 12%;

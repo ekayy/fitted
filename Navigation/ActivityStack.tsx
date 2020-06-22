@@ -2,7 +2,11 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Activity from '../Containers/Activity';
 
-const Stack = createStackNavigator();
+export type ActivityParamList = {
+  Activity: undefined;
+};
+
+const Stack = createStackNavigator<ActivityParamList>();
 
 const ActivityStack = () => {
   return (
@@ -12,7 +16,7 @@ const ActivityStack = () => {
         gestureEnabled: true,
       }}
     >
-      <Stack.Screen name="activity" component={Activity} />
+      <Stack.Screen name="Activity" component={Activity} />
     </Stack.Navigator>
   );
 };

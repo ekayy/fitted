@@ -10,46 +10,63 @@ import styles from './Styles/GarmentDetailStyles';
 import { FavoriteButton } from '../Components/FavoriteButton';
 import CommentList from '../Components/Comment/CommentList';
 import { favoriteGarment } from '../Redux/UserRedux';
-import { fetchFits, clearCreatedFit, tagGarmentToFit } from '../Redux/FitsRedux';
+import { clearCreatedFit, tagGarmentToFit } from '../Redux/FitsRedux';
 import { fetchComments } from '../Redux/CommentsRedux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { GarmentDetailProps, ContentType } from '../types';
+import { GarmentDetailProps, ContentType, Garment, Fit } from '../types';
 import { useTypedSelector } from '../types';
+import { fetchGarment, fetchGarmentFits } from '../Redux/GarmentsRedux';
 
 const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   // Navigation params
+  const { id: garmentId } = route.params;
+
+  // Redux state
+  // const { items: fits } = useTypedSelector((state) => state.fits);
+  const { items: comments } = useTypedSelector((state) => state.comments);
+  const user = useTypedSelector((state) => state.user);
+  const { favoriteGarments } = user;
+
+  // State
+  const [toggled, setToggled] = useState<boolean>(false);
+  const [favoriteLength, setFavoriteLength] = useState<number>(0);
+  const [fits, setFits] = useState<Fit[]>([]);
+  const [garment, setGarment] = useState<Partial<Garment>>({});
   const {
-    id: garmentId,
     color,
-    brand,
+    brand_name: brandName,
     model,
     photo,
     purchase_page: purchasePage,
     favorited_by: favoritedBy,
-  } = route.params;
-
-  // Redux state
-  const { items: fits } = useTypedSelector((state) => state.fits);
-  const { items: brands } = useTypedSelector((state) => state.brands);
-  // const { items: comments } = useTypedSelector((state) => state.comments);
-  const user = useTypedSelector((state) => state.user);
-  const { favoriteGarments } = user;
-  const brandName = brands[brand - 1]['name'];
-
-  // State
-  const [toggled, setToggled] = useState<boolean>(false);
-  const [favoriteLength, setFavoriteLength] = useState<number>(favoritedBy.length);
+  } = garment;
 
   // Effects
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchFits(garmentId));
-    // dispatch(fetchComments());
+    // initial api call
+    (async () => {
+      const result = await fetchGarment(garmentId);
+      setGarment(result);
+      const garmentFits = await fetchGarmentFits(garmentId);
+      setFits(garmentFits);
+    })();
+  }, []);
+
+  useEffect(() => {
+    // dispatch(fetchFits(garmentId));
+    dispatch(fetchComments());
     favoriteGarments.includes(garmentId) ? setToggled(true) : setToggled(false);
   }, []);
+
   useEffect(() => {
-    toggled ? setFavoriteLength(favoritedBy.length + 1) : setFavoriteLength(favoritedBy.length);
+    // run once garment data fetched
+    favoritedBy && setFavoriteLength(favoritedBy.length);
+  }, [garment]);
+
+  useEffect(() => {
+    toggled ? setFavoriteLength(favoriteLength + 1) : setFavoriteLength(favoriteLength);
   }, [toggled]);
 
   const favorite = () => {
@@ -57,13 +74,8 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
     favoriteGarments.includes(garmentId) ? setToggled(false) : setToggled(true);
   };
 
-  // const [error, setError] = useState(null);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [garmentFits, setGarmentFits] = useState([]);
-  // const [count, setCount] = useState<number>(0);
-
   const handleOpenWithWebBrowser = () => {
-    WebBrowser.openBrowserAsync(purchasePage);
+    purchasePage && WebBrowser.openBrowserAsync(purchasePage);
   };
 
   // photo taken will be associated with the current garment
@@ -178,17 +190,16 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
           <Text style={AppStyles.sectionTitleText}>Discussion</Text>
         </View>
 
-        {/* {comments.length > 0 && (
+        {comments.length > 0 && (
           <CommentList
-            {...this.props}
-            data={comments.slice(0, 3)}
+            route={route}
+            data={comments.slice(0, 2)}
             renderViewComments
             renderLeaveComment
-            numReplies={1}
-            contentType="garment"
-            objectId={id}
+            initialNumToRender={2}
           />
-        )} */}
+        )}
+
         <View style={AppStyles.button}>
           <Button
             title={`See all discussion`}
