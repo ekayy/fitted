@@ -8,7 +8,7 @@ import { AppStyles, Metrics } from '../Themes';
 import styles from './Styles/GarmentDetailStyles';
 
 import { FavoriteButton } from '../Components/FavoriteButton';
-import CommentList from '../Components/Comment/CommentList';
+import CommentExcerpt from '../Components/Comment/CommentExcerpt';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { clearCreatedFit, tagGarmentToFit } from '../Redux/FitsRedux';
 import { fetchComments } from '../Redux/CommentsRedux';
@@ -55,8 +55,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    // dispatch(fetchFits(garmentId));
-    dispatch(fetchComments());
+    dispatch(fetchComments(garmentId, 'garment'));
     favoriteGarments.includes(garmentId) ? setToggled(true) : setToggled(false);
   }, []);
 
@@ -94,6 +93,15 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
         <Image style={styles.carouselImage} source={{ uri: item.photo }} />
       </TouchableOpacity>
     );
+  };
+
+  const leaveReply = (comment) => {
+    navigation.navigate('Comments', {
+      objectId: garmentId,
+      contentType: ContentType.GARMENT,
+      model,
+      comment,
+    });
   };
 
   return (
@@ -191,13 +199,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
         </View>
 
         {comments.length > 0 && (
-          <CommentList
-            route={route}
-            data={comments.slice(0, 2)}
-            renderViewComments
-            renderLeaveComment
-            initialNumToRender={2}
-          />
+          <CommentExcerpt data={comments.slice(0, 2)} leaveReply={leaveReply} />
         )}
 
         <View style={AppStyles.button}>

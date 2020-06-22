@@ -1,4 +1,4 @@
-import React, { useState, useEffect, RefObject, createRef } from 'react';
+import React, { useState, useEffect, RefObject, createRef, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
 import {
@@ -30,7 +30,7 @@ const sortOptions: string[] = [Sort.RECENT, Sort.POPULAR];
 
 const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   // Navigation params
-  const { objectId, contentType } = route.params;
+  const { objectId, contentType, comment } = route.params;
 
   // Redux state
   const { items: comments } = useTypedSelector((state) => state.comments);
@@ -38,9 +38,6 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   // const commentsByMostPopular = useSelector((state) => selectPopularComments(state));
 
   // State
-  // const [commentValue, onChangeComment] = useState('');
-  // const [showModal, setModal] = useState(false);
-  // const [currentComment, setCurrentComment] = useState({});
   const [searchValue, onChangeSearch] = useState('');
   const [searchedComments, setSearchedComments] = useState(comments);
   const [tag, setTag] = useState<string>('');
@@ -50,12 +47,19 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
 
   // for focusing on next input
   const inputRef: RefObject<TextInput> = createRef<TextInput>();
+  // for scrolling to corresponding comment or reply
+  const flatListRef: RefObject<FlatList> = useRef<FlatList>();
 
   const dispatch = useDispatch();
   useEffect(() => {
     // update comment store on tab change if changed
     dispatch(fetchComments(objectId, contentType));
   }, []);
+
+  useEffect(() => {
+    leaveReply(comment, 0);
+  }, [comment]);
+
   useEffect(() => {
     // if redux comments change, update component state
     setSearchedComments(comments);
@@ -77,10 +81,11 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
     dispatch(loadReplies({ commentId }));
   };
 
-  const leaveReply = (comment) => {
+  const leaveReply = (comment, index) => {
     setCurrentComment(comment);
     setIsReply(true);
     inputRef.current && inputRef.current.focus();
+    flatListRef.current && flatListRef.current.scrollToIndex({ animated: true, index });
   };
 
   const closeReply = () => {
@@ -141,6 +146,7 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
           </View> */}
 
         <CommentList
+          flatListRef={flatListRef}
           route={route}
           data={searchedComments}
           renderViewComments

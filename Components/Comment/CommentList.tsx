@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import { FlatList, View, Text, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -11,13 +11,19 @@ import {
 } from '../../Redux/CommentsRedux';
 
 const CommentList = (props) => {
-  const { data, ListHeaderComponent, loadMoreReplies, leaveReply } = props;
+  const { data, ListHeaderComponent, loadMoreReplies, leaveReply, flatListRef } = props;
 
   // Redux State
   // const { commentId, profileId } = useSelector((state) => ({
   //   commentId: id,
   //   profileId: state.user.profileId,
   // }));
+
+  // useEffect(() => {
+  //   if (flatListRef.current) {
+  //     flatListRef.current.scrollToIndex({ animated: true, index });
+  //   }
+  // }, []);
 
   const dispatch = useDispatch();
 
@@ -69,7 +75,7 @@ const CommentList = (props) => {
     );
   };
 
-  const renderComment = (comment) => {
+  const renderComment = (comment: Partial<Comment>, index: number) => {
     const { content, username, replies } = comment;
 
     return (
@@ -86,7 +92,9 @@ const CommentList = (props) => {
               <StyledCommentLink onPress={() => loadMoreReplies(comment)}>
                 View More
               </StyledCommentLink>
-              <StyledCommentLink onPress={() => leaveReply(comment)}>Reply</StyledCommentLink>
+              <StyledCommentLink onPress={() => leaveReply(comment, index)}>
+                Reply
+              </StyledCommentLink>
             </StyledCommentLinks>
             {replies && renderReplies(replies)}
           </StyledReplies>
@@ -97,9 +105,10 @@ const CommentList = (props) => {
 
   return (
     <FlatList
+      ref={flatListRef}
       data={data}
       keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => renderComment(item)}
+      renderItem={({ item, index }) => renderComment(item, index)}
       ListHeaderComponent={ListHeaderComponent}
     />
   );

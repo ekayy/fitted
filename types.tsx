@@ -298,6 +298,7 @@ export interface Comment {
   created_date: string;
   object_id: number;
   origin: ContentType;
+  replies: Reply[];
 }
 
 export interface CommentState {
