@@ -82,7 +82,7 @@ export const fetchActivity = (profile): AppThunk => async (dispatch) => {
 
     // comments and replies
     const data = responses.reduce((acc, response) => acc.concat(response.data.results), []);
-    const result = data.sort((a, b) => (a.created_date > b.created_date ? 1 : -1));
+    const result = data.sort((a, b) => (a.created_date > b.created_date ? -1 : 1));
 
     dispatch(fetchActivitySuccess(result));
   } catch (error) {
