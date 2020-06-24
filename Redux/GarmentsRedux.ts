@@ -251,6 +251,7 @@ export const createGarment = ({ brand, color, model }): AppThunk => async (dispa
       purchase_page: 'https://x',
     });
     dispatch(createGarmentSuccess(res.data));
+    return res.data;
   } catch (error) {
     dispatch(createGarmentFailure(error));
   }

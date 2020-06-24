@@ -8,6 +8,7 @@ import Fits from '../Containers/Fits';
 import Camera from '../Containers/Camera';
 
 import { Garment, Fit, ContentType } from '../types';
+import Comments from '../Containers/Comments';
 
 export type SearchStackParamList = {
   'Create Discussion': { screen: string };
@@ -15,7 +16,7 @@ export type SearchStackParamList = {
   'Garment Detail': Garment;
   'Fit Detail': Fit;
   Fits: Garment;
-  Comments: { objectId: number; contentType: ContentType; model: string };
+  Comments: { objectId: number; contentType: ContentType };
   Profile: { title: string } | undefined;
   Camera: undefined;
 };
@@ -47,6 +48,7 @@ const SearchStack = () => {
         options={({ route }) => ({ title: route.params!['username'] })}
       />
       <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }} />
+      <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>
   );
 };

@@ -1,4 +1,4 @@
-import React, { createRef, RefObject, useEffect } from 'react';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, TextInput } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch } from 'react-redux';
@@ -7,10 +7,11 @@ import { Formik } from 'formik';
 import { createGarment, clearCreatedGarment } from '../Redux/GarmentsRedux';
 // import Checkbox from '../Components/Forms/Checkbox';
 import * as Yup from 'yup';
-import { CreateDiscussionProps, useTypedSelector } from '../types';
+import { CreateDiscussionProps, useTypedSelector, ContentType } from '../types';
 import { AutocompleteInput } from '../Components/Forms/AutocompleteInput';
 import { MyTextInput } from '../Components/Forms/MyTextInput';
 import { fetchBrands } from '../Redux/BrandsRedux';
+import { postComment } from '../Redux/CommentsRedux';
 
 export interface CreateDiscussionFields {
   brand: string;
@@ -40,30 +41,24 @@ const colors = [{ name: 'red' }, { name: 'black' }, { name: 'orange' }];
 // ];
 
 const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }) => {
+  // State
+  const [discussion, setDiscussion] = useState<string>('');
+
   // Redux state
   const { createdGarment } = useTypedSelector((state) => state.garments);
   const { items: brands } = useTypedSelector((state) => state.brands);
+  const { profileId } = useTypedSelector((state) => state.user);
+  const { items: comments } = useTypedSelector((state) => state.comments);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchBrands());
   }, []);
+
   useEffect(() => {
-    // on garment created
-    if (createdGarment) {
-      navigation.reset({
-        routes: [{ name: 'Create Choice' }],
-      });
-
-      navigation.navigate('Search', {
-        screen: 'Garment Detail',
-        params: createdGarment,
-      });
-    }
-
     // reset fit redux
     dispatch(clearCreatedGarment());
-  }, [createdGarment]);
+  }, [comments]);
 
   // for focusing on next input
   const fieldRef1: RefObject<TextInput> = createRef<TextInput>();
@@ -72,11 +67,11 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
   const fieldRef4: RefObject<TextInput> = createRef<TextInput>();
 
   const initialValues: CreateDiscussionFields = {
-    brand: '',
-    color: '',
-    discussion: '',
-    model: '',
-    type: '',
+    brand: 'John Elliot',
+    color: '123',
+    discussion: '123',
+    model: '123',
+    type: '123',
   };
 
   const getBrandId = (name: string): number => {
@@ -98,13 +93,38 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
           initialValues={initialValues}
           validationSchema={createGarmentSchema}
           onSubmit={async (values) => {
-            const { brand, color, model } = values;
+            const { brand, color, model, discussion } = values;
             const brandId = getBrandId(brand);
 
-            /* tslint:disable-next-line */
-            await dispatch(createGarment({ brand: brandId, color, model }));
+            const createdGarment = await dispatch(createGarment({ brand: brandId, color, model }));
 
-            //     /* TODO create discussion comment */
+            if (createdGarment) {
+              const { id: garmentId } = createdGarment;
+
+              await dispatch(
+                postComment({
+                  contentType: ContentType.GARMENT,
+                  objectId: garmentId,
+                  profileId,
+                  content: discussion,
+                }),
+              );
+
+              navigation.reset({
+                routes: [
+                  { name: 'Create Choice' },
+                  //     { name: 'Garment Detail', params: createdGarment },
+                ],
+              });
+
+              navigation.navigate('Search', {
+                screen: 'Comments',
+                params: {
+                  objectId: garmentId,
+                  contentType: ContentType.GARMENT,
+                },
+              });
+            }
           }}
         >
           {(props) => {

@@ -211,7 +211,6 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
               navigation.navigate('Comments', {
                 objectId: garmentId,
                 contentType: ContentType.GARMENT,
-                model,
               })
             }
           />
