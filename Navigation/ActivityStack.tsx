@@ -8,6 +8,7 @@ import Fits from '../Containers/Fits';
 import Camera from '../Containers/Camera';
 
 import { Garment, Fit, ContentType } from '../types';
+import Comments from '../Containers/Comments';
 
 export type ActivityParamList = {
   'Create Discussion': { screen: string };
@@ -15,9 +16,9 @@ export type ActivityParamList = {
   'Garment Detail': Pick<Garment, 'id'>;
   'Fit Detail': Pick<Fit, 'id'>;
   Fits: Garment;
-  Comments: { objectId: number; contentType: ContentType; model: string };
   Profile: { title: string } | undefined;
   Camera: undefined;
+  Comments: { objectId: number; contentType: ContentType };
 };
 
 const Stack = createStackNavigator<ActivityParamList>();
@@ -52,6 +53,7 @@ const ActivityStack = () => {
         options={({ route }) => ({ title: route.params!['username'] })}
       />
       <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }} />
+      <Stack.Screen name="Comments" component={Comments} options={{ title: '' }} />
     </Stack.Navigator>
   );
 };

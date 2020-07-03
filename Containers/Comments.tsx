@@ -19,8 +19,10 @@ import {
   selectPopularComments,
   loadReplies,
 } from '../Redux/CommentsRedux';
-import { CommentsProps, useTypedSelector, Sort, Comment } from '../types';
+import { CommentsProps, useTypedSelector, Sort, Comment, Garment, Fit } from '../types';
 import { SearchBar } from 'react-native-elements';
+import { fetchGarment } from '../Redux/GarmentsRedux';
+import { fetchFit } from '../Redux/FitsRedux';
 
 const sortOptions: string[] = [Sort.RECENT, Sort.POPULAR];
 
@@ -40,6 +42,7 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   const [showFilters, setShowFilter] = useState<boolean>(false);
   const [isReply, setIsReply] = useState<boolean>(false);
   const [currentComment, setCurrentComment] = useState<Comment>({});
+  const [object, setObject] = useState<Garment>({});
 
   // for focusing on next input
   const inputRef: RefObject<TextInput> = createRef<TextInput>();
@@ -47,6 +50,21 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   const flatListRef: RefObject<FlatList> = useRef<FlatList>();
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    // if visiting from activity, need data for garment or fit navigation back
+    (async () => {
+      const result =
+        contentType === 'garment' ? await fetchGarment(objectId) : await fetchFit(objectId);
+      setObject(result);
+    })();
+  }, []);
+
+  useEffect(() => {
+    const { model } = object;
+
+    navigation.setOptions({ title: model });
+  }, [object]);
+
   useEffect(() => {
     // update comment store on tab change if changed
     dispatch(fetchComments(objectId, contentType));

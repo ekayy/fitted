@@ -62,6 +62,9 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   useEffect(() => {
     // run once garment data fetched
     favoritedBy && setFavoriteLength(favoritedBy.length);
+
+    // set title (used when navigating in reverse from Activity)
+    navigation.setOptions({ title: garment['model'] });
   }, [garment]);
 
   useEffect(() => {

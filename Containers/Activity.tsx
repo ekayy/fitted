@@ -45,7 +45,9 @@ const Activity: React.FC<ActivityProps> = ({ route, navigation }) => {
             <IsResponse>{isReply ? 'You commented:' : 'You replied:'}</IsResponse>
 
             <PostMessage>{excerpt}</PostMessage>
-            <PostDate>{date.toDateString()}</PostDate>
+            <PostDate>
+              {date.toDateString()} {date.toLocaleTimeString()}
+            </PostDate>
           </ActivityMessage>
         </ActivityMessageContainer>
 
@@ -60,12 +62,17 @@ const Activity: React.FC<ActivityProps> = ({ route, navigation }) => {
 
   const navigateToType = (origin, id) => {
     origin === 'garment'
-      ? navigation.navigate('Garment Detail', {
+      ? navigation.push('Garment Detail', {
           id,
         })
-      : navigation.navigate('Fit Detail', {
+      : navigation.push('Fit Detail', {
           id,
         });
+
+    navigation.navigate('Comments', {
+      objectId: id,
+      contentType: origin,
+    });
   };
 
   const renderFooter = () => {
