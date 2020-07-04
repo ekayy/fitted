@@ -43,6 +43,7 @@ const colors = [{ name: 'red' }, { name: 'black' }, { name: 'orange' }];
 const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }) => {
   // State
   const [discussion, setDiscussion] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   // Redux state
   const { createdGarment } = useTypedSelector((state) => state.garments);
@@ -67,17 +68,18 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
   const fieldRef4: RefObject<TextInput> = createRef<TextInput>();
 
   const initialValues: CreateDiscussionFields = {
-    brand: 'John Elliot',
-    color: '123',
-    discussion: '123',
-    model: '123',
-    type: '123',
+    brand: 'John Elliott',
+    color: 'Black',
+    discussion: 'This is a comment',
+    model: 'Model name',
+    type: 'Box Logo',
   };
 
+  // TODO: Need to handle new brand case
   const getBrandId = (name: string): number => {
     return brands.filter((brand) => brand['name'] === name).length
       ? brands.filter((brand) => brand['name'] === name)[0]['id']
-      : 0;
+      : 999;
   };
 
   return (
@@ -96,6 +98,11 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
             const { brand, color, model, discussion } = values;
             const brandId = getBrandId(brand);
 
+            if (brandId === 999) {
+              setError('Brand does not exist');
+              return;
+            }
+
             const createdGarment = await dispatch(createGarment({ brand: brandId, color, model }));
 
             if (createdGarment) {
@@ -111,18 +118,17 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
               );
 
               navigation.reset({
-                routes: [
-                  { name: 'Create Choice' },
-                  //     { name: 'Garment Detail', params: createdGarment },
-                ],
+                routes: [{ name: 'Create Choice' }],
+              });
+
+              navigation.navigate('Search', {
+                screen: 'Garment Detail',
+                params: { id: garmentId },
               });
 
               navigation.navigate('Search', {
                 screen: 'Comments',
-                params: {
-                  objectId: garmentId,
-                  contentType: ContentType.GARMENT,
-                },
+                params: { objectId: garmentId, contentType: ContentType.GARMENT },
               });
             }
           }}
