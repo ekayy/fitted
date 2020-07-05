@@ -130,6 +130,6 @@ export default StyleSheet.create({
   error: {
     color: 'red',
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 4,
   },
 });

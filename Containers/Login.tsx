@@ -51,7 +51,7 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
       });
       if (type === 'success') {
         const response = await axios.get(`https://graph.facebook.com/me?access_token=${token}`);
-        Alert.alert('Logged in!', `Hi ${await response.data.name}!`);
+        console.log(response.data);
       } else {
         // type === 'cancel'
       }

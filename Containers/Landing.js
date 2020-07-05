@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback
-} from 'react-native';
+import { View, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import styles from './Styles/LoginStyles';
 import { fbAppId } from '../Config';
 import { connect } from 'react-redux';
-import { login, fetchProfile } from '../Redux/UserRedux';
+import { login, fetchProfile, loginClearError } from '../Redux/UserRedux';
 
 class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
     };
     this.isAttempting = false;
   }
@@ -23,19 +18,16 @@ class Landing extends Component {
     if (this.props.isLoggedIn) {
       this.props.navigation.navigate('App');
     }
+
+    this.props.loginClearError();
   }
 
   loginFb = async () => {
-    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
-      fbAppId,
-      {
-        permissions: ['public_profile']
-      }
-    );
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(fbAppId, {
+      permissions: ['public_profile'],
+    });
     if (type === 'success') {
-      const response = await fetch(
-        `https://graph.facebook.com/me?access_token=${token}`
-      );
+      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
 
       this.props.navigation.navigate('App');
     }
@@ -48,18 +40,13 @@ class Landing extends Component {
         <View style={styles.welcomeContainer}>
           <View style={styles.welcomeText}>
             <Text style={styles.welcomeTitle}>Welcome!</Text>
-            <Text style={styles.welcomeSubtitle}>
-              Sign up to start sharing your
-            </Text>
+            <Text style={styles.welcomeSubtitle}>Sign up to start sharing your</Text>
             <Text style={styles.welcomeSubtitle}>Outfits of The Day!</Text>
           </View>
         </View>
         <View style={styles.loginWrapper}>
           <View style={[styles.loginRow, { alignItems: 'center' }]}>
-            <TouchableOpacity
-              style={styles.loginButtonWrapper}
-              onPress={this.loginFb}
-            >
+            <TouchableOpacity style={styles.loginButtonWrapper} onPress={this.loginFb}>
               <View style={styles.facebookButton}>
                 <Text style={styles.loginText}>Log In With Facebook</Text>
               </View>
@@ -105,16 +92,13 @@ class Landing extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     error: state.user.error,
     loading: state.user.loading,
     profileId: state.user.profileId,
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { login, fetchProfile }
-)(Landing);
+export default connect(mapStateToProps, { login, fetchProfile, loginClearError })(Landing);

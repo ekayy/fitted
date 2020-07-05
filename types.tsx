@@ -38,6 +38,9 @@ import {
   LOGIN_CLEAR_ERROR,
   FAVORITE_ITEM,
   UNFAVORITE_ITEM,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE,
 } from './Redux/UserRedux';
 import {
   FETCH_FAVORITE_GARMENTS_BEGIN,
@@ -127,6 +130,14 @@ type LoginNavigationProp = StackNavigationProp<AuthParamList, 'Login'>;
 export type LoginProps = {
   route: LoginRouteProp;
   navigation: LoginNavigationProp;
+};
+
+type RegisterRouteProp = RouteProp<AuthParamList, 'Register'>;
+type RegisterNavigationProp = StackNavigationProp<AuthParamList, 'Register'>;
+
+export type RegisterProps = {
+  route: RegisterRouteProp;
+  navigation: RegisterNavigationProp;
 };
 
 type CreateChoiceRouteProp = RouteProp<CreateDiscussionStackParamList, 'Create Choice'>;
@@ -263,6 +274,7 @@ export interface SearchState {
 
 export interface UserState {
   error: string | null;
+  registerError: string[] | null;
   favoriteFits: number[];
   favoriteGarments: number[];
   height: number | null;
@@ -475,6 +487,17 @@ interface LoginClearErrorAction {
   type: typeof LOGIN_CLEAR_ERROR;
 }
 
+interface RegisterRequestAction {
+  type: typeof REGISTER_REQUEST;
+}
+interface RegisterSuccessAction {
+  type: typeof REGISTER_SUCCESS;
+}
+interface RegisterFailureAction {
+  type: typeof REGISTER_FAILURE;
+  payload: Pick<UserState, 'error'>;
+}
+
 interface ProfileRequestAction {
   type: typeof PROFILE_REQUEST;
 }
@@ -514,6 +537,9 @@ export type UserActionTypes =
   | LoginFailureAction
   | LogoutAction
   | LoginClearErrorAction
+  | RegisterRequestAction
+  | RegisterSuccessAction
+  | RegisterFailureAction
   | ProfileRequestAction
   | ProfileSuccessAction
   | ProfileFailureAction
