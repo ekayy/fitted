@@ -7,6 +7,7 @@ import Profile from '../Containers/Profile';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const SET_ISLOGGEDIN = 'SET_ISLOGGEDIN';
 export const LOGOUT = 'LOGOUT';
 export const LOGIN_CLEAR_ERROR = 'LOGIN_CLEAR_ERROR';
 
@@ -60,7 +61,6 @@ export default function (state = INITIAL_STATE, action: UserActionTypes): UserSt
         error: null,
         token: action.payload.token,
         profileId: action.payload.profileId,
-        isLoggedIn: true,
       };
     case LOGIN_FAILURE:
       return {
@@ -69,6 +69,12 @@ export default function (state = INITIAL_STATE, action: UserActionTypes): UserSt
         error: action.payload.error,
         token: null,
         profileId: null,
+        isLoggedIn: false,
+      };
+    case SET_ISLOGGEDIN:
+      return {
+        ...state,
+        isLoggedIn: true,
       };
     case LOGOUT:
       return INITIAL_STATE;
@@ -95,7 +101,7 @@ export default function (state = INITIAL_STATE, action: UserActionTypes): UserSt
       return {
         ...state,
         loading: false,
-        registerError: action.payload.error,
+        registerError: action.payload.registerError,
       };
 
     case PROFILE_REQUEST:
@@ -205,6 +211,9 @@ export const loginFailure = ({ error }: Pick<UserState, 'error'>): UserActionTyp
   type: LOGIN_FAILURE,
   payload: { error },
 });
+export const setIsLoggedIn = (): UserActionTypes => ({
+  type: SET_ISLOGGEDIN,
+});
 export const logout = (): UserActionTypes => ({
   type: LOGOUT,
 });
@@ -218,9 +227,11 @@ export const registerRequest = (): UserActionTypes => ({
 export const registerSuccess = (): UserActionTypes => ({
   type: REGISTER_SUCCESS,
 });
-export const registerFailure = ({ error }: Pick<UserState, 'error'>): UserActionTypes => ({
+export const registerFailure = ({
+  registerError,
+}: Pick<UserState, 'registerError'>): UserActionTypes => ({
   type: REGISTER_FAILURE,
-  payload: { error },
+  payload: { registerError },
 });
 
 export const profileRequest = (): UserActionTypes => ({
@@ -324,7 +335,7 @@ export const register = ({ username, password, firstName, email }): AppThunk => 
     dispatch(registerSuccess());
   } catch (error) {
     const errorArray = Object.entries(error.response.data['user']);
-    dispatch(registerFailure({ error: errorArray[0] }));
+    dispatch(registerFailure({ registerError: errorArray[0] }));
   }
 };
 

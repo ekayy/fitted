@@ -7,79 +7,68 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 45
+    paddingTop: 45,
   },
   headerText: {
     textAlign: 'center',
     fontSize: 15,
     fontWeight: '700',
-    marginVertical: Metrics.marginVertical
+    marginVertical: Metrics.marginVertical,
   },
   formContainer: {
     flex: 1,
-    width: 315
+    width: 315,
   },
   form: {
     backgroundColor: Colors.snow,
     marginVertical: Metrics.baseMargin,
     borderRadius: 4,
-    height: 188
+    paddingBottom: 20,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 14.5
+    marginHorizontal: 14.5,
   },
   rowLabel: {
     color: 'rgb(0,0,0)',
     marginVertical: Metrics.marginVertical,
     width: 53,
-    fontSize: 14
+    fontSize: 14,
   },
   textInput: {
-    height: 36,
     width: 160,
-    marginHorizontal: 26,
-    color: Colors.coal,
-    borderWidth: 0.5,
-    borderColor: 'rgb(236,236,237)',
-    padding: 7
   },
   imperialInput: {
-    height: 36,
-    width: 67,
-    marginLeft: 26,
-    color: Colors.coal,
-    borderWidth: 0.5,
-    borderColor: 'rgb(236,236,237)',
-    padding: 7
+    width: 60,
   },
   rowInput: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   imperialRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   switchContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    marginVertical: 20
+    marginVertical: 20,
   },
   switchLabel: {},
   switch: {
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   buttonWrapper: {
-    height: 44
+    height: 44,
   },
   buttonRow: {
     paddingVertical: Metrics.doubleBaseMargin,
     paddingHorizontal: Metrics.doubleBaseMargin,
-    height: 44
+    height: 44,
   },
   button: {
     borderRadius: 5,
@@ -87,14 +76,14 @@ export default StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: 'rgb(141,141,141)',
     width: 315,
-    height: 44
+    height: 44,
   },
   buttonText: {
     textAlign: 'center',
     color: Colors.snow,
-    fontSize: 17
+    fontSize: 17,
   },
   spacer: {
-    height: 25
-  }
+    height: 25,
+  },
 });

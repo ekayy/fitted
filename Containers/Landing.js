@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-na
 import styles from './Styles/LoginStyles';
 import { fbAppId } from '../Config';
 import { connect } from 'react-redux';
-import { login, fetchProfile, loginClearError } from '../Redux/UserRedux';
+import { login, fetchProfile, logout } from '../Redux/UserRedux';
 
 class Landing extends Component {
   constructor(props) {
@@ -15,11 +15,7 @@ class Landing extends Component {
   }
 
   componentDidMount() {
-    if (this.props.isLoggedIn) {
-      this.props.navigation.navigate('App');
-    }
-
-    this.props.loginClearError();
+    this.props.logout();
   }
 
   loginFb = async () => {
@@ -101,4 +97,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { login, fetchProfile, loginClearError })(Landing);
+export default connect(mapStateToProps, { login, fetchProfile, logout })(Landing);

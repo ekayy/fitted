@@ -44,13 +44,13 @@ const Register: React.FC<RegisterProps> = ({ route, navigation }: RegisterProps)
   const passwordInputRef = createRef<TextInput>();
 
   // Load UserRedux
-  const { profileId, registerError, loading, isLoggedIn } = useTypedSelector((state) => state.user);
+  const { profileId, registerError, loading } = useTypedSelector((state) => state.user);
 
   const initialValues: RegisterFormValues = {
-    firstName: '',
-    email: '',
-    username: '',
-    password: '',
+    firstName: 'asdfasdf',
+    email: 'asdfasdf@mail.com',
+    username: 'asdfasdf',
+    password: 'asdfasdf',
   };
 
   // for preventing hook running on initial load
@@ -66,7 +66,7 @@ const Register: React.FC<RegisterProps> = ({ route, navigation }: RegisterProps)
       // Move on to next step (RegisterMeasurements) if everything is good
       profile && navigation.navigate('Register Measurements');
     }
-  }, [isLoggedIn]);
+  }, [profileId]);
 
   const signup = async ({ firstName, email, username, password }: RegisterFormValues) => {
     try {

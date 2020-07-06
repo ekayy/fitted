@@ -41,6 +41,7 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
+  SET_ISLOGGEDIN,
 } from './Redux/UserRedux';
 import {
   FETCH_FAVORITE_GARMENTS_BEGIN,
@@ -138,6 +139,17 @@ type RegisterNavigationProp = StackNavigationProp<AuthParamList, 'Register'>;
 export type RegisterProps = {
   route: RegisterRouteProp;
   navigation: RegisterNavigationProp;
+};
+
+type RegisterMeasurementsRouteProp = RouteProp<AuthParamList, 'Register Measurements'>;
+type RegisterMeasurementsNavigationProp = StackNavigationProp<
+  AuthParamList,
+  'Register Measurements'
+>;
+
+export type RegisterMeasurementsProps = {
+  route: RegisterMeasurementsRouteProp;
+  navigation: RegisterMeasurementsNavigationProp;
 };
 
 type CreateChoiceRouteProp = RouteProp<CreateDiscussionStackParamList, 'Create Choice'>;
@@ -480,6 +492,9 @@ interface LoginFailureAction {
   type: typeof LOGIN_FAILURE;
   payload: Pick<UserState, 'error'>;
 }
+interface SetIsLoggedInAction {
+  type: typeof SET_ISLOGGEDIN;
+}
 interface LogoutAction {
   type: typeof LOGOUT;
 }
@@ -495,7 +510,7 @@ interface RegisterSuccessAction {
 }
 interface RegisterFailureAction {
   type: typeof REGISTER_FAILURE;
-  payload: Pick<UserState, 'error'>;
+  payload: Pick<UserState, 'registerError'>;
 }
 
 interface ProfileRequestAction {
@@ -535,6 +550,7 @@ export type UserActionTypes =
   | LoginRequestAction
   | LoginSuccessAction
   | LoginFailureAction
+  | SetIsLoggedInAction
   | LogoutAction
   | LoginClearErrorAction
   | RegisterRequestAction

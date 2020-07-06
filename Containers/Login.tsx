@@ -1,7 +1,7 @@
 import React, { useEffect, createRef, useRef } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { login, fetchProfile, loginClearError } from '../Redux/UserRedux';
+import { login, fetchProfile, loginClearError, setIsLoggedIn } from '../Redux/UserRedux';
 import { LoginProps, useTypedSelector } from '../types';
 import * as Facebook from 'expo-facebook';
 import { fbAppId } from '../Config';
@@ -23,7 +23,7 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
   const passwordInputRef = createRef<TextInput>();
 
   // Load UserRedux
-  const { profileId, error, loading, isLoggedIn } = useTypedSelector((state) => state.user);
+  const { profileId, error, loading } = useTypedSelector((state) => state.user);
 
   const initialValues: LoginFormValues = {
     username: 'fittedsf',
@@ -39,8 +39,9 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
       initialRender.current = false;
     } else {
       dispatch(fetchProfile(profileId));
+      dispatch(setIsLoggedIn());
     }
-  }, [isLoggedIn]);
+  }, [profileId]);
 
   // TODO: fix facebook login flow
   const loginFb = async () => {
