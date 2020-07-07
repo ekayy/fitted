@@ -1,50 +1,49 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { createSelector } from 'reselect';
+// import { createSelector } from 'reselect';
+import { CommentState, CommentActionTypes, AppThunk } from '../types';
 
 // Actions
-const FETCH_COMMENTS_BEGIN = 'FETCH_COMMENTS_BEGIN';
-const FETCH_COMMENTS_SUCCESS = 'FETCH_COMMENTS_SUCCESS';
-const FETCH_COMMENTS_FAILURE = 'FETCH_COMMENTS_FAILURE';
+export const FETCH_COMMENTS_BEGIN = 'FETCH_COMMENTS_BEGIN';
+export const FETCH_COMMENTS_SUCCESS = 'FETCH_COMMENTS_SUCCESS';
+export const FETCH_COMMENTS_FAILURE = 'FETCH_COMMENTS_FAILURE';
 
-const UPVOTE_COMMENT_BEGIN = 'UPVOTE_COMMENT_BEGIN';
-const UPVOTE_COMMENT_SUCCESS = 'UPVOTE_COMMENT_SUCCESS';
-const UPVOTE_COMMENT_FAILURE = 'UPVOTE_COMMENT_FAILURE';
-const DOWNVOTE_COMMENT_BEGIN = 'DOWNVOTE_COMMENT_BEGIN';
-const DOWNVOTE_COMMENT_SUCCESS = 'DOWNVOTE_COMMENT_SUCCESS';
-const DOWNVOTE_COMMENT_FAILURE = 'DOWNVOTE_COMMENT_FAILURE';
+export const UPVOTE_COMMENT_BEGIN = 'UPVOTE_COMMENT_BEGIN';
+export const UPVOTE_COMMENT_SUCCESS = 'UPVOTE_COMMENT_SUCCESS';
+export const UPVOTE_COMMENT_FAILURE = 'UPVOTE_COMMENT_FAILURE';
+export const DOWNVOTE_COMMENT_BEGIN = 'DOWNVOTE_COMMENT_BEGIN';
+export const DOWNVOTE_COMMENT_SUCCESS = 'DOWNVOTE_COMMENT_SUCCESS';
+export const DOWNVOTE_COMMENT_FAILURE = 'DOWNVOTE_COMMENT_FAILURE';
 
-const UPVOTE_REPLY_BEGIN = 'UPVOTE_REPLY_BEGIN';
-const UPVOTE_REPLY_SUCCESS = 'UPVOTE_REPLY_SUCCESS';
-const UPVOTE_REPLY_FAILURE = 'UPVOTE_REPLY_FAILURE';
-const DOWNVOTE_REPLY_BEGIN = 'DOWNVOTE_REPLY_BEGIN';
-const DOWNVOTE_REPLY_SUCCESS = 'DOWNVOTE_REPLY_SUCCESS';
-const DOWNVOTE_REPLY_FAILURE = 'DOWNVOTE_REPLY_FAILURE';
+export const UPVOTE_REPLY_BEGIN = 'UPVOTE_REPLY_BEGIN';
+export const UPVOTE_REPLY_SUCCESS = 'UPVOTE_REPLY_SUCCESS';
+export const UPVOTE_REPLY_FAILURE = 'UPVOTE_REPLY_FAILURE';
+export const DOWNVOTE_REPLY_BEGIN = 'DOWNVOTE_REPLY_BEGIN';
+export const DOWNVOTE_REPLY_SUCCESS = 'DOWNVOTE_REPLY_SUCCESS';
+export const DOWNVOTE_REPLY_FAILURE = 'DOWNVOTE_REPLY_FAILURE';
 
-const POST_COMMENT_BEGIN = 'POST_COMMENT_BEGIN';
-const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
-const POST_COMMENT_FAILURE = 'POST_COMMENT_FAILURE';
+export const POST_COMMENT_BEGIN = 'POST_COMMENT_BEGIN';
+export const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
+export const POST_COMMENT_FAILURE = 'POST_COMMENT_FAILURE';
 
-const POST_REPLY_BEGIN = 'POST_REPLY_BEGIN';
-const POST_REPLY_SUCCESS = 'POST_REPLY_SUCCESS';
-const POST_REPLY_FAILURE = 'POST_REPLY_FAILURE';
+export const POST_REPLY_BEGIN = 'POST_REPLY_BEGIN';
+export const POST_REPLY_SUCCESS = 'POST_REPLY_SUCCESS';
+export const POST_REPLY_FAILURE = 'POST_REPLY_FAILURE';
 
-const LOAD_REPLIES_BEGIN = 'LOAD_REPLIES_BEGIN';
-const LOAD_REPLIES_SUCCESS = 'LOAD_REPLIES_SUCCESS';
-const LOAD_REPLIES_FAILURE = 'LOAD_REPLIES_FAILURE';
+export const LOAD_REPLIES_BEGIN = 'LOAD_REPLIES_BEGIN';
+export const LOAD_REPLIES_SUCCESS = 'LOAD_REPLIES_SUCCESS';
+export const LOAD_REPLIES_FAILURE = 'LOAD_REPLIES_FAILURE';
 
-export const INITIAL_STATE = {
+export const INITIAL_STATE: CommentState = {
   items: [],
-  garments: [],
-  fits: [],
   loading: false,
   error: null,
-  content: null,
-  replies: {},
+  content: '',
+  // replies: {},
 };
 
 // Reducer
-export default function comments(state = INITIAL_STATE, action = {}) {
+export default function comments(state = INITIAL_STATE, action: CommentActionTypes): CommentState {
   switch (action.type) {
     case FETCH_COMMENTS_BEGIN:
       return {
@@ -139,7 +138,7 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       const { replyResponse } = action.payload;
 
       const items = state.items.map((comment) => {
-        if (comment.id === reply.comment) {
+        if (comment.id === replyResponse.comment) {
           const replies = comment.replies.map((reply) => {
             if (reply.id === replyResponse.id) {
               return { ...reply };
@@ -176,13 +175,21 @@ export default function comments(state = INITIAL_STATE, action = {}) {
       };
 
     case DOWNVOTE_REPLY_SUCCESS: {
-      const { reply } = action.payload;
+      const { replyResponse } = action.payload;
 
-      const items = state.items.map((item) => {
-        if (item.id === reply.comment) {
-          return { ...item, replies: [...item.replies, reply] };
+      const items = state.items.map((comment) => {
+        if (comment.id === replyResponse.comment) {
+          const replies = comment.replies.map((reply) => {
+            if (reply.id === replyResponse.id) {
+              return { ...reply };
+            } else {
+              return reply;
+            }
+          });
+
+          return { ...comment, replies };
         } else {
-          return item;
+          return comment;
         }
       });
 
@@ -289,62 +296,48 @@ export default function comments(state = INITIAL_STATE, action = {}) {
 }
 
 // Action Creators
-export const fetchCommentsBegin = () => ({
+export const fetchCommentsBegin = (): CommentActionTypes => ({
   type: FETCH_COMMENTS_BEGIN,
 });
-export const fetchCommentsSuccess = (comments) => ({
+export const fetchCommentsSuccess = ({ comments }): CommentActionTypes => ({
   type: FETCH_COMMENTS_SUCCESS,
-  payload: {
-    comments,
-  },
+  payload: { comments },
 });
-export const fetchCommentsFailure = (error) => ({
+export const fetchCommentsFailure = (error): CommentActionTypes => ({
   type: FETCH_COMMENTS_FAILURE,
-  payload: {
-    error,
-  },
+  payload: { error },
 });
 
-export const upvoteCommentBegin = () => ({
+export const upvoteCommentBegin = (): CommentActionTypes => ({
   type: UPVOTE_COMMENT_BEGIN,
 });
-export const upvoteCommentSuccess = (comment) => ({
+export const upvoteCommentSuccess = (comment): CommentActionTypes => ({
   type: UPVOTE_COMMENT_SUCCESS,
-  payload: {
-    comment,
-  },
+  payload: { comment },
 });
-export const upvoteCommentFailure = (error) => ({
+export const upvoteCommentFailure = (error): CommentActionTypes => ({
   type: UPVOTE_COMMENT_FAILURE,
-  payload: {
-    error,
-  },
+  payload: { error },
 });
 
-export const downvoteCommentBegin = () => ({
+export const downvoteCommentBegin = (): CommentActionTypes => ({
   type: DOWNVOTE_COMMENT_BEGIN,
 });
-export const downvoteCommentSuccess = (comment) => ({
+export const downvoteCommentSuccess = (comment): CommentActionTypes => ({
   type: DOWNVOTE_COMMENT_SUCCESS,
-  payload: {
-    comment,
-  },
+  payload: { comment },
 });
-export const downvoteCommentFailure = (error) => ({
+export const downvoteCommentFailure = (error): CommentActionTypes => ({
   type: DOWNVOTE_COMMENT_FAILURE,
-  payload: {
-    error,
-  },
+  payload: { error },
 });
 
-export const upvoteReplyBegin = () => ({
+export const upvoteReplyBegin = (): CommentActionTypes => ({
   type: UPVOTE_REPLY_BEGIN,
 });
-export const upvoteReplySuccess = (replyResponse) => ({
+export const upvoteReplySuccess = (replyResponse): CommentActionTypes => ({
   type: UPVOTE_REPLY_SUCCESS,
-  payload: {
-    replyResponse,
-  },
+  payload: { replyResponse },
 });
 export const upvoteReplyFailure = (error) => ({
   type: UPVOTE_REPLY_FAILURE,
@@ -353,73 +346,59 @@ export const upvoteReplyFailure = (error) => ({
   },
 });
 
-export const downvoteReplyBegin = () => ({
+export const downvoteReplyBegin = (): CommentActionTypes => ({
   type: DOWNVOTE_REPLY_BEGIN,
 });
-export const downvoteReplySuccess = (replyResponse) => ({
+export const downvoteReplySuccess = (replyResponse): CommentActionTypes => ({
   type: DOWNVOTE_REPLY_SUCCESS,
-  payload: {
-    replyResponse,
-  },
+  payload: { replyResponse },
 });
-export const downvoteReplyFailure = (error) => ({
+export const downvoteReplyFailure = (error): CommentActionTypes => ({
   type: DOWNVOTE_REPLY_FAILURE,
   payload: {
     error,
   },
 });
 
-export const postCommentBegin = () => ({
+export const postCommentBegin = (): CommentActionTypes => ({
   type: POST_COMMENT_BEGIN,
 });
-export const postCommentSuccess = (comment) => ({
+export const postCommentSuccess = (comment): CommentActionTypes => ({
   type: POST_COMMENT_SUCCESS,
-  payload: {
-    comment,
-  },
+  payload: { comment },
 });
-export const postCommentFailure = (error) => ({
+export const postCommentFailure = (error): CommentActionTypes => ({
   type: POST_COMMENT_FAILURE,
-  payload: {
-    error,
-  },
+  payload: { error },
 });
 
-export const postReplyBegin = () => ({
+export const postReplyBegin = (): CommentActionTypes => ({
   type: POST_REPLY_BEGIN,
 });
-export const postReplySuccess = (reply) => ({
+export const postReplySuccess = (reply): CommentActionTypes => ({
   type: POST_REPLY_SUCCESS,
-  payload: {
-    reply,
-  },
+  payload: { reply },
 });
-export const postReplyFailure = (error) => ({
+export const postReplyFailure = (error): CommentActionTypes => ({
   type: POST_REPLY_FAILURE,
-  payload: {
-    error,
-  },
+  payload: { error },
 });
 
-export const loadRepliesBegin = () => ({
+export const loadRepliesBegin = (): CommentActionTypes => ({
   type: LOAD_REPLIES_BEGIN,
 });
-export const loadRepliesSuccess = (replies) => ({
+export const loadRepliesSuccess = (replies): CommentActionTypes => ({
   type: LOAD_REPLIES_SUCCESS,
-  payload: {
-    replies,
-  },
+  payload: { replies },
 });
-export const loadRepliesFailure = (error) => ({
+export const loadRepliesFailure = (error): CommentActionTypes => ({
   type: LOAD_REPLIES_FAILURE,
-  payload: {
-    error,
-  },
+  payload: { error },
 });
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export const fetchComments = (objectId, origin) => async (dispatch) => {
+export const fetchComments = (objectId, origin): AppThunk => async (dispatch) => {
   dispatch(fetchCommentsBegin());
 
   try {
@@ -432,7 +411,7 @@ export const fetchComments = (objectId, origin) => async (dispatch) => {
 
     // sort by newest comments
     const sortedComments = res.data.results.sort(
-      (a, b) => new Date(b.created_date) - new Date(a.created_date),
+      (a, b) => (new Date(b.created_date) as any) - (new Date(a.created_date) as any),
     );
 
     dispatch(fetchCommentsSuccess(sortedComments));
@@ -441,7 +420,7 @@ export const fetchComments = (objectId, origin) => async (dispatch) => {
   }
 };
 
-export const upvoteComment = (id, profileId) => async (dispatch) => {
+export const upvoteComment = (id, profileId): AppThunk => async (dispatch) => {
   dispatch(upvoteCommentBegin());
 
   try {
@@ -452,7 +431,7 @@ export const upvoteComment = (id, profileId) => async (dispatch) => {
   }
 };
 
-export const downvoteComment = (id, profileId) => async (dispatch) => {
+export const downvoteComment = (id, profileId): AppThunk => async (dispatch) => {
   dispatch(downvoteCommentBegin());
 
   try {
@@ -463,7 +442,7 @@ export const downvoteComment = (id, profileId) => async (dispatch) => {
   }
 };
 
-export const upvoteReply = (id, profileId) => async (dispatch) => {
+export const upvoteReply = (id, profileId): AppThunk => async (dispatch) => {
   dispatch(upvoteReplyBegin());
 
   try {
@@ -474,7 +453,7 @@ export const upvoteReply = (id, profileId) => async (dispatch) => {
   }
 };
 
-export const downvoteReply = (id, profileId) => async (dispatch) => {
+export const downvoteReply = (id, profileId): AppThunk => async (dispatch) => {
   dispatch(downvoteReplyBegin());
 
   try {
@@ -485,7 +464,9 @@ export const downvoteReply = (id, profileId) => async (dispatch) => {
   }
 };
 
-export const postComment = ({ contentType, objectId, profileId, content }) => async (dispatch) => {
+export const postComment = ({ contentType, objectId, profileId, content }): AppThunk => async (
+  dispatch,
+) => {
   dispatch(postCommentBegin());
 
   try {
@@ -503,7 +484,7 @@ export const postComment = ({ contentType, objectId, profileId, content }) => as
   }
 };
 
-export const postReply = ({ commentId, profileId, content }) => async (dispatch) => {
+export const postReply = ({ commentId, profileId, content }): AppThunk => async (dispatch) => {
   dispatch(postReplyBegin());
 
   try {
@@ -519,7 +500,7 @@ export const postReply = ({ commentId, profileId, content }) => async (dispatch)
   }
 };
 
-export const loadReplies = ({ commentId, offset = 2 }) => async (dispatch) => {
+export const loadReplies = ({ commentId, offset = 2 }): AppThunk => async (dispatch) => {
   dispatch(loadRepliesBegin());
 
   try {
@@ -537,12 +518,12 @@ export const loadReplies = ({ commentId, offset = 2 }) => async (dispatch) => {
 };
 
 /* Selectors */
-export const selectRecentComments = createSelector(
-  (state) => state.comments.items,
-  (comments) => comments.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
-);
+// export const selectRecentComments = createSelector(
+//   (state) => state.comments.items,
+//   (comments) => comments.sort((a, b) => (new Date(b.created_date) as any) - new Date(a.created_date)),
+// );
 
-export const selectPopularComments = createSelector(
-  (state) => state.comments.items,
-  (comments) => comments.sort((a, b) => new Date(a.created_date) - new Date(b.created_date)),
-);
+// export const selectPopularComments = createSelector(
+//   (state) => state.comments.items,
+//   (comments) => comments.sort((a, b) => new Date(a.created_date) - new Date(b.created_date)),
+// );

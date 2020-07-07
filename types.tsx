@@ -71,6 +71,32 @@ import {
   SET_BRAND_FILTER,
   CLEAR_SEARCH_FILTERS,
 } from './Redux/SearchRedux';
+import {
+  FETCH_COMMENTS_BEGIN,
+  FETCH_COMMENTS_SUCCESS,
+  FETCH_COMMENTS_FAILURE,
+  POST_COMMENT_BEGIN,
+  POST_COMMENT_SUCCESS,
+  POST_COMMENT_FAILURE,
+  POST_REPLY_BEGIN,
+  POST_REPLY_SUCCESS,
+  POST_REPLY_FAILURE,
+  LOAD_REPLIES_BEGIN,
+  LOAD_REPLIES_SUCCESS,
+  LOAD_REPLIES_FAILURE,
+  UPVOTE_COMMENT_BEGIN,
+  UPVOTE_COMMENT_SUCCESS,
+  UPVOTE_COMMENT_FAILURE,
+  DOWNVOTE_COMMENT_BEGIN,
+  DOWNVOTE_COMMENT_SUCCESS,
+  DOWNVOTE_COMMENT_FAILURE,
+  UPVOTE_REPLY_BEGIN,
+  UPVOTE_REPLY_SUCCESS,
+  UPVOTE_REPLY_FAILURE,
+  DOWNVOTE_REPLY_BEGIN,
+  DOWNVOTE_REPLY_SUCCESS,
+  DOWNVOTE_REPLY_FAILURE,
+} from './Redux/CommentsRedux';
 import { RootParamList } from './Navigation/RootNav';
 import { ActivityParamList } from './Navigation/ActivityStack';
 
@@ -326,7 +352,7 @@ export interface Comment {
 }
 
 export interface CommentState {
-  error: string;
+  error: string | null;
   loading: boolean;
   items: Comment[];
   content: string;
@@ -623,3 +649,123 @@ export type SearchActionTypes =
   | SearchGarmentsFailureAction
   | SetBrandFilterAction
   | ClearSearchFilterAction;
+
+interface FetchCommentsBeginAction {
+  type: typeof FETCH_COMMENTS_BEGIN;
+}
+interface FetchCommentsSuccessAction {
+  type: typeof FETCH_COMMENTS_SUCCESS;
+  payload: { comments: Comment[] };
+}
+interface FetchCommentsFailureAction {
+  type: typeof FETCH_COMMENTS_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+
+interface PostCommentBeginAction {
+  type: typeof POST_COMMENT_BEGIN;
+}
+interface PostCommentSuccessAction {
+  type: typeof POST_COMMENT_SUCCESS;
+  payload: { comment: Comment };
+}
+interface PostCommentFailureAction {
+  type: typeof POST_COMMENT_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+
+interface PostReplyBeginAction {
+  type: typeof POST_REPLY_BEGIN;
+}
+interface PostReplySuccessAction {
+  type: typeof POST_REPLY_SUCCESS;
+  payload: { reply: Reply };
+}
+interface PostReplyFailureAction {
+  type: typeof POST_REPLY_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+
+interface LoadRepliesBeginAction {
+  type: typeof LOAD_REPLIES_BEGIN;
+}
+interface LoadRepliesSuccessAction {
+  type: typeof LOAD_REPLIES_SUCCESS;
+  payload: { replies: Reply[] };
+}
+interface LoadRepliesFailureAction {
+  type: typeof LOAD_REPLIES_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+
+interface UpvoteCommentBeginAction {
+  type: typeof UPVOTE_COMMENT_BEGIN;
+}
+interface UpvoteCommentSuccessAction {
+  type: typeof UPVOTE_COMMENT_SUCCESS;
+  payload: { comment: Comment };
+}
+interface UpvoteCommentFailureAction {
+  type: typeof UPVOTE_COMMENT_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+interface DownvoteCommentBeginAction {
+  type: typeof DOWNVOTE_COMMENT_BEGIN;
+}
+interface DownvoteCommentSuccessAction {
+  type: typeof DOWNVOTE_COMMENT_SUCCESS;
+  payload: { comment: Comment };
+}
+interface DownvoteCommentFailureAction {
+  type: typeof DOWNVOTE_COMMENT_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+
+interface UpvoteReplyBeginAction {
+  type: typeof UPVOTE_REPLY_BEGIN;
+}
+interface UpvoteReplySuccessAction {
+  type: typeof UPVOTE_REPLY_SUCCESS;
+  payload: { replyResponse: { [key: string]: any } };
+}
+interface UpvoteReplyFailureAction {
+  type: typeof UPVOTE_REPLY_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+interface DownvoteReplyBeginAction {
+  type: typeof DOWNVOTE_REPLY_BEGIN;
+}
+interface DownvoteReplySuccessAction {
+  type: typeof DOWNVOTE_REPLY_SUCCESS;
+  payload: { replyResponse: { [key: string]: any } };
+}
+interface DownvoteReplyFailureAction {
+  type: typeof DOWNVOTE_REPLY_FAILURE;
+  payload: Pick<CommentState, 'error'>;
+}
+
+export type CommentActionTypes =
+  | FetchCommentsBeginAction
+  | FetchCommentsSuccessAction
+  | FetchCommentsFailureAction
+  | PostCommentBeginAction
+  | PostCommentSuccessAction
+  | PostCommentFailureAction
+  | PostReplyBeginAction
+  | PostReplySuccessAction
+  | PostReplyFailureAction
+  | LoadRepliesBeginAction
+  | LoadRepliesSuccessAction
+  | LoadRepliesFailureAction
+  | UpvoteCommentBeginAction
+  | UpvoteCommentSuccessAction
+  | UpvoteCommentFailureAction
+  | DownvoteCommentBeginAction
+  | DownvoteCommentSuccessAction
+  | DownvoteCommentFailureAction
+  | UpvoteReplyBeginAction
+  | UpvoteReplySuccessAction
+  | UpvoteReplyFailureAction
+  | DownvoteReplyBeginAction
+  | DownvoteReplySuccessAction
+  | DownvoteReplyFailureAction;
