@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from './ModalDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { StyleSheet, Keyboard } from 'react-native';
 
