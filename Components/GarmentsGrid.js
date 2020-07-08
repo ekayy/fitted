@@ -5,7 +5,6 @@ import { Badge } from 'react-native-elements';
 import { Metrics, Dimensions } from '../Themes';
 
 import { profiles } from '../data.json';
-import autoMergeLevel1 from 'redux-persist/es/stateReconciler/autoMergeLevel1';
 
 class GarmentsGrid extends Component {
   renderGarment(item) {

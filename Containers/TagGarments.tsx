@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { removeGarmentFromFit, createFit, clearCreatedFit } from '../Redux/FitsRedux';
@@ -22,7 +22,7 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
   // State
   const [description, setDescription] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [refreshing] = useState<boolean>(false);
   // const [loading, setLoading] = useState<boolean>(false);
 
   // Effects
@@ -54,7 +54,7 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
-          onPress={() => navigation.navigate('Search Garments')}
+          onPress={() => navigation.navigate('Search Garments', { image })}
           style={{ marginRight: 20 }}
         >
           <Ionicons name="ios-add" size={40} color="#000" />

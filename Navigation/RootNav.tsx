@@ -9,7 +9,7 @@ import { NavigationContainer, NavigationContainerRef } from '@react-navigation/n
 import { createStackNavigator } from '@react-navigation/stack';
 import AppNav from './AppNav';
 import AuthStack from './AuthStack';
-import { useTypedSelector, ContentType } from '../types';
+import { useTypedSelector, ContentType, Comment } from '../types';
 import Comments from '../Containers/Comments';
 
 /**i()uasdf
@@ -23,7 +23,7 @@ import Comments from '../Containers/Comments';
 export type RootParamList = {
   AuthStack: undefined;
   App: undefined;
-  Comments: { objectId: number; contentType: ContentType; model: string };
+  Comments: { objectId: number; contentType: ContentType; model?: string; comment?: Comment };
 };
 
 const Stack = createStackNavigator<RootParamList>();

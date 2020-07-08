@@ -5,13 +5,14 @@ import { SearchBar, Badge } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 import { fetchBrands } from '../Redux/BrandsRedux';
 import { favoriteGarment } from '../Redux/UserRedux';
-import { searchGarments, setBrandFilter, clearSearchFilters, x } from '../Redux/SearchRedux';
+import { searchGarments, setBrandFilter, clearSearchFilters } from '../Redux/SearchRedux';
 import SearchFilter from '../Components/Search/SearchFilter';
 import SearchList from '../Components/SearchList';
 import Dropdown from '../Components/Dropdown';
 import Home from './Home';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { SearchProps, useTypedSelector, Brand, Sort } from '../types';
+import { fetchGarments } from '../Redux/GarmentsRedux';
 
 const sortOptions: string[] = [Sort.RECENT, Sort.POPULAR];
 
@@ -29,6 +30,7 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(fetchGarments());
     dispatch(fetchBrands());
     createBrandTable();
   }, []);
@@ -142,16 +144,13 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
           <StyledFilterBar>
             <StyledFilterButton onPress={toggleFilters}>
               <StyledFilterText>FILTER</StyledFilterText>
-              {brandIds.length > 0 && (
-                <Badge status="error" value={brandIds.length} containerStyle={styles.badgeStyle} />
-              )}
+              {brandIds.length > 0 && <Badge status="error" value={brandIds.length} />}
             </StyledFilterButton>
           </StyledFilterBar>
         </StyledFilterBarContainer>
       ) : null}
 
       <SearchFilter
-        navigation={navigation}
         showFilters={showFilters}
         applyFilters={applyFilters}
         clearFilters={clearFilters}
@@ -173,7 +172,7 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
           favoriteGarment={favoriteGarment}
         />
       ) : Object.keys(brandTable).length > 0 ? (
-        <Home brandTable={brandTable} brands={brands} navigation={navigation} user={user} />
+        <Home brandTable={brandTable} brands={brands} />
       ) : (
         <View>
           <ActivityIndicator style={{ marginTop: 20 }} size="large" color="#0000ff" />

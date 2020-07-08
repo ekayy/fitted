@@ -38,8 +38,10 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
     if (initialRender.current) {
       initialRender.current = false;
     } else {
-      dispatch(fetchProfile(profileId));
-      dispatch(setIsLoggedIn());
+      if (profileId) {
+        dispatch(fetchProfile(profileId));
+        dispatch(setIsLoggedIn());
+      }
     }
   }, [profileId]);
 
@@ -104,6 +106,7 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
                     passwordInputRef.current !== null && passwordInputRef.current.focus()
                   }
                   placeholder="Username or Email"
+                  testID="username"
                 />
 
                 <MyTextInput
@@ -120,14 +123,17 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
                   secureTextEntry
                   underlineColorAndroid="transparent"
                   placeholder="Password"
+                  testID="password"
                 />
               </View>
 
-              <View style={styles.loginWrapper}>
+              <>
                 <View style={[styles.loginRow, { alignItems: 'center' }]}>
                   <TouchableOpacity style={styles.loginButtonWrapper} onPress={handleSubmit as any}>
                     <View style={styles.loginButton}>
-                      <Text style={styles.loginText}>LOGIN</Text>
+                      <Text style={styles.loginText} testID="login">
+                        LOGIN
+                      </Text>
                     </View>
 
                     {error && <Text style={styles.error}>{error}</Text>}
@@ -158,7 +164,7 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
                     </View>
                   </TouchableOpacity>
                 </View>
-              </View>
+              </>
             </>
           );
         }}

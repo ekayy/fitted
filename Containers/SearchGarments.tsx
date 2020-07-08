@@ -7,10 +7,11 @@ import { fetchBrands } from '../Redux/BrandsRedux';
 import { tagGarmentToFit } from '../Redux/FitsRedux';
 import { AppStyles } from '../Themes';
 import styles from './Styles/TagGarmentsStyles';
-import { Garment, useTypedSelector, TagGarmentsProps } from '../types';
+import { Garment, useTypedSelector, SearchGarmentsProps } from '../types';
 
-const SearchGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
+const SearchGarments: React.FC<SearchGarmentsProps> = ({ route, navigation }) => {
   // Navigation params
+  const { image } = route.params;
 
   // Redux state
   const { items: garments } = useTypedSelector((state) => state.garments);
@@ -91,7 +92,7 @@ const SearchGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
     // check if garment id already tagged to a fit
     if (!taggedGarments.filter((garment) => garment.id === garmentId).length) {
       garmentId && dispatch(tagGarmentToFit(item));
-      navigation.navigate('Tag Garments');
+      navigation.navigate('Tag Garments', { image });
     } else {
       // display an error message to user
       navigation.goBack();
@@ -99,7 +100,7 @@ const SearchGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
   };
 
   const renderGarment = ({ item }: { item: Garment }) => {
-    const { id, color, model, sku, brand, photo } = item;
+    const { model, brand, photo } = item;
     const brandName = brands[brand].name;
 
     return (

@@ -8,14 +8,22 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Garment, Brand, useTypedSelector } from '../types';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
-const BrandGrid: React.FC = (props) => {
-  const { navigation, brandTable, style, refreshing, loading, onRefresh, handleLoadMore } = props;
+interface BrandGridProps {
+  brandTable: any[];
+  refreshing: boolean;
+  loading: boolean;
+  onRefresh(): void;
+  handleLoadMore(): void;
+}
+
+const BrandGrid: React.FC<BrandGridProps> = (props) => {
+  const { brandTable, refreshing, loading, onRefresh, handleLoadMore } = props;
 
   // Redux state
   const { items: brands } = useTypedSelector((state) => state.brands);
@@ -46,11 +54,10 @@ const BrandGrid: React.FC = (props) => {
           </TouchableOpacity>
         </View>
         <FlatList
-          style={style}
           data={brandTable[item.name].slice(0, 10)}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
-          renderItem={({ item }) => <BrandGarment item={item} navigation={navigation} />}
+          renderItem={({ item }) => <BrandGarment item={item} />}
           onRefresh={() => onRefresh()}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0}
@@ -101,11 +108,10 @@ const BrandGrid: React.FC = (props) => {
           </View>
           <FlatList
             columnWrapperStyle={styles.row}
-            style={style}
             data={brandTable[currentBrand]}
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
-            renderItem={({ item }) => <BrandGarment item={item} navigation={navigation} />}
+            renderItem={({ item }) => <BrandGarment item={item} />}
             onRefresh={onRefresh}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0}
@@ -118,7 +124,6 @@ const BrandGrid: React.FC = (props) => {
         </View>
       ) : (
         <FlatList
-          style={style}
           data={brands}
           keyExtractor={(item, index) => index.toString()}
           numColumns={1}
@@ -137,7 +142,9 @@ const BrandGrid: React.FC = (props) => {
 };
 
 // rendered garment with local toggled state
-const BrandGarment: React.FC<{ item: Garment }> = ({ item, navigation }) => {
+const BrandGarment: React.FC<{ item: Garment }> = ({ item }) => {
+  const navigation = useNavigation();
+
   // Redux state
   const user = useTypedSelector((state) => state.user);
   const { favoriteGarments } = user;
@@ -272,6 +279,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 5,
   },
+  loading: {},
 });
 
 export default BrandGrid;

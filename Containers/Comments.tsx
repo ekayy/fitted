@@ -1,25 +1,18 @@
 import React, { useState, useEffect, RefObject, createRef, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
-import {
-  KeyboardAvoidingView,
-  View,
-  Picker,
-  FlatList,
-  Platform,
-  Keyboard,
-  TextInput,
-} from 'react-native';
+import { KeyboardAvoidingView, View, FlatList, Platform, Keyboard, TextInput } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import CommentList from '../Components/Comment/CommentList';
 import CommentInput from '../Components/Comment/CommentInput';
 import Dropdown from '../Components/Dropdown';
 import {
   fetchComments,
-  selectRecentComments,
-  selectPopularComments,
+  // selectRecentComments,
+  // selectPopularComments,
   loadReplies,
 } from '../Redux/CommentsRedux';
-import { CommentsProps, useTypedSelector, Sort, Comment, Garment, Fit } from '../types';
+import { CommentsProps, useTypedSelector, Sort, Comment, Garment } from '../types';
 import { SearchBar } from 'react-native-elements';
 import { fetchGarment } from '../Redux/GarmentsRedux';
 import { fetchFit } from '../Redux/FitsRedux';
@@ -31,7 +24,8 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   const { objectId, contentType, comment } = route.params;
 
   // Redux state
-  const { items: comments } = useTypedSelector((state) => state.comments);
+  const { items } = useTypedSelector((state) => state.comments);
+  let comments: Comment[] = items;
   // const comments = useSelector((state) => selectRecentComments(state));
   // const commentsByMostPopular = useSelector((state) => selectPopularComments(state));
 
@@ -41,13 +35,14 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   const [tag, setTag] = useState<string>('');
   const [showFilters, setShowFilter] = useState<boolean>(false);
   const [isReply, setIsReply] = useState<boolean>(false);
-  const [currentComment, setCurrentComment] = useState<Comment>({});
-  const [object, setObject] = useState<Garment>({});
+  const [currentComment, setCurrentComment] = useState<Comment>();
+  const [object, setObject] = useState<Garment>();
+  const [activeSort, setActiveSort] = useState<string>(Sort.SELECT);
 
   // for focusing on next input
   const inputRef: RefObject<TextInput> = createRef<TextInput>();
   // for scrolling to corresponding comment or reply
-  const flatListRef: RefObject<FlatList> = useRef<FlatList>();
+  const flatListRef = useRef<FlatList>();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -60,9 +55,10 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    const { model } = object;
-
-    navigation.setOptions({ title: model });
+    if (object) {
+      const { model } = object;
+      navigation.setOptions({ title: model });
+    }
   }, [object]);
 
   useEffect(() => {
@@ -107,15 +103,9 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
     Keyboard.dismiss();
   };
 
-  const filterComments = (index, value) => {
-    switch (value) {
-      case 'Most Recent':
-        return console.tron.log('recent');
-      case 'Most Popular':
-        return console.tron.log('popular');
-      default:
-        return;
-    }
+  const filterComments = (index: string, option: string) => {
+    // change dropdown text
+    setActiveSort(option);
   };
 
   return (
@@ -136,7 +126,12 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
 
         <StyledFilterBarContainer>
           <StyledFilterBar>
-            <Dropdown options={sortOptions} defaultValue={Sort.SELECT} onSelect={filterComments} />
+            <Dropdown
+              options={sortOptions}
+              defaultValue={Sort.SELECT}
+              onSelect={filterComments}
+              value={activeSort}
+            />
           </StyledFilterBar>
 
           <VerticalDivider />
@@ -179,7 +174,7 @@ const Comments: React.FC<CommentsProps> = ({ route, navigation }) => {
           inputRef={inputRef}
           isReply={isReply}
           closeReply={closeReply}
-          currentComment={currentComment}
+          currentComment={currentComment!}
         />
       </KeyboardAvoidingView>
 

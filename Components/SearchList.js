@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { View, Text, Image, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Badge } from 'react-native-elements';
 import { Metrics } from '../Themes';

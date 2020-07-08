@@ -36,7 +36,7 @@ export default function activity(
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.error,
       };
     default:
       return state;
@@ -53,14 +53,14 @@ export const fetchActivitySuccess = (items: Activity[]): ActivityActionTypes => 
   payload: items,
 });
 
-export const fetchActivityFailure = (error: ActivityState): ActivityActionTypes => ({
+export const fetchActivityFailure = (error): ActivityActionTypes => ({
   type: FETCH_ACTIVITY_FAILURE,
-  payload: error,
+  payload: { error },
 });
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export const fetchActivity = (profile): AppThunk => async (dispatch) => {
+export const fetchActivity = (profile: number): AppThunk => async (dispatch) => {
   dispatch(fetchActivityBegin());
 
   try {
@@ -81,8 +81,13 @@ export const fetchActivity = (profile): AppThunk => async (dispatch) => {
     const responses = await Promise.all([comments, replies]);
 
     // comments and replies
-    const data = responses.reduce((acc, response) => acc.concat(response.data.results), []);
-    const result = data.sort((a, b) => (a.created_date > b.created_date ? -1 : 1));
+    const data: Activity[] = responses.reduce(
+      (acc, response) => acc.concat(response.data.results),
+      [],
+    );
+    const result = data.sort((a, b) =>
+      (((a.created_date as any) > b.created_date) as any) ? -1 : 1,
+    );
 
     dispatch(fetchActivitySuccess(result));
   } catch (error) {

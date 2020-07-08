@@ -42,6 +42,9 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
   SET_ISLOGGEDIN,
+  PROFILE_UPDATE_REQUEST,
+  PROFILE_UPDATE_SUCCESS,
+  PROFILE_UPDATE_FAILURE,
 } from './Redux/UserRedux';
 import {
   FETCH_FAVORITE_GARMENTS_BEGIN,
@@ -99,6 +102,11 @@ import {
 } from './Redux/CommentsRedux';
 import { RootParamList } from './Navigation/RootNav';
 import { ActivityParamList } from './Navigation/ActivityStack';
+import {
+  FETCH_ACTIVITY_BEGIN,
+  FETCH_ACTIVITY_SUCCESS,
+  FETCH_ACTIVITY_FAILURE,
+} from './Redux/ActivityRedux';
 
 export enum Sort {
   SELECT = 'SELECT',
@@ -369,6 +377,27 @@ export interface Reply {
   total_votes: number;
 }
 
+export interface Activity {
+  id: number;
+  created_date: string;
+  origin: ContentType;
+  content_type: number;
+  object_id: number;
+  profile: number;
+  username: string;
+  content: string;
+  upvotes: number;
+  downvotes: number;
+  total_votes: number;
+  replies: Reply[];
+}
+
+export interface ActivityState {
+  error: string | null;
+  loading: boolean;
+  items: Activity[];
+}
+
 export interface FavoriteGarmentParams {
   token: string;
   profileId: number;
@@ -572,6 +601,20 @@ interface UnfavoriteItemAction {
   payload: UserState;
 }
 
+interface ProfileUpdateRequestAction {
+  type: typeof PROFILE_UPDATE_REQUEST;
+}
+
+interface ProfileUpdateSuccessAction {
+  type: typeof PROFILE_UPDATE_SUCCESS;
+  payload: Pick<UserState, 'user' | 'favoriteGarments' | 'favoriteFits' | 'height' | 'weight'>;
+}
+
+interface ProfileUpdateFailureAction {
+  type: typeof PROFILE_UPDATE_FAILURE;
+  payload: Pick<UserState, 'error'>;
+}
+
 export type UserActionTypes =
   | LoginRequestAction
   | LoginSuccessAction
@@ -589,7 +632,10 @@ export type UserActionTypes =
   | FavoriteSuccessAction
   | FavoriteFailureAction
   | FavoriteItemAction
-  | UnfavoriteItemAction;
+  | UnfavoriteItemAction
+  | ProfileUpdateRequestAction
+  | ProfileUpdateSuccessAction
+  | ProfileUpdateFailureAction;
 
 interface FetchFavoriteGarmentsBeginAction {
   type: typeof FETCH_FAVORITE_GARMENTS_BEGIN;
@@ -769,3 +815,20 @@ export type CommentActionTypes =
   | DownvoteReplyBeginAction
   | DownvoteReplySuccessAction
   | DownvoteReplyFailureAction;
+
+interface FetchActivityBeginAction {
+  type: typeof FETCH_ACTIVITY_BEGIN;
+}
+interface FetchActivitySuccessAction {
+  type: typeof FETCH_ACTIVITY_SUCCESS;
+  payload: Activity[];
+}
+interface FetchActivityFailureAction {
+  type: typeof FETCH_ACTIVITY_FAILURE;
+  payload: Pick<ActivityState, 'error'>;
+}
+
+export type ActivityActionTypes =
+  | FetchActivityBeginAction
+  | FetchActivitySuccessAction
+  | FetchActivityFailureAction;

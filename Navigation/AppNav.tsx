@@ -6,6 +6,7 @@ import CreateDiscussionStack from './CreateDiscussionStack';
 import ActivityStack from './ActivityStack';
 import ProfileStack from './ProfileStack';
 import { Ionicons, Feather } from '@expo/vector-icons';
+
 // import { Alert } from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -17,7 +18,6 @@ const AppNav = () => {
         activeTintColor: '#e91e63',
         inactiveTintColor: 'rgb(255,255,255)',
         showLabel: false,
-        showIcon: true,
         style: { backgroundColor: 'rgb(0,0,0)' },
       }}
     >

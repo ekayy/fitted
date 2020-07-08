@@ -5,28 +5,27 @@ import GarmentDetail from '../Containers/GarmentDetail';
 import FitDetail from '../Containers/FitDetail';
 import Fits from '../Containers/Fits';
 import Comments from '../Containers/Comments';
-import CommentSingle from '../Components/Comment/CommentSingle';
 import Camera from '../Containers/Camera';
 import TagGarments from '../Containers/TagGarments';
 import SearchGarments from '../Containers/SearchGarments';
 import SelectSizing from '../Containers/SelectSizing';
 import AddCustomGarment from '../Containers/AddCustomGarment';
 import CreateChoice from '../Components/CreateChoice';
-import { Fit, Garment } from '../types';
+import { Fit, ContentType } from '../types';
 
 export type CreateDiscussionStackParamList = {
-  Search: { screen: string; params: Partial<Garment> };
+  Search: { screen: string; params: { objectId?: number; contentType?: ContentType; id?: number } };
   Camera: undefined;
   'Create Choice': undefined;
   'Tag Garments': { image: string };
-  'Search Garments': undefined;
+  'Search Garments': { image: string };
   'Select Sizing': undefined;
   'Add Custom Garment': undefined;
   'Create Discussion': undefined;
   'Garment Detail': { title: string };
   'Fit Detail': Fit;
   Fits: { title: string };
-  Comments: undefined;
+  Comments: { objectId: number; contentType: ContentType };
 };
 
 const Stack = createStackNavigator<CreateDiscussionStackParamList>();

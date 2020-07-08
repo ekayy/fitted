@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Metrics } from '../Themes';
 import { View, Image, FlatList, ActivityIndicator } from 'react-native';
-import { ActivityProps, useTypedSelector, Comment, Reply } from '../types';
+import { ActivityProps, useTypedSelector } from '../types';
 import { useDispatch } from 'react-redux';
 import { fetchActivity } from '../Redux/ActivityRedux';
 
@@ -14,17 +14,18 @@ const Activity: React.FC<ActivityProps> = ({ route, navigation }) => {
   // Effects
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchActivity(profileId));
+    profileId && dispatch(fetchActivity(profileId));
   }, []);
 
   const onRefresh = () => {
-    dispatch(fetchActivity(profileId));
+    profileId && dispatch(fetchActivity(profileId));
   };
 
   const handleLoadMore = () => {};
 
-  const renderDiscussion = (item: Partial<Comment> | Partial<Reply>) => {
-    const { id, created_date: createdDate, content, origin, object_id: objectId } = item;
+  /* Reply | Comment */
+  const renderDiscussion = (item) => {
+    const { created_date: createdDate, content, origin, object_id: objectId } = item;
     const isReply = 'replies' in item;
 
     if (!item) return null;
@@ -38,7 +39,12 @@ const Activity: React.FC<ActivityProps> = ({ route, navigation }) => {
       <ActivityContainer>
         <ActivityMessageContainer>
           <ActivityImage>
-            <Image style={styles.image} source={{ uri: photoUrl }} />
+            <Image
+              style={styles.image}
+              source={{
+                uri: photoUrl,
+              }}
+            />
           </ActivityImage>
 
           <ActivityMessage>
@@ -169,6 +175,7 @@ const styles = {
     marginHorizontal: 10,
     marginVertical: 2,
   },
+  loading: {},
 };
 
 // const StyledActivityBar = styled.View`

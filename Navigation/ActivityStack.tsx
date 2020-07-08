@@ -7,7 +7,7 @@ import Profile from '../Containers/Profile';
 import Fits from '../Containers/Fits';
 import Camera from '../Containers/Camera';
 
-import { Garment, Fit, ContentType } from '../types';
+import { Garment, Fit, ContentType, Comment } from '../types';
 import Comments from '../Containers/Comments';
 
 export type ActivityParamList = {
@@ -18,7 +18,7 @@ export type ActivityParamList = {
   Fits: Garment;
   Profile: { title: string } | undefined;
   Camera: undefined;
-  Comments: { objectId: number; contentType: ContentType };
+  Comments: { objectId: number; contentType: ContentType; comment?: Comment };
 };
 
 const Stack = createStackNavigator<ActivityParamList>();

@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import FitsGrid from '../Components/FitsGrid';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { tagGarmentToFit, clearCreatedFit } from '../Redux/FitsRedux';
 import { FitsProps, useTypedSelector } from '../types';
 import { useDispatch } from 'react-redux';
@@ -14,7 +14,7 @@ const Fits: React.FC<FitsProps> = ({ route, navigation }) => {
   const { items: fits } = useTypedSelector((state) => state.fits);
 
   // State
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,7 +31,9 @@ const Fits: React.FC<FitsProps> = ({ route, navigation }) => {
   }, [navigation]);
 
   const onPress = async () => {
-    setError(null);
+    // setError(null);
+    setRefreshing(false);
+    setLoading(false);
 
     await dispatch(clearCreatedFit());
     await dispatch(tagGarmentToFit(route.params));

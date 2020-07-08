@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import { Comment } from '../../types';
 
-interface Props {
-  data: Comment[];
-  leaveReply(comment: Comment): void;
-}
+// interface Props {
+//   data: Comment[];
+//   leaveReply(comment: Comment): void;
+// }
 
-const CommentExcerpt: React.FC<Props> = ({ data, leaveReply }) => {
+const CommentExcerpt = ({ data, leaveReply }) => {
   const renderReply = (reply) => {
     const { id, content, username } = reply;
 

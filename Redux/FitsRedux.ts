@@ -153,7 +153,7 @@ export const fetchFits = (garmentId: number): AppThunk => {
   };
 };
 
-export const createFit = (fit: Fit): AppThunk => {
+export const createFit = (fit: Partial<Fit>): AppThunk => {
   return (dispatch, getState) => {
     dispatch(createFitBegin());
     const { user } = getState();

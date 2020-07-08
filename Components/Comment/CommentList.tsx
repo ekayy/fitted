@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { FlatList, TouchableOpacity } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import {
   upvoteComment,
@@ -9,7 +9,7 @@ import {
   upvoteReply,
   downvoteReply,
 } from '../../Redux/CommentsRedux';
-import { useTypedSelector } from '../../types';
+import { useTypedSelector, Comment } from '../../types';
 
 const CommentList = (props) => {
   const { data, ListHeaderComponent, loadMoreReplies, leaveReply, flatListRef } = props;
@@ -19,13 +19,13 @@ const CommentList = (props) => {
 
   const dispatch = useDispatch();
 
-  const handleUpvote = (commentId: Pick<Comment, 'id'>, isReply) => {
+  const handleUpvote = (commentId, isReply) => {
     isReply
       ? dispatch(upvoteReply(commentId, profileId))
       : dispatch(upvoteComment(commentId, profileId));
   };
 
-  const handleDownvote = (commentId: Pick<Comment, 'id'>, isReply) => {
+  const handleDownvote = (commentId, isReply) => {
     isReply
       ? dispatch(downvoteReply(commentId, profileId))
       : dispatch(downvoteComment(commentId, profileId));
@@ -67,7 +67,7 @@ const CommentList = (props) => {
     );
   };
 
-  const renderComment = (comment: Partial<Comment>, index: number) => {
+  const renderComment = (comment: Comment, index: number) => {
     const { content, username, replies } = comment;
 
     return (

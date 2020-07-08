@@ -12,9 +12,9 @@ import CommentExcerpt from '../Components/Comment/CommentExcerpt';
 import { favoriteGarment } from '../Redux/UserRedux';
 import { clearCreatedFit, tagGarmentToFit } from '../Redux/FitsRedux';
 import { fetchComments } from '../Redux/CommentsRedux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
-import { GarmentDetailProps, ContentType, Garment, Fit } from '../types';
+import { GarmentDetailProps, ContentType, Garment, Fit, Comment } from '../types';
 import { useTypedSelector } from '../types';
 import { fetchGarment, fetchGarmentFits } from '../Redux/GarmentsRedux';
 
@@ -23,8 +23,8 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   const { id: garmentId } = route.params;
 
   // Redux state
-  // const { items: fits } = useTypedSelector((state) => state.fits);
-  const { items: comments } = useTypedSelector((state) => state.comments);
+  const { items } = useTypedSelector((state) => state.comments);
+  let comments: Comment[] = items;
   const user = useTypedSelector((state) => state.user);
   const { favoriteGarments } = user;
 
@@ -102,7 +102,6 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
     navigation.navigate('Comments', {
       objectId: garmentId,
       contentType: ContentType.GARMENT,
-      model,
       comment,
     });
   };

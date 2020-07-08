@@ -31,7 +31,7 @@ const ChangePassword = () => {
       initialValues={initialValues}
       validationSchema={changeEmailValidationSchema}
       onSubmit={({ email }) => {
-        dispatch(updateProfile(profileId, { email }));
+        profileId && dispatch(updateProfile(profileId, { email }));
         // setTimeout(() => dispatch(loginClearError()), 2000);
       }}
     >

@@ -3,16 +3,14 @@ import styled from 'styled-components/native';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { postComment, postReply } from '../../Redux/CommentsRedux';
-// import { syncGarmentComments, syncGarmentCommentReplies } from '../../Redux/GarmentsRedux';
-// import { syncFitComments } from '../../Redux/FitsRedux';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import { EvilIcons } from '@expo/vector-icons';
 import * as Yup from 'yup';
 import { MyTextInput } from '../Forms/MyTextInput';
 import { useTypedSelector, ContentType, Comment } from '../../types';
 import { Text, TextInput } from 'react-native';
 
 interface CommentInputProps {
-  currentComment: Comment;
+  currentComment?: Comment;
   route: { params: { objectId: number; contentType: ContentType } };
   isReply: boolean;
   closeReply(): void;
@@ -25,7 +23,6 @@ const CommentInputSchema = Yup.object().shape({
 
 const CommentInput: React.FC<CommentInputProps> = (props) => {
   const { route, currentComment, inputRef, isReply, closeReply } = props;
-  const { id: commentId, username } = currentComment;
 
   // Navigation params
   const { objectId, contentType } = route.params;
@@ -40,9 +37,12 @@ const CommentInput: React.FC<CommentInputProps> = (props) => {
       initialValues={{ content: '' }}
       validationSchema={CommentInputSchema}
       onSubmit={async ({ content }, { resetForm }) => {
-        isReply
-          ? await dispatch(postReply({ commentId, profileId, content }))
-          : await dispatch(postComment({ contentType, objectId, profileId, content }));
+        if (isReply && currentComment) {
+          const { id: commentId } = currentComment;
+          await dispatch(postReply({ commentId, profileId, content }));
+        } else {
+          await dispatch(postComment({ contentType, objectId, profileId, content }));
+        }
 
         closeReply();
         resetForm({ values: { content: '' } });
@@ -55,7 +55,7 @@ const CommentInput: React.FC<CommentInputProps> = (props) => {
           <>
             {isReply && (
               <StyledReplyTo>
-                <Text>Replying to {username}</Text>
+                <Text>Replying to {currentComment && currentComment['username']}</Text>
                 <StyledReplyClose onPress={closeReply}>
                   <EvilIcons name="close" size={25} />
                 </StyledReplyClose>
@@ -77,7 +77,7 @@ const CommentInput: React.FC<CommentInputProps> = (props) => {
                 />
               </StyledTextInputContainer>
 
-              <StyledPostButton onPress={handleSubmit}>
+              <StyledPostButton onPress={handleSubmit as any}>
                 <StyledPostButtonText>Post</StyledPostButtonText>
               </StyledPostButton>
             </StyledInputContainer>

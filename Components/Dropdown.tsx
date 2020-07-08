@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ModalDropdown from './ModalDropdown';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Keyboard } from 'react-native';
 
 interface Props {

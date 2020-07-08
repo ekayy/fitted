@@ -208,12 +208,13 @@ export const clearCreatedGarment = (): GarmentActionTypes => ({
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export const fetchGarments = ({ brand }): AppThunk => async (dispatch) => {
+export const fetchGarments = (brand?): AppThunk => async (dispatch) => {
   dispatch(fetchGarmentsBegin());
   try {
-    const res = await axios.get(`${baseURL}/garments/?limit=1500`, {
+    const res = await axios.get(`${baseURL}/garments/`, {
       params: {
         brand,
+        limit: 1500,
       },
     });
     dispatch(fetchGarmentsSuccess(res.data.results));
@@ -228,7 +229,7 @@ export const fetchFitGarments = (garments: number[]): AppThunk => async (dispatc
   try {
     const response = await Promise.all(
       garments.map(async (garmentId) => {
-        const response = await axios.get(`${baseURL}/garments/${garmentId}`);
+        const response = await axios.get(`${baseURL}/garments/${garmentId}/`);
         return response.data;
       }),
     );

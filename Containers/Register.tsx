@@ -164,7 +164,7 @@ const Register: React.FC<RegisterProps> = ({ route, navigation }: RegisterProps)
                 />
               </View>
 
-              <View style={styles.loginWrapper}>
+              <View>
                 <View style={[styles.loginRow, { alignItems: 'center' }]}>
                   <TouchableOpacity style={styles.loginButtonWrapper} onPress={handleSubmit as any}>
                     <View style={styles.loginButton}>
@@ -181,7 +181,7 @@ const Register: React.FC<RegisterProps> = ({ route, navigation }: RegisterProps)
                 </View>
               </View>
 
-              <View style={styles.row}>
+              <View>
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                   <View>
                     <Text style={styles.switchText}>

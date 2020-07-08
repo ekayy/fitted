@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Config';
-import { UserActionTypes, UserState, AppThunk } from '../types';
-import Profile from '../Containers/Profile';
+import { UserActionTypes, UserState, AppThunk, Profile } from '../types';
 
 // Actions
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -227,9 +226,7 @@ export const registerRequest = (): UserActionTypes => ({
 export const registerSuccess = (): UserActionTypes => ({
   type: REGISTER_SUCCESS,
 });
-export const registerFailure = ({
-  registerError,
-}: Pick<UserState, 'registerError'>): UserActionTypes => ({
+export const registerFailure = ({ registerError }): UserActionTypes => ({
   type: REGISTER_FAILURE,
   payload: { registerError },
 });

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Switch, TouchableOpacity } from 'react-native';
+import { View, Text, Switch, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { baseURL } from '../Config';
 import { setIsLoggedIn } from '../Redux/UserRedux';
@@ -73,7 +73,8 @@ const RegisterMeasurements: React.FC<RegisterMeasurementsProps> = ({
     // Package together profile object to have ready for PATCH
     const patchPayload = convertMeasurements(feet, inches, cm, weight);
     try {
-      const newMeasurements = await axios.patch(`${baseURL}/profiles/${profileId}/`, patchPayload);
+      // new measurements POST
+      await axios.patch(`${baseURL}/profiles/${profileId}/`, patchPayload);
 
       dispatch(setIsLoggedIn());
     } catch (error) {
@@ -165,7 +166,7 @@ const RegisterMeasurements: React.FC<RegisterMeasurementsProps> = ({
                 </View>
                 <View style={styles.buttonWrapper}>
                   <View style={[styles.buttonRow, { alignItems: 'center' }]}>
-                    <TouchableOpacity style={styles.nextButtonWrapper} onPress={handleSubmit}>
+                    <TouchableOpacity onPress={handleSubmit as any}>
                       <View style={styles.button}>
                         <Text style={styles.buttonText}>NEXT</Text>
                       </View>

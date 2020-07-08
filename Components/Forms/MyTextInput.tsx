@@ -1,11 +1,9 @@
 import React from 'react';
 import { useField } from 'formik';
 import styled from 'styled-components/native';
-import { CSSProperties } from 'styled-components';
 import { TextInput } from 'react-native';
 
 interface Props {
-  style?: CSSProperties;
   name: string;
   multiline?: boolean;
   numberOfLines?: number;

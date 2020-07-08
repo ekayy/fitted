@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import Button from '../Components/Forms/Button';
 import { Formik } from 'formik';
 import { createGarment, clearCreatedGarment } from '../Redux/GarmentsRedux';
-// import Checkbox from '../Components/Forms/Checkbox';
 import * as Yup from 'yup';
 import { CreateDiscussionProps, useTypedSelector, ContentType } from '../types';
 import { AutocompleteInput } from '../Components/Forms/AutocompleteInput';
@@ -57,6 +56,37 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
   }, []);
 
   useEffect(() => {
+    if (createdGarment && discussion.length) {
+      const { id: garmentId } = createdGarment;
+
+      (async () => {
+        await dispatch(
+          postComment({
+            contentType: ContentType.GARMENT,
+            objectId: garmentId,
+            profileId,
+            content: discussion,
+          }),
+        );
+
+        navigation.reset({
+          routes: [{ name: 'Create Choice' }],
+        });
+
+        navigation.navigate('Search', {
+          screen: 'Garment Detail',
+          params: { id: garmentId },
+        });
+
+        navigation.navigate('Search', {
+          screen: 'Comments',
+          params: { objectId: garmentId, contentType: ContentType.GARMENT },
+        });
+      })();
+    }
+  }, [discussion]);
+
+  useEffect(() => {
     // reset fit redux
     dispatch(clearCreatedGarment());
   }, [comments]);
@@ -100,37 +130,14 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
 
             if (brandId === 999) {
               setError('Brand does not exist');
+              setTimeout(() => setError(''), 2000);
               return;
             }
 
-            const createdGarment = await dispatch(createGarment({ brand: brandId, color, model }));
+            // TODO: Not using redux properly
+            await dispatch(createGarment({ brand: brandId, color, model }));
 
-            if (createdGarment) {
-              const { id: garmentId } = createdGarment;
-
-              await dispatch(
-                postComment({
-                  contentType: ContentType.GARMENT,
-                  objectId: garmentId,
-                  profileId,
-                  content: discussion,
-                }),
-              );
-
-              navigation.reset({
-                routes: [{ name: 'Create Choice' }],
-              });
-
-              navigation.navigate('Search', {
-                screen: 'Garment Detail',
-                params: { id: garmentId },
-              });
-
-              navigation.navigate('Search', {
-                screen: 'Comments',
-                params: { objectId: garmentId, contentType: ContentType.GARMENT },
-              });
-            }
+            setDiscussion(discussion);
           }}
         >
           {(props) => {
@@ -204,6 +211,8 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
 
                   <Button primary onPress={handleSubmit} title="Submit" testID="submit" />
                 </StyledButtonGroup>
+
+                <StyledError>{error}</StyledError>
               </>
             );
           }}
@@ -241,6 +250,10 @@ const StyledButtonGroup = styled.View`
   justify-content: center;
   align-items: center;
   z-index: -1;
+`;
+
+const StyledError = styled.Text`
+  color: red;
 `;
 
 export default CreateDiscussion;

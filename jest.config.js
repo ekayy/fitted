@@ -2,10 +2,12 @@ const { defaults: tsJestConfig } = require('ts-jest/presets');
 
 module.exports = {
   ...tsJestConfig,
-  preset: '@testing-library/react-native',
+  preset: 'jest-expo',
+  // preset: 'react-native',
   transform: {
     ...tsJestConfig.transform,
   },
+  setupFiles: ['./node_modules/react-native-gesture-handler/jestSetup.js'],
   setupFilesAfterEnv: [
     '@testing-library/react-native/cleanup-after-each',
     '@testing-library/jest-native/extend-expect',

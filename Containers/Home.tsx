@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import BrandGrid from '../Components/BrandGrid';
-import { Brand, UserState } from '../types';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Brand } from '../types';
 
 interface Props {
   brands?: Brand[];
-  brandTable?: any[];
-  user?: UserState;
-  navigation?: StackNavigationProp<any, any>;
+  brandTable: any[];
 }
 
 const Home: React.FC<Props> = (props) => {
-  const { brandTable, navigation, user } = props;
+  const { brandTable } = props;
 
   // State
-  const [error, setError] = useState<string | null>(null);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [error, setError] = useState<string | null>(null);
+  // const [refreshing, setRefreshing] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
 
   const handleRefresh = () => {};
 
@@ -27,13 +24,10 @@ const Home: React.FC<Props> = (props) => {
     <View style={styles.container}>
       <BrandGrid
         brandTable={brandTable}
-        navigation={navigation}
-        numCol={2}
         handleLoadMore={handleLoadMore}
         onRefresh={handleRefresh}
-        refreshing={refreshing}
-        loading={loading}
-        user={user}
+        refreshing={false}
+        loading={false}
       />
     </View>
   );

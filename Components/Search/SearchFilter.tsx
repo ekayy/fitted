@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
 import CheckBox from '../Forms/Checkbox';
@@ -13,7 +13,6 @@ interface Props {
   selectFilter(id: Brand): void;
   applyFilters(): void;
   clearFilters(): void;
-  onClose(): void;
 }
 
 const SearchFilter: React.FC<Props> = (props) => {
