@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "expo start",
-    "test": "jest -o --watch --coverage=false",
+    "test": "jest -o --watch --coverage=false --runInBand",
     "lint": "tslint -p tsconfig.json src/**/*.{ts,tsx}",
     "validate": "yarn test && yarn lint && tsc --noEmit",
     "storybook": "start-storybook -p 7007"
@@ -47,14 +47,16 @@
     "react-native-testing-library": "^2.1.0",
     "reactotron-react-native": "^5.0.0",
     "reactotron-redux": "3.1.3",
+    "redux-devtools-extension": "^2.13.8",
     "redux-mock-store": "^1.5.4",
     "ts-jest": "^26.1.0",
     "typescript": "~3.9.5"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "0.1.10",
-    "@react-native-community/picker": "^1.6.5",
+    "@react-native-community/picker": "1.6.0",
     "@react-navigation/bottom-tabs": "^5.5.1",
     "@react-navigation/native": "^5.5.0",
     "@react-navigation/stack": "^5.4.1",

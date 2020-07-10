@@ -1,5 +1,7 @@
 // import createSecureStore from 'redux-persist-expo-securestore';
-import storage from 'redux-persist/lib/storage';
+// import storage from 'redux-persist/lib/storage';
+// import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 import { combineReducers } from 'redux';
 import configureStore from './CreateStore';
 import { persistReducer } from 'redux-persist';
@@ -15,7 +17,7 @@ import activity from './ActivityRedux';
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: AsyncStorage,
 };
 
 /* ------------- Assemble The Reducers ------------- */

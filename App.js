@@ -3,8 +3,9 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import createStore from './Redux';
 import RootContainer from './Containers/RootContainer';
+import Config from './Config';
 
-if (__DEV__) {
+if (__DEV__ && Config.useReactotron) {
   import('./Config/ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
 
