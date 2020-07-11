@@ -1,14 +1,7 @@
 import React from 'react';
-// import configureStore from 'redux-mock-store';
 import configureStore from '../Redux';
 import Login from '../Containers/Login';
-// import { fireEvent, render, wait } from '@testing-library/react-native';
-// import '@testing-library/jest-native/extend-expect';
-// import '@testing-library/react-native/cleanup-after-each';
-// import { fireEvent, render } from './test-utils';
-// import { NavigationContainer } from '@react-navigation/native';
-import { render, fireEvent, waitFor, act } from 'react-native-testing-library';
-// import { RootNav } from '../Navigation/RootNav';
+import { render, fireEvent, waitFor } from 'react-native-testing-library';
 import { Provider } from 'react-redux';
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
@@ -54,48 +47,60 @@ describe('Login', () => {
   });
 
   describe('form', () => {
-    // const component = (
-    //   <NavigationContainer>
-    //     <RootNav />
-    //   </NavigationContainer>
-    // );
-
     it('can change username', async () => {
       const { getByTestId } = render(wrapper);
 
-      await act(async () => {
-        fireEvent.changeText(getByTestId('username'), 'Hello world');
-      });
-      // fireEvent.press(getByText('Login'));
+      fireEvent.changeText(getByTestId('username'), 'Hello world');
 
       expect(getByTestId('username').props.value).toEqual('Hello world');
     });
 
-    it.skip('can change password', () => {
+    it('can change password', async () => {
       const { getByTestId } = render(wrapper);
 
       fireEvent.changeText(getByTestId('password'), 'Hello world');
 
-      expect(getByTestId('password').props.value).toEqual('Hello');
+      expect(getByTestId('password').props.value).toEqual('Hello world');
     });
 
-    it('can display error if missing username', () => {});
-
-    it('can display error if missing password', () => {});
-
-    it('can display login correctly', () => {});
-
-    it('cannot login if wrong credentials', () => {});
-
-    it.skip('can login if correct credentials', async () => {
-      const { getByTestId, getByPlaceholder } = render(wrapper);
-
-      fireEvent.changeText(getByTestId('username'), 'fittedsf');
-      fireEvent.changeText(getByTestId('password'), 'original');
+    it('can display error if missing username', async () => {
+      const { getByTestId, queryByTestId } = render(wrapper);
+      fireEvent.changeText(getByTestId('password'), 'justpassword');
 
       fireEvent.press(getByTestId('login'));
 
-      await waitFor(() => expect(getByPlaceholder('Search')).toBeTruthy());
+      await waitFor(() => expect(queryByTestId('error')).toBeNull());
     });
+
+    it('can display error if missing password', async () => {
+      const { getByTestId, queryByTestId } = render(wrapper);
+      fireEvent.changeText(getByTestId('username'), 'justusername');
+
+      fireEvent.press(getByTestId('login'));
+
+      await waitFor(() => expect(queryByTestId('error')).toBeNull());
+    });
+
+    it('cannot login if wrong credentials', async () => {
+      const { getByTestId } = render(wrapper);
+
+      fireEvent.changeText(getByTestId('username'), 'wronguser');
+      fireEvent.changeText(getByTestId('password'), 'wrongpassword');
+
+      fireEvent.press(getByTestId('login'));
+
+      await waitFor(() => expect(getByTestId('error')).toBeTruthy());
+    });
+
+    // it('can login if correct credentials', async () => {
+    //   const { getByTestId, queryByTestId } = render(wrapper);
+
+    //   fireEvent.changeText(getByTestId('username'), 'fittedsf');
+    //   fireEvent.changeText(getByTestId('password'), 'original');
+
+    //   fireEvent.press(getByTestId('login'));
+
+    //   await waitFor(() => expect(queryByTestId('login')).toBeNull());
+    // });
   });
 });

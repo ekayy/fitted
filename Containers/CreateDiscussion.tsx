@@ -212,7 +212,7 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
                   <Button primary onPress={handleSubmit} title="Submit" testID="submit" />
                 </StyledButtonGroup>
 
-                <StyledError>{error}</StyledError>
+                {error && <StyledError testID="error">{error}</StyledError>}
               </>
             );
           }}

@@ -35,7 +35,9 @@ class Landing extends Component {
       <View style={styles.landingContainer}>
         <View style={styles.welcomeContainer}>
           <View style={styles.welcomeText}>
-            <Text style={styles.welcomeTitle}>Welcome!</Text>
+            <Text style={styles.welcomeTitle} testID="welcome">
+              Welcome!
+            </Text>
             <Text style={styles.welcomeSubtitle}>Sign up to start sharing your</Text>
             <Text style={styles.welcomeSubtitle}>Outfits of The Day!</Text>
           </View>
@@ -73,11 +75,11 @@ class Landing extends Component {
             </Text>
           </View>
           <View style={styles.bottomTextContainer}>
-            <TouchableWithoutFeedback onPress={() => navigate('Login')}>
+            <TouchableWithoutFeedback onPress={() => navigate('Login')} testID="loginButton">
               <View>
                 <Text style={[styles.switchText, styles.bottomText]}>
                   Already have an account?
-                  <Text style={styles.highlightBlue}> Sign In</Text>
+                  <Text style={styles.highlightBlue}>Sign In</Text>
                 </Text>
               </View>
             </TouchableWithoutFeedback>

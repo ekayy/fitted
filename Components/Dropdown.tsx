@@ -21,6 +21,7 @@ const Dropdown: React.FC<Props> = ({ options, value, defaultValue, onSelect }) =
       options={options}
       style={styles.dropdownButton}
       onDropdownWillShow={Keyboard.dismiss}
+      testID="dropdown"
     >
       <StyledDropdownButtonContainer>
         <DropdownButtonText>{value ? value : defaultValue}</DropdownButtonText>

@@ -1,25 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import { Metrics } from '../Themes';
 
 import FitsGrid from '../Components/FitsGrid';
 import GarmentsGrid from '../Components/GarmentsGrid';
-import Reactotron from 'reactotron-react-native';
 import axios from 'axios';
 import { baseURL } from '../Config';
 
 const initialLayout = {
   height: 0,
-  width: Metrics.screenWidth
+  width: Metrics.screenWidth,
 };
 
 class BrandOverview extends Component {
@@ -27,14 +19,14 @@ class BrandOverview extends Component {
     index: 0,
     routes: [
       { key: 'garments', title: 'Garments' },
-      { key: 'fits', title: 'Fits' }
+      { key: 'fits', title: 'Fits' },
     ],
     garments: [],
     fits: [],
     error: null,
     loading: false,
     refreshing: false,
-    page: 1
+    page: 1,
   };
 
   componentDidMount() {
@@ -44,18 +36,16 @@ class BrandOverview extends Component {
     this.fetchGarments(this.state.page, id);
   }
 
-  fetchGarments = async page => {
+  fetchGarments = async (page) => {
     const { id } = this.props.navigation.state.params;
 
-    const response = await axios.get(
-      `${baseURL}/garments/?page=${page}&brand=${id}`
-    );
+    const response = await axios.get(`${baseURL}/garments/?page=${page}&brand=${id}`);
 
     try {
       this.setState({
         garments: [...this.state.garments, ...response.data.results],
         error: null,
-        loading: false
+        loading: false,
       });
     } catch (error) {
       console.log(error);
@@ -69,7 +59,7 @@ class BrandOverview extends Component {
       this.setState({
         fits: response.data.results,
         error: null,
-        loading: false
+        loading: false,
       });
     } catch (error) {
       console.log(error);
@@ -83,7 +73,7 @@ class BrandOverview extends Component {
       await this.fetchGarments(this.state.page, id);
 
       this.setState({
-        refreshing: false
+        refreshing: false,
       });
     });
   };
@@ -93,7 +83,7 @@ class BrandOverview extends Component {
       await this.fetchFits(this.state.page);
 
       this.setState({
-        refreshing: false
+        refreshing: false,
       });
     });
   };
@@ -101,17 +91,17 @@ class BrandOverview extends Component {
   handleLoadMore = () => {
     this.setState(
       {
-        page: this.state.page + 1
+        page: this.state.page + 1,
       },
       () => {
         this.fetchGarments(this.state.page);
-      }
+      },
     );
   };
 
-  _handleIndexChange = index => this.setState({ index });
+  _handleIndexChange = (index) => this.setState({ index });
 
-  _renderHeader = props => (
+  _renderHeader = (props) => (
     <TabBar
       {...props}
       indicatorStyle={styles.indicatorStyle}
@@ -173,32 +163,32 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: '#f3f3f3'
+    backgroundColor: '#f3f3f3',
   },
   imageContainer: {
     flex: 0.5,
     alignItems: 'center',
-    width: Metrics.screenWidth / 2 - 20
+    width: Metrics.screenWidth / 2 - 20,
   },
   image: {
     height: 200,
     marginVertical: 10,
-    width: Metrics.screenWidth / 2 - 20
+    width: Metrics.screenWidth / 2 - 20,
   },
   loading: {
     paddingVertical: 20,
-    flex: 1
+    flex: 1,
   },
 
   tabBarStyle: {
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   tabStyle: {
-    backgroundColor: 'red'
+    backgroundColor: 'red',
   },
   indicatorStyle: {
-    backgroundColor: 'red'
-  }
+    backgroundColor: 'red',
+  },
 };
 
 export default BrandOverview;

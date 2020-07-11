@@ -131,12 +131,16 @@ const Login: React.FC<LoginProps> = ({ route, navigation }: LoginProps) => {
                 <View style={[styles.loginRow, { alignItems: 'center' }]}>
                   <TouchableOpacity style={styles.loginButtonWrapper} onPress={handleSubmit as any}>
                     <View style={styles.loginButton}>
-                      <Text style={styles.loginText} testID="login">
+                      <Text style={styles.loginText} testID="loginSubmit">
                         LOGIN
                       </Text>
                     </View>
 
-                    {error && <Text style={styles.error}>{error}</Text>}
+                    {error && (
+                      <Text style={styles.error} testID="error">
+                        {error}
+                      </Text>
+                    )}
                   </TouchableOpacity>
                 </View>
 
