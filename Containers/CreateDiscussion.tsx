@@ -116,7 +116,7 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
     <StyledContainer>
       <KeyboardAvoidingView behavior="position" enabled>
         <StyledIntroduction>
-          Have a garment specific question? Or silmply want to share a review of your thoughts for a
+          Have a garment specific question? Or simply want to share a review of your thoughts for a
           specific garment?
         </StyledIntroduction>
         <StyledIntroduction>Get started below!</StyledIntroduction>
@@ -212,7 +212,7 @@ const CreateDiscussion: React.FC<CreateDiscussionProps> = ({ route, navigation }
                   <Button primary onPress={handleSubmit} title="Submit" testID="submit" />
                 </StyledButtonGroup>
 
-                {error && <StyledError testID="error">{error}</StyledError>}
+                {<StyledError testID="error">{error || ''}</StyledError>}
               </>
             );
           }}
