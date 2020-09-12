@@ -7,7 +7,7 @@ class GarmentsList extends Component {
   renderGarment(item) {
     const { navigate } = this.props.navigation;
     const { numCol, brands } = this.props;
-    const { id, color, model, sku, brand, photo } = item;
+    const { id, color, model, sku, brand, photo, images } = item;
     // const brandName = brands[brand - 1]['name'];
 
     return (
@@ -15,7 +15,10 @@ class GarmentsList extends Component {
         <View style={styles.leftCol}>
           <TouchableOpacity onPress={() => navigate('Garment Detail', item)}>
             <View style={styles.imageContainer}>
-              <Image style={styles.image} source={{ uri: photo }} />
+              <Image
+                style={styles.image}
+                source={{ uri: images && images.length ? images[0]['image'] : photo }}
+              />
             </View>
           </TouchableOpacity>
 

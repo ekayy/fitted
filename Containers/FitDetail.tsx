@@ -23,6 +23,7 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
   // Redux state
   const { items: brands } = useTypedSelector((state) => state.brands);
   const { fitGarments } = useTypedSelector((state) => state.garments);
+  const { createdFit } = useTypedSelector((state) => state.fits);
   const user = useTypedSelector((state) => state.user);
   const { favoriteFits, user: profile } = user;
 
@@ -30,7 +31,7 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
   const [convertedHeight, setConvertedHeight] = useState<string>();
   const [toggled, setToggled] = useState<boolean>(false);
   const [fit, setFit] = useState<Partial<Fit>>({});
-  const { photo, height, weight, garments } = fit;
+  const { photo, height, weight, garments, images } = fit;
 
   // Effects
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
       const result = await fetchFit(fitId);
       setFit(result);
     })();
-  }, []);
+  }, [createdFit]);
   useEffect(() => {
     dispatch(fetchBrands());
     favoriteFits.includes(fitId) ? setToggled(true) : setToggled(false);
@@ -54,6 +55,13 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
       setConvertedHeight(`${feet}"${inches}'`);
     }
   }, [fit]);
+
+  // useEffect(() => {
+  //   if (fit) {
+  //     const { model } = fit;
+  //     navigation.setOptions({ title: model });
+  //   }
+  // }, [fit]);
 
   const favorite = () => {
     dispatch(favoriteFit(fitId, user));
@@ -92,7 +100,10 @@ const FitDetail: React.FC<FitDetailProps> = ({ route, navigation }) => {
             </View>
           </TouchableOpacity>
 
-          <Image style={styles.image} source={{ uri: photo }} />
+          <Image
+            style={styles.image}
+            source={{ uri: images && images.length ? images[0]['image'] : photo }}
+          />
 
           <View style={styles.favorite}>
             <FavoriteButton onPress={favorite} toggled={toggled} />

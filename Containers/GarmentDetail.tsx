@@ -40,6 +40,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
     photo,
     purchase_page: purchasePage,
     favorited_by: favoritedBy,
+    images,
   } = garment;
 
   // Effects
@@ -88,12 +89,17 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   };
 
   const _renderCarouselItem = ({ item }) => {
+    const { images, photo } = item;
+
     return (
       <TouchableOpacity
         style={styles.carouselItem}
         onPress={() => navigation.navigate('Fit Detail', item)}
       >
-        <Image style={styles.carouselImage} source={{ uri: item.photo }} />
+        <Image
+          style={styles.carouselImage}
+          source={{ uri: images && images.length ? images[0]['image'] : photo }}
+        />
       </TouchableOpacity>
     );
   };
@@ -109,7 +115,10 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <Image style={styles.image} source={{ uri: photo }} />
+        <Image
+          style={styles.image}
+          source={{ uri: images && images.length ? images[0]['image'] : photo }}
+        />
 
         <View style={styles.favorite}>
           <FavoriteButton onPress={favorite} toggled={toggled} />
@@ -189,7 +198,7 @@ const GarmentDetail: React.FC<GarmentDetailProps> = ({ route, navigation }) => {
               title={`See all ${fits.length} photos`}
               buttonStyle={[AppStyles.buttonAltStyle]}
               titleStyle={AppStyles.buttonAltTitleStyle}
-              onPress={() => navigation.navigate('Fits', route.params)}
+              onPress={() => navigation.navigate('Fits', fits)}
             />
           </View>
         )}

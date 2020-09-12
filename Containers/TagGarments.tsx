@@ -3,7 +3,12 @@ import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { removeGarmentFromFit, createFit, clearCreatedFit } from '../Redux/FitsRedux';
+import {
+  removeGarmentFromFit,
+  createFit,
+  clearCreatedFit,
+  uploadFitImage,
+} from '../Redux/FitsRedux';
 import { fetchBrands } from '../Redux/BrandsRedux';
 import styles from './Styles/TagGarmentsStyles';
 import { AppStyles } from '../Themes';
@@ -69,14 +74,16 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
     // post fit to api
     // TODO: set up s3 for image upload
     if (garmentIds.length > 0 && profileId !== null) {
-      await dispatch(
+      const fitId = await dispatch(
         createFit({
           description,
           garments: garmentIds,
-          photo: image,
+          photo: 'http://x',
           profile: profileId,
         }),
       );
+
+      await dispatch(uploadFitImage({ image, fitId }));
     } else {
       setError('You must tag a garment to this fit');
       setTimeout(() => setError(''), 3000);
@@ -132,7 +139,7 @@ const TagGarments: React.FC<TagGarmentsProps> = ({ route, navigation }) => {
 
   const renderHeader = () => (
     <View style={styles.capturedPhotoSection}>
-      <Image source={{ uri: image }} style={styles.photo} />
+      <Image source={{ uri: `data:image/jpg;base64,${image}` }} style={styles.photo} />
 
       <TextInput
         multiline={true}

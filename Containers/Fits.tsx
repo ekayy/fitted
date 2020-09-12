@@ -7,11 +7,11 @@ import { FitsProps, useTypedSelector } from '../types';
 import { useDispatch } from 'react-redux';
 
 const Fits: React.FC<FitsProps> = ({ route, navigation }) => {
-  // Navigation params
+  const fits = route.params;
 
   // Redux state
   // const { items: brands } = useTypedSelector((state) => state.brands);
-  const { items: fits } = useTypedSelector((state) => state.fits);
+  // const { items: fits } = useTypedSelector((state) => state.fits);
 
   // State
   // const [error, setError] = useState<string | null>(null);

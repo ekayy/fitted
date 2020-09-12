@@ -49,8 +49,8 @@ class CameraScreen extends Component {
     });
 
     if (!result.cancelled) {
-      let image = result.uri;
-      // this.setState({ image: result.uri });
+      // convert to base64
+      const image = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' });
 
       // move on
       this.props.navigation.navigate('Tag Garments', { image });
@@ -81,7 +81,7 @@ class CameraScreen extends Component {
         >
           {image && (
             <StyledImageContainer>
-              <StyledImage source={{ uri: image }} />
+              <StyledImage source={{ uri: `data:image/jpg;base64,${image}` }} />
             </StyledImageContainer>
           )}
         </Camera>
@@ -123,24 +123,20 @@ class CameraScreen extends Component {
 
   takePicture = async () => {
     if (this.camera) {
-      // let photo = await this.camera.takePictureAsync();
+      let photo = await this.camera.takePictureAsync();
 
-      this.camera.takePictureAsync().then((data) => {
-        const image = `${FileSystem.documentDirectory}photos/photo_${this.state.photoId}.jpg`;
+      // const image = `${FileSystem.documentDirectory}photos/photo_${this.state.photoId}.jpg`;
+      const image = await FileSystem.readAsStringAsync(photo.uri, { encoding: 'base64' });
 
-        FileSystem.moveAsync({
-          from: data.uri,
-          to: image,
-        }).then(() => {
-          this.setState({
-            photoId: this.state.photoId + 1,
-            image,
-          });
-          Vibration.vibrate();
-        });
+      // FileSystem.moveAsync({
+      //   from: data.uri,
+      //   to: image,
+      // }).then(() => {
+      this.setState({
+        //     photoId: this.state.photoId + 1,
+        image,
       });
-
-      // console.log(photo);
+      Vibration.vibrate();
     }
   };
 

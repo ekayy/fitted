@@ -12,6 +12,9 @@ export const REMOVE_GARMENT_FROM_FIT = 'REMOVE_GARMENT_FROM_FIT';
 export const FETCH_FITS_BEGIN = 'FETCH_FITS_BEGIN';
 export const FETCH_FITS_SUCCESS = 'FETCH_FITS_SUCCESS';
 export const FETCH_FITS_FAILURE = 'FETCH_FITS_FAILURE';
+export const UPLOAD_FIT_IMAGE_BEGIN = 'UPLOAD_FIT_IMAGE_BEGIN';
+export const UPLOAD_FIT_IMAGE_SUCCESS = 'UPLOAD_FIT_IMAGE_SUCCESS';
+export const UPLOAD_FIT_IMAGE_FAILURE = 'UPLOAD_FIT_IMAGE_FAILURE';
 
 export const INITIAL_STATE: FitState = {
   createdFit: null,
@@ -87,6 +90,25 @@ export default function fits(state = INITIAL_STATE, action: FitActionTypes): Fit
         ),
       };
 
+    case UPLOAD_FIT_IMAGE_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case UPLOAD_FIT_IMAGE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+    case UPLOAD_FIT_IMAGE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+      };
+
     default:
       return state;
   }
@@ -137,6 +159,18 @@ export const removeGarmentFromFit = ({
   payload: { garmentId },
 });
 
+export const uploadFitImageBegin = () => ({
+  type: UPLOAD_FIT_IMAGE_BEGIN,
+});
+export const uploadFitImageSuccess = (image) => ({
+  type: UPLOAD_FIT_IMAGE_SUCCESS,
+  payload: { image },
+});
+export const uploadFitImageFailure = (error) => ({
+  type: UPLOAD_FIT_IMAGE_FAILURE,
+  payload: error,
+});
+
 // side effects, only as applicable
 // e.g. thunks, epics, etc
 export const fetchFits = (garmentId: number): AppThunk => {
@@ -163,6 +197,7 @@ export const createFit = (fit: Partial<Fit>): AppThunk => {
       .post(`${baseURL}/fits/`, fit, { headers: { Authorization: `Token ${token}` } })
       .then((response) => {
         dispatch(createFitSuccess(response.data));
+        return response.data.id;
       })
       .catch((error) => dispatch(createFitFailure(error)));
   };
@@ -176,5 +211,22 @@ export const fetchFit = async (id) => {
     return res.data;
   } catch (err) {
     return err;
+  }
+};
+
+export const uploadFitImage = ({ fitId, image }): AppThunk => async (dispatch) => {
+  dispatch(uploadFitImageBegin());
+
+  try {
+    const res = await axios.post(`${baseURL}/images/`, {
+      // bad need to specify ContentType.FIT on api
+      content_type: 10,
+      object_id: fitId,
+      image,
+    });
+
+    dispatch(uploadFitImageSuccess(res.data.object_id));
+  } catch (error) {
+    dispatch(uploadFitImageFailure(error));
   }
 };
