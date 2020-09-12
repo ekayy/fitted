@@ -67,7 +67,7 @@ describe('Login', () => {
       const { getByTestId, queryByTestId } = render(wrapper);
       fireEvent.changeText(getByTestId('password'), 'justpassword');
 
-      fireEvent.press(getByTestId('login'));
+      fireEvent.press(getByTestId('loginSubmit'));
 
       await waitFor(() => expect(queryByTestId('error')).toBeNull());
     });
@@ -76,7 +76,7 @@ describe('Login', () => {
       const { getByTestId, queryByTestId } = render(wrapper);
       fireEvent.changeText(getByTestId('username'), 'justusername');
 
-      fireEvent.press(getByTestId('login'));
+      fireEvent.press(getByTestId('loginSubmit'));
 
       await waitFor(() => expect(queryByTestId('error')).toBeNull());
     });
@@ -87,7 +87,7 @@ describe('Login', () => {
       fireEvent.changeText(getByTestId('username'), 'wronguser');
       fireEvent.changeText(getByTestId('password'), 'wrongpassword');
 
-      fireEvent.press(getByTestId('login'));
+      fireEvent.press(getByTestId('loginSubmit'));
 
       await waitFor(() => expect(getByTestId('error')).toBeTruthy());
     });

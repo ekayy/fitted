@@ -127,6 +127,7 @@ const Search: React.FC<SearchProps> = ({ route, navigation }) => {
         platform="ios"
         value={searchTerm}
         blurOnSubmit={false}
+        testID="searchBar"
       />
       {searchTerm ? (
         <StyledFilterBarContainer>

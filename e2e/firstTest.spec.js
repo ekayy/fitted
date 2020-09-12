@@ -19,4 +19,16 @@ describe('App', () => {
     await expect(element(by.id('password'))).toBeVisible();
     await expect(element(by.id('loginSubmit'))).toBeVisible();
   });
+
+  it.only('can login if correct credentials', async () => {
+    await element(by.id('loginButton')).tap();
+    await waitFor(element(by.id('loginSubmit'))).toBeVisible();
+
+    await element(by.id('username')).typeText('fittedsf');
+    await element(by.id('password')).typeText('original');
+    await element(by.id('loginSubmit')).tap();
+
+    await waitFor(element(by.id('searchBar'))).toBeVisible();
+    await expect(element(by.id('searchBar'))).toBeVisible();
+  });
 });
